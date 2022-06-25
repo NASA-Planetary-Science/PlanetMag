@@ -2,11 +2,11 @@ moonName = 'Europa';
 % Spacecraft era (sets timespan of field model)
 era = 'Galileo';
 CALC_NEW = 1;
-ALL_MODELS = 1;
-DO_FFT = 0;
+ALL_MODELS = 0;
+DO_FFT = 1;
 outData = 'out/';
 
-nptsApprox = 6000000;
+nptsApprox = 600000;
 magPhase = 0;
 
 parentName = LoadSpice(moonName);
@@ -18,7 +18,11 @@ if CALC_NEW
     Tsyn_h = 1/(1/Tparent_h - 1/Tmoon_h);
 
     if strcmp(parentName,'Saturn')
-        Tinterest_h = Tmoon_h;
+        if strcmp(moonName,'Enceladus')
+            Tinterest_h = 32.927200612354675;
+        else
+            Tinterest_h = Tmoon_h;
+        end
     else
         Tinterest_h = Tsyn_h;
     end
@@ -120,6 +124,7 @@ for opt=opts
     if DO_FFT
         [TfinalFFT_h, B0xFFT, B0yFFT, B0zFFT, B1xFFT, B1yFFT, B1zFFT] ...
                     = ExcitationSpectrum(moonName, nOsc, rate, Tinterest_h);
+        PlotSpectrum(moonName);
     end
 
     npts = length(t_h);

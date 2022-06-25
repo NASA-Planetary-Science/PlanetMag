@@ -177,7 +177,8 @@ switch body
         
         fOrb = 262.7318996 / 360 / 86400; % orbital period
         fSyn = fSat - fOrb;
-        f = [fOrb];
+        fTA = 1 / 3600 / 32.927200612354675; % true anomaly (?) period
+        f = [fOrb, fTA];
         
         f = [f, 2*fOrb, ...
                 9.26559563e-6, ... % inter-moon positional resonances
@@ -440,13 +441,20 @@ if PLOT_DIAGNOSTIC
     
     figure; box on;
     set(gcf,'Name', [bodyname ' ' descrip ' hodogram']);
-    plot(By, Bx, 'b')
-    ylabel(['B_x IAU (\approx B_y ' bodyname(1) '\phi\Omega, nT)'])
-    xlabel(['B_y IAU (\approx B_x ' bodyname(1) '\phi\Omega, nT)'])
+    if strcmp(parentName,'Saturn')
+        plot(Bx, Bz, 'b')
+        xlabel(['B_x IAU (\approx B_y ' bodyname(1) '\phi\Omega, nT)'])
+        ylabel(['B_z IAU (\approx B_z ' bodyname(1) '\phi\Omega, nT)'])
+        title([bodyname ' spin-parent plane hodogram, ' descrip])
+    else
+        plot(By, Bx, 'b')
+        ylabel(['B_x IAU (\approx B_y ' bodyname(1) '\phi\Omega, nT)'])
+        xlabel(['B_y IAU (\approx B_x ' bodyname(1) '\phi\Omega, nT)'])
+        title([bodyname ' equatorial plane hodogram, ' descrip])
+    end
     ylim([-max(abs(ylim())), max(abs(ylim()))])
     xlim(ylim())
     grid on;
-    title([bodyname ' equatorial plane hodogram, ' descrip])
     set(gca,'fontsize',16)
 end
 

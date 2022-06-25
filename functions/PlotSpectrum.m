@@ -1,5 +1,6 @@
 function PlotSpectrum(moonName)
-    load([moonName 'FTdata'], 'B1x', 'B1y', 'B1z', 'T_h', 'f_Hz', ...
+    outData = 'out/';
+    load(fullfile([outData moonName 'FTdata']), 'B1x', 'B1y', 'B1z', 'T_h', 'f_Hz', ...
         'B1xS3', 'B1yS3', 'B1zS3', 'coordType', 'magModelDescrip', ...
         'Tmax', 'Tinterest_h');
     LoadSpice(moonName);
@@ -11,8 +12,8 @@ function PlotSpectrum(moonName)
     interpreter = 'tex';
     font = 'STIX Two Math';
     set(0,'defaulttextinterpreter',interpreter);  
-    set(0, 'defaultAxesTickLabelInterpreter',interpreter);  
-    set(0, 'defaultLegendInterpreter',interpreter);
+    set(0,'defaultAxesTickLabelInterpreter',interpreter);  
+    set(0,'defaultLegendInterpreter',interpreter);
     set(0,'defaultTextFontName',font);
     set(0,'defaultAxesFontName',font);
     set(0,'defaultLegendFontName',font);
@@ -44,6 +45,7 @@ function PlotSpectrum(moonName)
     %vline(Tinterest_h,'r');
     xlabel('Period (h)');
     ylabel('Amplitude (nT)');
+    set(gcf,'Name', [moonName ' FFT excitation spectrum, ' magModelDescrip]);
     title([bnm moonName ' magnetic excitation spectrum, ' magModelDescrip ', ' coordType ' coordinates'], 'fontsize', 16);
     legend({[math 'B_x'], [math 'B_y'], [math 'B_z']}, 'Location', 'Southeast', 'Interpreter', 'tex');
 end
