@@ -21,13 +21,106 @@ ets_ca = ets(round(length(ets)/2));
 etMid_day = ets_ca / 86400;
 %ets_ca = 1228738876.0; % for Triton flyby at AOL 50  degrees
 
+fJup = 870.536 / 360 / 86400;
+fSat = 810.7939024 / 360 / 86400;
+fUra = abs(-501.1600928) / 360 / 86400;
+fNep = 536.3128492 / 360 / 86400;
 Pnut0Jup_deg = [73.32, 24.62, 283.90, 355.80, 119.90, 229.80, 352.25, 113.35];
 Pnut1Jup_degday = [91472.9, 45137.2, 4850.7, 1191.3, 262.1, 64.3, 2382.6, 6070.0] ...
     / 36525;
 
 switch body
+    
+    %% Jupiter moons       
+    case 'EUROPA'
+        parentName = 'Jupiter';
+        % frequencies obtained from FFT : 5 year data computed from FFT of simulated data
+        %fSyn = 2.47288637e-5; % synodic period
+        %f(2) = 3.281745587e-6; % orbital period 1 .. stronger, higher freq
+        %f(3) = 3.260134845e-6; % orbital period 2 
+        
+        Pnut0 = Pnut0Jup_deg;
+        Pnut1 = Pnut1Jup_degday;
+        PnutM = [0, 0, 0, -0.980, -0.054, -0.014, 0.008, 0];
+        fOrb = 101.3747235 / 360 / 86400;
+        fTA = 1 / 84.62776 / 3600; %3.281745587e-6;
+        fSyn = fJup - fOrb;
+        fNearBeats = 1 / 3600 ./ [9.916007150192408304, 9.918866231039942249, ...
+            9.924589341739000758, 12.954663079272373594];
+        fNearOrbs = 1 / 3600 ./ [85.1513423, 84.575556990340160723, ...
+            84.783999521416234302, 85.098596922214568394, 84.471719596866705615, ...
+            84.888606553513909603, 84.993472034115839620, 85.415537694012940, ...
+            85.521709897525156, 84.368136863961226, 85.628146376422208164];
+        %fOrbAdj = (101.3747235 + sum(PnutM .* Pnut1 .* cosd(Pnut0 + Pnut1*etMid_day))) / 360 / 86400;
+        
+        f = [fSyn, ... % synodic period
+             fTA, ... % true anomaly period,
+             fOrb]; % true orbital period wrt inertial reference frame
+        
+        % harmonics
+        f = [f, 2*fSyn, ...
+                3*fSyn, ...
+                4*fSyn, ...
+                2*fTA, ...
+                2*fOrb, ...
+                fSyn - fTA, ... % 1st harmonic beats
+                fSyn + fTA, ...
+                fSyn - fOrb, ...
+                fSyn + fOrb, ...
+                2*fSyn - fTA, ... % 2nd harmonic beats
+                2*fSyn + fTA, ...
+                2*fTA - fOrb, ...
+                2*fOrb - fTA, ...
+                fSyn - 2*fOrb, ...
+                fSyn - 2*fTA, ...
+                fTA + fOrb, ...
+                fNearOrbs, ...
+                fNearBeats];
+
+          
+    case 'GANYMEDE'
+        parentName = 'Jupiter';
+        
+        Pnut0 = Pnut0Jup_deg;
+        Pnut1 = Pnut1Jup_degday;
+        PnutM = [0, 0, 0, 0.033, -0.389, -0.082, 0, 0];
+        fOrb = 50.3176081 / 360 / 86400; % orbital period
+        fOrbAdj = (50.3176081 + sum(PnutM .* Pnut1 .* cosd(Pnut0 + Pnut1*etMid_day))) / 360 / 86400;
+        fSyn = fJup - fOrb;
+        fEuropaTA = 3.281745587e-6;
+        fOrbEuropa = 101.3747235 / 360 / 86400;
+        fMystery = 1 / 3600 / 34.724522173543868;
+        fMystery2 = 1 / 3600 / 150.271894222476305458;
+        f = [fSyn, fOrb];
+        
+         f = [f, 2*fSyn, ...
+                 3*fSyn, ...
+                 4*fSyn, ...
+                 5*fSyn, ...
+                 6*fSyn, ...
+                 fSyn - fOrb, ... % 1st harmonic beats
+                 fSyn + fOrb, ...
+                 2*fSyn - fOrb, ... % 2nd harmonic beats
+                 2*fSyn + fOrb, ...
+                 3*fSyn - fOrb, ... % 3rd harmonic beats
+                 3*fSyn + fOrb, ...
+                 fMystery, ...
+                 fSyn - fMystery, ...
+                 fSyn + fMystery, ...
+                 fEuropaTA/2, ... % Half Europa's true anomaly oscillation
+                 fOrbAdj, ...
+                 fJup - fOrbEuropa, ...
+                 2*fSyn - 5*fOrb, ...
+                 fMystery2, ...
+                 fSyn - fMystery2, ...
+                 1 / 3600 / 4.573237865242181, ...
+                 1 / 3600 / 6.208585640926228, ...
+                 1 / 3600 / 3.188814749737327, ...
+                 1 / 3600 / 3.906250548182006, ...
+                 2*fMystery];
 
     case 'CALLISTO'
+        parentName = 'Jupiter';
         
         %f(1) = 2.729414e-5; % synodic period
         %f(2) = 6.939704e-7; % orbital period
@@ -62,121 +155,47 @@ switch body
                 f(5) + f(2), ...
                 fSyn - 2*f(2), ... % 1st harmonic double beats
                 fSyn + 2*f(2)];
-
-          
-    case 'GANYMEDE'
-          
-        Pnut0 = Pnut0Jup_deg;
-        Pnut1 = Pnut1Jup_degday;
-        PnutM = [0, 0, 0, 0.033, -0.389, -0.082, 0, 0];
-        fParent = 870.536 / 360 / 86400;
-        fPyr = 1/4332.59/24/3600;
-        fOrb = 50.3176081 / 360 / 86400; % orbital period
-        fOrbAdj = (50.3176081 + sum(PnutM .* Pnut1 .* cosd(Pnut0 + Pnut1*etMid_day))) / 360 / 86400;
-        fSyn = fParent - fOrb;
-        fEuropaTA = 3.281745587e-6;
-        fOrbEuropa = 101.3747235 / 360 / 86400;
-        fMystery = 1 / 3600 / 34.724522173543868;
-        fMystery2 = 1 / 3600 / 150.271894222476305458;
-        f = [fSyn, fOrb];
         
-         f = [f, 2*fSyn, ...
-                 3*fSyn, ...
-                 4*fSyn, ...
-                 5*fSyn, ...
-                 6*fSyn, ...
-                 fSyn - fOrb, ... % 1st harmonic beats
-                 fSyn + fOrb, ...
-                 2*fSyn - fOrb, ... % 2nd harmonic beats
-                 2*fSyn + fOrb, ...
-                 3*fSyn - fOrb, ... % 3rd harmonic beats
-                 3*fSyn + fOrb, ...
-                 fMystery, ...
-                 fSyn - fMystery, ...
-                 fSyn + fMystery, ...
-                 fEuropaTA/2, ... % Half Europa's true anomaly oscillation
-                 fOrbAdj, ...
-                 fParent - fOrbEuropa, ...
-                 2*fSyn - 5*fOrb, ...
-                 fMystery2, ...
-                 fSyn - fMystery2, ...
-                 1 / 3600 / 4.573237865242181, ...
-                 1 / 3600 / 6.208585640926228, ...
-                 1 / 3600 / 3.188814749737327, ...
-                 1 / 3600 / 3.906250548182006, ...
-                 2*fMystery];
-          
-    case 'EUROPA'
+    
+    %% Saturn moons         
+    case 'MIMAS'
+        parentName = 'Saturn';
         
-        % frequencies obtained from FFT : 5 year data computed from FFT of simulated data
-        %fSyn = 2.47288637e-5; % synodic period
-        %f(2) = 3.281745587e-6; % orbital period 1 .. stronger, higher freq
-        %f(3) = 3.260134845e-6; % orbital period 2 
-        
-        Pnut0 = Pnut0Jup_deg;
-        Pnut1 = Pnut1Jup_degday;
-        PnutM = [0, 0, 0, -0.980, -0.054, -0.014, 0.008, 0];
-        fParent = 870.536 / 360 / 86400;
-        fOrb = 101.3747235 / 360 / 86400;
-        fTA = 1 / 84.62776 / 3600; %3.281745587e-6;
-        fSyn = fParent - fOrb;
-        fNearBeats = 1 / 3600 ./ [9.916007150192408304, 9.918866231039942249, ...
-            9.924589341739000758, 12.954663079272373594];
-        fNearOrbs = 1 / 3600 ./ [85.1513423, 84.575556990340160723, ...
-            84.783999521416234302, 85.098596922214568394, 84.471719596866705615, ...
-            84.888606553513909603, 84.993472034115839620, 85.415537694012940, ...
-            85.521709897525156, 84.368136863961226, 85.628146376422208164];
-        %fOrbAdj = (101.3747235 + sum(PnutM .* Pnut1 .* cosd(Pnut0 + Pnut1*etMid_day))) / 360 / 86400;
-        
-        f = [fSyn, ... % synodic period
-             fTA, ... % true anomaly period,
-             fOrb]; % true orbital period wrt inertial reference frame
+        f = [1.23134297475e-5, ... % orbital period 1 
+             1.22487406465e-5, ... % orbital period 2
+             6.33328477817e-8]; % intermoon orbital resonance?
         
         % harmonics
-        f = [f, 2*fSyn, ...
-                3*fSyn, ...
-                4*fSyn, ...
-                2*fTA, ...
-                2*fOrb, ...
-                fSyn - fTA, ... % 1st harmonic beats
-                fSyn + fTA, ...
-                fSyn - fOrb, ...
-                fSyn + fOrb, ...
-                2*fSyn - fTA, ... % 2nd harmonic beats
-                2*fSyn + fTA, ...
-                2*fTA - fOrb, ...
-                2*fOrb - fTA, ...
-                fSyn - 2*fOrb, ...
-                fSyn - 2*fTA, ...
-                fTA + fOrb, ...
-                fNearOrbs, ...
-                fNearBeats];
+        f = [f, 2*f(1), ...  
+                3*f(1), ...  
+                2*f(2), ...  
+                3*f(2)];  
+            
         
-          
-    case 'TRITON'
+    case 'ENCELADUS'
+        parentName = 'Saturn';
         
-        fSyn = 1.92125059641e-5;
-        f = [fSyn, ... % synodic period
-             1.96941653582e-6]; % orbital period
+        fOrb = 262.7318996 / 360 / 86400; % orbital period
+        fSyn = fSat - fOrb;
+        f = [fOrb];
         
-        % harmonics
-        f = [f, 2*fSyn, ...
-                3*fSyn, ...
-                2*f(2), ...
-                fSyn - f(2), ... % 1st harmonic beats
-                fSyn + f(2), ...
-                fSyn - 2*f(2), ...
-                fSyn + 2*f(2), ...
-                fSyn - 3*f(2), ...
-                fSyn + 3*f(2)];
-
-        % 2nd harmonic beats
-        f = [f, f(3) - f(2), ...
-                f(3) + f(2), ...
-                f(3) - 2*f(2), ...
-                f(3) + 2*f(2)];
-          
+        f = [f, 2*fOrb, ...
+                9.26559563e-6, ... % inter-moon positional resonances
+                6.94761340e-6, ... 
+                4.62963117e-6, ... 
+                2.31798223e-6];
+            
+        
+   case 'DIONE'
+        parentName = 'Saturn';
+        
+        f = [4.224300947e-6, ... % orbital period
+             4.2306342318e-6]; % orbital period
+         
+         
+    %% Uranus moons   
     case 'MIRANDA'
+        parentName = 'Saturn';
         
         fSyn = 1/(35.057143696*3600);
         f = [fSyn, ... % synodic period
@@ -198,7 +217,9 @@ switch body
                 f(4) + f(2), ... % 3.1960e-05
                 f(6) + f(3)]; % Double harmonic beats % 3.2228e-5        
        
+            
     case 'ARIEL'
+        parentName = 'Uranus';
         
         fSyn = 1.15202411714e-5; % synodic period
         f(2) = 4.59162993363e-6; % orbital period
@@ -209,7 +230,9 @@ switch body
                 fSyn - f(2), ... % 1st harmonic beats % 40.09
                 fSyn + f(2)]; % 8.037
           
+            
     case 'UMBRIEL'
+        parentName = 'Uranus';
         
         fSyn = 1.33189372223e-5;
         f = [fSyn, ... % synodic period
@@ -222,7 +245,9 @@ switch body
                 fSyn - f(2), ... % 1st harmonic beats
                 fSyn + f(2)];
         
+            
     case 'TITANIA'
+        parentName = 'Uranus';
         
         fSyn = 1.4782626327e-5; % synodic period
         f(2) = 1.32904237982e-6; % orbital period
@@ -234,7 +259,9 @@ switch body
                 fSyn - f(2), ... % 1st harmonic beats
                 fSyn + f(2)];
         
+            
     case 'OBERON'
+        parentName = 'Uranus';
         
         fSyn = 1.52530978251e-5;
         f = [fSyn, ... % synodic period
@@ -246,36 +273,32 @@ switch body
                 4*fSyn, ...
                 fSyn - f(2), ... % 1st harmonic beats
                 fSyn + f(2)];
+    
+            
+    %% Neptune moons
+    case 'TRITON'
+        parentName = 'Neptune';
         
-    case 'ENCELADUS'
-        
-       f = [8.4359353245e-6]; % orbital period
-        
-        % harmonics
-        f = [f, 2*f(1)];
-        
-        % intermoon positional resonance
-        f = [f, 9.26559563e-6, ... 
-                6.94761340e-6, ... 
-                4.62963117e-6, ... 
-                2.31798223e-6];
-        
-    case 'MIMAS'
-        
-        f = [1.23134297475e-5, ... % orbital period 1 
-             1.22487406465e-5, ... % orbital period 2
-             6.33328477817e-8]; % intermoon orbital resonance?
+        fSyn = 1.92125059641e-5;
+        f = [fSyn, ... % synodic period
+             1.96941653582e-6]; % orbital period
         
         % harmonics
-        f = [f, 2*f(1), ...  
-                3*f(1), ...  
-                2*f(2), ...  
-                3*f(2)];  
-        
-   case 'DIONE'
-        
-        f = [4.224300947e-6, ... % orbital period
-             4.2306342318e-6]; % orbital period
+        f = [f, 2*fSyn, ...
+                3*fSyn, ...
+                2*f(2), ...
+                fSyn - f(2), ... % 1st harmonic beats
+                fSyn + f(2), ...
+                fSyn - 2*f(2), ...
+                fSyn + 2*f(2), ...
+                fSyn - 3*f(2), ...
+                fSyn + 3*f(2)];
+
+        % 2nd harmonic beats
+        f = [f, f(3) - f(2), ...
+                f(3) + f(2), ...
+                f(3) - 2*f(2), ...
+                f(3) + 2*f(2)];
         
 end
 
@@ -366,12 +389,15 @@ if PLOT_DIAGNOSTIC
 %     ylabel('Magnetic Field (nT)'); xlabel('Period (hr)'); set(gca,'fontsize',12);set(gca, 'YScale', 'log');set(gca, 'XScale', 'log')
 
     etsRel_h = (ets-ets(1))/3600;
-    cosSyn = X(:, 2*(find(f==fSyn))-1);
-    sinSyn = X(:, 2*(find(f==fSyn)));
-    BxSyn = BdxO + Bdxi(f==fSyn)*cosSyn + Bdxq(f==fSyn)*sinSyn;
-    BySyn = BdyO + Bdyi(f==fSyn)*cosSyn + Bdyq(f==fSyn)*sinSyn;
-    BzSyn = BdzO + Bdzi(f==fSyn)*cosSyn + Bdzq(f==fSyn)*sinSyn;
     bodyname = [body(1) lower(body(2:end))];
+    
+    if ~strcmp(parentName,'Saturn')
+        cosSyn = X(:, 2*(find(f==fSyn))-1);
+        sinSyn = X(:, 2*(find(f==fSyn)));
+        BxSyn = BdxO + Bdxi(f==fSyn)*cosSyn + Bdxq(f==fSyn)*sinSyn;
+        BySyn = BdyO + Bdyi(f==fSyn)*cosSyn + Bdyq(f==fSyn)*sinSyn;
+        BzSyn = BdzO + Bdzi(f==fSyn)*cosSyn + Bdzq(f==fSyn)*sinSyn;
+    end
 
     figure; hold on; box on; grid on;
     set(gcf,'Name', [descrip ' model vs. reconstruction, first 200h']);
@@ -382,10 +408,14 @@ if PLOT_DIAGNOSTIC
     Bxout = plot(etsRel_h, Bxest, '--k');
     Byout = plot(etsRel_h, Byest, '--k');
     Bzout = plot(etsRel_h, Bzest, '--k');
-    BxsynOnly = plot(etsRel_h, BxSyn, 'm');
-    BysynOnly = plot(etsRel_h, BySyn, 'm');
-    BzsynOnly = plot(etsRel_h, BzSyn, 'm');
-    legend([Bxin,Byin,Bzin, Bxout, BxsynOnly], 'Bx', 'By', 'Bz', 'Reproduced', 'Synodic only')
+    if ~strcmp(parentName,'Saturn')
+        BxsynOnly = plot(etsRel_h, BxSyn, 'm');
+        BysynOnly = plot(etsRel_h, BySyn, 'm');
+        BzsynOnly = plot(etsRel_h, BzSyn, 'm');
+        legend([Bxin,Byin,Bzin, Bxout, BxsynOnly], 'Bx', 'By', 'Bz', 'Reproduced', 'Synodic only')
+    else
+        legend([Bxin,Byin,Bzin, Bzout], 'Bx', 'By', 'Bz', 'Reproduced')
+    end
     xlabel('Time (hr)')
     ylabel('Magnetic Field (nT)')
     set(gca,'fontsize',16)
@@ -397,8 +427,12 @@ if PLOT_DIAGNOSTIC
     Bxdiff = plot(etsRel_h, Bx-Bxest', 'b');
     Bydiff = plot(etsRel_h, By-Byest', 'r');
     Bzdiff = plot(etsRel_h, Bz-Bzest', 'g');
-    Bxsyndiff = plot(etsRel_h, Bx-BxSyn', 'm');
-    legend([Bxdiff,Bydiff,Bzdiff, Bxsyndiff], 'Bx','By','Bz', 'Bx synodic only')
+    if ~strcmp(parentName,'Saturn')
+        Bxsyndiff = plot(etsRel_h, Bx-BxSyn', 'm');
+        legend([Bxdiff,Bydiff,Bzdiff, Bxsyndiff], 'Bx','By','Bz', 'Bx synodic only')
+    else
+        legend([Bxdiff,Bydiff,Bzdiff], 'Bx','By','Bz')
+    end
     xlabel('Time (hr)')
     ylabel('Magnetic Field Error (nT)')
     set(gca,'fontsize',16)
@@ -407,8 +441,8 @@ if PLOT_DIAGNOSTIC
     figure; box on;
     set(gcf,'Name', [bodyname ' ' descrip ' hodogram']);
     plot(By, Bx, 'b')
-    ylabel('B_x IAU')
-    xlabel('B_y IAU')
+    ylabel(['B_x IAU (\approx B_y ' bodyname(1) '\phi\Omega, nT)'])
+    xlabel(['B_y IAU (\approx B_x ' bodyname(1) '\phi\Omega, nT)'])
     ylim([-max(abs(ylim())), max(abs(ylim()))])
     xlim(ylim())
     grid on;

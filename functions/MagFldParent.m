@@ -93,6 +93,8 @@ elseif strcmp(planet, 'Saturn')
         % g_mn, h_mn
         g = dlmread(fullfile([coeffPath 'coeffsSaturnBurton2010g.csv']), ',', nHeadLines, 0);
         h = zeros(Nmax,Nmax+1);
+        
+        NmaxExt = 1;
         G = dlmread(fullfile([coeffPath 'coeffsSaturnBurton2010Gext.csv']), ',', nHeadLines, 0);
         H = dlmread(fullfile([coeffPath 'coeffsSaturnBurton2010Hext.csv']), ',', nHeadLines, 0);
         
@@ -457,7 +459,7 @@ end
             
             dVr = 0; dVtheta = 0; dVphi = 0; %radius, colatitude, longitude components
             k = 0;
-            for n = 1:Nmax  % degree, spherical harmonic index
+            for n = 1:NmaxExt  % degree, spherical harmonic index
                 k = k+1;
                 for m = 0:k    % order
 
@@ -485,7 +487,7 @@ end
 
             eBx = eBr .* sin(theta) .* cos(phi) + eBtheta .* cos(theta) .* cos(phi) - eBphi .* sin(phi);
             eBy = eBr .* sin(theta) .* sin(phi) + eBtheta .* cos(theta) .* sin(phi) + eBphi .* cos(phi);
-            eBz = eBr .* cos(theta) - eBtheta*sin(theta);
+            eBz = eBr .* cos(theta) - eBtheta .* sin(theta);
             
         else
             

@@ -1,14 +1,15 @@
-moonName = 'Ganymede';
-parentName = 'Jupiter';
+moonName = 'Europa';
 % Spacecraft era (sets timespan of field model)
-era = 'Juno';
+era = 'Galileo';
 CALC_NEW = 1;
+ALL_MODELS = 1;
+DO_FFT = 0;
 outData = 'out/';
 
-nptsApprox = 6000000;
+nptsApprox = 600000;
 magPhase = 0;
 
-LoadSpice(moonName);
+parentName = LoadSpice(moonName);
 
 if CALC_NEW
     [R_P, ~, ~, ~, ~, Tparent_s, Tmoon_s] = GetBodyParams(moonName);
@@ -16,7 +17,11 @@ if CALC_NEW
     Tmoon_h = Tmoon_s / 3600;
     Tsyn_h = 1/(1/Tparent_h - 1/Tmoon_h);
 
-    Tinterest_h = Tsyn_h;
+    if strcmp(parentName,'Saturn')
+        Tinterest_h = Tmoon_h;
+    else
+        Tinterest_h = Tsyn_h;
+    end
 
     switch era
         case 'Galileo'
@@ -59,7 +64,18 @@ if CALC_NEW
     altM_km = rM_km - R_P;
 end
 
-for opt=1:6
+if ALL_MODELS
+    switch parentName
+        case 'Jupiter'; nOpts = 6;
+        case 'Saturn';  nOpts = 2;
+        case 'Uranus';  nOpts = 1;
+        case 'Neptune'; nOpts = 1;
+    end
+    opts = 1:nOpts;
+else
+    opts = 0:0;
+end
+for opt=opts
     [MagModel, CsheetModel, magModelDescrip, fEnd] = GetModelOpts(parentName, opt);
     
     if CALC_NEW
@@ -101,8 +117,10 @@ for opt=1:6
 
     Tmax = 200;
 
-    %[TfinalFFT_h, B0xFFT, B0yFFT, B0zFFT, B1xFFT, B1yFFT, B1zFFT] ...
-    %            = ExcitationSpectrum(moonName, nOsc, rate, Tinterest_h);
+    if DO_FFT
+        [TfinalFFT_h, B0xFFT, B0yFFT, B0zFFT, B1xFFT, B1yFFT, B1zFFT] ...
+                    = ExcitationSpectrum(moonName, nOsc, rate, Tinterest_h);
+    end
 
     npts = length(t_h);
 
@@ -135,14 +153,23 @@ for opt=1:6
     set(gcf,'Name', ['Bx full time, ' magModelDescrip]);
     plot(t_h, Bx);
     plot(t_h, BxTot);
+    xlabel('Time (hr)');
+    ylabel('B_x (nT)');
+    legend('B_x model', 'B_x exc');
     figure; hold on;
     set(gcf,'Name', ['By full time, ' magModelDescrip]);
     plot(t_h, By);
     plot(t_h, ByTot);
+    xlabel('Time (hr)');
+    ylabel('B_y (nT)');
+    legend('B_y model', 'B_y exc');
     figure; hold on;
     set(gcf,'Name', ['Bz full time, ' magModelDescrip]);
     plot(t_h, Bz);
     plot(t_h, BzTot);
+    xlabel('Time (hr)');
+    ylabel('B_z (nT)');
+    legend('B_z model', 'B_z exc');
 
     BxD = Bx - BxTot;
     ByD = By - ByTot;
@@ -170,9 +197,12 @@ for opt=1:6
     plot(Tfinal_h, abs(BxD1f));
     plot(Tfinal_h, abs(ByD1f));
     plot(Tfinal_h, abs(BzD1f));
+    legend('\Delta B_x', '\Delta B_y', '\Delta B_z');
 
     set(gca,'xscale','log');
     set(gca,'yscale','log');
+    xlabel('Period (hr)');
+    ylabel('FT\{B_i - B_{i,exc}\} (nT)');
     xlim([1 Tmax]);
 
     Bdiff = sqrt(abs(BxD1f).^2 + abs(ByD1f).^2 + abs(BzD1f).^2);

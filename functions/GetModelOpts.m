@@ -8,15 +8,16 @@ function [MagModel, CsheetModel, magModelDescrip, fEnd] = GetModelOpts(parentNam
             O6 = 'MagFldJupiterGSFCO6';
             K1997sheet = 'Khurana1997';
             % opt 3
-            JRM09 = 'MagFldJupiterJRM09';
-            C2020sheet = 'Connerney2020';
-            % opt 4 is Vance et al. 2021 combo, JRM09 + C1981
-            % opt 5 (includes C2020 current sheet)
-            JRM33 = 'MagFldJupiterJRM33';
-            % opt 6
             KhuranaJup = 'VIP4 with O6 orientation';
             K2007sheet = 'KS2007';
+            % opt 4
+            JRM09 = 'MagFldJupiterJRM09';
+            C2020sheet = 'Connerney2020';
+            % opt 5 is Vance et al. 2021 combo, JRM09 + C1981
+            % opt 6 (includes C2020 current sheet)
+            JRM33 = 'MagFldJupiterJRM33';
 
+            if opt == 0; opt = 6; end  % Set default to JRM33 + C2020
             switch opt
                 case 1
                     MagModel = VIP4;
@@ -29,25 +30,25 @@ function [MagModel, CsheetModel, magModelDescrip, fEnd] = GetModelOpts(parentNam
                     magModelDescrip = 'O6 + K1997';
                     fEnd = 'O6K1997';
                 case 3
-                    MagModel = JRM09;
-                    CsheetModel = C2020sheet;
-                    magModelDescrip = 'JRM09 + C2020';
-                    fEnd = 'JRM09C2020';
-                case 4
-                    MagModel = JRM09;
-                    CsheetModel = C1981sheet;
-                    magModelDescrip = 'Vance 2021 (JRM09 + C1981)';
-                    fEnd = 'JRM09C1981';
-                case 5
-                    MagModel = JRM33;
-                    CsheetModel = C2020sheet;
-                    magModelDescrip = 'JRM33 + C2020';
-                    fEnd = 'JRM33C2020';
-                case 6
                     MagModel = KhuranaJup;
                     CsheetModel = K2007sheet;
                     magModelDescrip = 'Khurana & Schwarzl 2007';
                     fEnd = 'KS2007';
+                case 4
+                    MagModel = JRM09;
+                    CsheetModel = C2020sheet;
+                    magModelDescrip = 'JRM09 + C2020';
+                    fEnd = 'JRM09C2020';
+                case 5
+                    MagModel = JRM09;
+                    CsheetModel = C1981sheet;
+                    magModelDescrip = 'Vance 2021 (JRM09 + C1981)';
+                    fEnd = 'JRM09C1981';
+                case 6
+                    MagModel = JRM33;
+                    CsheetModel = C2020sheet;
+                    magModelDescrip = 'JRM33 + C2020';
+                    fEnd = 'JRM33C2020';
                 otherwise
                     disp(['Magnetic field model option ' num2str(opt) ' not recognized. Defaulting to "None".'])
                     MagModel = 'None';
@@ -56,6 +57,7 @@ function [MagModel, CsheetModel, magModelDescrip, fEnd] = GetModelOpts(parentNam
                     fEnd = 'None';
             end
             
+            
         case 'Saturn'
             % opt 1
             B2010 = 'MagFldSaturnBurton2010';
@@ -63,7 +65,8 @@ function [MagModel, CsheetModel, magModelDescrip, fEnd] = GetModelOpts(parentNam
             % opt 2
             Cassini11 = 'MagFldSaturnCassini11';
             Cassini11sheet = 'Cassini11';
-    
+
+            if opt == 0; opt = 2; end  % Set default to Cassini11
             switch opt
                 case 1
                     MagModel = B2010;
@@ -83,11 +86,13 @@ function [MagModel, CsheetModel, magModelDescrip, fEnd] = GetModelOpts(parentNam
                     fEnd = 'None';
             end
             
+            
         case 'Uranus'
             % opt 1
             AH5 = 'MagFldUranusAH5';
             AH5sheet = 'None';
-            
+
+            if opt == 0; opt = 1; end  % Set default to AH5
             switch opt
                 case 1
                     MagModel = AH5;
@@ -102,11 +107,13 @@ function [MagModel, CsheetModel, magModelDescrip, fEnd] = GetModelOpts(parentNam
                     fEnd = 'None';
             end
             
+            
         case 'Neptune'
             % opt 1
             O8 = 'MagFldNeptuneO8';
             O8sheet = 'None';
             
+            if opt == 0; opt = 1; end  % Set default to O8
             switch opt
                 case 1
                     MagModel = O8;
