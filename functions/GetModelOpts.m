@@ -1,0 +1,125 @@
+function [MagModel, CsheetModel, magModelDescrip, fEnd] = GetModelOpts(parentName, opt)
+    switch parentName
+        case 'Jupiter'
+            % opt 1
+            VIP4 = 'MagFldJupiterVIP4';
+            C1981sheet = 'Connerney1981';
+            % opt 2
+            O6 = 'MagFldJupiterGSFCO6';
+            K1997sheet = 'Khurana1997';
+            % opt 3
+            JRM09 = 'MagFldJupiterJRM09';
+            C2020sheet = 'Connerney2020';
+            % opt 4 is Vance et al. 2021 combo, JRM09 + C1981
+            % opt 5 (includes C2020 current sheet)
+            JRM33 = 'MagFldJupiterJRM33';
+            % opt 6
+            KhuranaJup = 'VIP4 with O6 orientation';
+            K2007sheet = 'KS2007';
+
+            switch opt
+                case 1
+                    MagModel = VIP4;
+                    CsheetModel = C1981sheet;
+                    magModelDescrip = 'VIP4 + C1981';
+                    fEnd = 'VIP4C1981';
+                case 2
+                    MagModel = O6;
+                    CsheetModel = K1997sheet;
+                    magModelDescrip = 'O6 + K1997';
+                    fEnd = 'O6K1997';
+                case 3
+                    MagModel = JRM09;
+                    CsheetModel = C2020sheet;
+                    magModelDescrip = 'JRM09 + C2020';
+                    fEnd = 'JRM09C2020';
+                case 4
+                    MagModel = JRM09;
+                    CsheetModel = C1981sheet;
+                    magModelDescrip = 'Vance 2021 (JRM09 + C1981)';
+                    fEnd = 'JRM09C1981';
+                case 5
+                    MagModel = JRM33;
+                    CsheetModel = C2020sheet;
+                    magModelDescrip = 'JRM33 + C2020';
+                    fEnd = 'JRM33C2020';
+                case 6
+                    MagModel = KhuranaJup;
+                    CsheetModel = K2007sheet;
+                    magModelDescrip = 'Khurana & Schwarzl 2007';
+                    fEnd = 'KS2007';
+                otherwise
+                    disp(['Magnetic field model option ' num2str(opt) ' not recognized. Defaulting to "None".'])
+                    MagModel = 'None';
+                    CsheetModel = 'None';
+                    magModelDescrip = 'None';
+                    fEnd = 'None';
+            end
+            
+        case 'Saturn'
+            % opt 1
+            B2010 = 'MagFldSaturnBurton2010';
+            B2010sheet = 'SphericalHarmonic';
+            % opt 2
+            Cassini11 = 'MagFldSaturnCassini11';
+            Cassini11sheet = 'Cassini11';
+    
+            switch opt
+                case 1
+                    MagModel = B2010;
+                    CsheetModel = B2010sheet;
+                    magModelDescrip = 'Burton et al. 2010';
+                    fEnd = 'B2010';
+                case 2
+                    MagModel = Cassini11;
+                    CsheetModel = Cassini11sheet;
+                    magModelDescrip = 'Cassini 11 field + sheet';
+                    fEnd = 'Cassini11';
+                otherwise
+                    disp(['Magnetic field model option ' num2str(opt) ' not recognized. Defaulting to "None".'])
+                    MagModel = 'None';
+                    CsheetModel = 'None';
+                    magModelDescrip = 'None';
+                    fEnd = 'None';
+            end
+            
+        case 'Uranus'
+            % opt 1
+            AH5 = 'MagFldUranusAH5';
+            AH5sheet = 'None';
+            
+            switch opt
+                case 1
+                    MagModel = AH5;
+                    CsheetModel = AH5sheet;
+                    magModelDescrip = 'AH5';
+                    fEnd = 'AH5';
+                otherwise
+                    disp(['Magnetic field model option ' num2str(opt) ' not recognized. Defaulting to "None".'])
+                    MagModel = 'None';
+                    CsheetModel = 'None';
+                    magModelDescrip = 'None';
+                    fEnd = 'None';
+            end
+            
+        case 'Neptune'
+            % opt 1
+            O8 = 'MagFldNeptuneO8';
+            O8sheet = 'None';
+            
+            switch opt
+                case 1
+                    MagModel = O8;
+                    CsheetModel = O8sheet;
+                    magModelDescrip = 'O8';
+                    fEnd = 'O8';
+                otherwise
+                    disp(['Magnetic field model option ' num2str(opt) ' not recognized. Defaulting to "None".'])
+                    MagModel = 'None';
+                    CsheetModel = 'None';
+                    magModelDescrip = 'None';
+                    fEnd = 'None';
+            end
+            
+    end
+end

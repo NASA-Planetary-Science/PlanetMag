@@ -1,0 +1,6 @@
+Contains 'g' Schmidt semi-normalized spherical harmonic coefficients for VIP4 internal field model of Jupiter in gauss (G), organized as g_mn, so that each row represents a single n and each column a single m. See https://doi.org/10.1029/97JA03726
+     g0n,      g1n,      g2n,      g3n,     g4n
+ 4.20543, -0.65920,        0,        0,       0
+-0.05118, -0.61904,  0.49690,        0,       0
+-0.01576, -0.52036,  0.24386, -0.17597,       0
+-0.16758,  0.22210, -0.06074, -0.20243, 0.06643

@@ -1,0 +1,13 @@
+Table 1. Spherical Harmonic Coefficients for the Axisymmetric Model Derived in This Studya
+
+
+		Cassini	Cassini(SOI)	Z3	SPV
+
+g10	21136 (.60)	21153	21162	21248	21225
+g20	1526 (.37)	1576	1514	1613	1566
+g30	2219 (.90)	2267	2283	2683	2332
+G10	-11.6				
+G11	-.04				
+H11	-.14				
+
+aThe error in the model coefficients given by Connerney [1981], equation 13 is shown in parentheses. Earlier model coefficients are also shown for comparison including an earlier model based on three years of Cassini data [Burton et al., 2009], a model based on Saturn orbit insertion data only [Dougherty et al., 2005]. Model coefficients based on data obtained in the Pioneer-Voyager era are also shown, Z3 [Connerney et al., 1984] and SPV [Davis and Smith, 1990].

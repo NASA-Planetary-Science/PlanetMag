@@ -1,0 +1,651 @@
+ 
+; S030916A.BSP LOG FILE
+;
+; Created 2003-09-16/13:50:40.00.
+;
+; BEGIN NIOSPK COMMANDS
+ 
+LEAPSECONDS_FILE    = /usr/nav/traj/naif/mk98259a.tls
+SPK_FILE            = S030916A.BSP
+  SPK_LOG_FILE      = S030916A-GMM.log
+  INCLUDE_TEXT_FILE = gmm-comments.txt
+  SOURCE_NIO_FILE   = sateph/sateph-jup120ext-172.nio
+    BODIES          = 514 515 516
+    BEGIN_TIME      = CAL-ET 2000 FEB 01 00:00:00.000
+    END_TIME        = CAL-ET 2003 SEP 22 04:34:38.009
+  SOURCE_NIO_FILE   = sateph/sateph-jup120ext-172.nio
+    BODIES          = 505
+    BEGIN_TIME      = CAL-ET 2000 FEB 01 00:00:00.000
+    END_TIME        = CAL-ET 2001 JUL 30 12:00:00.000
+  SOURCE_NIO_FILE   = sateph/sateph-jup120ext-172.nio
+    BODIES          = 506 507 508 509 510 511 512 513
+    BEGIN_TIME      = CAL-ET 2000 FEB 01 00:00:00.000
+    END_TIME        = CAL-ET 2003 SEP 22 04:34:38.009
+  SOURCE_NIO_FILE   = orbiter/dpfil-000221-od281-i27-enc.nio
+    BODIES          = -77
+    BEGIN_TIME      = CAL-ET 2000 FEB 01 00:00:00.000
+    END_TIME        = CAL-ET 2000 FEB 06 12:01:04.184
+  SOURCE_NIO_FILE   = sateph/sateph.OD281.nio
+    BODIES          = 501 502 503 504 599
+    BEGIN_TIME      = CAL-ET 2000 FEB 01 00:00:00.000
+    END_TIME        = CAL-ET 2000 FEB 06 12:01:04.184
+  SOURCE_NIO_FILE   = plneph/eph.OD261.nio
+    BODIES          = 3 5 10 301 399
+    BEGIN_TIME      = CAL-ET 2000 FEB 01 00:00:00.000
+    END_TIME        = CAL-ET 2000 FEB 06 12:01:04.184
+  SOURCE_NIO_FILE   = orbiter/dpfil-000519-od287-g28-enc.nio
+    BODIES          = -77
+    BEGIN_TIME      = CAL-ET 2000 FEB 06 12:01:04.184
+    END_TIME        = CAL-ET 2000 MAY 18 12:01:04.185
+  SOURCE_NIO_FILE   = sateph/sateph.OD287.nio
+    BODIES          = 501 502 503 504 599
+    BEGIN_TIME      = CAL-ET 2000 FEB 06 12:01:04.184
+    END_TIME        = CAL-ET 2000 MAY 18 12:01:04.185
+  SOURCE_NIO_FILE   = plneph/eph.OD261.nio
+    BODIES          = 3 5 10 301 399
+    BEGIN_TIME      = CAL-ET 2000 FEB 06 12:01:04.184
+    END_TIME        = CAL-ET 2000 MAY 18 12:01:04.185
+  SOURCE_NIO_FILE   = orbiter/dpfil-001227-od296-g29-enc.nio
+    BODIES          = -77
+    BEGIN_TIME      = CAL-ET 2000 MAY 18 12:01:04.185
+    END_TIME        = CAL-ET 2000 NOV 01 12:01:04.182
+  SOURCE_NIO_FILE   = sateph/sateph.OD296.nio
+    BODIES          = 501 502 503 504 599
+    BEGIN_TIME      = CAL-ET 2000 MAY 18 12:01:04.185
+    END_TIME        = CAL-ET 2000 NOV 01 12:01:04.182
+  SOURCE_NIO_FILE   = plneph/eph.OD261.nio
+    BODIES          = 3 5 10 301 399
+    BEGIN_TIME      = CAL-ET 2000 MAY 18 12:01:04.185
+    END_TIME        = CAL-ET 2000 NOV 01 12:01:04.182
+  SOURCE_NIO_FILE   = orbiter/dpfil-010524-od303-c30-enc.nio
+    BODIES          = -77
+    BEGIN_TIME      = CAL-ET 2000 NOV 01 12:01:04.182
+    END_TIME        = CAL-ET 2001 MAY 01 12:01:04.185
+  SOURCE_NIO_FILE   = sateph/sateph.OD303.nio
+    BODIES          = 501 502 503 504 599
+    BEGIN_TIME      = CAL-ET 2000 NOV 01 12:01:04.182
+    END_TIME        = CAL-ET 2001 MAY 01 12:01:04.185
+  SOURCE_NIO_FILE   = plneph/eph.OD261.nio
+    BODIES          = 3 5 10 301 399
+    BEGIN_TIME      = CAL-ET 2000 NOV 01 12:01:04.182
+    END_TIME        = CAL-ET 2001 MAY 01 12:01:04.185
+  SOURCE_NIO_FILE   = orbiter/dpfil-010804-od308-i31-enc.nio
+    BODIES          = -77
+    BEGIN_TIME      = CAL-ET 2001 MAY 01 12:01:04.185
+    END_TIME        = CAL-ET 2001 JUL 30 12:00:00.000
+  SOURCE_NIO_FILE   = sateph/sateph.OD308.nio
+    BODIES          = 501 502 503 504 599
+    BEGIN_TIME      = CAL-ET 2001 MAY 01 12:01:04.185
+    END_TIME        = CAL-ET 2001 JUL 30 12:00:00.000
+  SOURCE_NIO_FILE   = plneph/eph.OD261.nio
+    BODIES          = 3 5 10 301 399
+    BEGIN_TIME      = CAL-ET 2001 MAY 01 12:01:04.185
+    END_TIME        = CAL-ET 2001 JUL 30 12:00:00.000
+  SOURCE_NIO_FILE   = orbiter/dpfil-011015-od315-i32-enc.nio
+    BODIES          = -77
+    BEGIN_TIME      = CAL-ET 2001 JUL 30 12:00:00.000
+    END_TIME        = CAL-ET 2001 OCT 10 12:00:00.000
+  SOURCE_NIO_FILE   = sateph/sateph.OD315.nio
+    BODIES          = 505
+    BEGIN_TIME      = CAL-ET 2001 JUL 30 12:00:00.000
+    END_TIME        = CAL-ET 2001 OCT 10 12:00:00.000
+  SOURCE_NIO_FILE   = sateph/sateph.OD315.nio
+    BODIES          = 501 502 503 504 599
+    BEGIN_TIME      = CAL-ET 2001 JUL 30 12:00:00.000
+    END_TIME        = CAL-ET 2001 OCT 10 12:00:00.000
+  SOURCE_NIO_FILE   = plneph/eph-jup197.nio
+    BODIES          = 3 5 10 301 399
+    BEGIN_TIME      = CAL-ET 2001 JUL 30 12:00:00.000
+    END_TIME        = CAL-ET 2001 OCT 10 12:00:00.000
+  SOURCE_NIO_FILE   = orbiter/dpfil-020116-od321-i33-enc.nio
+    BODIES          = -77
+    BEGIN_TIME      = CAL-ET 2001 OCT 10 12:00:00.000
+    END_TIME        = CAL-ET 2002 JAN 03 12:00:00.000
+  SOURCE_NIO_FILE   = sateph/sateph.OD321.nio
+    BODIES          = 505
+    BEGIN_TIME      = CAL-ET 2001 OCT 10 12:00:00.000
+    END_TIME        = CAL-ET 2002 JAN 03 12:00:00.000
+  SOURCE_NIO_FILE   = sateph/sateph.OD321.nio
+    BODIES          = 501 502 503 504 599
+    BEGIN_TIME      = CAL-ET 2001 OCT 10 12:00:00.000
+    END_TIME        = CAL-ET 2002 JAN 03 12:00:00.000
+  SOURCE_NIO_FILE   = plneph/eph-jup197.nio
+    BODIES          = 3 5 10 301 399
+    BEGIN_TIME      = CAL-ET 2001 OCT 10 12:00:00.000
+    END_TIME        = CAL-ET 2002 JAN 03 12:00:00.000
+  SOURCE_NIO_FILE   = orbiter/dpfil-020916-od327-otm108.nio
+    BODIES          = -77
+    BEGIN_TIME      = CAL-ET 2002 JAN 03 12:00:00.000
+    END_TIME        = CAL-ET 2002 SEP 11 12:00:00.000
+  SOURCE_NIO_FILE   = sateph/sateph.OD327.nio
+    BODIES          = 501 502 503 504 505 599
+    BEGIN_TIME      = CAL-ET 2002 JAN 03 12:00:00.000
+    END_TIME        = CAL-ET 2002 SEP 11 12:00:00.000
+  SOURCE_NIO_FILE   = plneph/eph-jup197.nio
+    BODIES          = 3 5 10 301 399
+    BEGIN_TIME      = CAL-ET 2002 JAN 03 12:00:00.000
+    END_TIME        = CAL-ET 2002 SEP 11 12:00:00.000
+  SOURCE_NIO_FILE   = orbiter/dpfil-021104-od329-a34-enc.nio
+    BODIES          = -77
+    BEGIN_TIME      = CAL-ET 2002 SEP 11 12:00:00.000
+    END_TIME        = CAL-ET 2002 SEP 21 12:00:00.000
+  SOURCE_NIO_FILE   = sateph/sateph.OD329.nio
+    BODIES          = 501 502 503 504 505 599
+    BEGIN_TIME      = CAL-ET 2002 SEP 11 12:00:00.000
+    END_TIME        = CAL-ET 2002 SEP 21 12:00:00.000
+  SOURCE_NIO_FILE   = plneph/eph-jup197.nio
+    BODIES          = 3 5 10 301 399
+    BEGIN_TIME      = CAL-ET 2002 SEP 11 12:00:00.000
+    END_TIME        = CAL-ET 2002 SEP 21 12:00:00.000
+  SOURCE_NIO_FILE   = orbiter/dpfil-030129-od331-j35.nio
+    BODIES          = -77
+    BEGIN_TIME      = CAL-ET 2002 SEP 21 12:00:00.000
+    END_TIME        = CAL-ET 2003 JAN 28 01:00:00.000
+  SOURCE_NIO_FILE   = sateph/sateph.OD331.nio
+    BODIES          = 501 502 503 504 505 599
+    BEGIN_TIME      = CAL-ET 2002 SEP 21 12:00:00.000
+    END_TIME        = CAL-ET 2003 JAN 28 01:00:00.000
+  SOURCE_NIO_FILE   = plneph/eph-jup197.nio
+    BODIES          = 3 5 10 301 399
+    BEGIN_TIME      = CAL-ET 2002 SEP 21 12:00:00.000
+    END_TIME        = CAL-ET 2003 JAN 28 01:00:00.000
+  SOURCE_NIO_FILE   = orbiter/dpfil-030916-od333-j35.nio
+    BODIES          = -77
+    BEGIN_TIME      = CAL-ET 2003 JAN 28 01:00:00.000
+    END_TIME        = CAL-ET 2003 SEP 30 12:00:00.000
+  SOURCE_NIO_FILE   = sateph/sateph.OD333.nio
+    BODIES          = 501 502 503 504 505 599
+    BEGIN_TIME      = CAL-ET 2003 JAN 28 01:00:00.000
+    END_TIME        = CAL-ET 2003 SEP 30 12:00:00.000
+  SOURCE_NIO_FILE   = plneph/eph-jup197.nio
+    BODIES          = 3 5 10 301 399
+    BEGIN_TIME      = CAL-ET 2003 JAN 28 01:00:00.000
+    END_TIME        = CAL-ET 2003 SEP 30 12:00:00.000
+ 
+; END NIOSPK COMMANDS
+ 
+                         GENERAL COMMENTS:
+ 
+KEY TO FILE SEGMENTS:
+ 
+01-FEB-2000 to 06-FEB-2000 Initial Epoch for GEM Millennium Mission, OD281
+06-FEB-2000 to 18-MAY-2000 Reconstruction for I27, OD287
+18-MAY-2000 to 01-NOV-2000 Reconstruction for G28, OD296
+01-NOV-2000 to 01-MAY-2001 Reconstruction for G29, OD303
+01-MAY-2001 to 30-JUL-2001 Reconstruction for C30, OD308
+30-JUL-2001 to 10-OCT-2001 Reconstruction for I31, OD315
+10-OCT-2001 to 03-JAN-2002 Reconstruction for I32, OD321
+03-JAN-2002 to 11-SEP-2002 Reconstruction for I33, OD327
+11-SEP-2002 to 21-SEP-2002 Reconstruction for beginning of orbit 34, OD329
+21-SEP-2002 to 28-JAN-2003 Reconstruction for A34, OD331
+28-JAN-2003 to 13-SEP-2003 Reconstruction for beginning of orbit 35, OD333
+13-SEP-2003 to 30-SEP-2003 Predict reference trajectory T-030916
+                           to Jupiter impact, OD333
+ 
+This file is a compilation of reconstructed trajectory segments and an
+updated predicted trajectory for the Galileo Millennium Mission (GMM).
+This file begins 1-FEB-2000 (DOY 00-032) and continues to the 30-SEP-2003.
+ 
+The file for the primary tour is S980326B.BSP.  It is compiled of
+reconstructed data only and ends on 1-JAN-1998 (DOY 98-001).  Also,
+the reconstructed file for the GEM mission is S000131A.BSP (1-DEC-1997
+to 1-FEB-2000).
+ 
+A similar file covering reconstructed segments for the interplanetary
+trajectory can be found in a S970311A.BSP.  The final reconstruction
+for the probe trajectory is provided separately in S960730A.BSP.
+ 
+This file coincides with the Jupiter Planning Sequence and Command
+cycle as represented in the GMM IMOP and includes the final
+reconstruction for the trajectory for the encounter, Amalthea 34.
+ 
+The minor Jovian satellites are included for the Post-GMM Mission until
+September 2003 (EOM).
+Bodies included in this file and radii for Jupiter and the Jovian
+satellites are:
+ 
+ 
+     Name                  Body Number      Radius (km)
+ 
+     Orbiter               -77
+     Earth                 399               6378.14
+     Earth barycenter        3
+     Moon                  301               1737.40
+     Sun barycenter         10
+     Jupiter               599              71492.0
+     Jupiter barycenter      5
+     Io                    501               1821.3
+     Europa                502               1565.0
+     Ganymede              503               2634.0
+     Callisto              504               2403.0
+     Amalthea              505                 86.2
+     Himalia               506                 85.0
+     Elara                 507                 40.0
+     Pasiphae              508                 18.0
+     Sinope                509                 14.0
+     Lysithea              510                 12.0
+     Carme                 511                 15.0
+     Ananke                512                 10.0
+     Leda                  513                  5.0
+     Thebe                 514                 50.0
+     Adrastea              515                 10.0
+     Metis                 516                 20.0
+ 
+NOTE:  The radii values were taken from the Report of the IAU/IAG/COSPAR
+       Working Group on Cartographic Coordinates and Rotational Elements
+       of the Planets and Satellites:  1994.
+Each segment listed has information under the following headings:
+  COMMENTS
+  TRAJECTORY BASIS/OD SOLUTION
+  TIME SPAN
+  SIGNIFICANT EVENTS
+  INPUT FILES
+ 
+ET is used to denote ephemeris time; it differs from UTC (universal time
+coordinated) in which spacecraft events are usually given by the following:
+  ET minus UTC = 64.184 sec (as of Jan. 1, 1999)
+  SCLK is spacecraft clock string.
+ 
+Questions should be directed to:
+  Joan Pojman (818 354-0264, Joan.Pojman@jpl.nasa.gov)
+-----------------------------------------------------------------------------
+                     INITIAL EPOCH FOR GEM MILLENNIUM MISSION
+ 
+COMMENTS:  Initial epoch for SPK file for GMM and Post-GMM
+           ET minus UTC is 64.184 seconds as of January 1, 1999.
+ 
+TRAJECTORY BASIS/OD SOLUTION:  OD-281
+ 
+TIME SPAN:
+                BEGIN: 01-FEB-2000 00:00:00.000 ET   DOY:  00-032
+                       31-JAN-2000 23:58:55.815 UTC  DOY:  00-031
+                       1/05368592:01:2:0       SCLK
+                  END: 06-FEB-2000 12:01:04.185 ET   DOY:  00-037
+                       06-FEB-2000 12:00:00.000 UTC  DOY:  00-037
+                       1/05376426:03:9:0       SCLK
+ 
+SIGNIFICANT EVENTS:
+ 
+INPUT FILES:
+ Planetary eph file: /usr/nav/od/deliveries/OD261/eph.OD261.nio
+ Satellite eph file: /usr/nav/od/deliveries/OD281/sateph.OD281.nio
+ Epoch file:         /usr/nav/od/deliveries/OD281/epoch
+ GIN file            /usr/nav/eph/gin-0198.v205.nio
+ STOIC file          /usr/nav/od/stoic/ld991228.pt0000309
+ P-file              /usr/nav/traj/pfiles/dpfil-000221-od281-i27-enc.nio
+ 
+-----------------------------------------------------------------------------
+                       RECONSTRUCTION FOR IO 27
+COMMENTS:  Reconstruction for Io 27
+           ET minus UTC is 64.184 seconds as of January 1, 1999.
+ 
+TRAJECTORY BASIS/OD SOLUTION:  OD-287
+ 
+TIME SPAN:
+                BEGIN: 06-FEB-2000 12:01:04.185 ET   DOY:  00-037
+                       06-FEB-2000 12:00:00.000 UTV  DOY:  00-037
+                       1/05376426:03:9:0       SCLK
+                  END: 18-MAY-2000 12:01:04.186 ET   DOY:  00-139
+                       18-MAY-2000 12:00:00.000 UTC  DOY:  00-139
+                       1/05521692:04:5:2       SCLK
+SIGNIFICANT EVENTS:
+ 
+  Io 27 closest approach:
+    22-FEB-2000 13:47:45.62 ET (13:46:41.44 UTC, 1/05399318:35:3:0 SCLK)
+    Altitude:    197.959 km +/- 0.010 km
+    Latitude:     18.535 deg. +/- 0.001 deg.
+                         (Io-centered, Io True Equator of Date)
+  Jupiter Periapsis:
+    22-FEB-2000 12:31:31.08 ET (12:30:26.89 UTC, 1/05399242:89:4:7 SCLK)
+    Range to Jupiter from S/C:  418503.75 km (5.85385 Rj)
+ 
+INPUT FILES:
+ Planetary eph file: /usr/nav/od/deliveries/OD261/eph.OD261.nio
+ Satellite eph file: /usr/nav/od/deliveries/OD287/sateph.OD287.nio
+ Epoch file:         /usr/nav/od/deliveries/OD287/epoch
+ GIN file            /usr/nav/eph/gin-0198.v205.nio
+ STOIC file          /usr/nav/od/stoic/ld991228.pt0000309
+ P-file              /usr/nav/traj/pfiles/dpfil-000519-od287-g28-enc.nio
+ 
+-----------------------------------------------------------------------------
+                      RECONSTRUCTION FOR GANYMEDE 28
+ 
+ 
+COMMENTS:  Reconstruction for Ganymede 28
+           ET minus UTC is 64.184 seconds as of January 1, 1999.
+ 
+TRAJECTORY BASIS/OD SOLUTION:  OD-296
+ 
+TIME SPAN:
+                BEGIN: 18-MAY-2000 12:01:04.186 ET   DOY:  00-139
+                       18-MAY-2000 12:00:00.000 UTC  DOY:  00-139
+                       1/05521692:04:5:2       SCLK
+                  END: 01-NOV-2000 12:01:04.183 ET   DOY:  00-306
+                       01-NOV-2000 12:00:00.000 UTC  DOY:  00-306
+                       1/05759529:49:3:0       SCLK
+SIGNIFICANT EVENTS:
+ 
+  Ganymede 28 closest approach:
+    20-MAY-2000 10:11:13.85 ET (10:10:09.66 UTC, 1/05524431:70:1:5
+    Altitude:    808.733 +/- 0.048 km
+    Latitude:    -18.958 +/- 0.002 deg.
+                         (Ganymede-centered, Ganymede True Equator of Date)
+ 
+  Jupiter Periapsis:
+    21-MAY-2000 04:53:22.75 ET (04:52:18.56 UTC, 1/05525541:53:5:5 SCLK)
+    Range to Jupiter from S/C:  477384.36 km (6.67745 Rj)
+ 
+INPUT FILES:
+ Planetary eph file: /usr/nav/od/deliveries/OD261/eph.OD261.nio
+ Satellite eph file: /usr/nav/od/deliveries/OD296/sateph.OD296.nio
+ Epoch file:         /usr/nav/od/deliveries/OD296/epoch
+ GIN file            /usr/nav/eph/gin-0198.v205.nio
+ STOIC file          /usr/nav/od/stoic/ld001221.pt010303
+ P-file              /usr/nav/traj/pfiles/dpfil-001227-od296-g29-enc.nio
+ 
+-----------------------------------------------------------------------------
+                      RECONSTRUCTION FOR GANYMEDE 29
+ 
+COMMENTS:  Reconstruction for Ganymede 29
+           ET minus UTC is 64.184 seconds as of January 1, 1999.
+ 
+TRAJECTORY BASIS/OD SOLUTION:  OD-303
+ 
+TIME SPAN:
+                BEGIN: 01-NOV-2000 12:01:04.183 ET   DOY:  00-306
+                       01-NOV-2000 12:00:00.000 UTC  DOY:  00-306
+                       1/05759529:49:3:0       SCLK
+                  END: 01-MAY-2001 12:01:04.186 ET   DOY:  01-121
+                       01-MAY-2001 12:00:00.000 UTC  DOY:  01-121
+                       1/06017305:46:0:5       SCLK
+SIGNIFICANT EVENTS:
+ 
+  Ganymede 29 closest approach:
+    28-DEC-2000 08:26:30.85 ET (08:25:26.66 UTC, 1/05840495:37:3:0
+    Altitude:    2337.47 +/- 0.042 km
+    Latitude:      62.205 +/- 0.002 deg.
+                         (Ganymede-centered, Ganymede True Equator of Date)
+ 
+  Jupiter Periapsis:
+    29-DEC-2000 03:27:35.37 ET (03:26:31.18 UTC, 1/05841623:86:1:3 SCLK)
+    Range to Jupiter from S/C:  535434.81 km (7.48944 Rj)
+ 
+INPUT FILES:
+ Planetary eph file: /usr/nav/od/deliveries/OD261/eph.OD261.nio
+ Satellite eph file: /usr/nav/od/deliveries/OD303/sateph.OD303.nio
+ Epoch file:         /usr/nav/od/deliveries/OD303/epoch
+ GIN file            /usr/nav/eph/gin-0198.v205.nio
+ STOIC file          /usr/nav/od/stoic/ld010522.pt010802
+ P-file              /usr/nav/traj/pfiles/dpfil-010524-od303-c30-enc.nio
+ 
+-----------------------------------------------------------------------------
+                         RECONSTRUCTION FOR CALLISTO 30
+ 
+COMMENTS:  Reconstruction for Callisto 30
+           ET minus UTC is 64.184 seconds as of January 1, 1999.
+ 
+TRAJECTORY BASIS/OD SOLUTION:  OD-308
+ 
+TIME SPAN:
+                BEGIN: 01-MAY-2001 12:01:04.186 ET   DOY:  01-121
+                       01-MAY-2001 12:00:00.000 UTC  DOY:  01-121
+                       1/06017305:46:0:5       SCLK
+                  END: 30-JUL-2001 12:00:00.000 ET   DOY:  01-211
+                       30-JUL-2001 11:58:55.817 UTC  DOY:  01-211
+                       1/06145480:31:1:2       SCLK
+SIGNIFICANT EVENTS:
+ 
+  Callisto 30 closest approach:
+    25-MAY-2001 11:25:01.93 ET (11:23:57.75 UTC, 1/06051450:09:3:6 SCLK)
+    Altitude:     137.90 +/- 0.01 km
+    Latitude:      13.65 +/- 0.0006 deg.
+                         (Callisto-centered, Callisto True Equator of Date)
+ 
+  Jupiter Periapsis:
+    23-MAY-2001 17:33:54.96 ET (17:32:50.78 UTC, 1/06048966:52:8:0 SCLK)
+    Range to Jupiter from S/C:  520354.34 km (7.27850 Rj)
+ 
+INPUT FILES:
+ Planetary eph file: /usr/nav/od/deliveries/OD261/eph.OD261.nio
+ Satellite eph file: /usr/nav/od/deliveries/OD308/sateph.OD308.nio
+ Epoch file:         /usr/nav/od/deliveries/OD308/epoch
+ GIN file            /usr/nav/eph/gin-0198.v205.nio
+ STOIC file          /usr/nav/od/stoic/ld010803.pt011014
+ P-file              /usr/nav/traj/ref-traj/dpfil-010810-od310-tour.nio
+ 
+-----------------------------------------------------------------------------
+                       RECONSTRUCTION FOR IO 31
+ 
+COMMENTS:  Reconstruction for Io 31
+           ET minus UTC is 64.184 seconds as of January 1, 1999.
+ 
+TRAJECTORY BASIS/OD SOLUTION:  OD-315
+ 
+TIME SPAN:
+                BEGIN: 30-JUL-2001 12:00:00.000 ET   DOY:  01-211
+                       30-JUL-2001 11:58:55.817 UTC  DOY:  01-211
+                       1/06145480:31:1:2       SCLK
+                  END: 10-OCT-2001 12:00:00.000 ET   DOY:  01-283
+                       10-OCT-2001 11:58:55.818 UTC  DOY:  01-283
+                       1/06248021:05:2:0       SCLK
+SIGNIFICANT EVENTS:
+ 
+  Io 31 closest approach:
+    06-AUG-2001 05:00:24.59 ET (04:59:20.41 UTC, 1/06155034:54:4:7 SCLK)
+    Altitude:     193.434 +/- 0.108 km
+    Latitude:      77.492 +/- 0.004 deg.
+                         (Io-centered, Io True Equator of Date)
+ 
+  Jupiter Periapsis:
+    06-AUG-2001 04:53:15.26 ET (04:52:11.07 UTC, 1/06155027:47:4:7 SCLK)
+    Range to Jupiter from S/C:  423897.71 km (5.92930 Rj)
+ 
+INPUT FILES:
+ Planetary eph file: /usr/nav/eph/eph-jup197.nio
+ Satellite eph file: /usr/nav/od/deliveries/OD315/sateph.OD315.nio
+ Epoch file:         /usr/nav/od/deliveries/OD315/epoch
+ GIN file            /usr/nav/eph/gin-0198.v205.nio
+ STOIC file          /usr/nav/od/stoic/ld011012.pt011223
+ P-file              /usr/nav/traj/ref-traj/dpfil-011015-od315-i32-enc.nio
+ 
+-----------------------------------------------------------------------------
+                     RECONSTRUCTION FOR IO-32
+ 
+COMMENTS:  Reconstruction for Io 32
+           ET minus UTC is 64.184 seconds as of January 1, 1999.
+ 
+TRAJECTORY BASIS/OD SOLUTION:  OD-321
+ 
+TIME SPAN:
+                BEGIN: 10-OCT-2001 12:00:00.000 ET   DOY:  01-283
+                       10-OCT-2001 11:58:55.818 UTC  DOY:  01-283
+                       1/06248021:05:2:0       SCLK
+                  END: 03-JAN-2002 12:00:00.000 ET   DOY:  02-003
+                       03-JAN-2002 11:58:55.816 UTC  DOY:  02-003
+                       1/06369076:06:2:0       SCLK
+SIGNIFICANT EVENTS:
+ 
+  Io 32 closest approach:
+    16-OCT-2001 01:24:24.76 ET (01:23:20.58 UTC, 1/06255937:46:7:3 SCLK)
+    Altitude:     184.402 +/- 0.030 km
+    Latitude:     -78.538 +/- 0.001 deg.
+                         (Io-centered, Io True Equator of Date)
+ 
+  Jupiter Periapsis:
+    15-OCT-2001 23:57:03.24 ET (23:55:59.06  UTC, 1/06255851:10:4:4 SCLK)
+    Range to Jupiter from S/C:  413439.64 km (5.78302 Rj)
+ 
+INPUT FILES:
+ Planetary eph file: /usr/nav/eph/eph-jup197.nio
+ Satellite eph file: /usr/nav/od/deliveries/OD321/sateph.OD321.nio
+ Epoch file:         /usr/nav/od/deliveries/OD321/epoch
+ GIN file            /usr/nav/eph/gin-0198.v205.nio
+ STOIC file          /usr/nav/od/stoic/ld020115.pt020328
+ P-file              /usr/nav/traj/ref-traj/dpfil-020116-od321-i33-enc.nio
+ 
+-----------------------------------------------------------------------------
+                     RECONSTRUCTION FOR IO-33
+ 
+COMMENTS:  Reconstruction for Io 33
+           ET minus UTC is 64.184 seconds as of January 1, 1999.
+ 
+TRAJECTORY BASIS/OD SOLUTION:  OD-327
+ 
+TIME SPAN:
+                BEGIN: 03-JAN-2002 12:00:00.000 ET   DOY:  02-003
+                       03-JAN-2002 11:58:55.816 UTC  DOY:  02-003
+                       1/06369076:06:2:0       SCLK
+                  END: 11-SEP-2002 12:00:00.000 ET   DOY:  02-254
+                       11-SEP-2002 11:58:55.817 UTC  DOY:  02-254
+                       1/06726544:35:9:0       SCLK
+SIGNIFICANT EVENTS:
+ 
+  Io 33 closest approach:
+    17-JAN-2002 14:09:32.30 ET (14:08:28.11 UTC, 1/06389142:59:6:3 SCLK)
+    Altitude:     101.510 +/- 0.021 km
+    Latitude:     -43.5355 +/- 0.0005 deg.
+                         (Io-centered, Io True Equator of Date)
+ 
+  Jupiter Periapsis:
+    17-JAN-2002 16:23:37.18 ET (16:22:32.99 UTC, 1/06389275:23:9:6 SCLK)
+    Range to Jupiter from S/C:  396311.76 km (5.54344 Rj)
+ 
+INPUT FILES:
+ Planetary eph file: /usr/nav/eph/eph-jup197.nio
+ Satellite eph file: /usr/nav/od/deliveries/OD327/sateph.OD327.nio
+ Epoch file:         /usr/nav/od/deliveries/OD327/epoch
+ GIN file            /usr/nav/eph/gin-0198.v205.nio
+ STOIC file          /usr/nav/od/stoic/ld020910.pt021121
+ P-file              /usr/nav/traj/ref-traj/dpfil-020916-od327-otm108.nio
+ 
+-----------------------------------------------------------------------------
+                     RECONSTRUCTION FOR BEGINNING OF ORBIT 34
+ 
+COMMENTS:  Reconstruction for beginning of Amalthea 34 orbit
+           ET minus UTC is assumed to be 64.184 seconds as of January 1, 1999.
+ 
+TRAJECTORY BASIS/OD SOLUTION:  OD-329
+ 
+TIME SPAN:
+                BEGIN: 11-SEP-2002 12:00:00.000 ET   DOY:  02-254
+                       11-SEP-2002 11:58:55.818 UTC  DOY:  02-254
+                       1/06726544:35:9:0       SCLK
+                  END: 21-SEP-2002 12:00:00.000 ET   DOY:  02-264
+                       21-SEP-2002 11:58:55.818 UTC  DOY:  02-264
+                       1/06740786:14:6:0       SCLK
+ 
+SIGNIFICANT EVENTS:
+ 
+INPUT FILES:
+ Planetary eph file: /usr/nav/nav/eph/eph-jup197.nio
+ Satellite eph file: /usr/nav/od/deliveries/OD329/sateph.OD329.nio
+ Epoch file:         /usr/nav/od/deliveries/OD326/epoch
+ GIN file            /usr/nav/od/deliveries/OD329/gin.nio
+ STOIC file          /usr/nav/od/stoic/ld021101.pt030112
+ P-file              /usr/nav/traj/ref-traj/dpfil-021104-od329-a34-enc.nio
+ 
+-----------------------------------------------------------------------------
+                     RECONSTRUCTION FOR AMALTHEA 34
+ 
+COMMENTS:  Reconstruction for Amalthea 34.  The GM for Amalthea has changed significantly.
+           The new GM value used is 0.146 +/- 0.013 km**3/s**2 (old value was 0.5 km**3/s**2).
+           ET minus UTC is 64.184 seconds as of January 1, 1999.
+ 
+TRAJECTORY BASIS/OD SOLUTION:  OD-331
+ 
+TIME SPAN:
+                BEGIN: 21-SEP-2002 12:00:00.000 ET   DOY:  02-264
+                       21-SEP-2002 11:58:55.818 UTC  DOY:  02-264
+                       1/06740786:14:6:0       SCLK
+                  END: 28-JAN-2003 01:00:00.000 ET   DOY:  03-028
+                       28-JAN-2003 00:58:55.815 UTC  DOY:  03-028
+                       1/06923852:14:7:2       SCLK        *** Using new SCLK file, mk03112.tsc ***
+ 
+SIGNIFICANT EVENTS:
+ 
+  Amalthea Closest Approach:
+    05-NOV-2002 06:19:45.05 ET (05-NOV-2002 06:18:40.87 UTC, 1/06804537:54:3:3 SCLK)
+    Altitude:     163.0  +/- 11.7 km
+    Latitude:     -47.7 +/- 2.8 degrees (STED)
+                         (Amalthea-centered, Amalthea True Equator of Date)
+ 
+  Io (Non-targeted) Distant Flyby:
+    05-NOV-2002 02:57:53.35 ET (05-NOV-2002 02:56:49.17 UTC, 1/06804337:86:7:6 SCLK)
+    Altitude:     45379.149 +/- 2.512 km
+    Latitude:        -6.294 +/- 0.028 deg
+                         (Io-centered, Io True Equator of Date)
+ 
+  Jupiter Periapsis:
+    05-NOV-2002 07:24:38.47 ET (05-NOV-2002 07:23:34.29 UTC, 1/06804601:70:4:6 SCLK)
+    Range to Jupiter from S/C:  141976.74 km (1.98591 Rj)
+ 
+INPUT FILES:
+ Planetary eph file: /usr/nav/eph/eph-jup197.nio
+ Satellite eph file: /usr/nav/od/deliveries/OD331/sateph.OD331.nio
+ Epoch file:         /usr/nav/od/deliveries/OD331/epoch
+ GIN file            /usr/nav/od/deliveries/OD331/gin.nio
+ STOIC file          /usr/nav/od/stoic/ld030128.pt030410
+ P-file              /usr/nav/traj/pfiles/dpfil-030129-od331-j35.nio
+ 
+-----------------------------------------------------------------------------
+                     RECONSTRUCTION FOR BEGINNING OF ORBIT 35
+ 
+COMMENTS:  Reconstruction for beginning of orbit 35.
+ 
+TRAJECTORY BASIS/OD SOLUTION:  OD-333
+ 
+TIME SPAN:
+                BEGIN: 28-JAN-2003 01:00:00.000 ET   DOY:  03-028
+                       28-JAN-2003 00:58:55.815 UTC  DOY:  03-028
+                       1/06923852:14:7:2       SCLK   *** Using new SCLK file, mk03112.tsc ***
+                  END: 13-SEP-2003 14:00:00.000 ET   DOY:  03-256
+                       13-SEP-2003 13:58:55.818 UTC  DOY:  03-256
+                       1/07249335:71:4:1       SCLK        *** Using new SCLK file, mk03112.tsc ***
+ 
+SIGNIFICANT EVENTS:
+ 
+Jupiter Apoapsis     14-APR-2003 15:44:54 UTC
+ 
+INPUT FILES:
+ Planetary eph file: /usr/nav/eph/eph-jup197.nio
+ Satellite eph file: /usr/nav/od/deliveries/OD333/sateph.OD333.nio
+ Epoch file:         /usr/nav/od/deliveries/OD333/epoch
+ GIN file            /usr/nav/od/deliveries/OD333/gin.nio
+ STOIC file          /usr/nav/od/stoic/ld030912.pt031123
+ P-file              /usr/nav/traj/pfiles/dpfil-030916-od333-j35.nio
+ 
+-----------------------------------------------------------------------------
+                            PREDICT FOR TOUR-030916
+ 
+COMMENTS:  Predict reference tour past Jupiter impact to 30-SEP-2003.
+           ET minus UTC is assumed to be 64.184 seconds for the predict tour.
+ 
+TRAJECTORY BASIS/OD SOLUTION:  OD-333
+ 
+TIME SPAN:
+                BEGIN: 13-SEP-2003 14:00:00.000 ET   DOY:  03-256
+                       13-SEP-2003 13:58:55.818 UTC  DOY:  03-256
+                       1/07249335:71:4:1       SCLK        *** Using new SCLK file, mk03112.tsc ***
+                  END: 30-SEP-2003 12:00:00.000 ET   DOY:  03-273
+                       30-SEP-2003 11:58:55.818 UTC  DOY:  03-273
+                       1/07273428:09:1:2       SCLK
+ 
+SIGNIFICANT EVENTS:
+ 
+The difference between ET (ephemeris time) and SCET in UTC time is
+64.184 seconds as of January 1, 1999.
+ 
+Jupiter Entry Site   21-SEP-2003 18:56:59.88 UTC
+ 
+ 
+ 
+INPUT FILES:
+ Planetary eph file: /usr/nav/nav/eph/eph-jup197.nio
+ Satellite eph file: /usr/nav/od/deliveries/OD333/sateph.OD333.nio
+ Epoch file:         /usr/nav/od/deliveries/OD333/epoch
+ GIN file            /usr/nav/od/deliveries/OD333/gin.nio
+ STOIC file          /usr/nav/od/stoic/ld030912.pt031123
+ P-file              /usr/nav/traj/ref-traj/dpfil-030916-od333-j35.nio
+ 
+-----------------------------------------------------------------------------
+ 

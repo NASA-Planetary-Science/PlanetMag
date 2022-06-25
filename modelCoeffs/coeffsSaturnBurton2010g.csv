@@ -1,0 +1,5 @@
+Contains 'g' Schmidt semi-normalized spherical harmonic coefficients for Burton et al. 2010 internal field model of Saturn in gauss (G), organized as g_mn, so that each row represents a single n and each column a single m. See https://doi.org/10.1029/2010GL045148
+     g0n,     g1n,     g2n,     g3n
+  2.1136,       0,       0,       0
+  0.1526,       0,       0,       0
+  0.2219,       0,       0,       0
