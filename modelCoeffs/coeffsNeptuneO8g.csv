@@ -1,4 +1,4 @@
-Contains 'g' Schmidt semi-normalized spherical harmonic coefficients for O8 internal field model of Uranus in gauss (G), organized as g_mn, so that each row represents a single n and each column a single m. See https://doi.org/10.1029/91JA01165
+Contains 'g' Schmidt semi-normalized spherical harmonic coefficients for O8 internal field model of Neptune in gauss (G), organized as g_mn, so that each row represents a single n and each column a single m. See https://doi.org/10.1029/91JA01165
       g0n,      g1n,      g2n,      g3n
   0.09732,  0.03220,        0,        0
   0.07448,  0.00664,  0.04499,        0
