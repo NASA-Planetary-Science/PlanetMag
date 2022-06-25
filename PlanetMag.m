@@ -122,8 +122,10 @@ for opt=opts
     Tmax = 200;
 
     if DO_FFT
-        [TfinalFFT_h, B0xFFT, B0yFFT, B0zFFT, B1xFFT, B1yFFT, B1zFFT] ...
-                    = ExcitationSpectrum(moonName, nOsc, rate, Tinterest_h);
+        if CALC_NEW
+            [TfinalFFT_h, B0xFFT, B0yFFT, B0zFFT, B1xFFT, B1yFFT, B1zFFT] ...
+                        = ExcitationSpectrum(moonName, nOsc, rate, Tinterest_h);
+        end
         PlotSpectrum(moonName);
     end
 
