@@ -6,7 +6,7 @@ ALL_MODELS = 1;
 DO_FFT = 0;
 outData = 'out/';
 
-nptsApprox = 600000;
+nptsApprox = 6000000;
 magPhase = 0;
 
 parentName = LoadSpice(moonName);
@@ -96,9 +96,9 @@ for opt=opts
         By = BvecMoon(2,:);
         Bz = BvecMoon(3,:);
         
-        save(fullfile([outData 'evalB' moonName magModelDescrip]), 't_h', 'Bx', 'By', 'Bz');
+        save(fullfile([outData 'evalB' moonName fEnd]), 't_h', 'Bx', 'By', 'Bz');
     else
-        load(fullfile([outData 'evalB' moonName magModelDescrip]));
+        load(fullfile([outData 'evalB' moonName fEnd]));
     end
 
     BD = PCA_decomposition(t_h*3600, upper(moonName), Bx, By, Bz, magModelDescrip);
