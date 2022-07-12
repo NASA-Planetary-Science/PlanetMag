@@ -161,20 +161,15 @@ switch body
                  1 / 3600 / 3.906250548182006, ...
                  2*fMystery];
 
+             
     case 'CALLISTO'
         parentName = 'Jupiter';
         
-        %f(1) = 2.729414e-5; % synodic period
-        %f(2) = 6.939704e-7; % orbital period
+        fOrb = 21.5710715 / 360 / 86400;
+        fSyn = fJup - fOrb;
         
-        % good for callisto C09
-        fSyn = 2.729408017371862e-05;
-        f = [fSyn, ... % synodic period
-             6.934070721821746e-07]; % orbital period
-        
-        %f(1) = 2.729713120183811e-05;
-        %f(2) = 6.957100164384470e-07;
-        
+        f = [fSyn, fOrb];
+         
         % harmonics
         f = [f, 2*fSyn, ...
                 3*fSyn, ...
