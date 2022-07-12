@@ -31,7 +31,49 @@ Pnut1Jup_degday = [91472.9, 45137.2, 4850.7, 1191.3, 262.1, 64.3, 2382.6, 6070.0
 
 switch body
     
-    %% Jupiter moons       
+    %% Jupiter moons 
+    case 'IO'
+        parentName = 'Jupiter';
+        
+        Pnut0 = Pnut0Jup_deg;
+        Pnut1 = Pnut1Jup_degday;
+        PnutM = [0, 0, -0.085, -0.022, 0, 0, 0, 0];
+        fOrb = 203.4889538 / 360 / 86400; % orbital period
+        fOrbBeat = 1 / 3600 / 42.289036514276894252;
+        fIoTA = 1 / 3600 / 42.315044531808887029; % true anomaly period
+        fOrbMid1 = 1 / 3600 / 42.431381950208163;
+        fOrbMid2 = 1 / 3600 / 42.305626942856122;
+        fOrbAdj = (203.4889538 + sum(PnutM .* Pnut1 .* cosd(Pnut0 + Pnut1*etMid_day))) / 360 / 86400;
+        fSyn = fJup - fOrb;
+        fSynAdj = fJup - fOrbAdj;
+        
+        f = [fSyn, fOrb, fIoTA, fOrbMid1, fOrbMid2];
+        
+        f = [f, 2*fSyn, ...
+                3*fSyn, ...
+                4*fSyn, ...
+                5*fSyn, ...
+                6*fSyn, ...
+                fSyn - fIoTA, ... % 1st harmonic beats
+                fSyn - fOrb, ...
+                fSyn + fOrb, ...
+                fSyn + fIoTA, ...
+                2*fSyn - fIoTA, ... % 2nd harmonic beats
+                2*fSyn + fIoTA, ...
+                3*fSyn - fIoTA, ... % 3rd harmonic beats
+                3*fSyn + fIoTA, ...
+                fSynAdj - fIoTA, ... % 1st harmonic beats
+                fSynAdj - fOrb, ... % 1st harmonic beats
+                fSynAdj + fIoTA, ...
+                2*fSynAdj - fIoTA, ... % 2nd harmonic beats
+                2*fSynAdj + fIoTA, ...
+                3*fSynAdj - fIoTA, ... % 3rd harmonic beats
+                3*fSynAdj + fIoTA, ...
+                fOrbBeat, ... % ~ 2nd harmonic beat between orbital and TA periods
+                fSynAdj - fOrbMid2, ... % Beat between strong(est) oscillations
+                ];
+
+       
     case 'EUROPA'
         parentName = 'Jupiter';
         % frequencies obtained from FFT : 5 year data computed from FFT of simulated data
@@ -180,11 +222,18 @@ switch body
         fTA = 1 / 3600 / 32.927200612354675; % true anomaly (?) period
         f = [fOrb, fTA];
         
-        f = [f, 2*fOrb, ...
+        f = [f, 2*fTA, ...
                 9.26559563e-6, ... % inter-moon positional resonances
-                6.94761340e-6, ... 
                 4.62963117e-6, ... 
                 2.31798223e-6];
+            
+        f = [f, 1 / 3600 / 32.917867508555119116, ...
+                1 / 3600 / 32.941210199582918960, ...
+                1 / 3600 / 32.838749203627905615, ...
+                1 / 3600 / 32.936539015933050223, ...
+                1 / 3600 / 32.913202935703473884, ...
+                1 / 3600 / 32.834107031435593171, ...
+                1 / 3600 / 32.866629845374262686];
             
         
    case 'DIONE'
@@ -196,7 +245,7 @@ switch body
          
     %% Uranus moons   
     case 'MIRANDA'
-        parentName = 'Saturn';
+        parentName = 'Uranus';
         
         fSyn = 1/(35.057143696*3600);
         f = [fSyn, ... % synodic period
@@ -460,3 +509,6 @@ end
 
 end
 
+function Tout = T(f)
+    Tout = 1 / 3600 ./ f;
+end

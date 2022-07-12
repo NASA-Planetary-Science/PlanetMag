@@ -13,6 +13,10 @@ Juno Frames Kernel
 Version and Date
 -------------------------------------------------------------------------------
 
+   Version 1.2_mod2 -- July 8, 2022 -- Marshall Styczinski, JPL
+   
+      Added USM frame based on adapting JUNO_JSM frame to Uranus.
+   
    Version 1.2_mod -- February 11, 2022 -- Marshall Styczinski, JPL
    
       Added JUNO_JMAG_O4 frame based on the description in [15]
@@ -175,6 +179,10 @@ References
    15. https://lasp.colorado.edu/home/mop/files/2015/02/CoOrd_systems12.pdf
    
    16. https://pds.nasa.gov/ds-view/pds/viewProfile.jsp?dsid=GO-J-POS-6-SC-TRAJ-JUP-COORDS-V1.0
+   
+   17. AH5 model: Herbert, F., 2009. Aurora and magnetic field of Uranus.
+       Journal of Geophysical Research: Space Physics, 114(A11).
+       https://doi.org/10.1029/2009JA014394
 
 
 Contact Information
@@ -203,11 +211,20 @@ Implementation Notes
 JUNO Frames
 -------------------------------------------------------------------------------
 
+   The following non-JUNO frames are defined in this kernel file:
+
+           Name                  Relative to           Type       NAIF ID
+      ======================  =====================  ============   =======
+      
+   Frames for Magnetospheric Studies at Uranus:
+   ---------------------------------------------
+      USM                     J2000                DYNAMIC      1661959
+   
    The following JUNO frames are defined in this kernel file:
 
            Name                  Relative to           Type       NAIF ID
       ======================  =====================  ============   =======
-
+   
    Frames for Magnetospheric Studies at Jupiter:
    ---------------------------------------------
       JUNO_MAG_VIP4           IAU_JUPITER            FIXED          -61952
@@ -865,6 +882,55 @@ Jupiter Solar Magnetospheric frame
       FRAME_1661958_SEC_UNITS       = 'DEGREES'
       FRAME_1661958_SEC_LONGITUDE   = 158.0
       FRAME_1661958_SEC_LATITUDE    = 80.4
+
+   \begintext
+
+
+Uranus Solar Magnetospheric frame
+
+   The USM frame copies the Jupiter Solar Magnetospheric
+   frame described above and applies the same to Uranus.
+
+   USM is defined as a dynamic frame as follows:
+
+      -  +X axis is along the geometric position of the Sun as seen
+         from Uranus
+  
+      -  +Y axis is along M x X, where M is the direction of the
+         magnetic dipole moment as defined in the AH5 model, along
+         LON=-55.7 deg/LAT=30.2 deg in the IAU_URANUS frame
+      
+      -  +Z axis completes the right-handed set, along X x Y.
+ 
+      -  the center is at the center of Uranus.
+
+   The keywords below implement the USM frame as a dynamic frame.
+   The +Z axis is specified as a secondary vector, so the actual
+   direction will be the component of the dipole axis perpendicular
+   to +X according to [1], with +Y completing the right-handed set.
+
+   \begindata
+
+      FRAME_USM                     = 1661959
+      FRAME_1661959_NAME            = 'USM'
+      FRAME_1661959_CLASS           = 5
+      FRAME_1661959_CLASS_ID        = 1661959
+      FRAME_1661959_CENTER          = 799
+      FRAME_1661959_RELATIVE        = 'J2000'
+      FRAME_1661959_DEF_STYLE       = 'PARAMETERIZED'
+      FRAME_1661959_FAMILY          = 'TWO-VECTOR'
+      FRAME_1661959_PRI_AXIS        = 'X'
+      FRAME_1661959_PRI_VECTOR_DEF  = 'OBSERVER_TARGET_POSITION'
+      FRAME_1661959_PRI_OBSERVER    = 'URANUS'
+      FRAME_1661959_PRI_TARGET      = 'SUN'
+      FRAME_1661959_PRI_ABCORR      = 'NONE'
+      FRAME_1661959_SEC_AXIS        = 'Z'
+      FRAME_1661959_SEC_VECTOR_DEF  = 'CONSTANT'
+      FRAME_1661959_SEC_FRAME       = 'IAU_URANUS'
+      FRAME_1661959_SEC_SPEC        = 'LATITUDINAL'
+      FRAME_1661959_SEC_UNITS       = 'DEGREES'
+      FRAME_1661959_SEC_LONGITUDE   = -55.7
+      FRAME_1661959_SEC_LATITUDE    = 30.2
 
    \begintext
 

@@ -23,16 +23,7 @@ function [Tpeak_h, B0x, B0y, B0z, B1x_peak, B1y_peak, B1z_peak] = ...
         EXPLORE = 0;
     end
     
-    switch parentName
-        case 'Jupiter'
-            opt = 5;
-        case 'Saturn'
-            opt = 2;
-        case 'Uranus'
-            opt = 1;
-        case 'Neptune'
-            opt = 1;
-    end
+    opt = 0; % Use default for each planet
     [MagModel, CsheetModel, magModelDescrip, fEnd] = GetModelOpts(parentName, opt);
     
     dt = Tinterest_h/rate;

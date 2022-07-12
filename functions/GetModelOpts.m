@@ -66,7 +66,7 @@ function [MagModel, CsheetModel, magModelDescrip, fEnd] = GetModelOpts(parentNam
             Cassini11 = 'MagFldSaturnCassini11';
             Cassini11sheet = 'Cassini11';
 
-            if opt == 0; opt = 2; end  % Set default to Cassini11
+            if opt == 0; opt = 2; end  % Set default to Cassini 11
             switch opt
                 case 1
                     MagModel = B2010;
