@@ -14,10 +14,11 @@ function [MagModel, CsheetModel, magModelDescrip, fEnd] = GetModelOpts(parentNam
             JRM09 = 'MagFldJupiterJRM09';
             C2020sheet = 'Connerney2020';
             % opt 5 is Vance et al. 2021 combo, JRM09 + C1981
-            % opt 6 (includes C2020 current sheet)
+            % opt 6 is Seufert et al. 2011 combo, VIP4 + K1997
+            % opt 7 (includes C2020 current sheet)
             JRM33 = 'MagFldJupiterJRM33';
 
-            if opt == 0; opt = 6; end  % Set default to JRM33 + C2020
+            if opt == 0; opt = 7; end  % Set default to JRM33 + C2020
             switch opt
                 case 1
                     MagModel = VIP4;
@@ -45,6 +46,11 @@ function [MagModel, CsheetModel, magModelDescrip, fEnd] = GetModelOpts(parentNam
                     magModelDescrip = 'Vance 2021 (JRM09 + C1981)';
                     fEnd = 'JRM09C1981';
                 case 6
+                    MagModel = VIP4;
+                    CsheetModel = K1997sheet;
+                    magModelDescrip = 'VIP4 + K1997';
+                    fEnd = 'VIP4K1997';
+                case 7
                     MagModel = JRM33;
                     CsheetModel = C2020sheet;
                     magModelDescrip = 'JRM33 + C2020';

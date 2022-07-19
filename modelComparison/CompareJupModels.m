@@ -1,11 +1,18 @@
+% Compare magnetic field measurements from spacecraft against the evaluated
+% magnetic field model(s).
+
+% Datasets:
+% Galileo MAG: https://doi.org/10.17189/1519667, volume GO-J-MAG-3-RDR-HIGHRES-V1.0
+% Juno MAG: https://doi.org/10.17189/1519711, volume JNO-J-3-FGM-CAL-V1.0
+
 cspice_kclear;
 moonName = 'Ganymede';
 parentName = 'Jupiter';
 scName = "Galileo";
-orbNum = -2;
+orbNum = -1;
 SEQUENTIAL = 1; % Whether to plot points by index or hours past J2000
 FULLORBITS = 1; % Whether to evalate goodness of fit from full-orbit data in System III coordinates
-FLYBYS = 1; % Whether to evaluate goodness of fit from flyby data in moon coordinates
+FLYBYS = 0; % Whether to evaluate goodness of fit from flyby data in moon coordinates
 JUNOTOO = 1;
 
 switch moonName
@@ -175,7 +182,7 @@ end
 
 %% Plot and calculate products
 
-for opt=5:6
+for opt=1:6
     if FULLORBITS
         GetBplotAndLsq(ets, t_h, alt_km, lat_deg, lon_deg, BrSC, BthSC, BphiSC, ...
             scName, parentName, orbStr, opt, SEQUENTIAL);
@@ -184,6 +191,6 @@ for opt=5:6
     if FLYBYS
         GetBplotAndLsqMoon(fbets, fbt_h, fbalt_km, fblat_deg, fblon_deg, ...
             r_RM, BxSC, BySC, BzSC, ...
-            scName, parentName, moonName, era, fbStr, opt, SEQUENTIAL, jt_h);
+            scName, parentName, moonName, 'Galileo', fbStr, opt, SEQUENTIAL, jt_h);
     end
 end

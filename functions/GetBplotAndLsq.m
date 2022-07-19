@@ -1,9 +1,12 @@
 function GetBplotAndLsq(ets, t_h, alt_km, lat_deg, lon_deg, BrSC, BthSC, BphiSC, ...
-        scName, parentName, orbStr, opt, SEQUENTIAL)
+        scName, parentName, orbStr, opt, SEQUENTIAL, jt_h)
     npts = length(t_h);
     if length(scName) > 1
         scName = strjoin(scName, '+');
     end
+    
+    if ~exist('jt_h', 'var'); jt_h = []; end
+    if isempty(jt_h); JUNOTOO=0; else; JUNOTOO=1; end
     
     [MagModel, CsheetModel, magModelDescrip, ~] = GetModelOpts(parentName, opt);
     magPhase = 0;

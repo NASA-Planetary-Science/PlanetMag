@@ -1,9 +1,11 @@
-moonName = 'Europa';
+moonName = 'Ganymede';
 % Spacecraft era (sets timespan of field model)
 era = 'Galileo';
+coords = 'JUPITER_SPRH';
 CALC_NEW = 1;
 ALL_MODELS = 0;
-DO_FFT = 1;
+DO_FFT = 0;
+specificModel = 6; % Set this to 0 to use default, or a number to use an opt
 outData = 'out/';
 
 nptsApprox = 600000;
@@ -68,16 +70,22 @@ if CALC_NEW
     altM_km = rM_km - R_P;
 end
 
+if strcmp(coords(end-3:end), 'SPRH')
+    SPHOUT = 1;
+else
+    SPHOUT = 0;
+end
+
 if ALL_MODELS
     switch parentName
-        case 'Jupiter'; nOpts = 6;
+        case 'Jupiter'; nOpts = 7;
         case 'Saturn';  nOpts = 2;
         case 'Uranus';  nOpts = 1;
         case 'Neptune'; nOpts = 1;
     end
     opts = 1:nOpts;
 else
-    opts = 0:0;
+    opts = specificModel:specificModel;
 end
 for opt=opts
     [MagModel, CsheetModel, magModelDescrip, fEnd] = GetModelOpts(parentName, opt);
@@ -85,46 +93,56 @@ for opt=opts
     if CALC_NEW
         disp(['Evaluating ' magModelDescrip ' field model.'])
         if strcmp(magModelDescrip, 'Khurana & Schwarzl 2007')
-            [Bvec, ~, ~] = KSMagFldJupiter(latM_deg, lonM_deg, altM_km, t_h*3600);
+            [Bvec, ~, ~] = KSMagFldJupiter(latM_deg, lonM_deg, altM_km, t_h*3600, SPHOUT);
         else
-            [Bvec, ~, ~] = MagFldParent(parentName, latM_deg, lonM_deg, altM_km, MagModel, CsheetModel, magPhase);
+            [Bvec, ~, ~] = MagFldParent(parentName, latM_deg, lonM_deg, altM_km, MagModel, CsheetModel, magPhase, SPHOUT);
         end
 
-        disp(['Rotating field vectors into IAU frame.']);
-        rotMat = cspice_pxform(['IAU_' upper(parentName)], ['IAU_' upper(moonName)], t_h*3600);
-        BvecMoon = zeros(3,npts);
-        parfor i=1:npts
-            BvecMoon(:,i) = rotMat(:,:,i) * Bvec(:,i);
+        disp(['Rotating field vectors into ' coords ' frame.']);
+        if strcmp(coords, ['IAU_' upper(moonName)])
+            BvecMoon = zeros(3,npts);
+            rotMat = cspice_pxform(['IAU_' upper(parentName)], coords, t_h*3600);
+            parfor i=1:npts
+                BvecMoon(:,i) = rotMat(:,:,i) * Bvec(:,i);
+            end
+        elseif strcmp(coords, [upper(parentName) '_SPRH'])
+            BvecMoon = Bvec;
+        else
+            if SPHOUT
+                coords = [upper(parentName) '_SPRH'];
+            else
+                coords = ['IAU_' upper(parentName)];
+            end
+            warning(['Unrecognized coordinates. Defaulting to ' coords '.'])
+            BvecMoon = Bvec;
         end
-        Bx = BvecMoon(1,:);
-        By = BvecMoon(2,:);
-        Bz = BvecMoon(3,:);
         
-        save(fullfile([outData 'evalB' moonName fEnd]), 't_h', 'Bx', 'By', 'Bz');
+        save(fullfile([outData 'evalB' moonName fEnd]), 't_h', 'BvecMoon', 'coords');
     else
         load(fullfile([outData 'evalB' moonName fEnd]));
     end
 
-    BD = PCA_decomposition(t_h*3600, upper(moonName), Bx, By, Bz, magModelDescrip);
+    BD = PCA_decomposition(t_h*3600, upper(moonName), parentName, BvecMoon, ...
+        magModelDescrip, SPHOUT, 1, 1);
 
     T_h = 1 ./ BD.f / 3600;
     npeaks = length(T_h);
-    B0x = BD.BdxO * ones(1,npeaks);
-    B0y = BD.BdyO * ones(1,npeaks);
-    B0z = BD.BdzO * ones(1,npeaks);
-    B1x_Re = BD.Bdxi;
-    B1x_Im = BD.Bdxq;
-    B1y_Re = BD.Bdyi;
-    B1y_Im = BD.Bdyq;
-    B1z_Re = BD.Bdzi;
-    B1z_Im = BD.Bdzq;
+    B0vec1 = BD.Bdvec1o * ones(1,npeaks);
+    B0vec2 = BD.Bdvec2o * ones(1,npeaks);
+    B0vec3 = BD.Bdvec3o * ones(1,npeaks);
+    B1vec1_Re = BD.Bdvec1i;
+    B1vec1_Im = BD.Bdvec1q;
+    B1vec2_Re = BD.Bdvec2i;
+    B1vec2_Im = BD.Bdvec2q;
+    B1vec3_Re = BD.Bdvec3i;
+    B1vec3_Im = BD.Bdvec3q;
 
-    Tmax = 200;
+    Tmax = 500;
 
     if DO_FFT
         if CALC_NEW
-            [TfinalFFT_h, B0xFFT, B0yFFT, B0zFFT, B1xFFT, B1yFFT, B1zFFT] ...
-                        = ExcitationSpectrum(moonName, nOsc, rate, Tinterest_h);
+            [TfinalFFT_h, B0vecFFT, B1vecFFT] ...
+                        = ExcitationSpectrum(moonName, nOsc, rate, Tinterest_h, SPHOUT);
         end
         PlotSpectrum(moonName);
     end
@@ -132,59 +150,64 @@ for opt=opts
     npts = length(t_h);
 
     omega_ph = 2*pi./T_h;
-    B1x = B1x_Re + 1i*B1x_Im;
-    B1y = B1y_Re + 1i*B1y_Im;
-    B1z = B1z_Re + 1i*B1z_Im;
-    Bmag = sqrt(abs(B1x).^2 + abs(B1y).^2 + abs(B1z).^2);
+    B1vec1 = B1vec1_Re + 1i*B1vec1_Im;
+    B1vec2 = B1vec2_Re + 1i*B1vec2_Im;
+    B1vec3 = B1vec3_Re + 1i*B1vec3_Im;
+    Bmag = sqrt(abs(B1vec1).^2 + abs(B1vec2).^2 + abs(B1vec3).^2);
 
-    [BxReprod, ByReprod, BzReprod] = deal(zeros(npeaks,npts));
+    [Bvec1Reprod, Bvec2Reprod, Bvec3Reprod] = deal(zeros(npeaks,npts));
 
     BeStrings = strings(npeaks,1);
     disp('Primary excitation modes:');
-    BeModes = sqrt(B1x_Re.^2 + B1x_Im.^2 + B1y_Re.^2 + B1y_Im.^2 + B1z_Re.^2 + B1z_Im.^2);
+    BeModes = sqrt(B1vec1_Re.^2 + B1vec1_Im.^2 + B1vec2_Re.^2 + B1vec2_Im.^2 + B1vec3_Re.^2 + B1vec3_Im.^2);
     sortBeModes = sort(BeModes, 'descend');
     for i=1:npeaks
-        BxReprod(i,:) = real(B1x(i) * exp(-1i * omega_ph(i) * t_h));
-        ByReprod(i,:) = real(B1y(i) * exp(-1i * omega_ph(i) * t_h));
-        BzReprod(i,:) = real(B1z(i) * exp(-1i * omega_ph(i) * t_h));
+        Bvec1Reprod(i,:) = real(B1vec1(i) * exp(-1i * omega_ph(i) * t_h));
+        Bvec2Reprod(i,:) = real(B1vec2(i) * exp(-1i * omega_ph(i) * t_h));
+        Bvec3Reprod(i,:) = real(B1vec3(i) * exp(-1i * omega_ph(i) * t_h));
         indB = find(BeModes == sortBeModes(i));
         BeStrings(i) = sprintf('|B| amp: %.4e   f_Hz: %.4e   T_h: %.18f', BeModes(indB), 1/3600/T_h(indB), T_h(indB));
     end
     disp(BeStrings);
 
-    BxTot = mean(B0x) + sum(BxReprod,1);
-    ByTot = mean(B0y) + sum(ByReprod,1);
-    BzTot = mean(B0z) + sum(BzReprod,1);
+    Bvec1Tot = mean(B0vec1) + sum(Bvec1Reprod,1);
+    Bvec2Tot = mean(B0vec2) + sum(Bvec2Reprod,1);
+    Bvec3Tot = mean(B0vec3) + sum(Bvec3Reprod,1);
+    if SPHOUT
+        Bv1lbl = 'B_r'; Bv2lbl = 'B_\theta'; Bv3lbl = 'B_\phi';
+    else
+        Bv1lbl = 'B_x'; Bv2lbl = 'B_y'; Bv3lbl = 'B_z';
+    end
 
     figure; hold on;
-    set(gcf,'Name', ['Bx full time, ' magModelDescrip]);
-    plot(t_h, Bx);
-    plot(t_h, BxTot);
+    set(gcf,'Name', ['Bvec1 full time, ' magModelDescrip]);
+    plot(t_h, BvecMoon(1,:));
+    plot(t_h, Bvec1Tot);
     xlabel('Time (hr)');
-    ylabel('B_x (nT)');
-    legend('B_x model', 'B_x exc');
+    ylabel([Bv1lbl ' (nT)']);
+    legend([Bv1lbl ' model'], [Bv1lbl ' exc']);
     figure; hold on;
-    set(gcf,'Name', ['By full time, ' magModelDescrip]);
-    plot(t_h, By);
-    plot(t_h, ByTot);
+    set(gcf,'Name', ['Bvec2 full time, ' magModelDescrip]);
+    plot(t_h, BvecMoon(2,:));
+    plot(t_h, Bvec2Tot);
     xlabel('Time (hr)');
-    ylabel('B_y (nT)');
-    legend('B_y model', 'B_y exc');
+    ylabel([Bv2lbl ' (nT)']);
+    legend([Bv2lbl ' model'], [Bv2lbl ' exc']);
     figure; hold on;
-    set(gcf,'Name', ['Bz full time, ' magModelDescrip]);
-    plot(t_h, Bz);
-    plot(t_h, BzTot);
+    set(gcf,'Name', ['Bvec3 full time, ' magModelDescrip]);
+    plot(t_h, BvecMoon(3,:));
+    plot(t_h, Bvec3Tot);
     xlabel('Time (hr)');
-    ylabel('B_z (nT)');
-    legend('B_z model', 'B_z exc');
+    ylabel([Bv3lbl ' (nT)']);
+    legend([Bv3lbl ' model'], [Bv3lbl ' exc']);
 
-    BxD = Bx - BxTot;
-    ByD = By - ByTot;
-    BzD = Bz - BzTot;
+    Bvec1D = BvecMoon(1,:) - Bvec1Tot;
+    Bvec2D = BvecMoon(2,:) - Bvec2Tot;
+    Bvec3D = BvecMoon(3,:) - Bvec3Tot;
 
-    BxD1 = conj(fftshift(fft(BxD)))/npts;
-    ByD1 = conj(fftshift(fft(ByD)))/npts;
-    BzD1 = conj(fftshift(fft(BzD)))/npts;
+    Bvec1D1 = conj(fftshift(fft(Bvec1D)))/npts;
+    Bvec2D1 = conj(fftshift(fft(Bvec2D)))/npts;
+    Bvec3D1 = conj(fftshift(fft(Bvec3D)))/npts;
     dt = t_h(2) - t_h(1);
     Fsample = 1/(dt*3600);
     dF = Fsample/npts;
@@ -195,16 +218,16 @@ for opt=opts
     iTmax = iTmax(end);
 
     Tfinal_h = TFT_h(iTmax:end);
-    BxD1f = 2*BxD1(iTmax:end);
-    ByD1f = 2*ByD1(iTmax:end);
-    BzD1f = 2*BzD1(iTmax:end);
+    Bvec1D1f = 2*Bvec1D1(iTmax:end);
+    Bvec2D1f = 2*Bvec2D1(iTmax:end);
+    Bvec3D1f = 2*Bvec3D1(iTmax:end);
 
     figure; hold on;
     set(gcf,'Name', ['Residual FFT for ' era ' era, ' magModelDescrip]);
-    plot(Tfinal_h, abs(BxD1f));
-    plot(Tfinal_h, abs(ByD1f));
-    plot(Tfinal_h, abs(BzD1f));
-    legend('\Delta B_x', '\Delta B_y', '\Delta B_z');
+    plot(Tfinal_h, abs(Bvec1D1f));
+    plot(Tfinal_h, abs(Bvec2D1f));
+    plot(Tfinal_h, abs(Bvec3D1f));
+    legend(['\Delta ' Bv1lbl], ['\Delta ' Bv2lbl], ['\Delta ' Bv3lbl]);
 
     set(gca,'xscale','log');
     set(gca,'yscale','log');
@@ -212,7 +235,7 @@ for opt=opts
     ylabel('FT\{B_i - B_{i,exc}\} (nT)');
     xlim([1 Tmax]);
 
-    Bdiff = sqrt(abs(BxD1f).^2 + abs(ByD1f).^2 + abs(BzD1f).^2);
+    Bdiff = sqrt(abs(Bvec1D1f).^2 + abs(Bvec2D1f).^2 + abs(Bvec3D1f).^2);
     maxBdiff = sort(Bdiff, 'descend');
     nGreatest = 10;
     disp('Highest-power remaining modes:')
@@ -223,9 +246,15 @@ for opt=opts
     end
     disp(remStrings);
 
-    outFname = fullfile([outData 'Be1xyz_' moonName '_' era '_' fEnd '.txt']);
-    header = 'period(hr),B0x(nT),B0y(nT),B0z(nT),Bex_Re(nT),Bex_Im(nT),Bey_Re(nT),Bey_Im(nT),Bez_Re(nT),Bez_Im(nT)';
-    spectrumData = [T_h' B0x' B0y' B0z' real(B1x)' imag(B1x)' real(B1y)' imag(B1y)' real(B1z)' imag(B1z)'];
+    if SPHOUT
+        BeType = 'Be1sph_';
+        header = 'period(hr),B0r(nT),B0th(nT),B0phi(nT),Ber_Re(nT),Ber_Im(nT),Beth_Re(nT),Beth_Im(nT),Bephi_Re(nT),Bephi_Im(nT)';
+    else
+        BeType = 'Be1xyz_';
+        header = 'period(hr),B0x(nT),B0y(nT),B0z(nT),Bex_Re(nT),Bex_Im(nT),Bey_Re(nT),Bey_Im(nT),Bez_Re(nT),Bez_Im(nT)';
+    end
+    outFname = fullfile([outData BeType moonName '_' era '_' fEnd '.txt']);
+    spectrumData = [T_h' B0vec1' B0vec2' B0vec3' real(B1vec1)' imag(B1vec1)' real(B1vec2)' imag(B1vec2)' real(B1vec3)' imag(B1vec3)'];
     dlmwrite(outFname, header, 'delimiter','');
     dlmwrite(outFname, spectrumData, 'delimiter',',', 'precision',18, '-append');
 

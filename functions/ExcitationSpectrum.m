@@ -1,5 +1,5 @@
-function [Tpeak_h, B0x, B0y, B0z, B1x_peak, B1y_peak, B1z_peak] = ...
-    ExcitationSpectrum(moonName, nOsc, rate, Tinterest_h, DO_EPO)
+function [Tpeak_h, B0vec, B1vec] = ...
+    ExcitationSpectrum(moonName, nOsc, rate, Tinterest_h, DO_EPO, SPHOUT)
     
     parentName = LoadSpice(moonName);
     outData = 'out/';
@@ -7,6 +7,7 @@ function [Tpeak_h, B0x, B0y, B0z, B1x_peak, B1y_peak, B1z_peak] = ...
     if ~exist('DO_EPO', 'var'); DO_EPO = 0; end
     if ~exist('nOsc', 'var'); nOsc = 5000; end
     if ~exist('rate', 'var'); rate = 100; end
+    if ~exist('SPHOUT', 'var'); SPHOUT = 0; end
     
     magPhase = 0;
     
@@ -46,44 +47,36 @@ function [Tpeak_h, B0x, B0y, B0z, B1x_peak, B1y_peak, B1z_peak] = ...
     
     disp(['Evaluating ' magModelDescrip ' field model for T = ' num2str(Tinterest_h) ' h.'])
     if strcmp(magModelDescrip, 'Khurana & Schwarzl 2007')
-        [Bvec, ~, ~] = kkMagFldJupiter(latM_deg, lonM_deg, altM_km, t_h*3600);
+        [Bvec, ~, ~] = kkMagFldJupiter(latM_deg, lonM_deg, altM_km, t_h*3600, SPHOUT);
     else
-        [Bvec, ~, ~] = MagFldParent(parentName, latM_deg, lonM_deg, altM_km, MagModel, CsheetModel, magPhase);
+        [Bvec, ~, ~] = MagFldParent(parentName, latM_deg, lonM_deg, altM_km, MagModel, CsheetModel, magPhase, SPHOUT);
     end
     
-    % Separate out components
-    BxS3 = Bvec(1,:);
-    ByS3 = Bvec(2,:);
-    BzS3 = Bvec(3,:);
-        
-    spkS3 = ['IAU_' upper(parentName)];
-    IAU = ['IAU_' upper(moonName)];
-    if DO_EPO && strcmp(moonName,'Europa')
-        EPhiO = 'EUROPAM_EUROPA_E_PHI_O';
-        moonCoords = EPhiO;
-        coordType = [math 'E\phi\Omega' nm];
+    if SPHOUT
+        BvecMoon = Bvec;
     else
-        moonCoords = IAU;
-        coordType = 'IAU';
+        spkS3 = ['IAU_' upper(parentName)];
+        IAU = ['IAU_' upper(moonName)];
+        if DO_EPO && strcmp(moonName,'Europa')
+            EPhiO = 'EUROPAM_EUROPA_E_PHI_O';
+            moonCoords = EPhiO;
+            coordType = [math 'E\phi\Omega' nm];
+        else
+            moonCoords = IAU;
+            coordType = 'IAU';
+        end
+        disp(['Rotating field vectors into ' moonCoords ' frame.']);
+        rotMat = cspice_pxform(spkS3, moonCoords, t_h*3600);
+        BvecMoon = zeros(3,npts);
+        parfor i=1:npts
+            BvecMoon(:,i) = rotMat(:,:,i) * Bvec(:,i);
+        end
     end
-    disp(['Rotating field vectors into ' moonCoords ' frame.']);
-    rotMat = cspice_pxform(spkS3, moonCoords, t_h*3600);
-    BvecMoon = zeros(3,npts);
-    parfor i=1:npts
-        BvecMoon(:,i) = rotMat(:,:,i) * Bvec(:,i);
-    end
-    Bx = BvecMoon(1,:);
-    By = BvecMoon(2,:);
-    Bz = BvecMoon(3,:);
     
     disp('Taking FFTs.');
-    B1x = conj(fftshift(fft(Bx)))/npts;
-    B1y = conj(fftshift(fft(By)))/npts;
-    B1z = conj(fftshift(fft(Bz)))/npts;
-    
-    B1xS3 = conj(fftshift(fft(BxS3)))/npts;
-    B1yS3 = conj(fftshift(fft(ByS3)))/npts;
-    B1zS3 = conj(fftshift(fft(BzS3)))/npts;
+    B1vec1 = conj(fftshift(fft(BvecMoon(1,:))))/npts;
+    B1vec2 = conj(fftshift(fft(BvecMoon(2,:))))/npts;
+    B1vec3 = conj(fftshift(fft(BvecMoon(3,:))))/npts;
     
     Fsample = 1/(dt*3600);
     dF = Fsample/npts;
@@ -94,26 +87,20 @@ function [Tpeak_h, B0x, B0y, B0z, B1x_peak, B1y_peak, B1z_peak] = ...
     iTmax = iTmax(end);
     
     % Clip arrays to include only positive frequencies/periods
-    B1x = 2*B1x(iTmax:end);
-    B1y = 2*B1y(iTmax:end);
-    B1z = 2*B1z(iTmax:end);
-    B1xS3 = 2*B1xS3(iTmax:end);
-    B1yS3 = 2*B1yS3(iTmax:end);
-    B1zS3 = 2*B1zS3(iTmax:end);
+    B1vec1 = 2*B1vec1(iTmax:end);
+    B1vec2 = 2*B1vec2(iTmax:end);
+    B1vec3 = 2*B1vec3(iTmax:end);
     T_h = T_h(iTmax:end);
     f_Hz = f(iTmax:end);
     
     disp('Complete! Saving data.');
-    save(fullfile([outData moonName 'FTdata']), 'B1x', 'B1y', 'B1z', 'T_h', 'f_Hz', ...
-        'B1xS3', 'B1yS3', 'B1zS3', 'coordType', 'magModelDescrip', ...
-        'Tmax', 'Tinterest_h');
+    save(fullfile([outData moonName 'FTdata']), 'B1vec1', 'B1vec2', 'B1vec3', 'T_h', 'f_Hz', ...
+        'coordType', 'SPHOUT', 'magModelDescrip', 'Tmax', 'Tinterest_h');
     cspice_kclear;
     
-    B0x = mean(Bx);
-    B0y = mean(By);
-    B0z = mean(Bz);
+    B0vec = [mean(BvecMoon(1,:)), mean(BvecMoon(2,:)), mean(BvecMoon(3,:))];
     
-    Bmag2 = abs(B1x).^2 + abs(B1y).^2 + abs(B1z).^2;
+    Bmag2 = abs(B1vec1).^2 + abs(B1vec2).^2 + abs(B1vec3).^2;
     checkPeak = islocalmax(Bmag2, 'MinSeparation', 5*dF, 'SamplePoints', f_Hz);
     iPeak = [];
     tol = 1e-6;
@@ -127,9 +114,8 @@ function [Tpeak_h, B0x, B0y, B0z, B1x_peak, B1y_peak, B1z_peak] = ...
         dist = abs(T_h(iPeak) - Tinterest_h);
         iPeak = iPeak(min(dist) == dist);
     end
-    B1x_peak = B1x(iPeak);
-    B1y_peak = B1y(iPeak);
-    B1z_peak = B1z(iPeak);
+    
+    B1vec = [B1vec1(iPeak), B1vec2(iPeak), B1vec3(iPeak)];
     
     if EXPLORE
         Tpeak_h = T_h(checkPeak & Bmag2 > 1);
@@ -138,8 +124,7 @@ function [Tpeak_h, B0x, B0y, B0z, B1x_peak, B1y_peak, B1z_peak] = ...
             Tpeak_h = [Tmoon_h Tpeak_h];
         end
         
-        save(fullfile([outData moonName 'TseriesData' fEnd]), 'Bx', 'By', 'Bz', 'BxS3', 'ByS3', ...
-            'BzS3', 't_h', 'Tmax');
+        save(fullfile([outData moonName 'TseriesData' fEnd]), 'BvecMoon', 't_h', 'Tmax');
     else
         Tpeak_h = T_h(iPeak);
     end

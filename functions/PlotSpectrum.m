@@ -1,7 +1,7 @@
 function PlotSpectrum(moonName)
     outData = 'out/';
-    load(fullfile([outData moonName 'FTdata']), 'B1x', 'B1y', 'B1z', 'T_h', 'f_Hz', ...
-        'B1xS3', 'B1yS3', 'B1zS3', 'coordType', 'magModelDescrip', ...
+    load(fullfile([outData moonName 'FTdata']), 'B1vec1', 'B1vec2', 'B1vec3', 'T_h', 'f_Hz', ...
+        'coordType', 'SPHOUT', 'magModelDescrip', ...
         'Tmax', 'Tinterest_h');
     LoadSpice(moonName);
     [~, ~, ~, ~, ~, Tparent_s, Torb_s] = GetBodyParams(moonName);
@@ -21,19 +21,9 @@ function PlotSpectrum(moonName)
     bnm  = '\rm\bf\fontname{STIX Two Text}';
     math  = '\it{}';
     
-    JS3 = 0;
-    if JS3
-        Bx = B1xS3;
-        By = B1yS3;
-        Bz = B1zS3;
-    else
-        Bx = B1x;
-        By = B1y;
-        Bz = B1z;
-    end
-    plot(T_h, abs(Bx), 'Color', 'b');
-    plot(T_h, abs(By), 'Color', 'k');
-    plot(T_h, abs(Bz), 'Color', [0 0.8 0]);
+    plot(T_h, abs(B1vec1), 'Color', 'b');
+    plot(T_h, abs(B1vec2), 'Color', 'k');
+    plot(T_h, abs(B1vec3), 'Color', [0 0.8 0]);
     Tparent_h = Tparent_s / 3600;
     Torb_h = Torb_s / 3600;
     Tsyn_h = 1/(1/Tparent_h - 1/Torb_h);
@@ -47,5 +37,10 @@ function PlotSpectrum(moonName)
     ylabel('Amplitude (nT)');
     set(gcf,'Name', [moonName ' FFT excitation spectrum, ' magModelDescrip]);
     title([bnm moonName ' magnetic excitation spectrum, ' magModelDescrip ', ' coordType ' coordinates'], 'fontsize', 16);
-    legend({[math 'B_x'], [math 'B_y'], [math 'B_z']}, 'Location', 'Southeast', 'Interpreter', 'tex');
+    if SPHOUT
+        Bv1lbl = 'B_r'; Bv2lbl = 'B_\theta'; Bv3lbl = 'B_\phi';
+    else
+        Bv1lbl = 'B_x'; Bv2lbl = 'B_y'; Bv3lbl = 'B_z';
+    end
+    legend({[math Bv1lbl], [math Bv2lbl], [math Bv3lbl]}, 'Location', 'Southeast', 'Interpreter', 'tex');
 end

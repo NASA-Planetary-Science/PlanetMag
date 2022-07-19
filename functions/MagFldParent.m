@@ -112,6 +112,9 @@ elseif strcmp(planet, 'Saturn')
     end
     
 elseif strcmp(planet, 'Uranus')
+    
+    % Coming soon.
+    
 elseif strcmp(planet, 'Neptune')
     
     if strcmp(InternalFieldModel,'MagFldNeptuneO8')
@@ -380,10 +383,9 @@ end
             D2 = 13.27;   % units Rj
             p = 6.26e-3;
             q = 0.35;
-            % Guessed at this, missing definition MJS 2022-01-28
-            x0 = -45;
-            rho0 = 1;
-            nu0 = 1;
+            x0 = -33.5;
+            rho0 = 33.2;
+            nu0 = 37.4;
 
             %OmegaJ = 1.76e-4*3600; % rad/hour, angular velocity of Jupiter, in rad/hr as nu0 has units of inverse hours
             OmegaJ = 2*pi/9.92492;  %  9.92492 hours
