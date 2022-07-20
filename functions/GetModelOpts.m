@@ -9,7 +9,7 @@ function [MagModel, CsheetModel, magModelDescrip, fEnd] = GetModelOpts(parentNam
             K1997sheet = 'Khurana1997';
             % opt 3
             KhuranaJup = 'VIP4 with O6 orientation';
-            K2007sheet = 'KS2007';
+            K2005sheet = 'KS2005';
             % opt 4
             JRM09 = 'MagFldJupiterJRM09';
             C2020sheet = 'Connerney2020';
@@ -32,9 +32,9 @@ function [MagModel, CsheetModel, magModelDescrip, fEnd] = GetModelOpts(parentNam
                     fEnd = 'O6K1997';
                 case 3
                     MagModel = KhuranaJup;
-                    CsheetModel = K2007sheet;
-                    magModelDescrip = 'Khurana & Schwarzl 2007';
-                    fEnd = 'KS2007';
+                    CsheetModel = K2005sheet;
+                    magModelDescrip = 'Khurana & Schwarzl 2005';
+                    fEnd = 'KS2005';
                 case 4
                     MagModel = JRM09;
                     CsheetModel = C2020sheet;
