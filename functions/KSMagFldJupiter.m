@@ -1,5 +1,6 @@
 % For calculating Jupiter magnetic field, based on Fortran code from
-% K. Khurana and H. Schwarzl.
+% K. Khurana and H. Schwarzl after Khurana and Schwarzl (2005):
+% https://doi.org/10.1029/2004JA010757 .
 % Author: Marshall J. Styczinski, itsmoosh@gmail.com
 % Last updated: 2022-02-07
 function [Bvec, Mdip, Odip] = KSMagFldJupiter(latS3_deg, lonS3_deg, altJup_km, ets, SPHOUT)
