@@ -2,7 +2,7 @@ function parentName = LoadSpice(moonName, sc)
     if ~exist('sc', 'var'); sc = ''; end
     spiceDir = 'spice/';
     leapseconds = 'naif0012.tls';
-    PhiO = 'clipper_dyn_v01_mod.tf';
+    frames = 'custom_frames_v01.tf';
     
     if any(strcmp(moonName, {'Io', 'Europa', 'Ganymede', 'Callisto'}))
         parentName = 'Jupiter';
@@ -26,15 +26,15 @@ function parentName = LoadSpice(moonName, sc)
         galileoSpicePrime = 's980326a.bsp';
         galileoSpiceGEM = 's000131a.bsp';
         galileoSpiceGMM = 's030916a.bsp';
-        spiceKernelList = { leapseconds planetData galileoSpicePrime galileoSpiceGEM galileoSpiceGMM generic PhiO };
+        spiceKernelList = { leapseconds planetData galileoSpicePrime galileoSpiceGEM galileoSpiceGMM generic frames };
     elseif strcmp(sc, 'Juno')
         planetData = 'pck00010.tpc';
         generic = 'jup380s.bsp';
         junoGanyFlyby = 'juno_rec_210513_210630_210707.bsp';
-        spiceKernelList = { leapseconds planetData generic junoGanyFlyby PhiO };
+        spiceKernelList = { leapseconds planetData generic junoGanyFlyby frames };
     else
         planetData = 'pck00010.tpc';
-        spiceKernelList = { leapseconds planetData generic PhiO };
+        spiceKernelList = { leapseconds planetData generic frames };
     end
     
     cspice_furnsh(fullfile(strcat(spiceDir, spiceKernelList)));
