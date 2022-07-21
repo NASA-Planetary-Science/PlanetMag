@@ -145,14 +145,12 @@ Frames Definitions
            from Jupiter
         -- +phi direction is positive counterclockwise (right-handed)
            around +Z direction, starting from 0 at the XZ-plane of the
-           PSM frame, i.e. the direction of the magnetic dipole moment
-           as defined in the models referenced in [6-9]
-        -- The above makes the +Y axis is along Z x M, where M is the
+           PSM frame, i.e. opposite the direction of the magnetic dipole
+           moment as defined in the models referenced in [6-9]
+        -- The above makes the +Y axis along M x Z, where M is the
            direction of the magnetic dipole moment as defined in the
            models referenced in [6-9]
         -- centered on the planet
-        -- This essentially just flips the Z and X axes of PSM frames,
-           keeping the solar axis the primary axis.
             
 
 \begindata
@@ -410,13 +408,11 @@ Frames Definitions
     FRAME_1850085_PRI_OBSERVER    = 'JUPITER'
     FRAME_1850085_PRI_TARGET      = 'SUN'
     FRAME_1850085_PRI_ABCORR      = 'NONE'
-    FRAME_1850085_SEC_AXIS        = 'X'
-    FRAME_1850085_SEC_VECTOR_DEF  = 'CONSTANT'
-    FRAME_1850085_SEC_FRAME       = 'IAU_JUPITER'
-    FRAME_1850085_SEC_SPEC        = 'LATITUDINAL'
-    FRAME_1850085_SEC_UNITS       = 'DEGREES'
-    FRAME_1850085_SEC_LONGITUDE   = 158.0
-    FRAME_1850085_SEC_LATITUDE    =  80.4
+    FRAME_1850085_SEC_AXIS         = 'X'
+    FRAME_1850085_SEC_VECTOR_DEF   = 'CONSTANT'
+    FRAME_1850085_SEC_FRAME        = 'JSM'
+    FRAME_1850085_SEC_SPEC         = 'RECTANGULAR'
+    FRAME_1850085_SEC_VECTOR       = ( 0, 0, -1 )
     
     FRAME_KDSZ                     = 1850086
     FRAME_1850086_NAME            = 'KDSZ'
@@ -433,11 +429,9 @@ Frames Definitions
     FRAME_1850086_PRI_ABCORR      = 'NONE'
     FRAME_1850086_SEC_AXIS        = 'X'
     FRAME_1850086_SEC_VECTOR_DEF  = 'CONSTANT'
-    FRAME_1850086_SEC_FRAME       = 'IAU_SATURN'
-    FRAME_1850086_SEC_SPEC        = 'LATITUDINAL'
-    FRAME_1850086_SEC_UNITS       = 'DEGREES'
-    FRAME_1850086_SEC_LONGITUDE   = 180.00
-    FRAME_1850086_SEC_LATITUDE    =  89.99
+    FRAME_1850086_SEC_FRAME       = 'KSM'
+    FRAME_1850086_SEC_SPEC        = 'RECTANGULAR'
+    FRAME_1850086_SEC_VECTOR      = ( 0, 0, -1 )
     
     FRAME_UDSZ                     = 1850087
     FRAME_1850087_NAME            = 'UDSZ'
@@ -454,13 +448,11 @@ Frames Definitions
     FRAME_1850087_PRI_ABCORR      = 'NONE'
     FRAME_1850087_SEC_AXIS        = 'X'
     FRAME_1850087_SEC_VECTOR_DEF  = 'CONSTANT'
-    FRAME_1850087_SEC_FRAME       = 'IAU_URANUS'
-    FRAME_1850087_SEC_SPEC        = 'LATITUDINAL'
-    FRAME_1850087_SEC_UNITS       = 'DEGREES'
-    FRAME_1850087_SEC_LONGITUDE   = -55.7
-    FRAME_1850087_SEC_LATITUDE    =  30.2
+    FRAME_1850087_SEC_FRAME       = 'USM'
+    FRAME_1850087_SEC_SPEC        = 'RECTANGULAR'
+    FRAME_1850087_SEC_VECTOR      = ( 0, 0, -1 )
     
-    FRAME_NDSZ                     = 1850088
+    FRAME_NDSZ                    = 1850088
     FRAME_1850088_NAME            = 'NDSZ'
     FRAME_1850088_CLASS           = 5
     FRAME_1850088_CLASS_ID        = 1850088
@@ -475,11 +467,9 @@ Frames Definitions
     FRAME_1850088_PRI_ABCORR      = 'NONE'
     FRAME_1850088_SEC_AXIS        = 'X'
     FRAME_1850088_SEC_VECTOR_DEF  = 'CONSTANT'
-    FRAME_1850088_SEC_FRAME       = 'IAU_NEPTUNE'
-    FRAME_1850088_SEC_SPEC        = 'LATITUDINAL'
-    FRAME_1850088_SEC_UNITS       = 'DEGREES'
-    FRAME_1850088_SEC_LONGITUDE   = -71.96
-    FRAME_1850088_SEC_LATITUDE    =  43.10
+    FRAME_1850088_SEC_FRAME       = 'NSM'
+    FRAME_1850088_SEC_SPEC        = 'RECTANGULAR'
+    FRAME_1850088_SEC_VECTOR      = ( 0, 0, -1 )
 
 \begintext
 
