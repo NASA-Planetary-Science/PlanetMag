@@ -3,7 +3,8 @@
 % Outputs: B =  [Bx (G), By (G), Bz (G)], Magnetic Moment M, and Dipole Offset
 % reference frame: IAU_PLANET (SYS3RH, where PLANET is a gas or ice giant), rotates with PLANET
 
-function [B,M,O] = MagFldParent(planet, S3lat_deg, S3lon_deg, alt_km, InternalFieldModel, ExternalFieldModel, magPhase_deg, SPHOUT)
+function [B,M,O] = MagFldParent(planet, S3lat_deg, S3lon_deg, alt_km, InternalFieldModel, ...
+                       ExternalFieldModel, MagnetopauseFieldModel, magPhase_deg, SPHOUT)
 if ~exist('SPHOUT', 'var')
     SPHOUT = 0;
 end
@@ -459,7 +460,7 @@ end
             
         elseif strcmp(ExternalFieldModel,'SphericalHarmonic')
             
-            dVr = 0; dVtheta = 0; dVphi = 0; %radius, colatitude, longitude components
+            dVr = 0; dVtheta = 0; dVphi = 0; % radius, colatitude, longitude components
             k = 0;
             for n = 1:NmaxExt  % degree, spherical harmonic index
                 k = k+1;
@@ -502,11 +503,21 @@ end
         [eBx, eBy, eBz] = deal(zeros(size(r)));
        
     end
+    
+    if strcmp(MagnetopauseFieldModel, 'AB2005') % Alexeev and Belenkaya (2005) jovian magnetopause model
+        
+        [mpBx, mpBy, mpBz] = deal(zeros(size(r)));
+        
+    else
+        
+        [mpBx, mpBy, mpBz] = deal(zeros(size(r)));
+        
+    end
 
     % output field in nT
-    Bx = (iBx + eBx)*1e5;
-    By = (iBy + eBy)*1e5;
-    Bz = (iBz + eBz)*1e5;
+    Bx = (iBx + eBx + mpBx)*1e5;
+    By = (iBy + eBy + mpBy)*1e5;
+    Bz = (iBz + eBz + mpBz)*1e5;
     
     % Optionally convert field vectors to spherical for output
     if SPHOUT
@@ -520,81 +531,109 @@ end
 
 % Returns the value of Schmidt-seminormalized Legendre function of degree n and order m given the angle theta
 function Pnm = LegendreS(n, m, theta)  % n ( or l) = degree m = order
-if (n == 1)
-    if     (m == 0); Pnm = cos(theta);
-    elseif (m == 1); Pnm = sin(theta);
-    else;            Pnm = 0;
+    costh = cos(theta);
+    sinth = sin(theta);
+
+    if (n == 1)
+        if     (m == 0); Pnm = costh;
+        elseif (m == 1); Pnm = sinth;
+        else;            Pnm = 0;
+        end
+    elseif (n == 2)
+        if     (m == 0); Pnm = (1/2) * (3*costh.^2 - 1);
+        elseif (m == 1); Pnm = sqrt(3) * costh .* sinth;
+        elseif (m == 2); Pnm = sqrt(3)/2 * sinth.^2;
+        else;            Pnm = 0;
+        end
+    elseif (n == 3)
+        if     (m == 0); Pnm = (1/2) * (5*costh.^3 - 3*costh);
+        elseif (m == 1); Pnm = sqrt(6)/4 * (5*costh.^2 - 1) .* sinth;
+        elseif (m == 2); Pnm = sqrt(15)/2 * costh .* sinth.^2;
+        elseif (m == 3); Pnm = sqrt(10)/4 * sinth.^3;
+        else;            Pnm = 0;
+        end
+    elseif (n == 4)
+        if     (m == 0); Pnm = (1/8) * (35*costh.^4 - 30*costh.^2 + 3);
+        elseif (m == 1); Pnm = sqrt(10)/4 * (7*costh.^3 - 3*costh) .* sinth;
+        elseif (m == 2); Pnm = sqrt(5)/4 * (7*costh.^2 - 1) .* sinth.^2;
+        elseif (m == 3); Pnm = sqrt(70)/4 * costh .* sinth.^3;
+        elseif (m == 4); Pnm = sqrt(35)/8 * sinth.^4;
+        else;            Pnm = 0;
+        end
+    elseif (n == 5)
+        if     (m == 0); Pnm = (1/8) * costh .* (63*costh.^4 - 70*costh.^2 + 15);
+        elseif (m == 1); Pnm = sqrt(15)/8 * (21*costh.^4 - 14*costh.^2 + 1) .* sinth;
+        elseif (m == 2); Pnm = sqrt(105)/4 * costh .* (3*costh.^2 - 1) .* sinth.^2;
+        elseif (m == 3); Pnm = sqrt(35/2)/8 * (9*costh.^2 - 1) .* sinth.^3;
+        elseif (m == 4); Pnm = sqrt(35)*3/8 * costh .* sinth.^4;
+        elseif (m == 5); Pnm = sqrt(7/2)*3/8 * sinth.^5;
+        else;            Pnm = 0;
+        end
+    elseif (n == 6)
+        if     (m == 0); Pnm = (1/16) * (231*costh.^6 - 315*costh.^4 + 105*costh.^2 - 5);
+        elseif (m == 1); Pnm = sqrt(21)/8 * costh .* (33*costh.^4 - 30*costh.^2 + 5) .* sinth;
+        elseif (m == 2); Pnm = sqrt(105/2)/16 * (33*costh.^4 - 18*costh.^2 + 1) .* sinth.^2;
+        elseif (m == 3); Pnm = sqrt(105/2)/8 * costh .* (11*costh.^2 - 3) .* sinth.^3;
+        elseif (m == 4); Pnm = sqrt(7)*3/16 * (11*costh.^2 - 1) .* sinth.^4;
+        elseif (m == 5); Pnm = sqrt(77/2)*3/8 * costh .* sinth.^5;
+        elseif (m == 6); Pnm = sqrt(231/2)/16 * sinth.^6;
+        else;            Pnm = 0;
+        end
+    else; Pnm = 0;
     end
-elseif (n == 2)
-    if     (m == 0); Pnm = (1/2)*(3*cos(theta).^2 - 1);  % P20
-    elseif (m == 1); Pnm = sqrt(3)*cos(theta).*sin(theta);
-    elseif (m == 2); Pnm = sqrt(3)/2*sin(theta).^2;
-    else;            Pnm = 0;
-    end
-elseif (n == 3)
-    if     (m == 0); Pnm = (1/2)*(5*cos(theta).^3 - 3*cos(theta)); %
-    elseif (m == 1); Pnm = sqrt(6)/4*(5*cos(theta).^2 - 1).*sin(theta);
-    elseif (m == 2); Pnm = sqrt(15)/2*cos(theta).*sin(theta).^2;
-    elseif (m == 3); Pnm = sqrt(10)/4*sin(theta).^3;
-    else;            Pnm = 0;
-    end
-elseif (n == 4)
-    if     (m == 0); Pnm = (1/8)*(35*cos(theta).^4 - 30*cos(theta).^2 + 3);
-    elseif (m == 1); Pnm = sqrt(10)/4*(7*cos(theta).^3 - 3*cos(theta)).*sin(theta);
-    elseif (m == 2); Pnm = sqrt(5)/4*(7*cos(theta).^2 - 1).*sin(theta).^2;
-    elseif (m == 3); Pnm = sqrt(70)/4*cos(theta).*sin(theta).^3;
-    elseif (m == 4); Pnm = sqrt(35)/8*sin(theta).^4;
-    else;            Pnm = 0;
-    end
-else; Pnm = 0;
-end
 end
 
 
 % Returns the value of the derivative of the Schmidt-seminormalized Legendre function of degree n and order m given the angle theta
 function dPnm = dLegendreS(n, m, theta)
-if (n == 1)
-    if     (m == 0); dPnm = -sin(theta);
-    elseif (m == 1); dPnm = cos(theta);
-    else;            dPnm = 0;
+    costh = cos(theta);
+    sinth = sin(theta);
+    
+    if (n == 1)
+        if     (m == 0); dPnm = -sinth;
+        elseif (m == 1); dPnm = costh;
+        else;            dPnm = 0;
+        end
+    elseif (n == 2)
+        if     (m == 0); dPnm = -3 * costh .* sinth;
+        elseif (m == 1); dPnm = sqrt(3) * (2*costh.^2 - 1);
+        elseif (m == 2); dPnm = sqrt(3) * costh .* sinth;
+        else;            dPnm = 0;
+        end
+    elseif (n == 3)
+        if     (m == 0); dPnm = -(3/2) * (10*costh/3 - 1) .* sinth;
+        elseif (m == 1); dPnm = -sqrt(6)/4 * (15*sinth.^2 - 4) .* costh;    
+        elseif (m == 2); dPnm = sqrt(15)/2 * (3*costh.^2 - 1) .* sinth; 
+        elseif (m == 3); dPnm = sqrt(10)*3/4 * costh .* sinth.^2;        
+        else;            dPnm = 0;
+        end
+    elseif (n == 4)
+        if     (m == 0); dPnm = -(5/2) * costh .* (7*costh.^2 - 3) .* sinth;
+        elseif (m == 1); dPnm = sqrt(10)/4 * (28*costh.^4 - 27*costh.^2 + 3);
+        elseif (m == 2); dPnm = sqrt(5) * costh .* (7*costh.^2 - 4) .* sinth;
+        elseif (m == 3); dPnm = sqrt(70)/4 * (2*costh.^2 - 1) .* sinth.^2;  
+        elseif (m == 4); dPnm = sqrt(35)/2 * costh .* sinth.^3;
+        else;            dPnm = 0;
+        end
+    elseif (n == 5)
+        if     (m == 0); dPnm = -(15/8) * (21*costh.^4 - 14*costh.^2 + 1) .* sinth;
+        elseif (m == 1); dPnm = sqrt(15)/8 * costh .* (105*costh.^4 - 126*costh.^2 + 29);
+        elseif (m == 2); dPnm = sqrt(105)/4 * (15*costh.^4 - 12*costh.^2 + 1) .* sinth;
+        elseif (m == 3); dPnm = sqrt(35/2)*3/8 * costh .* (15*costh.^2 - 7) .* sinth.^2;
+        elseif (m == 4); dPnm = -sqrt(35)*3/8 * sinth.^3 .* (5*sinth.^2 - 4);
+        elseif (m == 5); dPnm = sqrt(7/2)*15/8 * costh .* sinth.^4;
+        else;            dPnm = 0;
+        end
+    elseif (n == 6)
+        if     (m == 0); dPnm = -(21/8) * costh .* (33*costh.^4 - 30*costh.^2 + 5) .* sinth;
+        elseif (m == 1); dPnm = sqrt(21)/8 * (198*costh.^6 - 285*costh.^4 + 100*costh.^2 - 5);
+        elseif (m == 2); dPnm = sqrt(105/2)/16 * costh .* (198*costh.^4 - 204*costh.^2 + 38) .* sinth;
+        elseif (m == 3); dPnm = sqrt(105/2)/8 * (66*sinth.^4 - 87*sinth.^2 + 24) .* sinth.^2;
+        elseif (m == 4); dPnm = sqrt(7)*3/8 * costh .* (33*costh.^2 - 13) .* sinth.^3;
+        elseif (m == 5); dPnm = -sqrt(77/2)*3/8 * sinth.^4 .* (6*sinth.^2 - 5);
+        elseif (m == 6); dPnm = sqrt(231/2)*3/8 * costh .* sinth.^5;
+        else;            dPnm = 0;
+        end
+    else; dPnm = 0;
     end
-elseif (n == 2)
-    if     (m == 0); dPnm = -3*cos(theta).*sin(theta);
-    elseif (m == 1); dPnm = sqrt(3)*(2*cos(theta).^2 - 1);
-    elseif (m == 2); dPnm = sqrt(3)*cos(theta).*sin(theta);
-    else;            dPnm = 0;
-    end
-elseif (n == 3)
-    if     (m == 0); dPnm = -(3/2)*(10*cos(theta)/3 - 1).*sin(theta);
-    elseif (m == 1); dPnm = -sqrt(6)/4*(15*sin(theta).^2 - 4).*cos(theta);    
-    elseif (m == 2); dPnm = sqrt(15)/2*(3*cos(theta).^2 - 1).*sin(theta); 
-    elseif (m == 3); dPnm = 3*sqrt(10)/4*cos(theta).*sin(theta).^2;        
-    else;            dPnm = 0;
-    end
-elseif (n == 4)
-    if     (m == 0); dPnm = -(5/2)*(7*cos(theta).^3 - 3*cos(theta)).*sin(theta);
-    elseif (m == 1); dPnm = sqrt(10)/4*(28*cos(theta).^4 - 27*cos(theta).^2 + 3);
-    elseif (m == 2); dPnm = sqrt(5)*cos(theta).*sin(theta).*(7*cos(theta).^2 - 4);
-    elseif (m == 3); dPnm = sqrt(70)/4*(2*cos(theta).^2 - 1).*sin(theta).^2;  
-    elseif (m == 4); dPnm = sqrt(35)/2*cos(theta).*sin(theta).^3;
-    else;            dPnm = 0;
-    end
-else; dPnm = 0;
 end
-end
-
-function [Br, Bth, Bphi] = Bxyz2Bsph(Bx, By, Bz, theta, phi)
-% Convert vector components aligned to cartesian axes
-% into vector components aligned to spherical coordinates.
-% Source: Arfken, Weber, Harris, Mathematical Methods for Physicists,
-% 7th ed, pg. 199 for the unit vectors.
-    Br   =  sin(theta) .* cos(phi) .* Bx ...
-          + sin(theta) .* sin(phi) .* By ...
-          + cos(theta) .* Bz;
-    Bth  =  cos(theta) .* cos(phi) .* Bx ...
-          + cos(theta) .* sin(phi) .* By ...
-          - sin(theta) .* Bz;
-    Bphi = -sin(phi) .* Bx ...
-          + cos(phi) .* By;
-end
-
