@@ -3,8 +3,8 @@
 % Outputs: B =  [Bx (G), By (G), Bz (G)], Magnetic Moment M, and Dipole Offset
 % reference frame: IAU_PLANET (SYS3RH, where PLANET is a gas or ice giant), rotates with PLANET
 
-function [B,M,O] = MagFldParent(planet, S3lat_deg, S3lon_deg, alt_km, InternalFieldModel, ...
-                       ExternalFieldModel, MagnetopauseFieldModel, magPhase_deg, SPHOUT)
+function [Bvec_nT, Mdip_nT, Odip_km] = MagFldParent(planet, S3lat_deg, S3lon_deg, alt_km, InternalFieldModel, ...
+                       ExternalFieldModel, magPhase_deg, SPHOUT)
 if ~exist('SPHOUT', 'var')
     SPHOUT = 0;
 end
@@ -140,7 +140,7 @@ end
     %% Adjust inputs and get dipole parameters
 
     % Get planet radius in m
-    Rp_m = PlanetEqRadius * 1000; %m
+    Rp_m = PlanetEqRadius * 1000; % m
     
     % Adjust internal field coefficients if non-zero phase offset
     if magPhase ~= 0
@@ -153,30 +153,45 @@ end
         end
     end
 
-    % calculate dipole magnetic moment and dipole offst, ref: https://www.spenvis.oma.be/help/background/magfield/cd.html
+    % calculate dipole magnetic moment and dipole offset, ref: https://www.spenvis.oma.be/help/background/magfield/cd.html
     B0 = sqrt(g(1,1)^2+g(1,2)^2+h(1,2)^2); % reference field B0 = sqrt(g10^2+g11^2+h11^2), called reduced moment by Bartels
-    M0 = 4*pi*B0*PlanetEqRadius^3/(4*pi*1e-7); % magnetic moment magnitude
-    theta_n = acos(-g(1,1)/B0);  %magnetic moment latitude
-    phi_n = atan(h(1,2)/g(1,2)); % magnetic moment longitude
-    Mx = M0*g(1,2); My = M0*h(1,2); Mz = M0*g(1,1);
-    M = [Mx,My,Mz];
+    M0 = 4*pi*B0*1e-15*Rp_m^3/(4e-7*pi); % magnetic moment magnitude in SI units (Tm^3)
+    thDip_rad = acos(g(1,1)/B0);  % magnetic moment colatitude
+    phiDip_rad = atan2(h(1,2), g(1,2)); % magnetic moment east longitude
+     % Dipole vector
+    if SPHOUT
+        Mdip_nT = [B0 * 1e5, thDip_rad, phiDip_rad];
+    else
+        Mdip_nT = [g(1,2), h(1,2), g(1,1)] * 1e5;
+    end
 
 
-    %% offset dipole ... see Koochak and Fraser-Snith 2017
-    L0 = 2*g(1,1)*g(2,1)+sqrt(3)*(g(1,2)*g(2,2)+h(1,2)*h(2,2));                  % 2*g10*g20+sqrt(3)*(g11*g21+h11*h21)
-    L1 = -g(1,2)*g(2,1)+sqrt(3)*(g(1,1)*g(2,2)+g(1,2)*g(2,3)+h(1,2)*h(2,3));  % -g11*g20+sqrt(3)*(g10*g21+g11*g22+h11*h22)
-    L2 = -h(1,2)*g(2,1)+sqrt(3)*(g(1,1)*h(2,2)-h(1,2)*g(2,3)+g(1,2)*h(2,3));  % -h11*g20+sqrt(3)*(g10*h21-h11*g22+g11*h22)
-    E = (L0*g(1,1)+L1*g(1,2)+L2*h(1,2))/(4*B0^2);                             % (L0*g10+L1*g11+L2*h11)/(4*B0^2)
+    %% Offset dipole -- see Koochak and Fraser-Snith 2017
+    % Note two typos in Koochak and Fraser-Snith (2017) Eq. 4: G11 and G20
+    % should be g11 and g20, and the g20 inside square brackets should be
+    % g21, see Fraser-Snith (1987).
+    L0 = 2*g(1,1)*g(2,1) + sqrt(3)*(g(2,1)*g(2,2) + h(1,2)*h(2,2));                 % L0 = 2*g10*g20 + sqrt(3)*(g11*g21 + h11*h21)
+    L1 =  -g(1,2)*g(2,1) + sqrt(3)*(g(1,1)*g(2,2) + g(1,2)*g(2,3) + h(1,2)*h(2,3)); % L1 =  -g11*g20 + sqrt(3)*(g10*g21 + g11*g22 + h11*h22)
+    L2 =  -h(1,2)*g(2,1) + sqrt(3)*(g(1,1)*h(2,2) - h(1,2)*g(2,3) + g(1,2)*h(2,3)); % L2 =  -h11*g20 + sqrt(3)*(g10*h21 - h11*g22 + g11*h22)
+    E = (L0*g(1,1) + L1*g(1,2) + L2*h(1,2)) / (4*B0^2);                             % E = (L0*g10 + L1*g11 + L2*h11) / (4*B0^2)
 
     % unitless offset parameters
-    eta = (L0-g(1,1)*E)/(3*B0^2);   % z-axis
-    zeta = (L1-g(1,2)*E)/(3*B0^2);  % x-axis
-    xi = (L2-h(1,2)*E)/(3*B0^2);    % y-axis
+    xi =   (L0 - g(1,1)*E) / (3*B0^2); % z-axis: xi =   (L0 - g10*E) / (3*B0^2)
+    eta =  (L1 - g(1,2)*E) / (3*B0^2); % x-axis: eta =  (L1 - g11*E) / (3*B0^2)
+    zeta = (L2 - h(1,2)*E) / (3*B0^2); % y-axis: zeta = (L2 - h11*E) / (3*B0^2)
 
-    O = PlanetEqRadius*[zeta,xi,eta];   % offset
+    % Dipole offset in km
+    if SPHOUT
+        rO_km = sqrt(eta^2 + zeta^2 + xi^2);
+        thO_rad = acos(xi / rO_km);
+        phiO_rad = atan2(zeta, eta);
+        Odip_km = PlanetEqRadius * [rO_km, thO_rad, phiO_rad];
+    else
+        Odip_km = PlanetEqRadius * [eta, zeta, xi];
+    end
 
-    sphRad = sphAlt + PlanetEqRadius;     %km
-    sphColat = 90 - sphLat; % Deg, convert to colatitude
+    sphRad = sphAlt + PlanetEqRadius; % km
+    sphColat = 90 - sphLat; % deg, convert to colatitude
     sphAlt = sphAlt*1000; %m
     sphLat = sphLat*pi/180; %rad
     sphLon = sphLon*pi/180; %rad
@@ -187,13 +202,10 @@ end
     phi = sphLon; %rad
 
     % convert to cartesian coordinates
-    rxy = r .* sin(theta); %m, again, theta is measured from z axis (colatitude), so sin(theta) is projection onto xy plane
-    x = rxy .* cos(phi); %m
-    y = rxy .* sin(phi); %m
-    z = r .* cos(theta); %m
-
-    iBx = 0; iBy = 0; iBz = 0; % internal field components
-    eBx = 0; eBy = 0; eBz = 0; % external field components
+    rxy = r .* sin(theta); % m, again, theta is measured from z axis (colatitude), so sin(theta) is projection onto xy plane
+    x = rxy .* cos(phi); % m
+    y = rxy .* sin(phi); % m
+    z = r .* cos(theta); % m
 
     % Inner Field
     if (~strcmp(InternalFieldModel,'None'))
@@ -245,12 +257,10 @@ end
         end
 
         iBr = -dVr;
-        iBtheta = -dVtheta;
+        iBth = -dVtheta;
         iBphi = -dVphi;
 
-        iBx = iBr .* sin(theta) .* cos(phi) + iBtheta .* cos(theta) .* cos(phi) - iBphi .* sin(phi);
-        iBy = iBr .* sin(theta) .* sin(phi) + iBtheta .* cos(theta) .* sin(phi) + iBphi .* cos(phi);
-        iBz = iBr .* cos(theta) - iBtheta .* sin(theta);
+        [iBx, iBy, iBz] = Bsph2Bxyz(iBr, iBth, iBphi, theta, phi);
 
     else
         
@@ -452,10 +462,10 @@ end
             eBy =  eBxps*cos(Theta0)*sin(Phi0) + eByps*cos(Phi0) + eBzps*sin(Theta0)*sin(Phi0);
             eBz = -eBxps*sin(Theta0) + eBzps*cos(Theta0);
 
-            % convert from nT to Gauss
-            eBx = eBx*1e-5;
-            eBy = eBy*1e-5;
-            eBz = eBz*1e-5;
+            % convert from nT to Gauss for combining
+            eBx = eBx * 1e-5;
+            eBy = eBy * 1e-5;
+            eBz = eBz * 1e-5;
             
             
         elseif strcmp(ExternalFieldModel,'SphericalHarmonic')
@@ -485,12 +495,10 @@ end
             end
 
             eBr = -dVr;
-            eBtheta = -dVtheta;
+            eBth = -dVtheta;
             eBphi = -dVphi;
 
-            eBx = eBr .* sin(theta) .* cos(phi) + eBtheta .* cos(theta) .* cos(phi) - eBphi .* sin(phi);
-            eBy = eBr .* sin(theta) .* sin(phi) + eBtheta .* cos(theta) .* sin(phi) + eBphi .* cos(phi);
-            eBz = eBr .* cos(theta) - eBtheta .* sin(theta);
+            [eBx, eBy, eBz] = Bsph2Bxyz(eBr, eBth, eBphi, theta, phi);
             
         else
             
@@ -504,136 +512,17 @@ end
        
     end
     
-    if strcmp(MagnetopauseFieldModel, 'AB2005') % Alexeev and Belenkaya (2005) jovian magnetopause model
-        
-        [mpBx, mpBy, mpBz] = deal(zeros(size(r)));
-        
-    else
-        
-        [mpBx, mpBy, mpBz] = deal(zeros(size(r)));
-        
-    end
-
     % output field in nT
-    Bx = (iBx + eBx + mpBx)*1e5;
-    By = (iBy + eBy + mpBy)*1e5;
-    Bz = (iBz + eBz + mpBz)*1e5;
+    Bx = (iBx + eBx) * 1e5;
+    By = (iBy + eBy) * 1e5;
+    Bz = (iBz + eBz) * 1e5;
     
     % Optionally convert field vectors to spherical for output
     if SPHOUT
         [Br, Bth, Bphi] = Bxyz2Bsph(Bx, By, Bz, theta, phi);
-        B = [Br; Bth; Bphi];
+        Bvec_nT = [Br; Bth; Bphi];
     else
-        B = [Bx; By; Bz];
+        Bvec_nT = [Bx; By; Bz];
     end
 
-end
-
-% Returns the value of Schmidt-seminormalized Legendre function of degree n and order m given the angle theta
-function Pnm = LegendreS(n, m, theta)  % n ( or l) = degree m = order
-    costh = cos(theta);
-    sinth = sin(theta);
-
-    if (n == 1)
-        if     (m == 0); Pnm = costh;
-        elseif (m == 1); Pnm = sinth;
-        else;            Pnm = 0;
-        end
-    elseif (n == 2)
-        if     (m == 0); Pnm = (1/2) * (3*costh.^2 - 1);
-        elseif (m == 1); Pnm = sqrt(3) * costh .* sinth;
-        elseif (m == 2); Pnm = sqrt(3)/2 * sinth.^2;
-        else;            Pnm = 0;
-        end
-    elseif (n == 3)
-        if     (m == 0); Pnm = (1/2) * (5*costh.^3 - 3*costh);
-        elseif (m == 1); Pnm = sqrt(6)/4 * (5*costh.^2 - 1) .* sinth;
-        elseif (m == 2); Pnm = sqrt(15)/2 * costh .* sinth.^2;
-        elseif (m == 3); Pnm = sqrt(10)/4 * sinth.^3;
-        else;            Pnm = 0;
-        end
-    elseif (n == 4)
-        if     (m == 0); Pnm = (1/8) * (35*costh.^4 - 30*costh.^2 + 3);
-        elseif (m == 1); Pnm = sqrt(10)/4 * (7*costh.^3 - 3*costh) .* sinth;
-        elseif (m == 2); Pnm = sqrt(5)/4 * (7*costh.^2 - 1) .* sinth.^2;
-        elseif (m == 3); Pnm = sqrt(70)/4 * costh .* sinth.^3;
-        elseif (m == 4); Pnm = sqrt(35)/8 * sinth.^4;
-        else;            Pnm = 0;
-        end
-    elseif (n == 5)
-        if     (m == 0); Pnm = (1/8) * costh .* (63*costh.^4 - 70*costh.^2 + 15);
-        elseif (m == 1); Pnm = sqrt(15)/8 * (21*costh.^4 - 14*costh.^2 + 1) .* sinth;
-        elseif (m == 2); Pnm = sqrt(105)/4 * costh .* (3*costh.^2 - 1) .* sinth.^2;
-        elseif (m == 3); Pnm = sqrt(35/2)/8 * (9*costh.^2 - 1) .* sinth.^3;
-        elseif (m == 4); Pnm = sqrt(35)*3/8 * costh .* sinth.^4;
-        elseif (m == 5); Pnm = sqrt(7/2)*3/8 * sinth.^5;
-        else;            Pnm = 0;
-        end
-    elseif (n == 6)
-        if     (m == 0); Pnm = (1/16) * (231*costh.^6 - 315*costh.^4 + 105*costh.^2 - 5);
-        elseif (m == 1); Pnm = sqrt(21)/8 * costh .* (33*costh.^4 - 30*costh.^2 + 5) .* sinth;
-        elseif (m == 2); Pnm = sqrt(105/2)/16 * (33*costh.^4 - 18*costh.^2 + 1) .* sinth.^2;
-        elseif (m == 3); Pnm = sqrt(105/2)/8 * costh .* (11*costh.^2 - 3) .* sinth.^3;
-        elseif (m == 4); Pnm = sqrt(7)*3/16 * (11*costh.^2 - 1) .* sinth.^4;
-        elseif (m == 5); Pnm = sqrt(77/2)*3/8 * costh .* sinth.^5;
-        elseif (m == 6); Pnm = sqrt(231/2)/16 * sinth.^6;
-        else;            Pnm = 0;
-        end
-    else; Pnm = 0;
-    end
-end
-
-
-% Returns the value of the derivative of the Schmidt-seminormalized Legendre function of degree n and order m given the angle theta
-function dPnm = dLegendreS(n, m, theta)
-    costh = cos(theta);
-    sinth = sin(theta);
-    
-    if (n == 1)
-        if     (m == 0); dPnm = -sinth;
-        elseif (m == 1); dPnm = costh;
-        else;            dPnm = 0;
-        end
-    elseif (n == 2)
-        if     (m == 0); dPnm = -3 * costh .* sinth;
-        elseif (m == 1); dPnm = sqrt(3) * (2*costh.^2 - 1);
-        elseif (m == 2); dPnm = sqrt(3) * costh .* sinth;
-        else;            dPnm = 0;
-        end
-    elseif (n == 3)
-        if     (m == 0); dPnm = -(3/2) * (10*costh/3 - 1) .* sinth;
-        elseif (m == 1); dPnm = -sqrt(6)/4 * (15*sinth.^2 - 4) .* costh;    
-        elseif (m == 2); dPnm = sqrt(15)/2 * (3*costh.^2 - 1) .* sinth; 
-        elseif (m == 3); dPnm = sqrt(10)*3/4 * costh .* sinth.^2;        
-        else;            dPnm = 0;
-        end
-    elseif (n == 4)
-        if     (m == 0); dPnm = -(5/2) * costh .* (7*costh.^2 - 3) .* sinth;
-        elseif (m == 1); dPnm = sqrt(10)/4 * (28*costh.^4 - 27*costh.^2 + 3);
-        elseif (m == 2); dPnm = sqrt(5) * costh .* (7*costh.^2 - 4) .* sinth;
-        elseif (m == 3); dPnm = sqrt(70)/4 * (2*costh.^2 - 1) .* sinth.^2;  
-        elseif (m == 4); dPnm = sqrt(35)/2 * costh .* sinth.^3;
-        else;            dPnm = 0;
-        end
-    elseif (n == 5)
-        if     (m == 0); dPnm = -(15/8) * (21*costh.^4 - 14*costh.^2 + 1) .* sinth;
-        elseif (m == 1); dPnm = sqrt(15)/8 * costh .* (105*costh.^4 - 126*costh.^2 + 29);
-        elseif (m == 2); dPnm = sqrt(105)/4 * (15*costh.^4 - 12*costh.^2 + 1) .* sinth;
-        elseif (m == 3); dPnm = sqrt(35/2)*3/8 * costh .* (15*costh.^2 - 7) .* sinth.^2;
-        elseif (m == 4); dPnm = -sqrt(35)*3/8 * sinth.^3 .* (5*sinth.^2 - 4);
-        elseif (m == 5); dPnm = sqrt(7/2)*15/8 * costh .* sinth.^4;
-        else;            dPnm = 0;
-        end
-    elseif (n == 6)
-        if     (m == 0); dPnm = -(21/8) * costh .* (33*costh.^4 - 30*costh.^2 + 5) .* sinth;
-        elseif (m == 1); dPnm = sqrt(21)/8 * (198*costh.^6 - 285*costh.^4 + 100*costh.^2 - 5);
-        elseif (m == 2); dPnm = sqrt(105/2)/16 * costh .* (198*costh.^4 - 204*costh.^2 + 38) .* sinth;
-        elseif (m == 3); dPnm = sqrt(105/2)/8 * (66*sinth.^4 - 87*sinth.^2 + 24) .* sinth.^2;
-        elseif (m == 4); dPnm = sqrt(7)*3/8 * costh .* (33*costh.^2 - 13) .* sinth.^3;
-        elseif (m == 5); dPnm = -sqrt(77/2)*3/8 * sinth.^4 .* (6*sinth.^2 - 5);
-        elseif (m == 6); dPnm = sqrt(231/2)*3/8 * costh .* sinth.^5;
-        else;            dPnm = 0;
-        end
-    else; dPnm = 0;
-    end
 end
