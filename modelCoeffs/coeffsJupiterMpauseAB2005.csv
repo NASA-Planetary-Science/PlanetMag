@@ -1,0 +1,8 @@
+Contains 'd_para' and 'd_perp' un-normalized spherical harmonic coefficients and 'D' and 'G' parabolic harmonic coeffiecients for Alexeev and Belenkaya magnetopause field model of Jupiter in dimensionless units. Each row is for n=1, n=2, etc. See https://doi.org/10.5194/angeo-23-809-2005
+     dPara_n,     dPerp_n,         D_n,        G_n
+      0.9403,      0.6497,   9.46303e3,  -1.31869e3
+     -0.4650,      0.2165,   1.07980e7,  -1.90098e5
+      0.1293,      0.0434,   6.52950e8,  -9.60338e6
+     -0.0148,     -0.0008,  3.01584e10,  -3.69794e8
+     -0.0160,     -0.0049,  1.19816e12, -1.25022e10
+     -0.0225,     -0.0022,           0,           0
