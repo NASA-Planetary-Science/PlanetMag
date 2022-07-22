@@ -1,11 +1,12 @@
-moonName = 'Ganymede';
+moonName = 'Callisto';
 % Spacecraft era (sets timespan of field model)
 era = 'Galileo';
-coords = 'JUPITER_SPRH';
+coords = 'IAU_CALLISTO';
 CALC_NEW = 1;
 ALL_MODELS = 0;
 DO_FFT = 0;
-specificModel = 6; % Set this to 0 to use default, or a number to use an opt
+DO_MPAUSE = 1;
+specificModel = 2; % Set this to 0 to use default, or a number to use an opt
 outData = 'out/';
 
 nptsApprox = 600000;
@@ -66,7 +67,7 @@ if CALC_NEW
     t_h = tStart_h:dt:tEnd_h;
     npts = length(t_h);
     disp(['Getting ' moonName ' positions for ' num2str(npts) ' pts over the ' era ' era.'])
-    [rM_km, latM_deg, lonM_deg] = GetPosSpice(moonName, parentName, t_h);
+    [rM_km, latM_deg, lonM_deg, xyz_km] = GetPosSpice(moonName, parentName, t_h);
     altM_km = rM_km - R_P;
 end
 
@@ -88,14 +89,26 @@ else
     opts = specificModel:specificModel;
 end
 for opt=opts
-    [MagModel, CsheetModel, magModelDescrip, fEnd] = GetModelOpts(parentName, opt);
+    [MagModel, CsheetModel, MPmodel, magModelDescrip, fEnd] = GetModelOpts(parentName, opt);
     
     if CALC_NEW
         disp(['Evaluating ' magModelDescrip ' field model.'])
         if strcmp(magModelDescrip, 'Khurana & Schwarzl 2007')
-            [Bvec, ~, ~] = KSMagFldJupiter(latM_deg, lonM_deg, altM_km, t_h*3600, SPHOUT);
+            [Bvec, Mdip_nT, Odip_km] = KSMagFldJupiter(latM_deg, lonM_deg, altM_km, t_h*3600, SPHOUT);
         else
-            [Bvec, ~, ~] = MagFldParent(parentName, latM_deg, lonM_deg, altM_km, MagModel, CsheetModel, magPhase, SPHOUT);
+            [Bvec, Mdip_nT, Odip_km] = MagFldParent(parentName, latM_deg, lonM_deg, altM_km, MagModel, CsheetModel, magPhase, SPHOUT);
+        end
+        if DO_MPAUSE
+            
+            nSW_pcc = 0.14 * ones(1,npts);
+            vSW_kms = 400  * ones(1,npts);
+            pSW_nPa = 2 * 1.67e-27 * (nSW_pcc*1e6) .* (vSW_kms*1e3).^2 * 1e9;
+            xyz_Rp = xyz_km / R_P;
+            r_Rp = rM_km / R_P;
+            mpBvec = MpauseFld(pSW_nPa, t_h*3600, xyz_Rp, r_Rp, Mdip_nT, ...
+                               parentName, MPmodel, SPHOUT);
+            Bvec = Bvec + mpBvec;
+            
         end
 
         disp(['Rotating field vectors into ' coords ' frame.']);
