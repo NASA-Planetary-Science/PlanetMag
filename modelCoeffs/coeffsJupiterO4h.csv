@@ -1,5 +1,5 @@
-Contains 'h' Schmidt semi-normalized spherical harmonic coefficients for O4 internal field model of Jupiter in gauss (G), organized as h_mn, so that each row represents a single n and each column a single m. See https://doi.org/10.1029/JA081i016p02917
+Contains 'h' Schmidt semi-normalized spherical harmonic coefficients for O4 internal field model of Jupiter in gauss (G), organized as h_mn, so that each row represents a single n and each column a single m. See https://doi.org/10.1029/JA081i016p02917; note that the original publication used SIII (1957) coordinates, and these values were updated to SIII (1965) coordinates by Acuna et al. (1983), as reported in Connerney (1992) along with the O6 model: https://core.ac.uk/download/pdf/83644007.pdf
  h0n,      h1n,    h2n,    h3n
-   0,    0.562,      0,      0
-   0,   -0.037, -0.402,      0
-   0,   -0.463,  0.096,  0.233
+   0,    0.264,      0,      0
+   0,   -0.469, -0.088,      0
+   0,   -0.580,  0.487, -0.294
