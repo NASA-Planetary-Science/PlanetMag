@@ -1,16 +1,26 @@
 moonName = 'Callisto';
 % Spacecraft era (sets timespan of field model)
 era = 'Galileo';
-coords = 'IAU_CALLISTO';
+coordType = 'IAU';
 CALC_NEW = 1;
 ALL_MODELS = 0;
 DO_FFT = 0;
 DO_MPAUSE = 1;
-specificModel = 2; % Set this to 0 to use default, or a number to use an opt
+specificModel = 3; % Set this to 0 to use default, or a number to use an opt
 outData = 'out/';
 
-nptsApprox = 600000;
+nptsApprox = 6000000;
 magPhase = 0;
+
+switch coordType
+    case 'IAU'
+        coords = ['IAU_' upper(moonName)];
+    case 'SPRH'
+        coords = [upper(planetName) '_SPRH'];
+    otherwise
+        warning(['coordType "' coordType '" not recognized Defaulting to IAU.'])
+        coords = ['IAU_' upper(moonName)];
+end
 
 parentName = LoadSpice(moonName);
 

@@ -210,6 +210,11 @@ end
 
 %% List of excitation periods to invert over
 function [f, fSyn] = GetExcitations(body, etMid_day)
+    fJyr = 1 / 4332.589 / 86400; % https://nssdc.gsfc.nasa.gov/planetary/factsheet/jupiterfact.html
+    fSyr = 1 / 10759.22 / 86400; % https://nssdc.gsfc.nasa.gov/planetary/factsheet/saturnfact.html
+    fUyr = 1 / 30685.4 / 86400; % https://nssdc.gsfc.nasa.gov/planetary/factsheet/uranusfact.html
+    fNyr = 1 / 60189 / 86400; % https://nssdc.gsfc.nasa.gov/planetary/factsheet/neptunefact.html
+    % Remaining quantities are from pck00010.tpc
     fJup = 870.536 / 360 / 86400;
     fSat = 810.7939024 / 360 / 86400;
     fUra = abs(-501.1600928) / 360 / 86400;
@@ -257,7 +262,11 @@ function [f, fSyn] = GetExcitations(body, etMid_day)
                     3*fSynAdj - fIoTA, ... % 3rd harmonic beats
                     3*fSynAdj + fIoTA, ...
                     fOrbBeat, ... % ~ 2nd harmonic beat between orbital and TA periods
-                    fSynAdj - fOrbMid2]; % Beat between strong(est) oscillations
+                    fSynAdj - fOrbMid2, ...  % Beat between strong(est) oscillations
+                    fJup - fJyr, ... % Solar oscillation periods due to 
+                    fJup - 2*fJyr, ... % magnetopause current fields
+                    fOrbAdj - fJyr, ...
+                    fOrbAdj - 2*fJyr];
                     
 
         case 'EUROPA'
@@ -268,7 +277,7 @@ function [f, fSyn] = GetExcitations(body, etMid_day)
             fTA = 1 / 84.62776 / 3600; %3.281745587e-6;
             fSyn = fJup - fOrb;
             fNearBeats = 1 / 3600 ./ [9.916007150192408304, 9.918866231039942249, ...
-                9.924589341739000758, 12.954663079272373594];
+                9.924589341739000758, 12.952600819268481];
             fNearOrbs = 1 / 3600 ./ [85.1513423, 84.575556990340160723, ...
                 84.783999521416234302, 85.098596922214568394, 84.471719596866705615, ...
                 84.888606553513909603, 84.993472034115839620, 85.415537694012940, ...
@@ -297,7 +306,11 @@ function [f, fSyn] = GetExcitations(body, etMid_day)
                     fSyn - 2*fTA, ...
                     fTA + fOrb, ...
                     fNearOrbs, ...
-                    fNearBeats];
+                    fNearBeats, ...
+                    fJup - fJyr, ... % Solar oscillation periods due to 
+                    fJup - 2*fJyr, ... % magnetopause current fields
+                    fOrbAdj - fJyr, ...
+                    fOrbAdj - 2*fJyr];
 
 
         case 'GANYMEDE'
@@ -337,7 +350,11 @@ function [f, fSyn] = GetExcitations(body, etMid_day)
                     1 / 3600 / 6.208585640926228, ...
                     1 / 3600 / 3.188814749737327, ...
                     1 / 3600 / 3.906250548182006, ...
-                    2*fMystery];
+                    2*fMystery, ...
+                    fJup - fJyr, ... % Solar oscillation periods due to 
+                    fJup - 2*fJyr, ... % magnetopause current fields
+                    fOrbAdj - fJyr, ...
+                    fOrbAdj - 2*fJyr];
 
 
         case 'CALLISTO'
@@ -368,9 +385,11 @@ function [f, fSyn] = GetExcitations(body, etMid_day)
                     fSheet1, ...
                     fSheet2, ...
                     fSheet3, ...
-                    fSheet4 ...
-                    ];
-            a=0;
+                    fSheet4, ...
+                    fJup - fJyr, ... % Solar oscillation periods due to 
+                    fJup - 2*fJyr, ... % magnetopause current fields
+                    fOrbAdj - fJyr, ...
+                    fOrbAdj - 2*fJyr];
 
 
         %% Saturn moons         
@@ -507,7 +526,7 @@ function [f, fSyn] = GetExcitations(body, etMid_day)
                     f(3) + 2*f(2)];
 
     end
-
+    
     f = sort(f, 'descend');
 end
 

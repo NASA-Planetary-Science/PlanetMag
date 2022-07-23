@@ -24,7 +24,7 @@ function [MagModel, CsheetModel, MPmodel, magModelDescrip, fEnd] = GetModelOpts(
             E1992a180 = 'Engle1992alpha180'; % Engle (1992) anti-sunward-tilt magnetopause field model
             B1994 = 'Bode1994'; % Engle (1992) magnetopause field model with Bode (1994) time-dependent coefficients
             
-            MPmodel = AB2005;
+            MPmodel = B1994;
 
             if opt == 0; opt = 7; end  % Set default to JRM33 + C2020
             switch opt
