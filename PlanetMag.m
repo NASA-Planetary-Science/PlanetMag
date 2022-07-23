@@ -93,7 +93,7 @@ for opt=opts
     
     if CALC_NEW
         disp(['Evaluating ' magModelDescrip ' field model.'])
-        if strcmp(magModelDescrip, 'Khurana & Schwarzl 2007')
+        if strcmp(magModelDescrip, 'Khurana & Schwarzl 2005')
             [Bvec, Mdip_nT, Odip_km] = KSMagFldJupiter(latM_deg, lonM_deg, altM_km, t_h*3600, SPHOUT);
         else
             [Bvec, Mdip_nT, Odip_km] = MagFldParent(parentName, latM_deg, lonM_deg, altM_km, MagModel, CsheetModel, magPhase, SPHOUT);
@@ -102,12 +102,10 @@ for opt=opts
             
             nSW_pcc = 0.14 * ones(1,npts);
             vSW_kms = 400  * ones(1,npts);
-            pSW_nPa = 2 * 1.67e-27 * (nSW_pcc*1e6) .* (vSW_kms*1e3).^2 * 1e9;
-            xyz_Rp = xyz_km / R_P;
-            r_Rp = rM_km / R_P;
-            mpBvec = MpauseFld(pSW_nPa, t_h*3600, xyz_Rp, r_Rp, Mdip_nT, ...
+            [mpBvec, OUTSIDE_MP] = MpauseFld(nSW_pcc, vSW_kms, t_h*3600, xyz_km, Mdip_nT, ...
                                parentName, MPmodel, SPHOUT);
             Bvec = Bvec + mpBvec;
+            Bvec(:,OUTSIDE_MP) = 0;
             
         end
 

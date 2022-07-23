@@ -1,0 +1,12 @@
+Contains 'G' Schmidt semi-normalized spherical harmonic coefficients for Engle (1992) magnetopause current field model of Jupiter, organized as G_mn in nanotesla (nT), so that each row represents a single n and each column a single m. See https://doi.org/10.1029/92JA02036 . These coefficients are for the "no tilt" model.
+      G0n,       G1n,       G2n,       G3n,       G4n,       G5n,       G6n,       G7n,       G8n,       G9n,      G10n
+    0.639,         0,         0,         0,         0,         0,         0,         0,         0,         0,         0
+        0,   0.34758,         0,         0,         0,         0,         0,         0,         0,         0,         0
+   0.0157,         0,    0.0817,         0,         0,         0,         0,         0,         0,         0,         0
+        0,    0.0194,         0,   0.00594,         0,         0,         0,         0,         0,         0,         0
+ -0.01885,         0,  -0.01721,         0, -0.014514,         0,         0,         0,         0,         0,         0
+        0,   -0.0115,         0,  -0.02087,         0,   -0.0166,         0,         0,         0,         0,         0
+  0.00653,         0,   0.00082,         0,  -0.01154,         0,  -0.00933,         0,         0,         0,         0
+        0,  0.000056,         0,  0.004094,         0, -0.001893,         0, -0.003038,         0,         0,         0
+  0.00277,        0, 0.00004716,         0,   0.00369,         0,    0.0002,         0,   -0.0005,         0,         0
+        0,   0.0006,          0,  0.000139,         0,  0.000377,         0,  0.000111,        0, 0.00000244,         0

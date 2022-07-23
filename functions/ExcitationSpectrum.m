@@ -25,7 +25,7 @@ function [Tpeak_h, B0vec, B1vec] = ...
     end
     
     opt = 0; % Use default for each planet
-    [MagModel, CsheetModel, magModelDescrip, fEnd] = GetModelOpts(parentName, opt);
+    [MagModel, CsheetModel, MPmodel, magModelDescrip, fEnd] = GetModelOpts(parentName, opt);
     
     dt = Tinterest_h/rate;
     duration = nOsc*Tinterest_h - dt;
@@ -42,14 +42,24 @@ function [Tpeak_h, B0vec, B1vec] = ...
     end
     npts = length(t_h);
     disp(['Getting ' moonName ' positions for ' num2str(npts) ' pts.'])
-    [rM_km, latM_deg, lonM_deg] = GetPosSpice(moonName, parentName, t_h);
+    [rM_km, latM_deg, lonM_deg, xyz_km] = GetPosSpice(moonName, parentName, t_h);
     altM_km = rM_km - R_P;
     
     disp(['Evaluating ' magModelDescrip ' field model for T = ' num2str(Tinterest_h) ' h.'])
     if strcmp(magModelDescrip, 'Khurana & Schwarzl 2007')
-        [Bvec, ~, ~] = kkMagFldJupiter(latM_deg, lonM_deg, altM_km, t_h*3600, SPHOUT);
+        [Bvec, Mdip_nT, ~] = kkMagFldJupiter(latM_deg, lonM_deg, altM_km, t_h*3600, SPHOUT);
     else
-        [Bvec, ~, ~] = MagFldParent(parentName, latM_deg, lonM_deg, altM_km, MagModel, CsheetModel, magPhase, SPHOUT);
+        [Bvec, Mdip_nT, ~] = MagFldParent(parentName, latM_deg, lonM_deg, altM_km, MagModel, CsheetModel, magPhase, SPHOUT);
+    end
+    if DO_MPAUSE
+
+        nSW_pcc = 0.14 * ones(1,npts);
+        vSW_kms = 400  * ones(1,npts);
+        [mpBvec, OUTSIDE_MP] = MpauseFld(nSW_pcc, vSW_kms, t_h*3600, xyz_km, Mdip_nT, ...
+                           parentName, MPmodel, SPHOUT);
+        Bvec = Bvec + mpBvec;
+        Bvec(:,OUTSIDE_MP) = 0;
+
     end
     
     if SPHOUT

@@ -1,4 +1,4 @@
-function [MagModel, CsheetModel, magModelDescrip, fEnd] = GetModelOpts(parentName, opt)
+function [MagModel, CsheetModel, MPmodel, magModelDescrip, fEnd] = GetModelOpts(parentName, opt)
     switch parentName
         case 'Jupiter'
             % opt 1
@@ -17,6 +17,14 @@ function [MagModel, CsheetModel, magModelDescrip, fEnd] = GetModelOpts(parentNam
             % opt 6 is Seufert et al. 2011 combo, VIP4 + K1997
             % opt 7 (includes C2020 current sheet)
             JRM33 = 'MagFldJupiterJRM33';
+            
+            AB2005 = 'AB2005'; % Alexeev and Belenkaya (2005) magnetopause model
+            E1992a90 = 'Engle1992alpha90'; % Engle (1992) no-tilt magnetopause field model
+            E1992a0 = 'Engle1992alpha0'; % Engle (1992) sunward-tilt magnetopause field model
+            E1992a180 = 'Engle1992alpha180'; % Engle (1992) anti-sunward-tilt magnetopause field model
+            B1994 = 'Bode1994'; % Engle (1992) magnetopause field model with Bode (1994) time-dependent coefficients
+            
+            MPmodel = AB2005;
 
             if opt == 0; opt = 7; end  % Set default to JRM33 + C2020
             switch opt
@@ -71,6 +79,8 @@ function [MagModel, CsheetModel, magModelDescrip, fEnd] = GetModelOpts(parentNam
             % opt 2
             Cassini11 = 'MagFldSaturnCassini11';
             Cassini11sheet = 'Cassini11';
+            
+            MPmodel = 'None'; % No magnetopause model implemented
 
             if opt == 0; opt = 2; end  % Set default to Cassini 11
             switch opt
@@ -97,6 +107,7 @@ function [MagModel, CsheetModel, magModelDescrip, fEnd] = GetModelOpts(parentNam
             % opt 1
             AH5 = 'MagFldUranusAH5';
             AH5sheet = 'None';
+            MPmodel = 'None'; % No magnetopause model implemented
 
             if opt == 0; opt = 1; end  % Set default to AH5
             switch opt
@@ -118,6 +129,7 @@ function [MagModel, CsheetModel, magModelDescrip, fEnd] = GetModelOpts(parentNam
             % opt 1
             O8 = 'MagFldNeptuneO8';
             O8sheet = 'None';
+            MPmodel = 'None'; % No magnetopause model implemented
             
             if opt == 0; opt = 1; end  % Set default to O8
             switch opt

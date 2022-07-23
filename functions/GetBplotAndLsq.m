@@ -8,14 +8,25 @@ function GetBplotAndLsq(ets, t_h, alt_km, lat_deg, lon_deg, BrSC, BthSC, BphiSC,
     if ~exist('jt_h', 'var'); jt_h = []; end
     if isempty(jt_h); JUNOTOO=0; else; JUNOTOO=1; end
     
-    [MagModel, CsheetModel, magModelDescrip, ~] = GetModelOpts(parentName, opt);
+    [MagModel, CsheetModel, MPmodel, magModelDescrip, ~] = GetModelOpts(parentName, opt);
     magPhase = 0;
 
     disp(['Evaluating ' magModelDescrip ' field model.'])
     if strcmp(magModelDescrip, 'Khurana & Schwarzl 2007')
-        [Bvec, ~, ~] = KSMagFldJupiter(lat_deg, lon_deg, alt_km, ets, 1);
+        [Bvec, Mdip_nT, ~] = KSMagFldJupiter(lat_deg, lon_deg, alt_km, ets, 1);
     else
-        [Bvec, ~, ~] = MagFldParent(parentName, lat_deg, lon_deg, alt_km, MagModel, CsheetModel, magPhase, 1);
+        [Bvec, Mdip_nT, ~] = MagFldParent(parentName, lat_deg, lon_deg, alt_km, MagModel, ...
+                                    CsheetModel, magPhase, 1);
+    end
+    if DO_MPAUSE
+
+        nSW_pcc = 0.14 * ones(1,npts);
+        vSW_kms = 400  * ones(1,npts);
+        [mpBvec, OUTSIDE_MP] = MpauseFld(nSW_pcc, vSW_kms, t_h*3600, xyz_km, Mdip_nT, ...
+                           parentName, MPmodel, SPHOUT);
+        Bvec = Bvec + mpBvec;
+        Bvec(:,OUTSIDE_MP) = 0;
+
     end
 
     Br = Bvec(1,:);

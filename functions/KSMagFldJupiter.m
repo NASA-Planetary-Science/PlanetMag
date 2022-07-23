@@ -59,7 +59,7 @@ function [Bvec, Mdip, Odip] = KSMagFldJupiter(latS3_deg, lonS3_deg, altJup_km, e
     if trueToKK
         B0 = sqrt(420543.0^2 + 65920.0^2 + 24992.0^2);
     else
-        B0 = sqrt(gVIP4(1,1)^2 + gVIP4(2,1)^2 + hVIP4(2,1)^2);  % Magnitude of dipole moment in VIP4 model in nT
+        B0 = sqrt(gVIP4(1,1)^2 + gVIP4(1,2)^2 + hVIP4(1,2)^2);  % Magnitude of dipole moment in VIP4 model in nT
     end
     Nmodes = 3;  % "Number of dipole modes" (?)
     parmod = [ ...
@@ -72,18 +72,31 @@ function [Bvec, Mdip, Odip] = KSMagFldJupiter(latS3_deg, lonS3_deg, altJup_km, e
     % Dipole moment vector calculation
     g = gVIP4;
     h = hVIP4;
-    M0 = 4*pi*B0*Rj^3 / (4e-7*pi);
-    Mdip = M0 * [g(1,2), h(1,2), g(1,1)];
-    % Dipole offset calculation
-    L0 = 2*g(1,1)*g(2,1) + sqrt(3)*(g(1,2)*g(2,2) + h(1,2)*h(2,2));
-    L1 =  -g(1,2)*g(2,1) + sqrt(3)*(g(1,1)*g(2,2) + g(1,2)*g(2,3) + h(1,2)*h(2,3));
-    L2 =  -h(1,2)*g(2,1) + sqrt(3)*(g(1,1)*h(2,2) - h(1,2)*g(2,3) + g(1,2)*h(2,3));
-    E = (L0*g(1,1) + L1*g(1,2) + L2*h(1,2)) / (4*B0^2);
-    % Unitless offset parameters
-    zeta = (L1 - g(1,2)*E) / (3*B0^2);
-    xi = (L2 - h(1,2)*E) / (3*B0^2);
-    eta = (L0 - g(1,1)*E) / (3*B0^2);
-    Odip = Rj * [zeta, xi, eta];
+    M0 = 4*pi*B0*1e-15*(Rj*1e3)^3 / (4e-7*pi);
+    Mdip = [g(1,2), h(1,2), g(1,1)] * 1e5;
+    %% Offset dipole -- see Koochak and Fraser-Snith 2017
+    % Note two typos in Koochak and Fraser-Snith (2017) Eq. 4: G11 and G20
+    % should be g11 and g20, and the g20 inside square brackets should be
+    % g21, see Fraser-Snith (1987).
+    L0 = 2*g(1,1)*g(2,1) + sqrt(3)*(g(2,1)*g(2,2) + h(1,2)*h(2,2));                 % L0 = 2*g10*g20 + sqrt(3)*(g11*g21 + h11*h21)
+    L1 =  -g(1,2)*g(2,1) + sqrt(3)*(g(1,1)*g(2,2) + g(1,2)*g(2,3) + h(1,2)*h(2,3)); % L1 =  -g11*g20 + sqrt(3)*(g10*g21 + g11*g22 + h11*h22)
+    L2 =  -h(1,2)*g(2,1) + sqrt(3)*(g(1,1)*h(2,2) - h(1,2)*g(2,3) + g(1,2)*h(2,3)); % L2 =  -h11*g20 + sqrt(3)*(g10*h21 - h11*g22 + g11*h22)
+    E = (L0*g(1,1) + L1*g(1,2) + L2*h(1,2)) / (4*B0^2);                             % E = (L0*g10 + L1*g11 + L2*h11) / (4*B0^2)
+
+    % unitless offset parameters
+    xi =   (L0 - g(1,1)*E) / (3*B0^2); % z-axis: xi =   (L0 - g10*E) / (3*B0^2)
+    eta =  (L1 - g(1,2)*E) / (3*B0^2); % x-axis: eta =  (L1 - g11*E) / (3*B0^2)
+    zeta = (L2 - h(1,2)*E) / (3*B0^2); % y-axis: zeta = (L2 - h11*E) / (3*B0^2)
+
+    % Dipole offset in km
+    if SPHOUT
+        rO_km = sqrt(eta^2 + zeta^2 + xi^2);
+        thO_rad = acos(xi / rO_km);
+        phiO_rad = atan2(zeta, eta);
+        Odip = Rj * [rO_km, thO_rad, phiO_rad];
+    else
+        Odip = Rj * [eta, zeta, xi];
+    end
     
     rho = r .* sin(theta);
     xS3 = rho .* cos(phi);

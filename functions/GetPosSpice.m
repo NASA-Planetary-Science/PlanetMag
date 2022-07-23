@@ -1,4 +1,4 @@
-function [r_km, latS3_deg, lonS3_deg] = GetPosSpice(moonName, parentName, t_h)
+function [r_km, latS3_deg, lonS3_deg, xyz_km] = GetPosSpice(moonName, parentName, t_h)
     t = t_h * 3600;
     spkParent = upper(parentName);
     spkMoon = upper(moonName);
