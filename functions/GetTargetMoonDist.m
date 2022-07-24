@@ -1,6 +1,6 @@
 function r_RM = GetTargetMoonDist(sc, moonName, parentName, ets)
 
-    [~, ~, RM_km, ~, ~, ~, ~] = GetBodyParams(moonName);
+    [~, ~, RM_km, ~, ~, ~, ~, ~, ~, ~] = GetBodyParams(moonName);
     spkParent = upper(parentName);
     spkS3 = ['IAU_' spkParent];
     [scPos_km, ~] = cspice_spkpos(upper(sc), ets, spkS3, 'NONE', spkParent);

@@ -1,15 +1,16 @@
-moonName = 'Callisto';
+moonName = 'Triton';
 % Spacecraft era (sets timespan of field model)
-era = 'Galileo';
+era = 'Voyager';
 coordType = 'IAU';
 CALC_NEW = 1;
 ALL_MODELS = 0;
 DO_FFT = 0;
-DO_MPAUSE = 1;
-specificModel = 3; % Set this to 0 to use default, or a number to use an opt
+DO_MPAUSE = 0;
+specificModel = 0; % Set this to 0 to use default, or a number to use an opt
+MPopt = 0; % As above, for magnetopause models
 outData = 'out/';
 
-nptsApprox = 6000000;
+nptsApprox = 600000;
 magPhase = 0;
 
 switch coordType
@@ -25,7 +26,8 @@ end
 parentName = LoadSpice(moonName);
 
 if CALC_NEW
-    [R_P, ~, ~, ~, ~, Tparent_s, Tmoon_s] = GetBodyParams(moonName);
+    [Rp_km, ~, ~, a_AU, ~, ~, Tparent_s, Tmoon_s, nutPrecParent, nutPrecMoon] ...
+        = GetBodyParams(moonName);
     Tparent_h = Tparent_s / 3600;
     Tmoon_h = Tmoon_s / 3600;
     Tsyn_h = 1/(1/Tparent_h - 1/Tmoon_h);
@@ -78,7 +80,7 @@ if CALC_NEW
     npts = length(t_h);
     disp(['Getting ' moonName ' positions for ' num2str(npts) ' pts over the ' era ' era.'])
     [rM_km, latM_deg, lonM_deg, xyz_km] = GetPosSpice(moonName, parentName, t_h);
-    altM_km = rM_km - R_P;
+    altM_km = rM_km - Rp_km;
 end
 
 if strcmp(coords(end-3:end), 'SPRH')
@@ -99,7 +101,7 @@ else
     opts = specificModel:specificModel;
 end
 for opt=opts
-    [MagModel, CsheetModel, MPmodel, magModelDescrip, fEnd] = GetModelOpts(parentName, opt);
+    [MagModel, CsheetModel, MPmodel, magModelDescrip, fEnd] = GetModelOpts(parentName, opt, MPopt);
     
     if CALC_NEW
         disp(['Evaluating ' magModelDescrip ' field model.'])
@@ -110,7 +112,7 @@ for opt=opts
         end
         if DO_MPAUSE
             
-            nSW_pcc = 0.14 * ones(1,npts);
+            nSW_pcc = 4 / a_AU^2 * ones(1,npts);
             vSW_kms = 400  * ones(1,npts);
             [mpBvec, OUTSIDE_MP] = MpauseFld(nSW_pcc, vSW_kms, t_h*3600, xyz_km, Mdip_nT, ...
                                parentName, MPmodel, SPHOUT);
@@ -143,7 +145,7 @@ for opt=opts
         load(fullfile([outData 'evalB' moonName fEnd]));
     end
 
-    BD = PCA_decomposition(t_h*3600, upper(moonName), parentName, BvecMoon, ...
+    BD = PCA_decomposition(t_h*3600, moonName, parentName, BvecMoon, ...
         magModelDescrip, SPHOUT, 1, 1);
 
     T_h = 1 ./ BD.f / 3600;

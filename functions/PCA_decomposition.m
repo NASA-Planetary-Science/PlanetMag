@@ -1,5 +1,5 @@
-function BD = PCA_decomposition(ets,body,parentName,Bvec, descrip, SPHOUT, ...
-    PLOT_DIAGNOSTIC, COMPARE_SEUFERT)
+function BD = PCA_decomposition(ets, moonName, parentName, Bvec, descrip, ...
+    SPHOUT, PLOT_DIAGNOSTIC, COMPARE_SEUFERT)
 % Evaluates the excitation moments of the input time series Bx, By, and Bz
 % by the method of Principal Component Analysis (PCA).
 % In this method, the expected oscillation frequencies are each used to
@@ -29,7 +29,7 @@ ets_ca = ets(round(length(ets)/2));
 etMid_day = ets_ca / 86400;
 %ets_ca = 1228738876.0; % for Triton flyby at AOL 50  degrees
 
-[f, fSyn] = GetExcitations(body, etMid_day);
+[f, fSyn] = GetExcitations(moonName, etMid_day);
 
 nFreqs = length(f);
 % Initialize frequency sampling matrix
@@ -117,7 +117,6 @@ if PLOT_DIAGNOSTIC
 %     ylabel('Magnetic Field (nT)'); xlabel('Period (hr)'); set(gca,'fontsize',12);set(gca, 'YScale', 'log');set(gca, 'XScale', 'log')
 
     etsRel_h = (ets-ets(1))/3600;
-    bodyname = [body(1) lower(body(2:end))];
     
     if ~strcmp(parentName,'Saturn')
         cosSyn = X(:, 2*(find(f==fSyn))-1);
@@ -129,7 +128,7 @@ if PLOT_DIAGNOSTIC
 
     figure; hold on; box on; grid on;
     set(gcf,'Name', [descrip ' model vs. reconstruction, first 200h']);
-    title([bodyname ' ' descrip ' model vs. reconstruction, first 200h'])
+    title([moonName ' ' descrip ' model vs. reconstruction, first 200h'])
     Bvec1in = plot(etsRel_h, Bvec(1,:), 'b');
     Bvec2in = plot(etsRel_h, Bvec(2,:), 'r');
     Bvec3in = plot(etsRel_h, Bvec(3,:), 'g');
@@ -151,7 +150,7 @@ if PLOT_DIAGNOSTIC
     
     figure; hold on; box on; grid on;
     set(gcf,'Name', [descrip ' model vs. reconstruction diff, first 200h']);
-    title([bodyname ' ' descrip ' model vs. reconstruction diff, first 200h'])
+    title([moonName ' ' descrip ' model vs. reconstruction diff, first 200h'])
     Bvec1diff = plot(etsRel_h, Bvec(1,:)-Bvec1est', 'b');
     Bvec2diff = plot(etsRel_h, Bvec(2,:)-Bvec2est', 'r');
     Bvec3diff = plot(etsRel_h, Bvec(3,:)-Bvec3est', 'g');
@@ -167,36 +166,36 @@ if PLOT_DIAGNOSTIC
     xlim([0 200])
     
     figure; box on;
-    set(gcf,'Name', [bodyname ' ' descrip ' hodogram']);
+    set(gcf,'Name', [moonName ' ' descrip ' hodogram']);
     if SPHOUT
         if strcmp(parentName,'Saturn')
             plot(-Bvec(1,:), -Bvec(2,:), 'b')
-            xlabel(['-B_r ' parentName ' SIII (\approx B_y ' bodyname(1) '\phi\Omega, nT)'])
-            ylabel(['-B_\theta ' parentName ' SIII (\approx B_z ' bodyname(1) '\phi\Omega, nT)'])
-            title([bodyname ' spin-parent plane hodogram, ' descrip])
+            xlabel(['-B_r ' parentName ' SIII (\approx B_y ' moonName(1) '\phi\Omega, nT)'])
+            ylabel(['-B_\theta ' parentName ' SIII (\approx B_z ' moonName(1) '\phi\Omega, nT)'])
+            title([moonName ' spin-parent plane hodogram, ' descrip])
         else
             if COMPARE_SEUFERT
                 plot(-Bvec(3,:), Bvec(1,:), 'b')
-                xlabel(['-B_\phi ' parentName ' SIII (\approx -B_x ' bodyname(1) '\phi\Omega, nT)'])
-                ylabel(['B_r ' parentName ' SIII (\approx -B_y ' bodyname(1) '\phi\Omega, nT)'])
+                xlabel(['-B_\phi ' parentName ' SIII (\approx -B_x ' moonName(1) '\phi\Omega, nT)'])
+                ylabel(['B_r ' parentName ' SIII (\approx -B_y ' moonName(1) '\phi\Omega, nT)'])
             else
                 plot(Bvec(3,:), -Bvec(1,:), 'b')
-                xlabel(['B_\phi ' parentName ' SIII (\approx B_x ' bodyname(1) '\phi\Omega, nT)'])
-                ylabel(['-B_r ' parentName ' SIII (\approx B_y ' bodyname(1) '\phi\Omega, nT)'])
+                xlabel(['B_\phi ' parentName ' SIII (\approx B_x ' moonName(1) '\phi\Omega, nT)'])
+                ylabel(['-B_r ' parentName ' SIII (\approx B_y ' moonName(1) '\phi\Omega, nT)'])
             end
-            title([bodyname ' equatorial plane hodogram, ' descrip])
+            title([moonName ' equatorial plane hodogram, ' descrip])
         end
     else
         if strcmp(parentName,'Saturn')
             plot(Bvec(1,:), Bvec(3,:), 'b')
-            xlabel(['B_x IAU (\approx B_y ' bodyname(1) '\phi\Omega, nT)'])
-            ylabel(['B_z IAU (\approx B_z ' bodyname(1) '\phi\Omega, nT)'])
-            title([bodyname ' spin-parent plane hodogram, ' descrip])
+            xlabel(['B_x IAU (\approx B_y ' moonName(1) '\phi\Omega, nT)'])
+            ylabel(['B_z IAU (\approx B_z ' moonName(1) '\phi\Omega, nT)'])
+            title([moonName ' spin-parent plane hodogram, ' descrip])
         else
             plot(Bvec(2,:), Bvec(1,:), 'b')
-            ylabel(['B_x IAU (\approx B_y ' bodyname(1) '\phi\Omega, nT)'])
-            xlabel(['B_y IAU (\approx -B_x ' bodyname(1) '\phi\Omega, nT)'])
-            title([bodyname ' equatorial plane hodogram, ' descrip])
+            ylabel(['B_x IAU (\approx B_y ' moonName(1) '\phi\Omega, nT)'])
+            xlabel(['B_y IAU (\approx -B_x ' moonName(1) '\phi\Omega, nT)'])
+            title([moonName ' equatorial plane hodogram, ' descrip])
         end
     end
     ylim([-max(abs(ylim())), max(abs(ylim()))])
@@ -209,35 +208,29 @@ end
 
 
 %% List of excitation periods to invert over
-function [f, fSyn] = GetExcitations(body, etMid_day)
+function [f, fSyn] = GetExcitations(moonName, etMid_day)
     fJyr = 1 / 4332.589 / 86400; % https://nssdc.gsfc.nasa.gov/planetary/factsheet/jupiterfact.html
     fSyr = 1 / 10759.22 / 86400; % https://nssdc.gsfc.nasa.gov/planetary/factsheet/saturnfact.html
     fUyr = 1 / 30685.4 / 86400; % https://nssdc.gsfc.nasa.gov/planetary/factsheet/uranusfact.html
     fNyr = 1 / 60189 / 86400; % https://nssdc.gsfc.nasa.gov/planetary/factsheet/neptunefact.html
-    % Remaining quantities are from pck00010.tpc
-    fJup = 870.536 / 360 / 86400;
-    fSat = 810.7939024 / 360 / 86400;
-    fUra = abs(-501.1600928) / 360 / 86400;
-    fNep = 536.3128492 / 360 / 86400;
-    Pnut0Jup_deg = [73.32, 24.62, 283.90, 355.80, 119.90, 229.80, 352.25, 113.35];
-    Pnut1Jup_degday = [91472.9, 45137.2, 4850.7, 1191.3, 262.1, 64.3, 2382.6, 6070.0] ...
-        / 36525;
-
-    switch body
+    % Fetch remaining quantities from PCK file
+    [~, ~, ~, ~, omegaParent_radps, omegaMoon_radps, ~, ~, nutPrecParent, nutPrecMoon] = GetBodyParams(moonName);
+    fPar = abs(omegaParent_radps / 2/pi);
+    fOrb = abs(omegaMoon_radps / 2/pi);
+    Pnut0 = nutPrecParent(1:2:end);
+    Pnut1 = nutPrecParent(2:2:end) / 36525;
+    fOrbAdj = abs(omegaMoon_radps / 2/pi + sum(nutPrecMoon .* Pnut1 .* cosd(Pnut0 + Pnut1*etMid_day)) / 360 / 86400);
+    fSyn = fPar - fOrb;
+    fSynAdj = fPar - fOrbAdj;
+    
+    switch moonName
 
         %% Jupiter moons 
-        case 'IO'
-            Pnut0 = Pnut0Jup_deg;
-            Pnut1 = Pnut1Jup_degday;
-            PnutM = [0, 0, -0.085, -0.022, 0, 0, 0, 0];
-            fOrb = 203.4889538 / 360 / 86400; % orbital period
-            fOrbBeat = 1 / 3600 / 42.289036514276894252;
+        case 'Io'
             fIoTA = 1 / 3600 / 42.315044531808887029; % true anomaly period
+            fOrbBeat = 1 / 3600 / 42.289036514276894252;
             fOrbMid1 = 1 / 3600 / 42.431381950208163;
             fOrbMid2 = 1 / 3600 / 42.305626942856122;
-            fOrbAdj = (203.4889538 + sum(PnutM .* Pnut1 .* cosd(Pnut0 + Pnut1*etMid_day))) / 360 / 86400;
-            fSyn = fJup - fOrb;
-            fSynAdj = fJup - fOrbAdj;
 
             f = [fSyn, fOrb, fIoTA, fOrbMid1, fOrbMid2];
 
@@ -263,30 +256,22 @@ function [f, fSyn] = GetExcitations(body, etMid_day)
                     3*fSynAdj + fIoTA, ...
                     fOrbBeat, ... % ~ 2nd harmonic beat between orbital and TA periods
                     fSynAdj - fOrbMid2, ...  % Beat between strong(est) oscillations
-                    fJup - fJyr, ... % Solar oscillation periods due to 
-                    fJup - 2*fJyr, ... % magnetopause current fields
+                    fPar - fJyr, ... % Solar oscillation periods due to 
+                    fPar - 2*fJyr, ... % magnetopause current fields
                     fOrbAdj - fJyr, ...
                     fOrbAdj - 2*fJyr];
                     
 
-        case 'EUROPA'
-            Pnut0 = Pnut0Jup_deg;
-            Pnut1 = Pnut1Jup_degday;
-            PnutM = [0, 0, 0, -0.980, -0.054, -0.014, 0.008, 0];
-            fOrb = 101.3747235 / 360 / 86400;
-            fTA = 1 / 84.62776 / 3600; %3.281745587e-6;
-            fSyn = fJup - fOrb;
+        case 'Europa'
+            fTA = 1 / 84.62776 / 3600;
             fNearBeats = 1 / 3600 ./ [9.916007150192408304, 9.918866231039942249, ...
                 9.924589341739000758, 12.952600819268481];
             fNearOrbs = 1 / 3600 ./ [85.1513423, 84.575556990340160723, ...
                 84.783999521416234302, 85.098596922214568394, 84.471719596866705615, ...
                 84.888606553513909603, 84.993472034115839620, 85.415537694012940, ...
                 85.521709897525156, 84.368136863961226, 85.628146376422208164];
-            fOrbAdj = (101.3747235 + sum(PnutM .* Pnut1 .* cosd(Pnut0 + Pnut1*etMid_day))) / 360 / 86400;
-
-            f = [fSyn, ... % synodic period
-                 fTA, ... % true anomaly period,
-                 fOrb]; % true orbital period wrt inertial reference frame
+            
+            f = [fSyn, fTA, fOrb];
 
             % harmonics
             f = [f, 2*fSyn, ...
@@ -307,19 +292,13 @@ function [f, fSyn] = GetExcitations(body, etMid_day)
                     fTA + fOrb, ...
                     fNearOrbs, ...
                     fNearBeats, ...
-                    fJup - fJyr, ... % Solar oscillation periods due to 
-                    fJup - 2*fJyr, ... % magnetopause current fields
+                    fPar - fJyr, ... % Solar oscillation periods due to 
+                    fPar - 2*fJyr, ... % magnetopause current fields
                     fOrbAdj - fJyr, ...
                     fOrbAdj - 2*fJyr];
 
 
-        case 'GANYMEDE'
-            Pnut0 = Pnut0Jup_deg;
-            Pnut1 = Pnut1Jup_degday;
-            PnutM = [0, 0, 0, 0.033, -0.389, -0.082, 0, 0];
-            fOrb = 50.3176081 / 360 / 86400; % orbital period
-            fOrbAdj = (50.3176081 + sum(PnutM .* Pnut1 .* cosd(Pnut0 + Pnut1*etMid_day))) / 360 / 86400;
-            fSyn = fJup - fOrb;
+        case 'Ganymede'
             fEuropaTA = 3.281745587e-6;
             fOrbEuropa = 101.3747235 / 360 / 86400;
             fMystery = 1 / 3600 / 34.724522173543868;
@@ -342,7 +321,7 @@ function [f, fSyn] = GetExcitations(body, etMid_day)
                     fSyn + fMystery, ...
                     fEuropaTA/2, ... % Half Europa's true anomaly oscillation
                     fOrbAdj, ...
-                    fJup - fOrbEuropa, ...
+                    fPar - fOrbEuropa, ...
                     2*fSyn - 5*fOrb, ...
                     fMystery2, ...
                     fSyn - fMystery2, ...
@@ -351,23 +330,17 @@ function [f, fSyn] = GetExcitations(body, etMid_day)
                     1 / 3600 / 3.188814749737327, ...
                     1 / 3600 / 3.906250548182006, ...
                     2*fMystery, ...
-                    fJup - fJyr, ... % Solar oscillation periods due to 
-                    fJup - 2*fJyr, ... % magnetopause current fields
+                    fPar - fJyr, ... % Solar oscillation periods due to 
+                    fPar - 2*fJyr, ... % magnetopause current fields
                     fOrbAdj - fJyr, ...
                     fOrbAdj - 2*fJyr];
 
 
-        case 'CALLISTO'
-            Pnut0 = Pnut0Jup_deg;
-            Pnut1 = Pnut1Jup_degday;
-            PnutM = [0, 0, 0, 0, 0.061, -0.533, 0, -0.009];
-            fOrbAdj = (21.5710715 + sum(PnutM .* Pnut1 .* cosd(Pnut0 + Pnut1*etMid_day))) / 360 / 86400;
-            fOrb = 21.5710715 / 360 / 86400;
+        case 'Callisto'
             fSheet1 = 1 / 3600 / 15.120553206749488;
             fSheet2 = 1 / 3600 / 7.6696338880659605;
             fSheet3 = 1 / 3600 / 3.8072842207111743;
             fSheet4 = 1 / 3600 / 3.059002331397538;
-            fSyn = fJup - fOrb;
 
             f = [fSyn, fOrbAdj];
 
@@ -393,48 +366,68 @@ function [f, fSyn] = GetExcitations(body, etMid_day)
 
 
         %% Saturn moons         
-        case 'MIMAS'
-            f = [1.23134297475e-5, ... % orbital period 1 
-                 1.22487406465e-5, ... % orbital period 2
-                 6.33328477817e-8]; % intermoon orbital resonance?
+        case 'Mimas'
+            fTA = 1 / 3600 / 22.67814677274641;
+            fOrbTAbeat1 = 1 / 3600 / 22.55964638685534;
+            fOrbTAbeat2 = 1 / 3600 / 22.50213602844169;
+            f = [fOrb, fOrbAdj, fTA, fOrbTAbeat1, fOrbTAbeat2];
 
             % harmonics
-            f = [f, 2*f(1), ...  
-                    3*f(1), ...  
-                    2*f(2), ...  
-                    3*f(2)];  
+            f = [f, 2*fOrb, ...  
+                    2*fOrbAdj, ...
+                    2*fTA, ...  
+                    2*fOrbTAbeat1, ...
+                    3*fOrb, ...
+                    3*fOrbAdj, ...
+                    3*fTA, ...
+                    fPar - fSyr, ... % Solar oscillation periods due to 
+                    fPar - 2*fSyr, ... % magnetopause current fields
+                    fOrbAdj - fSyr, ...
+                    fOrbAdj - 2*fSyr];  
 
 
-        case 'ENCELADUS'
-            fOrb = 262.7318996 / 360 / 86400; % orbital period
-            fSyn = fSat - fOrb;
-            fTA = 1 / 3600 / 32.927200612354675; % true anomaly (?) period
+        case 'Enceladus'
+            fTA = 1 / 3600 / 32.927200612354675; % true anomaly period
             f = [fOrb, fTA];
 
             f = [f, 2*fTA, ...
-                    9.26559563e-6, ... % inter-moon positional resonances
-                    4.62963117e-6, ... 
-                    2.31798223e-6];
-
-            f = [f, 1 / 3600 / 32.917867508555119116, ...
+                    1 / 3600 / 32.917867508555119116, ...
                     1 / 3600 / 32.941210199582918960, ...
                     1 / 3600 / 32.838749203627905615, ...
                     1 / 3600 / 32.936539015933050223, ...
                     1 / 3600 / 32.913202935703473884, ...
                     1 / 3600 / 32.834107031435593171, ...
-                    1 / 3600 / 32.866629845374262686];
+                    1 / 3600 / 32.866629845374262686, ...
+                    fPar - fSyr, ... % Solar oscillation periods due to 
+                    fPar - 2*fSyr, ... % magnetopause current fields
+                    fOrbAdj - fSyr, ...
+                    fOrbAdj - 2*fSyr];
 
 
-       case 'DIONE'
-            f = [4.224300947e-6, ... % orbital period
-                 4.2306342318e-6]; % orbital period
+        case 'Dione'
+            fTA = 1 / 3600 / 65.872263600244693293;
+            f = [fOrb, fTA];
+            
+            f = [f, ...
+                    fPar - fSyr, ... % Solar oscillation periods due to 
+                    fPar - 2*fSyr, ... % magnetopause current fields
+                    fOrbAdj - fSyr, ...
+                    fOrbAdj - 2*fSyr];
+
+
+        case 'Titan'
+            f = fOrb;
+            
+            f = [f, 2*fOrb, ...
+                    fPar - fSyr, ... % Solar oscillation periods due to 
+                    fPar - 2*fSyr, ... % magnetopause current fields
+                    fOrbAdj - fSyr, ...
+                    fOrbAdj - 2*fSyr];
 
 
         %% Uranus moons   
-        case 'MIRANDA'
-            fSyn = 1/(35.057143696*3600);
-            f = [fSyn, ... % synodic period
-                 1/(33.9179560479*3600)]; % orbital period
+        case 'Miranda'
+            f = [fSyn, fOrb];
 
             % harmonics
             f = [f, 2*f(1), ... % 1.5847e-05
@@ -450,81 +443,96 @@ function [f, fSyn] = GetExcitations(body, etMid_day)
                     f(6) + f(1), ... % 2.3405e-5
                     f(4) - f(2), ... % 3rd harmonic beats % 1.5581e-05
                     f(4) + f(2), ... % 3.1960e-05
-                    f(6) + f(3)]; % Double harmonic beats % 3.2228e-5        
+                    f(6) + f(3), ... % Double harmonic beats % 3.2228e-5
+                    fPar - fUyr, ... % Solar oscillation periods due to 
+                    fPar - 2*fUyr, ... % magnetopause current fields
+                    fOrbAdj - fUyr, ...
+                    fOrbAdj - 2*fUyr];         
 
 
-        case 'ARIEL'
-            fSyn = 1.15202411714e-5; % synodic period
-            f(2) = 4.59162993363e-6; % orbital period
+        case 'Ariel'
+            f = [fSyn, fOrb];
 
             % harmonics
             f = [f, 2*fSyn, ... % 6.028
                     3*fSyn, ... % 12.05
                     fSyn - f(2), ... % 1st harmonic beats % 40.09
-                    fSyn + f(2)]; % 8.037
+                    fSyn + f(2), ...
+                    fPar - fUyr, ... % Solar oscillation periods due to 
+                    fPar - 2*fUyr, ... % magnetopause current fields
+                    fOrbAdj - fUyr, ...
+                    fOrbAdj - 2*fUyr];
 
 
-        case 'UMBRIEL'
-            fSyn = 1.33189372223e-5;
-            f = [fSyn, ... % synodic period
-                 2.79273148465e-6]; % orbital period
-
-            % harmonics
-            f = [f, 2*fSyn, ...
-                    3*fSyn, ...
-                    4*fSyn, ...
-                    fSyn - f(2), ... % 1st harmonic beats
-                    fSyn + f(2)];
-
-
-        case 'TITANIA'
-            fSyn = 1.4782626327e-5; % synodic period
-            f(2) = 1.32904237982e-6; % orbital period
+        case 'Umbriel'
+            f = [fSyn, fOrb];
 
             % harmonics
             f = [f, 2*fSyn, ...
                     3*fSyn, ...
                     4*fSyn, ...
                     fSyn - f(2), ... % 1st harmonic beats
-                    fSyn + f(2)];
+                    fSyn + f(2), ...
+                    fPar - fUyr, ... % Solar oscillation periods due to 
+                    fPar - 2*fUyr, ... % magnetopause current fields
+                    fOrbAdj - fUyr, ...
+                    fOrbAdj - 2*fUyr];
 
 
-        case 'OBERON'
-            fSyn = 1.52530978251e-5;
-            f = [fSyn, ... % synodic period
-                 8.60154960956e-7]; % orbital period
+        case 'Titania'
+            f = [fSyn, fOrb];
 
             % harmonics
             f = [f, 2*fSyn, ...
                     3*fSyn, ...
                     4*fSyn, ...
                     fSyn - f(2), ... % 1st harmonic beats
-                    fSyn + f(2)];
+                    fSyn + f(2), ...
+                    fPar - fUyr, ... % Solar oscillation periods due to 
+                    fPar - 2*fUyr, ... % magnetopause current fields
+                    fOrbAdj - fUyr, ...
+                    fOrbAdj - 2*fUyr];
+
+
+        case 'Oberon'
+            f = [fSyn, fOrb];
+
+            % harmonics
+            f = [f, 2*fSyn, ...
+                    3*fSyn, ...
+                    4*fSyn, ...
+                    fSyn - f(2), ... % 1st harmonic beats
+                    fSyn + f(2), ...
+                    fPar - fUyr, ... % Solar oscillation periods due to 
+                    fPar - 2*fUyr, ... % magnetopause current fields
+                    fOrbAdj - fUyr, ...
+                    fOrbAdj - 2*fUyr];
 
 
         %% Neptune moons
-        case 'TRITON'
-            fSyn = 1.92125059641e-5;
-            f = [fSyn, ... % synodic period
-                 1.96941653582e-6]; % orbital period
+        case 'Triton'
+            fSyn = fPar + fOrb; % Retrograde orbit
+            f = [fSyn, fOrb];
 
             % harmonics
             f = [f, 2*fSyn, ...
                     3*fSyn, ...
-                    2*f(2), ...
-                    fSyn - f(2), ... % 1st harmonic beats
-                    fSyn + f(2), ...
-                    fSyn - 2*f(2), ...
-                    fSyn + 2*f(2), ...
-                    fSyn - 3*f(2), ...
-                    fSyn + 3*f(2)];
+                    2*fOrb, ...
+                    fSyn - fOrb, ... % 1st harmonic beats
+                    fSyn + fOrb, ...
+                    fSyn - 2*fOrb, ...
+                    fSyn + 2*fOrb, ...
+                    fSyn - 3*fOrb, ...
+                    fSyn + 3*fOrb];
 
             % 2nd harmonic beats
-            f = [f, f(3) - f(2), ...
-                    f(3) + f(2), ...
-                    f(3) - 2*f(2), ...
-                    f(3) + 2*f(2)];
-
+            f = [f, 2*fSyn - fOrb, ...
+                    2*fSyn + fOrb, ...
+                    2*fSyn - 2*fOrb, ...
+                    2*fSyn + 2*fOrb, ...
+                    fPar - fNyr, ... % Solar oscillation periods due to 
+                    fPar - 2*fNyr]; % magnetopause current fields
+                    
     end
     
     f = sort(f, 'descend');

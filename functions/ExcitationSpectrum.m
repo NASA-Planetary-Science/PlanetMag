@@ -11,7 +11,7 @@ function [Tpeak_h, B0vec, B1vec] = ...
     
     magPhase = 0;
     
-    [R_P, ~, ~, ~, ~, Tparent_s, Tmoon_s] = GetBodyParams(moonName);
+    [R_P, ~, ~, ~, ~, ~, Tparent_s, Tmoon_s, ~, ~] = GetBodyParams(moonName);
     Tparent_h = Tparent_s / 3600;
     Tmoon_h = Tmoon_s / 3600;
     Tsyn_h = 1/(1/Tparent_h - 1/Tmoon_h);
@@ -24,8 +24,9 @@ function [Tpeak_h, B0vec, B1vec] = ...
         EXPLORE = 0;
     end
     
-    opt = 0; % Use default for each planet
-    [MagModel, CsheetModel, MPmodel, magModelDescrip, fEnd] = GetModelOpts(parentName, opt);
+    opt = 0; % Use defaults for each planet
+    MPopt = 0;
+    [MagModel, CsheetModel, MPmodel, magModelDescrip, fEnd] = GetModelOpts(parentName, opt, MPopt);
     
     dt = Tinterest_h/rate;
     duration = nOsc*Tinterest_h - dt;
@@ -46,7 +47,7 @@ function [Tpeak_h, B0vec, B1vec] = ...
     altM_km = rM_km - R_P;
     
     disp(['Evaluating ' magModelDescrip ' field model for T = ' num2str(Tinterest_h) ' h.'])
-    if strcmp(magModelDescrip, 'Khurana & Schwarzl 2007')
+    if strcmp(magModelDescrip, 'KS2005')
         [Bvec, Mdip_nT, ~] = kkMagFldJupiter(latM_deg, lonM_deg, altM_km, t_h*3600, SPHOUT);
     else
         [Bvec, Mdip_nT, ~] = MagFldParent(parentName, latM_deg, lonM_deg, altM_km, MagModel, CsheetModel, magPhase, SPHOUT);

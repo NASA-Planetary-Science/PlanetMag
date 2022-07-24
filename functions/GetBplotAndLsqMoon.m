@@ -1,16 +1,17 @@
 function GetBplotAndLsqMoon(ets, t_h, alt_km, lat_deg, lon_deg, ...
         r_RM, BxSC, BySC, BzSC, ...
-        scName, parentName, moonName, era, fbStr, opt, SEQUENTIAL, jt_h, DO_MPAUSE)
+        scName, parentName, moonName, era, fbStr, opt, MPopt, ...
+        SEQUENTIAL, jt_h, DO_MPAUSE)
     if ~exist('jt_h', 'var'); jt_h = []; end
     if isempty(jt_h); JUNOTOO=0; else; JUNOTOO=1; end
     
-    [MagModel, CsheetModel, MPmodel, magModelDescrip, fEnd] = GetModelOpts(parentName, opt);
+    [MagModel, CsheetModel, MPmodel, magModelDescrip, fEnd] = GetModelOpts(parentName, opt, MPopt);
     magPhase = 0;
     outData = 'out/';
     npts = length(ets);
     
     disp(['Evaluating ' magModelDescrip ' for flybys.'])
-    if strcmp(magModelDescrip, 'Khurana & Schwarzl 2007')
+    if strcmp(magModelDescrip, 'KS2005')
         [Bvec, Mdip_nT, ~] = KSMagFldJupiter(lat_deg, lon_deg, alt_km, ets, 1);
     else
         [Bvec, Mdip_nT, ~] = MagFldParent(parentName, lat_deg, lon_deg, alt_km, MagModel, ...

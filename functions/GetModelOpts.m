@@ -1,4 +1,4 @@
-function [MagModel, CsheetModel, MPmodel, magModelDescrip, fEnd] = GetModelOpts(parentName, opt)
+function [MagModel, CsheetModel, MPmodel, magModelDescrip, fEnd] = GetModelOpts(parentName, opt, MPopt)
     switch parentName
         case 'Jupiter'
             % opt 1
@@ -18,15 +18,40 @@ function [MagModel, CsheetModel, MPmodel, magModelDescrip, fEnd] = GetModelOpts(
             % opt 7 (includes C2020 current sheet)
             JRM33 = 'MagFldJupiterJRM33';
             
-            AB2005 = 'AB2005'; % Alexeev and Belenkaya (2005) magnetopause model
-            E1992a90 = 'Engle1992alpha90'; % Engle (1992) no-tilt magnetopause field model
-            E1992a0 = 'Engle1992alpha0'; % Engle (1992) sunward-tilt magnetopause field model
-            E1992a180 = 'Engle1992alpha180'; % Engle (1992) anti-sunward-tilt magnetopause field model
-            B1994 = 'Bode1994'; % Engle (1992) magnetopause field model with Bode (1994) time-dependent coefficients
+            % MPopt 1: Alexeev and Belenkaya (2005) magnetopause model
+            AB2005 = 'AB2005'; 
+            % MPopt 2: Engle (1992) no-tilt magnetopause field model
+            E1992a90 = 'Engle1992alpha90';
+            % MPopt 3: Engle (1992) sunward-tilt magnetopause field model
+            E1992a0 = 'Engle1992alpha0'; 
+            % MPopt 4: Engle (1992) anti-sunward-tilt magnetopause field model
+            E1992a180 = 'Engle1992alpha180';
+            % MPopt 5: Engle (1992) magnetopause field model with Bode (1994) time-dependent coefficients
+            B1994 = 'Bode1994'; 
             
-            MPmodel = B1994;
+            if MPopt == 0; opt = 2; end % Set default to Engle (1992) no-tilt model
+            switch MPopt
+                case 1
+                    MPmodel = AB2005;
+                    MPend = 'AB2005';
+                case 2
+                    MPmodel = E1992a90;
+                    MPend = 'E1992a90';
+                case 3
+                    MPmodel = E1992a0;
+                    MPend = 'E1992a0';
+                case 4
+                    MPmodel = E1992a180;
+                    MPend = 'E1992a180';
+                case 5
+                    MPmodel = B1994;
+                    MPend = 'B1994';
+                otherwise
+                    MPmodel = 'None';
+                    MPend = 'noMP';
+            end
 
-            if opt == 0; opt = 7; end  % Set default to JRM33 + C2020
+            if opt == 0; opt = 7; end % Set default to JRM33 + C2020
             switch opt
                 case 1
                     MagModel = VIP4;
@@ -41,7 +66,7 @@ function [MagModel, CsheetModel, MPmodel, magModelDescrip, fEnd] = GetModelOpts(
                 case 3
                     MagModel = KhuranaJup;
                     CsheetModel = K2005sheet;
-                    magModelDescrip = 'Khurana & Schwarzl 2005';
+                    magModelDescrip = 'KS2005';
                     fEnd = 'KS2005';
                 case 4
                     MagModel = JRM09;
@@ -51,7 +76,7 @@ function [MagModel, CsheetModel, MPmodel, magModelDescrip, fEnd] = GetModelOpts(
                 case 5
                     MagModel = JRM09;
                     CsheetModel = C1981sheet;
-                    magModelDescrip = 'Vance 2021 (JRM09 + C1981)';
+                    magModelDescrip = 'JRM09 + C1981';
                     fEnd = 'JRM09C1981';
                 case 6
                     MagModel = VIP4;
@@ -64,7 +89,7 @@ function [MagModel, CsheetModel, MPmodel, magModelDescrip, fEnd] = GetModelOpts(
                     magModelDescrip = 'JRM33 + C2020';
                     fEnd = 'JRM33C2020';
                 otherwise
-                    disp(['Magnetic field model option ' num2str(opt) ' not recognized. Defaulting to "None".'])
+                    warning(['Magnetic field model option ' num2str(opt) ' not recognized. Defaulting to "None".'])
                     MagModel = 'None';
                     CsheetModel = 'None';
                     magModelDescrip = 'None';
@@ -81,6 +106,7 @@ function [MagModel, CsheetModel, MPmodel, magModelDescrip, fEnd] = GetModelOpts(
             Cassini11sheet = 'Cassini11';
             
             MPmodel = 'None'; % No magnetopause model implemented
+            MPend = 'noMP';
 
             if opt == 0; opt = 2; end  % Set default to Cassini 11
             switch opt
@@ -108,6 +134,7 @@ function [MagModel, CsheetModel, MPmodel, magModelDescrip, fEnd] = GetModelOpts(
             AH5 = 'MagFldUranusAH5';
             AH5sheet = 'None';
             MPmodel = 'None'; % No magnetopause model implemented
+            MPend = 'noMP';
 
             if opt == 0; opt = 1; end  % Set default to AH5
             switch opt
@@ -130,6 +157,7 @@ function [MagModel, CsheetModel, MPmodel, magModelDescrip, fEnd] = GetModelOpts(
             O8 = 'MagFldNeptuneO8';
             O8sheet = 'None';
             MPmodel = 'None'; % No magnetopause model implemented
+            MPend = 'noMP';
             
             if opt == 0; opt = 1; end  % Set default to O8
             switch opt
@@ -146,5 +174,10 @@ function [MagModel, CsheetModel, MPmodel, magModelDescrip, fEnd] = GetModelOpts(
                     fEnd = 'None';
             end
             
+    end
+    
+    if ~strcmp(magModelDescrip, 'None')
+        magModelDescrip = [magModelDescrip ' + ' MPend];
+        fEnd = [fEnd MPend];
     end
 end

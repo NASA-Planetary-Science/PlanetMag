@@ -67,7 +67,7 @@ if FULLORBITS
 
     LoadSpice(moonName, char(scName));
     sc = 'Galileo Orbiter';
-    [R_P, ~, ~, ~, ~, ~, ~] = GetBodyParams(moonName);
+    [R_P, ~, ~, ~, ~, ~, ~, ~, ~, ~] = GetBodyParams(moonName);
 
     nTot = length(t_UTC);
     disp(['Converting UTC strings to TDB seconds for all ' num2str(nTot) ' points.'])
@@ -181,16 +181,17 @@ else
 end
 
 %% Plot and calculate products
-
-for opt=1:6
+MPopt = 0;
+for opt=1:7
     if FULLORBITS
         GetBplotAndLsq(ets, t_h, alt_km, lat_deg, lon_deg, BrSC, BthSC, BphiSC, ...
-            scName, parentName, orbStr, opt, SEQUENTIAL);
+            scName, parentName, orbStr, opt, MPopt, SEQUENTIAL);
     end
     
     if FLYBYS
         GetBplotAndLsqMoon(fbets, fbt_h, fbalt_km, fblat_deg, fblon_deg, ...
             r_RM, BxSC, BySC, BzSC, ...
-            scName, parentName, moonName, 'Galileo', fbStr, opt, SEQUENTIAL, jt_h);
+            scName, parentName, moonName, 'Galileo', fbStr, opt, MPopt, ...
+            SEQUENTIAL, jt_h);
     end
 end

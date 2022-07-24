@@ -10,7 +10,12 @@ function [mpBvecOut, OUTSIDE_MP] = MpauseFld(nSW_pcc, vSW_kms, ets, xyz_km, Mdip
     % Get planet-solar-magnetospheric (PSM) coordinates used by
     % some models and in all cases to asses whether we're within
     % the magnetopause
-    PSMcoords = [parentName(1) 'SM'];
+    if strcmp(parentName, 'Saturn')
+        parentLetter = 'K';
+    else
+        parentLetter = parentName(1);
+    end
+    PSMcoords = [parentLetter 'SM'];
     xyzPSM_km = zeros(3,npts);
     disp(['Rotating to ' PSMcoords ' coordinates.'])
     rotMat = cspice_pxform(S3coords, PSMcoords, ets);
@@ -18,11 +23,12 @@ function [mpBvecOut, OUTSIDE_MP] = MpauseFld(nSW_pcc, vSW_kms, ets, xyz_km, Mdip
         xyzPSM_km(:,i) = rotMat(:,:,i) * xyz_km(:,i);
     end
     
+    % Solar wind dynamic pressure equation from AB2005
+    pSW_nPa = 2 * 1.67e-27 * (nSW_pcc*1e6) .* (vSW_kms*1e3).^2 * 1e9;
+    
     if ~strcmp(MPmodel, 'None')
         
         if strcmp(MPmodel, 'AB2005') || strcmp(MPmodel, 'Bode1994') || strcmp(MPmodel(1:9), 'Engle1992')
-            % Solar wind dynamics pressure equation from AB2005
-            pSW_nPa = 2 * 1.67e-27 * (nSW_pcc*1e6) .* (vSW_kms*1e3).^2 * 1e9;
             % Distance to magnetopause at subsolar point in planetary
             % radii, Eq. 25 of AB2005
             Rss_Rp = 39.81 ./ pSW_nPa.^(0.23); 
@@ -34,7 +40,7 @@ function [mpBvecOut, OUTSIDE_MP] = MpauseFld(nSW_pcc, vSW_kms, ets, xyz_km, Mdip
                 xyz_Rp = xyz_km / Rp_km;
                 r_Rp = sqrt(xyz_Rp(1,:).^2 + xyz_Rp(2,:).^2 + xyz_Rp(3,:).^2);
 
-                MPcoords = [parentName(1) 'DSZ']; % Planet-Dipole-Solar-Zenith coordinates
+                MPcoords = [parentLetter 'DSZ']; % Planet-Dipole-Solar-Zenith coordinates
                 % Get evaluation position in PDSZ coordinates
                 xyzMP_Rp = zeros(3,npts);
                 disp(['Rotating to ' MPcoords ' coordinates for ' MPmodel ' magnetopause model.'])
@@ -193,21 +199,41 @@ function [mpBvecOut, OUTSIDE_MP] = MpauseFld(nSW_pcc, vSW_kms, ets, xyz_km, Mdip
         switch(parentName)
             case 'Jupiter'
                 Rss_Rp = 60;
+                Rp_km = 71492;
             case 'Saturn'
-                Rss_Rp = 60;
+                Rss_Rp = 25;
+                Rp_km = 60268;
             case 'Uranus'
                 Rss_Rp = 60;
+                Rp_km = 25559;
             case 'Neptune'
-                Rss_Rp = 60;                
+                Rss_Rp = 60;
+                Rp_km = 24764;
             otherwise
-                warning(['parentName "' parentName '" not recognized.'])
-                Rss_Rp = 10;
+                error(['parentName "' parentName '" not recognized.'])
         end
         
     end
     
-    % Evaluate in/out of magnetopause from paraboloid of revolution
     Rss_km = Rss_Rp * Rp_km;
-    OUTSIDE_MP = xyzPSM_km(3,:) > Rss_km - (xyzPSM_km(1,:).^2 + xyzPSM_km(2,:).^2)/2/Rss_km;
+    switch(parentName)
+        case 'Jupiter'
+            % Evaluate in/out of magnetopause from paraboloid of revolution
+            % as described in Alexeev and Belenkaya (2005)
+            OUTSIDE_MP = xyzPSM_km(3,:) > Rss_km - (xyzPSM_km(1,:).^2 + xyzPSM_km(2,:).^2)/2/Rss_km;
+        case 'Saturn'
+            % Use paraboloid model described in Arridge et al. (2006):
+            % https://doi.org/10.1029/2005JA011574
+            a = [9.1, 0.24, 0.77, -1.5];
+            Rss_km = a(1) * pSW_nPa.^(-a(2)) * Rp_km;
+            K = a(3) + a(4) * pSW_nPa;
+            r_km = sqrt(xyz_km(1,:).^2 + xyz_km(2,:).^2 + xyz_km(3,:).^2);
+            thDSZ = acos(xyzPSM_km(1,:) / r_km);
+            OUTSIDE_MP = r_km > Rss_km .* (2 / (1 + cos(thDSZ))).^K;
+        otherwise
+            % Do the same as Jupiter
+            Rss_km = Rss_Rp * Rp_km;
+            OUTSIDE_MP = xyzPSM_km(3,:) > Rss_km - (xyzPSM_km(1,:).^2 + xyzPSM_km(2,:).^2)/2/Rss_km;
+    end
     
 end

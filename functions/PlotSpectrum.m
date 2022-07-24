@@ -4,7 +4,7 @@ function PlotSpectrum(moonName)
         'coordType', 'SPHOUT', 'magModelDescrip', ...
         'Tmax', 'Tinterest_h');
     LoadSpice(moonName);
-    [~, ~, ~, ~, ~, Tparent_s, Torb_s] = GetBodyParams(moonName);
+    [~, ~, ~, ~, ~, ~, Tparent_s, Torb_s, ~, ~] = GetBodyParams(moonName);
     cspice_kclear;
     
     figure;
