@@ -3,7 +3,7 @@
 % https://doi.org/10.1029/2004JA010757 .
 % Author: Marshall J. Styczinski, itsmoosh@gmail.com
 % Last updated: 2022-02-07
-function [Bvec, Mdip, Odip] = KSMagFldJupiter(latS3_deg, lonS3_deg, altJup_km, ets, SPHOUT)
+function [Bvec, Mdip, Odip] = KSMagFldJupiter(r_km, theta, phi, ets, SPHOUT)
     % Calculate magnetic field vectors, magnetic dipole moment,
     % and dipole offset in System III coordinates based on VIP4
     % Jupiter field model, plus the latest evolution of the Khurana
@@ -37,9 +37,7 @@ function [Bvec, Mdip, Odip] = KSMagFldJupiter(latS3_deg, lonS3_deg, altJup_km, e
     end
     
     Rj = 71492;    
-    r = (altJup_km + Rj) / Rj;
-    theta = deg2rad(90 - latS3_deg);
-    phi = deg2rad(lonS3_deg);
+    r = r_km / Rj;
     ctimes = ctimer(ets);
     npts = length(ets);
     
