@@ -1,26 +1,26 @@
-moonName = 'Triton';
+moonName = 'Miranda';
 % Spacecraft era (sets timespan of field model)
 era = 'Voyager';
 coordType = 'IAU';
 CALC_NEW = 1;
 ALL_MODELS = 0;
 DO_FFT = 0;
-DO_MPAUSE = 0;
+DO_MPAUSE = 1;
 specificModel = 0; % Set this to 0 to use default, or a number to use an opt
-MPopt = 0; % As above, for magnetopause models
+MPopt = 1; % As above, for magnetopause models
 outData = 'out/';
 
-nptsApprox = 600000;
+nptsApprox = 60000;
 magPhase = 0;
 
 switch coordType
     case 'IAU'
-        coords = ['IAU_' upper(moonName)];
+        outCoords = ['IAU_' upper(moonName)];
     case 'SPRH'
-        coords = [upper(planetName) '_SPRH'];
+        outCoords = [upper(planetName) '_SPRH'];
     otherwise
         warning(['coordType "' coordType '" not recognized Defaulting to IAU.'])
-        coords = ['IAU_' upper(moonName)];
+        outCoords = ['IAU_' upper(moonName)];
 end
 
 parentName = LoadSpice(moonName);
@@ -66,7 +66,7 @@ if CALC_NEW
             end
     end
 
-    tStart_h = (2000 - tStart_yr) * 365.25*24;
+    tStart_h = (tStart_yr - 2000) * 365.25*24;
 
     approxDur_h = (tEnd_yr - tStart_yr) * 365.25*24;
     nOsc = floor(approxDur_h / Tinterest_h);
@@ -79,11 +79,10 @@ if CALC_NEW
     t_h = tStart_h:dt:tEnd_h;
     npts = length(t_h);
     disp(['Getting ' moonName ' positions for ' num2str(npts) ' pts over the ' era ' era.'])
-    [rM_km, latM_deg, lonM_deg, xyz_km] = GetPosSpice(moonName, parentName, t_h);
-    altM_km = rM_km - Rp_km;
+    [rM_km, thetaM, phiM, xyz_km, S3coords] = GetPosSpice(moonName, parentName, t_h);
 end
 
-if strcmp(coords(end-3:end), 'SPRH')
+if strcmp(outCoords(end-3:end), 'SPRH')
     SPHOUT = 1;
 else
     SPHOUT = 0;
@@ -93,7 +92,7 @@ if ALL_MODELS
     switch parentName
         case 'Jupiter'; nOpts = 7;
         case 'Saturn';  nOpts = 2;
-        case 'Uranus';  nOpts = 1;
+        case 'Uranus';  nOpts = 2;
         case 'Neptune'; nOpts = 1;
     end
     opts = 1:nOpts;
@@ -105,42 +104,42 @@ for opt=opts
     
     if CALC_NEW
         disp(['Evaluating ' magModelDescrip ' field model.'])
-        if strcmp(magModelDescrip, 'Khurana & Schwarzl 2005')
-            [Bvec, Mdip_nT, Odip_km] = KSMagFldJupiter(latM_deg, lonM_deg, altM_km, t_h*3600, SPHOUT);
+        if strcmp(magModelDescrip, 'KS2005')
+            [Bvec, Mdip_nT, Odip_km] = KSMagFldJupiter(rM_km, thetaM, phiM, t_h*3600, SPHOUT);
         else
-            [Bvec, Mdip_nT, Odip_km] = MagFldParent(parentName, latM_deg, lonM_deg, altM_km, MagModel, CsheetModel, magPhase, SPHOUT);
+            [Bvec, Mdip_nT, Odip_km] = MagFldParent(parentName, rM_km, thetaM, phiM, MagModel, CsheetModel, magPhase, SPHOUT);
         end
         if DO_MPAUSE
             
             nSW_pcc = 4 / a_AU^2 * ones(1,npts);
             vSW_kms = 400  * ones(1,npts);
-            [mpBvec, OUTSIDE_MP] = MpauseFld(nSW_pcc, vSW_kms, t_h*3600, xyz_km, Mdip_nT, ...
-                               parentName, MPmodel, SPHOUT);
+            [mpBvec, OUTSIDE_MP] = MpauseFld(nSW_pcc, vSW_kms, t_h*3600, xyz_km, ...
+                Mdip_nT, Odip_km, S3coords, parentName, MPmodel, SPHOUT);
             Bvec = Bvec + mpBvec;
             Bvec(:,OUTSIDE_MP) = 0;
             
         end
 
-        disp(['Rotating field vectors into ' coords ' frame.']);
-        if strcmp(coords, ['IAU_' upper(moonName)])
-            BvecMoon = zeros(3,npts);
-            rotMat = cspice_pxform(['IAU_' upper(parentName)], coords, t_h*3600);
-            parfor i=1:npts
-                BvecMoon(:,i) = rotMat(:,:,i) * Bvec(:,i);
-            end
-        elseif strcmp(coords, [upper(parentName) '_SPRH'])
+        disp(['Rotating field vectors into ' outCoords ' frame.']);
+        if strcmp(outCoords, ['IAU_' upper(moonName)])
+            rotMat = cspice_pxform(S3coords, outCoords, t_h*3600);
+            BvecMat(:,1,:) = Bvec;
+            BvecMoon = squeeze(pagemtimes(rotMat, BvecMat));
+            
+        elseif strcmp(outCoords, [upper(parentName) '_SPRH'])
             BvecMoon = Bvec;
+            
         else
             if SPHOUT
-                coords = [upper(parentName) '_SPRH'];
+                outCoords = [upper(parentName) '_SPRH'];
             else
-                coords = ['IAU_' upper(parentName)];
+                outCoords = S3coords;
             end
-            warning(['Unrecognized coordinates. Defaulting to ' coords '.'])
+            warning(['Unrecognized coordinates. Defaulting to ' outCoords '.'])
             BvecMoon = Bvec;
         end
         
-        save(fullfile([outData 'evalB' moonName fEnd]), 't_h', 'BvecMoon', 'coords');
+        save(fullfile([outData 'evalB' moonName fEnd]), 't_h', 'BvecMoon', 'outCoords');
     else
         load(fullfile([outData 'evalB' moonName fEnd]));
     end
