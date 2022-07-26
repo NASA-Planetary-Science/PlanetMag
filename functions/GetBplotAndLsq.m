@@ -1,4 +1,4 @@
-function GetBplotAndLsq(ets, t_h, alt_km, lat_deg, lon_deg, BrSC, BthSC, BphiSC, ...
+function GetBplotAndLsq(ets, t_h, r_km, theta, phi, BrSC, BthSC, BphiSC, ...
         scName, parentName, orbStr, opt, MPopt, SEQUENTIAL, jt_h)
     npts = length(t_h);
     if length(scName) > 1
@@ -13,17 +13,17 @@ function GetBplotAndLsq(ets, t_h, alt_km, lat_deg, lon_deg, BrSC, BthSC, BphiSC,
 
     disp(['Evaluating ' magModelDescrip ' field model.'])
     if strcmp(magModelDescrip, 'KS2005')
-        [Bvec, Mdip_nT, ~] = KSMagFldJupiter(lat_deg, lon_deg, alt_km, ets, 1);
+        [Bvec, Mdip_nT, Odip_km] = KSMagFldJupiter(r_km, theta, phi, ets, 1);
     else
-        [Bvec, Mdip_nT, ~] = MagFldParent(parentName, lat_deg, lon_deg, alt_km, MagModel, ...
+        [Bvec, Mdip_nT, Odip_km] = MagFldParent(parentName, r_km, theta, phi, MagModel, ...
                                     CsheetModel, magPhase, 1);
     end
     if DO_MPAUSE
 
         nSW_pcc = 0.14 * ones(1,npts);
         vSW_kms = 400  * ones(1,npts);
-        [mpBvec, OUTSIDE_MP] = MpauseFld(nSW_pcc, vSW_kms, t_h*3600, xyz_km, Mdip_nT, ...
-                           parentName, MPmodel, SPHOUT);
+        [mpBvec, OUTSIDE_MP] = MpauseFld(nSW_pcc, vSW_kms, t_h*3600, xyz_km, ...
+            Mdip_nT, Odip_km, parentName, MPmodel, SPHOUT);
         Bvec = Bvec + mpBvec;
         Bvec(:,OUTSIDE_MP) = 0;
 

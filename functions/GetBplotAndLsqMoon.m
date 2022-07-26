@@ -1,4 +1,4 @@
-function GetBplotAndLsqMoon(ets, t_h, alt_km, lat_deg, lon_deg, ...
+function GetBplotAndLsqMoon(ets, t_h, r_km, theta, phi, ...
         r_RM, BxSC, BySC, BzSC, ...
         scName, parentName, moonName, era, fbStr, opt, MPopt, ...
         SEQUENTIAL, jt_h, DO_MPAUSE)
@@ -12,24 +12,22 @@ function GetBplotAndLsqMoon(ets, t_h, alt_km, lat_deg, lon_deg, ...
     
     disp(['Evaluating ' magModelDescrip ' for flybys.'])
     if strcmp(magModelDescrip, 'KS2005')
-        [Bvec, Mdip_nT, ~] = KSMagFldJupiter(lat_deg, lon_deg, alt_km, ets, 1);
+        [Bvec, Mdip_nT, Odip_km] = KSMagFldJupiter(r_km, theta, phi, ets, 1);
     else
-        [Bvec, Mdip_nT, ~] = MagFldParent(parentName, lat_deg, lon_deg, alt_km, MagModel, ...
+        [Bvec, Mdip_nT, Odip_km] = MagFldParent(parentName, r_km, theta, phi, MagModel, ...
                                     CsheetModel, magPhase, 1);
     end
     if DO_MPAUSE
 
         nSW_pcc = 0.14 * ones(1,npts);
         vSW_kms = 400  * ones(1,npts);
-        [mpBvec, OUTSIDE_MP] = MpauseFld(nSW_pcc, vSW_kms, t_h*3600, xyz_km, Mdip_nT, ...
-                           parentName, MPmodel, SPHOUT);
+        [mpBvec, OUTSIDE_MP] = MpauseFld(nSW_pcc, vSW_kms, t_h*3600, xyz_km, ...
+            Mdip_nT, Odip_km, parentName, MPmodel, SPHOUT);
         Bvec = Bvec + mpBvec;
         Bvec(:,OUTSIDE_MP) = 0;
 
     end
     
-    theta = deg2rad(90 - lat_deg);
-    phi = deg2rad(lon_deg);
     spkParent = ['IAU_' upper(parentName)];
     spkMoon = ['IAU_' upper(moonName)];
     [BxS3, ByS3, BzS3] = Bsph2Bxyz(Bvec(1,:), Bvec(2,:), Bvec(3,:), theta, phi);

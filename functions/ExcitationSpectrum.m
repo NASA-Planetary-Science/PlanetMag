@@ -43,21 +43,20 @@ function [Tpeak_h, B0vec, B1vec] = ...
     end
     npts = length(t_h);
     disp(['Getting ' moonName ' positions for ' num2str(npts) ' pts.'])
-    [rM_km, latM_deg, lonM_deg, xyz_km] = GetPosSpice(moonName, parentName, t_h);
-    altM_km = rM_km - R_P;
+    [rM_km, thetaM, phiM, xyz_km, S3coords] = GetPosSpice(moonName, parentName, t_h);
     
     disp(['Evaluating ' magModelDescrip ' field model for T = ' num2str(Tinterest_h) ' h.'])
     if strcmp(magModelDescrip, 'KS2005')
-        [Bvec, Mdip_nT, ~] = kkMagFldJupiter(latM_deg, lonM_deg, altM_km, t_h*3600, SPHOUT);
+        [Bvec, Mdip_nT, Odip_km] = kkMagFldJupiter(rM_km, thetaM, phiM, t_h*3600, SPHOUT);
     else
-        [Bvec, Mdip_nT, ~] = MagFldParent(parentName, latM_deg, lonM_deg, altM_km, MagModel, CsheetModel, magPhase, SPHOUT);
+        [Bvec, Mdip_nT, Odip_km] = MagFldParent(parentName, rM_km, thetaM, phiM, MagModel, CsheetModel, magPhase, SPHOUT);
     end
     if DO_MPAUSE
 
         nSW_pcc = 0.14 * ones(1,npts);
         vSW_kms = 400  * ones(1,npts);
-        [mpBvec, OUTSIDE_MP] = MpauseFld(nSW_pcc, vSW_kms, t_h*3600, xyz_km, Mdip_nT, ...
-                           parentName, MPmodel, SPHOUT);
+        [mpBvec, OUTSIDE_MP] = MpauseFld(nSW_pcc, vSW_kms, t_h*3600, xyz_km, ...
+            Mdip_nT, Odip_km, parentName, MPmodel, SPHOUT);
         Bvec = Bvec + mpBvec;
         Bvec(:,OUTSIDE_MP) = 0;
 
@@ -66,7 +65,6 @@ function [Tpeak_h, B0vec, B1vec] = ...
     if SPHOUT
         BvecMoon = Bvec;
     else
-        spkS3 = ['IAU_' upper(parentName)];
         IAU = ['IAU_' upper(moonName)];
         if DO_EPO && strcmp(moonName,'Europa')
             EPhiO = 'EUROPAM_EUROPA_E_PHI_O';
@@ -77,11 +75,9 @@ function [Tpeak_h, B0vec, B1vec] = ...
             coordType = 'IAU';
         end
         disp(['Rotating field vectors into ' moonCoords ' frame.']);
-        rotMat = cspice_pxform(spkS3, moonCoords, t_h*3600);
-        BvecMoon = zeros(3,npts);
-        parfor i=1:npts
-            BvecMoon(:,i) = rotMat(:,:,i) * Bvec(:,i);
-        end
+        rotMat = cspice_pxform(S3coords, moonCoords, t_h*3600);
+        BvecMat(:,1,:) = Bvec;
+        BvecMoon = squeeze(pagemtimes(rotMat, BvecMat));
     end
     
     disp('Taking FFTs.');
