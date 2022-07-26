@@ -27,29 +27,7 @@ function [MagModel, CsheetModel, MPmodel, magModelDescrip, fEnd] = GetModelOpts(
             % MPopt 4: Engle (1992) anti-sunward-tilt magnetopause field model
             E1992a180 = 'Engle1992alpha180';
             % MPopt 5: Engle (1992) magnetopause field model with Bode (1994) time-dependent coefficients
-            B1994 = 'Bode1994'; 
-            
-            if MPopt == 0; opt = 2; end % Set default to Engle (1992) no-tilt model
-            switch MPopt
-                case 1
-                    MPmodel = AB2005;
-                    MPend = 'AB2005';
-                case 2
-                    MPmodel = E1992a90;
-                    MPend = 'E1992a90';
-                case 3
-                    MPmodel = E1992a0;
-                    MPend = 'E1992a0';
-                case 4
-                    MPmodel = E1992a180;
-                    MPend = 'E1992a180';
-                case 5
-                    MPmodel = B1994;
-                    MPend = 'B1994';
-                otherwise
-                    MPmodel = 'None';
-                    MPend = 'noMP';
-            end
+            B1994 = 'Bode1994';
 
             if opt == 0; opt = 7; end % Set default to JRM33 + C2020
             switch opt
@@ -96,6 +74,28 @@ function [MagModel, CsheetModel, MPmodel, magModelDescrip, fEnd] = GetModelOpts(
                     fEnd = 'None';
             end
             
+            if MPopt == 0; MPopt = 2; end % Set default to Engle (1992) no-tilt model
+            switch MPopt
+                case 1
+                    MPmodel = AB2005;
+                    MPend = 'AB2005';
+                case 2
+                    MPmodel = E1992a90;
+                    MPend = 'E1992a90';
+                case 3
+                    MPmodel = E1992a0;
+                    MPend = 'E1992a0';
+                case 4
+                    MPmodel = E1992a180;
+                    MPend = 'E1992a180';
+                case 5
+                    MPmodel = B1994;
+                    MPend = 'B1994';
+                otherwise
+                    MPmodel = 'None';
+                    MPend = 'noMP';
+            end
+            
             
         case 'Saturn'
             % opt 1
@@ -104,9 +104,6 @@ function [MagModel, CsheetModel, MPmodel, magModelDescrip, fEnd] = GetModelOpts(
             % opt 2
             Cassini11 = 'MagFldSaturnCassini11';
             Cassini11sheet = 'Cassini11';
-            
-            MPmodel = 'None'; % No magnetopause model implemented
-            MPend = 'noMP';
 
             if opt == 0; opt = 2; end  % Set default to Cassini 11
             switch opt
@@ -128,17 +125,33 @@ function [MagModel, CsheetModel, MPmodel, magModelDescrip, fEnd] = GetModelOpts(
                     fEnd = 'None';
             end
             
+            MPmodel = 'None'; % No magnetopause model implemented
+            MPend = 'noMP';
+            
             
         case 'Uranus'
             % opt 1
+            Q3 = 'MagFldUranusQ3';
+            Q3sheet = 'SphericalHarmonic';
+            % opt 2
             AH5 = 'MagFldUranusAH5';
             AH5sheet = 'None';
-            MPmodel = 'None'; % No magnetopause model implemented
-            MPend = 'noMP';
+            
+            % MPopt 1: Dipole-mirror magnetopause model used in Herbert
+            % (2009) to derive AH5 model (based on SM1996)
+            Q3mp = 'Q3mp';
+            % MPopt 2: Box harmonic magnetopause model from Arridge and
+            % Eggington (2022)
+            AE2022 = 'AE2022';
 
-            if opt == 0; opt = 1; end  % Set default to AH5
+            if opt == 0; opt = 2; end  % Set default to AH5
             switch opt
                 case 1
+                    MagModel = Q3;
+                    CsheetModel = Q3sheet;
+                    magModelDescrip = 'Q3';
+                    fEnd = 'Q3';
+                case 2
                     MagModel = AH5;
                     CsheetModel = AH5sheet;
                     magModelDescrip = 'AH5';
@@ -151,13 +164,28 @@ function [MagModel, CsheetModel, MPmodel, magModelDescrip, fEnd] = GetModelOpts(
                     fEnd = 'None';
             end
             
+            if MPopt == 0; MPopt = 2; end % Set default to AE2022 model
+            switch MPopt
+                case 1
+                    MPmodel = Q3mp;
+                    MPend = 'Q3mp';
+                case 2
+                    MPmodel = AE2022;
+                    MPend = 'AE2022';
+                otherwise
+                    MPmodel = 'None';
+                    MPend = 'noMP';
+            end
+            
             
         case 'Neptune'
             % opt 1
             O8 = 'MagFldNeptuneO8';
             O8sheet = 'None';
-            MPmodel = 'None'; % No magnetopause model implemented
-            MPend = 'noMP';
+            
+            % MPopt 1: Dipole-mirror magnetopause model described
+            % in Schulz and McNab (1996)
+            SM1996 = 'SM1996';
             
             if opt == 0; opt = 1; end  % Set default to O8
             switch opt
@@ -172,6 +200,16 @@ function [MagModel, CsheetModel, MPmodel, magModelDescrip, fEnd] = GetModelOpts(
                     CsheetModel = 'None';
                     magModelDescrip = 'None';
                     fEnd = 'None';
+            end
+            
+            if MPopt == 0; MPopt = 1; end % Set default to SM1996 model
+            switch MPopt
+                case 1
+                    MPmodel = SM1996;
+                    MPend = 'SM1996';
+                otherwise
+                    MPmodel = 'None';
+                    MPend = 'noMP';
             end
             
     end
