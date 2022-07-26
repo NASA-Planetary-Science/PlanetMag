@@ -148,7 +148,7 @@ function [MagModel, CsheetModel, MPmodel, magModelDescrip, fEnd] = GetModelOpts(
             switch opt
                 case 1
                     MagModel = Q3;
-                    CsheetModel = Q3sheet;
+                    CsheetModel = 'None'; % Only use uniform external field if noMP
                     magModelDescrip = 'Q3';
                     fEnd = 'Q3';
                 case 2
@@ -175,6 +175,9 @@ function [MagModel, CsheetModel, MPmodel, magModelDescrip, fEnd] = GetModelOpts(
                 otherwise
                     MPmodel = 'None';
                     MPend = 'noMP';
+                    if opt == 1
+                        CsheetModel = Q3sheet;
+                    end
             end
             
             
