@@ -1,10 +1,14 @@
-function [r_km, latS3_deg, lonS3_deg, xyz_km] = GetPosSpice(moonName, parentName, t_h)
+function [r_km, theta_rad, phi_rad, xyz_km, S3coords] = GetPosSpice(moonName, parentName, t_h)
     t = t_h * 3600;
     spkParent = upper(parentName);
     spkMoon = upper(moonName);
-    spkS3 = ['IAU_' spkParent];
-    [xyz_km, ~] = cspice_spkpos(spkMoon, t, spkS3, 'NONE', spkParent);
+    if strcmp(parentName, 'Uranus')
+        S3coords = 'US3';
+    else
+        S3coords = ['IAU_' spkParent];
+    end
+    [xyz_km, ~] = cspice_spkpos(spkMoon, t, S3coords, 'NONE', spkParent);
     r_km = sqrt(xyz_km(1,:).^2 + xyz_km(2,:).^2 + xyz_km(3,:).^2);
-    latS3_deg = asind(xyz_km(3,:) ./ r_km);
-    lonS3_deg = mod(atan2d(xyz_km(2,:), xyz_km(1,:)), 360.0);
+    theta_rad = acos(xyz_km(3,:) ./ r_km);
+    phi_rad = atan2(xyz_km(2,:), xyz_km(1,:));
 end
