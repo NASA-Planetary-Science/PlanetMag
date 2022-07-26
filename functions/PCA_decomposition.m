@@ -448,14 +448,10 @@ function [f, fSyn] = GetExcitations(moonName, etMid_day)
             f = [fSyn, fOrb];
 
             % harmonics
-            f = [f, 2*fSyn, ... % 6.028
-                    3*fSyn, ... % 12.05
+            f = [f, 2*fSyn, ...
+                    3*fSyn, ...
                     fSyn - fOrb, ... % 1st harmonic beats % 40.09
-                    fSyn + fOrb, ...
-                    fPar + fUyr, ... % Solar oscillation periods due to 
-                    fPar + 2*fUyr, ... % magnetopause current fields
-                    fOrbAdj + fUyr, ...
-                    fOrbAdj + 2*fUyr];
+                    fSyn + fOrb];
 
 
         case 'Umbriel'
@@ -466,11 +462,7 @@ function [f, fSyn] = GetExcitations(moonName, etMid_day)
                     3*fSyn, ...
                     4*fSyn, ...
                     fSyn - fOrb, ... % 1st harmonic beats
-                    fSyn + fOrb, ...
-                    fPar + fUyr, ... % Solar oscillation periods due to 
-                    fPar + 2*fUyr, ... % magnetopause current fields
-                    fOrbAdj + fUyr, ...
-                    fOrbAdj + 2*fUyr];
+                    fSyn + fOrb];
 
 
         case 'Titania'
@@ -481,11 +473,7 @@ function [f, fSyn] = GetExcitations(moonName, etMid_day)
                     3*fSyn, ...
                     4*fSyn, ...
                     fSyn - fOrb, ... % 1st harmonic beats
-                    fSyn + fOrb, ...
-                    fPar + fUyr, ... % Solar oscillation periods due to 
-                    fPar + 2*fUyr, ... % magnetopause current fields
-                    fOrbAdj + fUyr, ...
-                    fOrbAdj + 2*fUyr];
+                    fSyn + fOrb];
 
 
         case 'Oberon'
@@ -496,11 +484,7 @@ function [f, fSyn] = GetExcitations(moonName, etMid_day)
                     3*fSyn, ...
                     4*fSyn, ...
                     fSyn - fOrb, ... % 1st harmonic beats
-                    fSyn + fOrb, ...
-                    fPar + fUyr, ... % Solar oscillation periods due to 
-                    fPar + 2*fUyr, ... % magnetopause current fields
-                    fOrbAdj + fUyr, ...
-                    fOrbAdj + 2*fUyr];
+                    fSyn + fOrb];
 
 
         %% Neptune moons
