@@ -74,13 +74,16 @@ function [RparentEq_km, RparentPol_km, RmoonEq_km, a_AU, omegaParent_radps, omeg
     Tparent_s = abs(2.0*pi / omegaParent_radps); % abs because Uranus has a negative number here
     Tmoon_s = abs(2.0*pi / omegaMoon_radps); % abs because some moons rotate retrograde
     
-    nutPrecParent = cspice_bodvcd(floor(parentID/100), 'NUT_PREC_ANGLES', 36);
+    nutPrecParent = zeros(36,1);
+    nutPrecParentRet = cspice_bodvcd(floor(parentID/100), 'NUT_PREC_ANGLES', 36);
+    nutPrecParent(1:length(nutPrecParentRet)) = nutPrecParentRet;
     % pck00010.tpc does not contain precession info for these bodies:
     nutPrecExcluded = [602, 604];
+    nutPrecMoon = zeros(18,1);
     if ~any(moonID == nutPrecExcluded)
-        nutPrecMoon = cspice_bodvcd(moonID, 'NUT_PREC_PM', 18);
-    else
-        nutPrecMoon = zeros(18,1);
+        % bodvcd returns a variable length; use max size we might need
+        nutPrecMoonRet = cspice_bodvcd(moonID, 'NUT_PREC_PM', 18);
+        nutPrecMoon(1:length(nutPrecMoonRet)) = nutPrecMoonRet;
     end
     
     switch parentID
