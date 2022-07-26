@@ -1,0 +1,6 @@
+Contains 'g' Schmidt semi-normalized spherical harmonic coefficients for AH5 internal field model of Uranus in gauss (G), organized as g_mn, so that each row represents a single n and each column a single m. See https://doi.org/10.1029/2009JA014394
+      g0n,      g1n,      g2n,      g3n,      g4n
+  0.11278,  0.10928,        0,        0,        0
+ -0.09648, -0.12284,  0.01453,        0,        0
+ -0.01265,  0.02778, -0.04535, -0.06297,        0
+  0.03388, -0.00029,  0.00955,  0.05588,  0.08136

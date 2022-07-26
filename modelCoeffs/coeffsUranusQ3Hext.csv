@@ -1,0 +1,3 @@
+Contains 'H' Schmidt semi-normalized spherical harmonic coefficients for Q3 external field model of Uranus in gauss (G), organized as H_mn, so that each row represents a single n and each column a single m. See https://doi.org/10.1029/JA092iA13p15329
+      H0n,       H1n
+        0, -0.000009

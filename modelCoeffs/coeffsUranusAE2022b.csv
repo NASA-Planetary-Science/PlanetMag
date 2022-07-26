@@ -1,0 +1,5 @@
+Contains 'b' box harmonic coefficients for Arridge and Eggington (2022) magnetopause field model of Uranus in nT*R_U, organized as b_ki, so that each row represents a single i and each column a single k. Unlike spherical harmonics, there are no powers of i or k, so the indices are arbitrary. See https://doi.org/10.1016/j.icarus.2021.114562
+                    b1i,                   b2i,                   b3i
+  -0.067659794456119   ,  -0.26508462208523287,  0.039048819175832444
+   0.003658445181747277,   0.3800595786028047 , -0.32854084061998434
+   0.07939129606739725 ,   0.1722800052080468 ,  0.010840039677544875
