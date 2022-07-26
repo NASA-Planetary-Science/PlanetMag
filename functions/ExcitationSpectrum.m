@@ -11,7 +11,7 @@ function [Tpeak_h, B0vec, B1vec] = ...
     
     magPhase = 0;
     
-    [R_P, ~, ~, ~, ~, ~, Tparent_s, Tmoon_s, ~, ~] = GetBodyParams(moonName);
+    [~, ~, ~, ~, ~, ~, Tparent_s, Tmoon_s, ~, ~] = GetBodyParams(moonName);
     Tparent_h = Tparent_s / 3600;
     Tmoon_h = Tmoon_s / 3600;
     Tsyn_h = 1/(1/Tparent_h - 1/Tmoon_h);
