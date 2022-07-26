@@ -99,12 +99,12 @@ if FULLORBITS
     npts = length(ets);
     t_h = ets / 3600;
     disp(['Getting ' sc ' positions for ' num2str(npts) ' pts over ' orbStr '.'])
-    [r_km, lat_deg, lon_deg] = GetPosSpice(sc, parentName, t_h);
-    alt_km = r_km - R_P;
-    theta = deg2rad(90 - lat_deg);
-    phi = deg2rad(lon_deg);
+    [r_km, theta, phi, xyz_km, spkParent] = GetPosSpice(sc, parentName, t_h);
+elseif strcmp(parentName, 'Uranus')
+    spkParent = 'US3';
+else
+    spkParent = ['IAU_' upper(parentName)];
 end
-spkParent = ['IAU_' upper(parentName)];
 spkMoon = ['IAU_' upper(moonName)];
 
 %% Flyby data
@@ -129,10 +129,7 @@ if FLYBYS
 
     fbets = cspice_str2et(fbt_UTC);
     fbt_h = fbets / 3600;
-    [fbr_km, fblat_deg, fblon_deg] = GetPosSpice(sc, parentName, fbt_h);
-    fbalt_km = fbr_km - R_P;
-    fbtheta = deg2rad(90 - fblat_deg);
-    fbphi = deg2rad(fblon_deg);
+    [fbr_km, fbtheta, fbphi, xyz_km, ~] = GetPosSpice(sc, parentName, fbt_h);
     
     [BxSCS3, BySCS3, BzSCS3] = Bsph2Bxyz(fbBrSC, fbBthSC, fbBphiSC, fbtheta, fbphi);
     [BxSC, BySC, BzSC] = RotateBspice(BxSCS3, BySCS3, BzSCS3, fbets, spkParent, spkMoon);
@@ -158,18 +155,15 @@ if JUNOTOO && FLYBYS
     jets = cspice_str2et(jt_UTC);
     jt_h = jets / 3600;
     
-    [jr_km, jlat_deg, jlon_deg] = GetPosSpice(sc, parentName, jt_h);
-    jalt_km = jr_km - R_P;
-    jtheta = deg2rad(90 - jlat_deg);
-    jphi = deg2rad(jlon_deg);
+    [jr_km, jtheta, jphi, xyz_km, ~] = GetPosSpice(sc, parentName, jt_h);
     jr_RM = GetTargetMoonDist(sc, moonName, parentName, jets);
     
     % Append to lists of coords to eval in Jupiter field model
     fbets = [fbets, jets];
     % NOT t_h, we will use the separate arrays to organize outputs.
-    fbalt_km = [fbalt_km, jalt_km];
-    fblat_deg = [fblat_deg, jlat_deg];
-    fblon_deg = [fblon_deg, jlon_deg];
+    fbr_km = [fbr_km, jr_km];
+    fbtheta = [fbtheta, jtheta];
+    fbphi = [fbphi, jphi];
     r_RM = [r_RM, jr_RM];
     BxSC = [BxSC, jBx];
     BySC = [BySC, jBy];
@@ -184,12 +178,12 @@ end
 MPopt = 0;
 for opt=1:7
     if FULLORBITS
-        GetBplotAndLsq(ets, t_h, alt_km, lat_deg, lon_deg, BrSC, BthSC, BphiSC, ...
+        GetBplotAndLsq(ets, t_h, r_km, theta, phi, BrSC, BthSC, BphiSC, ...
             scName, parentName, orbStr, opt, MPopt, SEQUENTIAL);
     end
     
     if FLYBYS
-        GetBplotAndLsqMoon(fbets, fbt_h, fbalt_km, fblat_deg, fblon_deg, ...
+        GetBplotAndLsqMoon(fbets, fbt_h, fbr_km, fbtheta, fbphi, ...
             r_RM, BxSC, BySC, BzSC, ...
             scName, parentName, moonName, 'Galileo', fbStr, opt, MPopt, ...
             SEQUENTIAL, jt_h);
