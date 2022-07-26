@@ -1,4 +1,4 @@
-moonName = 'Miranda';
+moonName = 'Ariel';
 % Spacecraft era (sets timespan of field model)
 era = 'Voyager';
 coordType = 'IAU';
@@ -7,10 +7,10 @@ ALL_MODELS = 0;
 DO_FFT = 0;
 DO_MPAUSE = 1;
 specificModel = 0; % Set this to 0 to use default, or a number to use an opt
-MPopt = 1; % As above, for magnetopause models
+MPopt = 0; % As above, for magnetopause models
 outData = 'out/';
 
-nptsApprox = 60000;
+nptsApprox = 600000;
 magPhase = 0;
 
 switch coordType
@@ -123,6 +123,7 @@ for opt=opts
         disp(['Rotating field vectors into ' outCoords ' frame.']);
         if strcmp(outCoords, ['IAU_' upper(moonName)])
             rotMat = cspice_pxform(S3coords, outCoords, t_h*3600);
+            BvecMat = zeros(3,1,npts);
             BvecMat(:,1,:) = Bvec;
             BvecMoon = squeeze(pagemtimes(rotMat, BvecMat));
             
