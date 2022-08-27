@@ -1,29 +1,29 @@
-moonName = 'Triton';
+moonName = 'Europa';
 % Spacecraft era (sets timespan of field model)
-era = 'Voyager';
-coordType = 'IAU';
+era = 'Galileo';
+coordType = 'SPRH';
 CALC_NEW = 1;
 ALL_MODELS = 0;
-DO_FFT = 0;
-DO_MPAUSE = 1;
+DO_FFT = 1;
+DO_MPAUSE = 0;
 specificModel = 0; % Set this to 0 to use default, or a number to use an opt
 specificMPmodel = 0; % As above, for magnetopause models
 outData = 'out/';
 
-nptsApprox = 60000;
+nptsApprox = 12*365.25*3*24;
 magPhase = 0;
+
+parentName = LoadSpice(moonName);
 
 switch coordType
     case 'IAU'
         outCoords = ['IAU_' upper(moonName)];
     case 'SPRH'
-        outCoords = [upper(planetName) '_SPRH'];
+        outCoords = [upper(parentName) '_SPRH'];
     otherwise
         warning(['coordType "' coordType '" not recognized Defaulting to IAU.'])
         outCoords = ['IAU_' upper(moonName)];
 end
-
-parentName = LoadSpice(moonName);
 
 if CALC_NEW
     [Rp_km, ~, ~, a_AU, ~, ~, Tparent_s, Tmoon_s, nutPrecParent, nutPrecMoon] ...
@@ -64,6 +64,12 @@ if CALC_NEW
                     tStart_yr = 1989.25;
                     tEnd_yr = 1989.75;
             end
+        otherwise
+            if ~strcmp(era, 'None')
+                warning(['era "' era '" not recognized. Starting at J2000 with 20 min cadence.'])
+            end
+            tStart_yr = 2000;
+            tEnd_yr = tStart_yr + nptsApprox / (365.25*24*3);
     end
 
     tStart_h = (tStart_yr - 2000) * 365.25*24;
@@ -99,7 +105,11 @@ if ALL_MODELS
     MPopts = 1:(nMPopts + 1); % Add 1 to force noMP model in addition
 else
     opts = specificModel:specificModel;
-    MPopts = specificMPmodel:specificMPmodel;
+    if DO_MPAUSE
+        MPopts = specificMPmodel:specificMPmodel;
+    else
+        MPopts = -1:-1;
+    end
 end
 for opt=opts
     for MPopt=MPopts
@@ -107,7 +117,7 @@ for opt=opts
 
         if CALC_NEW
             disp(['Evaluating ' magModelDescrip ' field model.'])
-            if strcmp(magModelDescrip, 'KS2005')
+            if contains(magModelDescrip, 'KS2005')
                 [Bvec, Mdip_nT, Odip_km] = KSMagFldJupiter(rM_km, thetaM, phiM, t_h*3600, SPHOUT);
             else
                 [Bvec, Mdip_nT, Odip_km] = MagFldParent(parentName, rM_km, thetaM, phiM, MagModel, CsheetModel, magPhase, SPHOUT);
@@ -166,10 +176,29 @@ for opt=opts
         Tmax = 500;
 
         if DO_FFT
-            if CALC_NEW
-                [TfinalFFT_h, B0vecFFT, B1vecFFT] ...
-                            = ExcitationSpectrum(moonName, nOsc, rate, Tinterest_h, SPHOUT);
+            if ~CALC_NEW
+                [Rp_km, ~, ~, a_AU, ~, ~, Tparent_s, Tmoon_s, nutPrecParent, nutPrecMoon] ...
+                    = GetBodyParams(moonName);
+                Tparent_h = Tparent_s / 3600;
+                Tmoon_h = Tmoon_s / 3600;
+                Tsyn_h = 1/(1/Tparent_h - 1/Tmoon_h);
+
+                if strcmp(parentName,'Saturn')
+                    if strcmp(moonName,'Enceladus')
+                        Tinterest_h = 32.927200612354675;
+                    else
+                        Tinterest_h = Tmoon_h;
+                    end
+                else
+                    Tinterest_h = Tsyn_h;
+                end
+                tStart_h = (tStart_yr - 2000) * 365.25*24;
+                approxDur_h = (tEnd_yr - tStart_yr) * 365.25*24;
+                nOsc = floor(approxDur_h / Tinterest_h);
             end
+            [TfinalFFT_h, B0vecFFT, B1vecFFT] ...
+                        = ExcitationSpectrum(moonName, nOsc, rate, Tinterest_h, ...
+                                             0, SPHOUT, DO_MPAUSE);
             PlotSpectrum(moonName);
         end
 
