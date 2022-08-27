@@ -71,7 +71,7 @@ function [Bvec, Mdip, Odip] = KSMagFldJupiter(r_km, theta, phi, ets, SPHOUT)
     g = gVIP4;
     h = hVIP4;
     M0 = 4*pi*B0*1e-15*(Rj*1e3)^3 / (4e-7*pi);
-    Mdip = [g(1,2), h(1,2), g(1,1)] * 1e5;
+    Mdip = [g(1,2), h(1,2), g(1,1)];
     %% Offset dipole -- see Koochak and Fraser-Snith 2017
     % Note two typos in Koochak and Fraser-Snith (2017) Eq. 4: G11 and G20
     % should be g11 and g20, and the g20 inside square brackets should be

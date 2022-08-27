@@ -1,5 +1,5 @@
 function [Tpeak_h, B0vec, B1vec] = ...
-    ExcitationSpectrum(moonName, nOsc, rate, Tinterest_h, DO_EPO, SPHOUT)
+    ExcitationSpectrum(moonName, nOsc, rate, Tinterest_h, DO_EPO, SPHOUT, DO_MPAUSE)
     
     parentName = LoadSpice(moonName);
     outData = 'out/';
@@ -25,14 +25,19 @@ function [Tpeak_h, B0vec, B1vec] = ...
     end
     
     opt = 0; % Use defaults for each planet
-    MPopt = 0;
+    if DO_MPAUSE
+        MPopt = 0;
+    else
+        MPopt = -1;
+    end
     [MagModel, CsheetModel, MPmodel, magModelDescrip, fEnd] = GetModelOpts(parentName, opt, MPopt);
     
     dt = Tinterest_h/rate;
     duration = nOsc*Tinterest_h - dt;
     tStart_h = 0;
     tEnd_h = tStart_h + duration;
-    t_h = tStart_h:dt:tEnd_h;
+    %t_h = tStart_h:dt:tEnd_h;
+    t_h = 0:(1/3):(12*365.25*24);
     
     compare_V2021 = 0;
     if compare_V2021
@@ -46,8 +51,8 @@ function [Tpeak_h, B0vec, B1vec] = ...
     [rM_km, thetaM, phiM, xyz_km, S3coords] = GetPosSpice(moonName, parentName, t_h);
     
     disp(['Evaluating ' magModelDescrip ' field model for T = ' num2str(Tinterest_h) ' h.'])
-    if strcmp(magModelDescrip, 'KS2005')
-        [Bvec, Mdip_nT, Odip_km] = kkMagFldJupiter(rM_km, thetaM, phiM, t_h*3600, SPHOUT);
+    if contains(magModelDescrip, 'KS2005')
+        [Bvec, Mdip_nT, Odip_km] = KSMagFldJupiter(rM_km, thetaM, phiM, t_h*3600, SPHOUT);
     else
         [Bvec, Mdip_nT, Odip_km] = MagFldParent(parentName, rM_km, thetaM, phiM, MagModel, CsheetModel, magPhase, SPHOUT);
     end
@@ -97,17 +102,18 @@ function [Tpeak_h, B0vec, B1vec] = ...
     B1vec1 = 2*B1vec1(iTmax:end);
     B1vec2 = 2*B1vec2(iTmax:end);
     B1vec3 = 2*B1vec3(iTmax:end);
+    Bmag2 = abs(B1vec1).^2 + abs(B1vec2).^2 + abs(B1vec3).^2;
+    B1mag = sqrt(Bmag2);
     T_h = T_h(iTmax:end);
     f_Hz = f(iTmax:end);
     
     disp('Complete! Saving data.');
-    save(fullfile([outData moonName 'FTdata']), 'B1vec1', 'B1vec2', 'B1vec3', 'T_h', 'f_Hz', ...
+    save(fullfile([outData moonName 'FTdata']), 'B1vec1', 'B1vec2', 'B1vec3', 'B1mag', 'T_h', 'f_Hz', ...
         'coordType', 'SPHOUT', 'magModelDescrip', 'Tmax', 'Tinterest_h');
     cspice_kclear;
     
     B0vec = [mean(BvecMoon(1,:)), mean(BvecMoon(2,:)), mean(BvecMoon(3,:))];
     
-    Bmag2 = abs(B1vec1).^2 + abs(B1vec2).^2 + abs(B1vec3).^2;
     checkPeak = islocalmax(Bmag2, 'MinSeparation', 5*dF, 'SamplePoints', f_Hz);
     iPeak = [];
     tol = 1e-6;
