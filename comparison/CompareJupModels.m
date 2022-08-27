@@ -67,7 +67,7 @@ if FULLORBITS
 
     LoadSpice(moonName, char(scName));
     sc = 'Galileo Orbiter';
-    [R_P, ~, ~, ~, ~, ~, ~, ~, ~, ~] = GetBodyParams(moonName);
+    R_P = 71492;
 
     nTot = length(t_UTC);
     disp(['Converting UTC strings to TDB seconds for all ' num2str(nTot) ' points.'])
@@ -100,8 +100,6 @@ if FULLORBITS
     t_h = ets / 3600;
     disp(['Getting ' sc ' positions for ' num2str(npts) ' pts over ' orbStr '.'])
     [r_km, theta, phi, xyz_km, spkParent] = GetPosSpice(sc, parentName, t_h);
-elseif strcmp(parentName, 'Uranus')
-    spkParent = 'US3';
 else
     spkParent = ['IAU_' upper(parentName)];
 end
@@ -175,17 +173,19 @@ else
 end
 
 %% Plot and calculate products
-MPopt = 0;
-for opt=1:7
-    if FULLORBITS
-        GetBplotAndLsq(ets, t_h, r_km, theta, phi, BrSC, BthSC, BphiSC, ...
-            scName, parentName, orbStr, opt, MPopt, SEQUENTIAL);
-    end
-    
-    if FLYBYS
-        GetBplotAndLsqMoon(fbets, fbt_h, fbr_km, fbtheta, fbphi, ...
-            r_RM, BxSC, BySC, BzSC, ...
-            scName, parentName, moonName, 'Galileo', fbStr, opt, MPopt, ...
-            SEQUENTIAL, jt_h);
+nOpts = 7; nMPopts = 5;
+opts = 1:nOpts;
+MPopts = 1:(nMPopts + 1); % Add 1 to force noMP model in addition
+for opt=opts
+    for MPopt=MPopts
+        if FULLORBITS
+            GetBplotAndLsq(ets, t_h, r_km, theta, phi, xyz_km, BrSC, BthSC, BphiSC, ...
+                scName, parentName, spkParent, orbStr, opt, MPopt, SEQUENTIAL);
+        else
+            GetBplotAndLsqMoon(fbets, fbt_h, fbr_km, fbxyz_km, fbtheta, fbphi, ...
+                r_RM, BxSC, BySC, BzSC, ...
+                scName, parentName, spkParent, moonName, 'Galileo', fbStr, opt, MPopt, ...
+                SEQUENTIAL, jt_h);
+        end
     end
 end

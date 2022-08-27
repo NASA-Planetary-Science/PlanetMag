@@ -1,5 +1,5 @@
-function GetBplotAndLsq(ets, t_h, r_km, theta, phi, BrSC, BthSC, BphiSC, ...
-        scName, parentName, orbStr, opt, MPopt, SEQUENTIAL, jt_h)
+function GetBplotAndLsq(ets, t_h, r_km, theta, phi, xyz_km, BrSC, BthSC, BphiSC, ...
+        scName, parentName, S3coords, orbStr, opt, MPopt, SEQUENTIAL, jt_h)
     npts = length(t_h);
     if length(scName) > 1
         scName = strjoin(scName, '+');
@@ -18,12 +18,12 @@ function GetBplotAndLsq(ets, t_h, r_km, theta, phi, BrSC, BthSC, BphiSC, ...
         [Bvec, Mdip_nT, Odip_km] = MagFldParent(parentName, r_km, theta, phi, MagModel, ...
                                     CsheetModel, magPhase, 1);
     end
-    if DO_MPAUSE
+    if ~strcmp(MPmodel, 'None')
 
         nSW_pcc = 0.14 * ones(1,npts);
         vSW_kms = 400  * ones(1,npts);
         [mpBvec, OUTSIDE_MP] = MpauseFld(nSW_pcc, vSW_kms, t_h*3600, xyz_km, ...
-            Mdip_nT, Odip_km, parentName, MPmodel, SPHOUT);
+            Mdip_nT, Odip_km, S3coords, parentName, MPmodel, 1);
         Bvec = Bvec + mpBvec;
         Bvec(:,OUTSIDE_MP) = 0;
 
@@ -36,6 +36,12 @@ function GetBplotAndLsq(ets, t_h, r_km, theta, phi, BrSC, BthSC, BphiSC, ...
     if SEQUENTIAL
         xx = 1:npts;
         xDescrip = 'Measurement index';
+    elseif strcmp(parentName, 'Uranus')
+        xx = t_h + 122154.0037;
+        xDescrip = 'Time relative to CA (h)';
+    elseif strcmp(parentName, 'Neptune')
+        xx = t_h + 90752.0566;
+        xDescrip = 'Time relative to CA (h)';
     else
         xx = t_h;
         xDescrip = 'Time past J2000 (h)';

@@ -176,6 +176,8 @@ function [mpBvecOut, OUTSIDE_MP] = MpauseFld(nSW_pcc, vSW_kms, ets, xyz_km, ...
             end
             
             Rss_km = Rss_Rp * Rp_km;
+            xyz_Rp = xyz_km / Rp_km;
+            r_Rp = r_km / Rp_km;
             
             % Get coordinates centered on the dipole z offset
             % in PSM for determining in/out of MP boundary --
@@ -228,6 +230,8 @@ function [mpBvecOut, OUTSIDE_MP] = MpauseFld(nSW_pcc, vSW_kms, ets, xyz_km, ...
             Rss_Rp = 19; % Fixed value inferred by AE2022 from results of Toth et al. (2004)
             Rp_km = 25559;
             Rss_km = Rss_Rp * Rp_km;
+            xyz_Rp = xyz_km / Rp_km;
+            r_Rp = r_km / Rp_km;
             % Import model coefficients
             aik =  dlmread(fullfile([coeffPath 'coeffsUranusAE2022a.csv']), ',', nHeadLines, 0);
             bik =  dlmread(fullfile([coeffPath 'coeffsUranusAE2022b.csv']), ',', nHeadLines, 0);

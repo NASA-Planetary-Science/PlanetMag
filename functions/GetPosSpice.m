@@ -3,7 +3,7 @@ function [r_km, theta_rad, phi_rad, xyz_km, S3coords] = GetPosSpice(moonName, pa
     spkParent = upper(parentName);
     spkMoon = upper(moonName);
     if strcmp(parentName, 'Uranus')
-        S3coords = 'US3';
+        S3coords = 'ULS';
     else
         S3coords = ['IAU_' spkParent];
     end
