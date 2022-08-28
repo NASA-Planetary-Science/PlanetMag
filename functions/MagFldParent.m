@@ -161,7 +161,7 @@ switch(planet)
                 % O8: Octupole model with (mostly unresolved) coefficients reported
                 % up to n = 8 for Neptune, from Voyager 2 data.
 
-                Nmax = 3; % order
+                Nmax = 8; % order
                 PlanetEqRadius = 24765; % km, as reported in the publication
 
                 g = dlmread(fullfile([coeffPath 'coeffsNeptuneO8g.csv']), ',', nHeadLines, 0);
