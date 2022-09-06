@@ -1,183 +1,23 @@
 % Author: Corey J Cochrane and Marshall J Styczinski
 % Inputs: r from body center (km), colatitude from angular momentum 
 %   vector theta (rad), east longitude phi (rad) 
-% Outputs: B = [Bx (nT); By (nT); Bz (nT)], Magnetic Moment M, and Dipole Offset
+% Outputs: Bvec = [Bx (nT); By (nT); Bz (nT)], Magnetic Moment Mdip, and Dipole Offset Odip
 % reference frame: IAU_PLANET (or US3 for Uranus), rotates with the planet
 
 function [Bvec_nT, Mdip_nT, Odip_km] = MagFldParent(planet, r_km, theta, phi, InternalFieldModel, ...
-                       ExternalFieldModel, magPhase_deg, SPHOUT)
-if ~exist('SPHOUT', 'var')
-    SPHOUT = 0;
-end
+                       ExternalFieldModel, magPhase_deg, SPHOUT, Nmaxin)
+if ~exist('SPHOUT', 'var'); SPHOUT = 0; end
+if ~exist('Nmaxin', 'var'); Nmaxin = Inf; end
 magPhase = deg2rad(magPhase_deg); % J2000 phase offset for magnetic moment orientation (longitude)
 npts = length(r_km);
-coeffPath = './modelCoeffs/';
-nHeadLines = 2;
+legendre_type = 0; % Legendre function implementation to use. 0 = Schmidt-norm explicit calc, 1 = unnorm explicit calc
 
-switch(planet)
-    case 'Jupiter'
-        switch(InternalFieldModel)
-            case 'MagFldJupiterVIP4'
-                % Connerney1998, New models of Jupiter's magnetic field constrained by the Io flux tube footprint
-                % Interior field parameters (Schmidt semi-normalized coefficients) in Gauss
-                % referenced to JSIII (1965) coordinates, 1RJ = 71,323 km
+[g, h, G, H, PlanetEqRadius, Nmax, NmaxExt] = GetGaussCoeffs(planet, InternalFieldModel);
 
-                Nmax = 4; % order
-                PlanetEqRadius = 71323; % km, as reported in the publication (table of coefficients).
-                % Note that the text of Connerney et al. (1998) includes a
-                % conflicting definition of RJ = 71,398 km.
-
-                g = dlmread(fullfile([coeffPath 'coeffsJupiterVIP4g.csv']), ',', nHeadLines, 0);
-                h = dlmread(fullfile([coeffPath 'coeffsJupiterVIP4h.csv']), ',', nHeadLines, 0);
-
-            case 'MagFldJupiterGSFCO4'
-                % From Acuna and Ness (1976) Jupiter GSFC O4 magnetic field model
-                % Interior field parameters (Schmidt semi-normalized Coefficients) in Gauss
-                % referenced to JSIII (1957) coordinates, 1RJ = 71,372 km. 
-                % Note that as the original publication used SIII (1957) coordinates,
-                % these values were updated to SIII (1965) coordinates by Acuna 
-                % et al. (1983), as reported in Connerney (1992) along with the 
-                % O6 model: https://core.ac.uk/download/pdf/83644007.pdf
-
-                Nmax = 3; % order
-                PlanetEqRadius = 71372; % km, as reported in the publication
-
-                g = dlmread(fullfile([coeffPath 'coeffsJupiterO4g.csv']), ',', nHeadLines, 0);
-                h = dlmread(fullfile([coeffPath 'coeffsJupiterO4h.csv']), ',', nHeadLines, 0);
-
-            case 'MagFldJupiterGSFCO6'
-                % From Russell and Dougherty (2010) Jupiter GSFC O6 magnetic field model
-                % Interior field parameters (Schmidt semi-normalized Coefficients) in Gauss
-                % referenced to JSIII (1965) coordinates, 1RJ = 71,372 km.
-                % Originally reported in Connerney (1992): https://core.ac.uk/download/pdf/83644007.pdf
-
-                Nmax = 3; % order
-                PlanetEqRadius = 71372; % km, as reported in the publication
-
-                g = dlmread(fullfile([coeffPath 'coeffsJupiterO6g.csv']), ',', nHeadLines, 0);
-                h = dlmread(fullfile([coeffPath 'coeffsJupiterO6h.csv']), ',', nHeadLines, 0);
-
-            case 'MagFldJupiterJRM09'
-                % Connerney et al. (2018), A New Model of Jupiter's Magnetic Field From Juno's First Nine Orbits
-                % JRM09: Juno Reference Model through perijove 9
-                % 10 (Perijove) PJ1-9, JUPITER, Juno, JRM09, Rc=0.85, I20 md, 264ev,
-                % r<7Rj 12/19/2017. lists the degree/order of the expansion (10) 
-                % and identifying information
-
-                Nmax = 10; % order
-                PlanetEqRadius = 71492; % km, as reported in the publication
-
-                g = dlmread(fullfile([coeffPath 'coeffsJupiterJRM09g.csv']), ',', nHeadLines, 0);
-                h = dlmread(fullfile([coeffPath 'coeffsJupiterJRM09h.csv']), ',', nHeadLines, 0);
-
-            case 'MagFldJupiterJRM33'
-                % Connerney2020, A New Model of Jupiter's Magnetic Field at the Completion of Juno's Prime Mission
-                % JRM09: Juno Reference Model through perijove 33, on 2021-04-15
-                % "The degree 1 coefficients of the JRM33 model describe a dipole with moment M = 4.177 G,
-                %  offset from the rotation axis by θd = 10.25° towards System III longitude of ϕd = 196.38°.
-                %  Differences with the previous JRM09 model dipole (ΔM = 0.007 G, Δθd = 0.06°, Δϕd = 0.23°)
-                %  are slight."
-                % 30  1  JUPITER RJ= 71,492. rcore=0.8, r=[2.,2.5], I30 E1, 620ev, Jun 28, 2021
-
-                Nmax = 10; % order
-                PlanetEqRadius = 71492; % km, as reported in the publication
-
-                g = dlmread(fullfile([coeffPath 'coeffsJupiterJRM33g.csv']), ',', nHeadLines, 0);
-                h = dlmread(fullfile([coeffPath 'coeffsJupiterJRM33h.csv']), ',', nHeadLines, 0);
-                
-            otherwise
-                error(['Magnetic field model "' InternalFieldModel '" not recognized.'])
-        end
-
-    case 'Saturn'
-        switch(InternalFieldModel)
-            case 'MagFldSaturnBurton2010'
-                % Burton et al. (2010), Saturn's internal planetary magnetic field
-                % Interior field parameters (Schmidt semi-normalized coefficients) in Gauss
-                % referenced to SIII coordinates, 1RS = 60,268 km
-
-                Nmax = 3; % order
-                PlanetEqRadius = 60268; % km, as reported in the publication
-
-                g = dlmread(fullfile([coeffPath 'coeffsSaturnBurton2010g.csv']), ',', nHeadLines, 0);
-                h = zeros(Nmax,Nmax+1);
-
-                NmaxExt = 1;
-                G = dlmread(fullfile([coeffPath 'coeffsSaturnBurton2010Gext.csv']), ',', nHeadLines, 0);
-                H = dlmread(fullfile([coeffPath 'coeffsSaturnBurton2010Hext.csv']), ',', nHeadLines, 0);
-
-            case 'MagFldSaturnCassini11'
-                % Dougherty et al. (2018),  Saturn's magnetic field revealed by the Cassini Grand Finale
-                % Interior field parameters (Schmidt semi-normalized coefficients) in Gauss
-                % referenced to SIII coordinates, 1RS = 60,268 km
-
-                Nmax = 12; % order
-                PlanetEqRadius = 60268; % km, as reported in the publication
-
-                g = dlmread(fullfile([coeffPath 'coeffsSaturnCassini11g.csv']), ',', nHeadLines, 0);
-                h = zeros(Nmax,Nmax+1);
-
-            otherwise
-                    error(['Magnetic field model "' InternalFieldModel '" not recognized.'])
-        end
-
-    case 'Uranus'
-        switch(InternalFieldModel)
-            case 'MagFldUranusQ3'
-                % Connerney et al. (1987), The magnetic field of Uranus
-                % Q3: Quadrupole model with some unresolved coefficients reported
-                % up to n = 3 for Uranus, from Voyager 2 data.
-
-                Nmax = 2; % maximum resolved order
-                PlanetEqRadius = 25600; % km, as reported in the publication
-
-                g = dlmread(fullfile([coeffPath 'coeffsUranusQ3g.csv']), ',', nHeadLines, 0);
-                h = dlmread(fullfile([coeffPath 'coeffsUranusQ3h.csv']), ',', nHeadLines, 0);
-
-                NmaxExt = 1;
-                G = dlmread(fullfile([coeffPath 'coeffsUranusQ3Gext.csv']), ',', nHeadLines, 0);
-                H = dlmread(fullfile([coeffPath 'coeffsUranusQ3Hext.csv']), ',', nHeadLines, 0);
-                
-            case 'MagFldUranusAH5'
-                % Herbert (2009), Aurora and magnetic field of Uranus
-                % AH5: Aurora hexadecapole L=5 model with unresolved coefficients reported
-                % up to n = 4 for Uranus, from Voyager 2 data.
-
-                Nmax = 3; % maximum resolved order
-                PlanetEqRadius = 25559; % km, as reported in the publication
-
-                g = dlmread(fullfile([coeffPath 'coeffsUranusAH5g.csv']), ',', nHeadLines, 0);
-                h = dlmread(fullfile([coeffPath 'coeffsUranusAH5h.csv']), ',', nHeadLines, 0);
-                
-            otherwise
-                error(['Magnetic field model "' InternalFieldModel '" not recognized.'])
-
-        end
-
-    case 'Neptune'
-        switch(InternalFieldModel)
-            case 'MagFldNeptuneO8'
-                % Connerney et al. (1991), The magnetic field of Neptune
-                % O8: Octupole model with (mostly unresolved) coefficients reported
-                % up to n = 8 for Neptune, from Voyager 2 data.
-
-                Nmax = 8; % order
-                PlanetEqRadius = 24765; % km, as reported in the publication
-
-                g = dlmread(fullfile([coeffPath 'coeffsNeptuneO8g.csv']), ',', nHeadLines, 0);
-                h = dlmread(fullfile([coeffPath 'coeffsNeptuneO8h.csv']), ',', nHeadLines, 0);
-                
-            otherwise
-                error(['Magnetic field model "' InternalFieldModel '" not recognized.'])
-
-        end
-    
-    otherwise
-        error(['Planet name "' planet '" not recognized. Options are Jupiter, Saturn, Uranus, Neptune.'])
-
-end
-    
     %% Adjust inputs and get dipole parameters
+    
+    % Limit Nmax if user desires
+    Nmax = min(Nmax, Nmaxin);
 
     % Get planet radius in m
     Rp_m = PlanetEqRadius * 1000; % m
@@ -195,9 +35,9 @@ end
 
     % calculate dipole magnetic moment and dipole offset, ref: https://www.spenvis.oma.be/help/background/magfield/cd.html
     B0 = sqrt(g(1,1)^2+g(1,2)^2+h(1,2)^2); % reference field B0 = sqrt(g10^2+g11^2+h11^2), called reduced moment by Bartels
-    M0 = 4*pi*B0*1e-15*Rp_m^3/(4e-7*pi); % magnetic moment magnitude in SI units (Tm^3)
-    thDip_rad = acos(g(1,1)/B0);  % magnetic moment colatitude
-    phiDip_rad = atan2(h(1,2), g(1,2)); % magnetic moment east longitude
+    M0 = 4*pi*B0*1e-15*Rp_m^3/(4e-7*pi); % dipole moment magnitude in SI units (Tm^3)
+    thDip_rad = acos(g(1,1)/B0);  % dipole moment colatitude
+    phiDip_rad = atan2(h(1,2), g(1,2)); % dipole moment east longitude
      % Dipole vector
     if SPHOUT
         Mdip_nT = [B0 * 1e5, thDip_rad, phiDip_rad];
@@ -249,8 +89,13 @@ end
             for m = 0:k    % order
                 A = Rp_m*(Rp_m./r).^(n+1);
                 dA = -(n+1)*(Rp_m./r).^(n+2);
-                P = LegendreS(n,m,theta);
-                dP = (1./r).*dLegendreS(n,m,theta);
+                if legendre_type == 0
+                    P = LegendreS(n,m,theta);
+                    dP = (1./r).*dLegendreS(n,m,theta);
+                else
+                    P = LegendreP(n,m,theta);
+                    dP = (1./r).*dLegendreP(n,m,theta);
+                end
                 Q = (g(n,m+1)*cos(m*phi)+h(n,m+1)*sin(m*phi));  % m index of g and h are offset by 1 because MATLAB cannot index 0
                 dQ = (1./(r.*sin(theta))) .* (-m*g(n,m+1)*sin(m*phi) + m*h(n,m+1)*cos(m*phi));
 

@@ -253,7 +253,7 @@ function [mpBvecOut, OUTSIDE_MP] = MpauseFld(nSW_pcc, vSW_kms, ets, xyz_km, ...
             % Use paraboloid model described in AE2022 based on Shue et al.
             % (1997) model
             xi = 0.72; % Fixed value inferred by AE2022 from Toth et al. (2004)
-            thDSZ = acos(xyzPSM_km(1,:) / r_km);
+            thDSZ = acos(xyzPSM_km(1,:) ./ r_km);
             rAE2022_km = GetMPsurfS1997(Rss_km, xi, thDSZ);
             OUTSIDE_MP = r_km > rAE2022_km;
             
@@ -419,7 +419,7 @@ end
 
 function rMP_km = GetMPsurfS1997(Rss_km, xi, thDSZ)
     % Shue et al. (1997) model: https://doi.org/10.1029/97JA00196
-    rMP_km = Rss_km .* (2 / (1 + cos(thDSZ))).^xi;
+    rMP_km = Rss_km .* (2 ./ (1 + cos(thDSZ))).^xi;
 end
 
 function xMP_km = GetMPsurfAB2005(Rss_km, xyzPSM_km)

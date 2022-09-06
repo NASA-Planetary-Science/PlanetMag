@@ -52,7 +52,7 @@ function parentName = LoadSpice(moonName, sc)
                 case 'Uranus'
                     voyaFlyby = fullfile(sc, 'vgr2.ura111.bsp');
                 case 'Neptune'
-                    voyaFlyby = fullfile(sc, 'vgr2_nep081.bsp');
+                    voyaFlyby = fullfile(sc, 'vgr2_nep097.bsp');
             end
             spiceKernelList = { leapseconds planetData generic voyaFlyby frames };
             

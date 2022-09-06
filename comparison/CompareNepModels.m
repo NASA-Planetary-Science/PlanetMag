@@ -31,19 +31,19 @@ nTot = length(t_UTC);
 disp(['Converting UTC strings to TDB seconds for all ' num2str(nTot) ' points.'])
 ets = cspice_str2et(t_UTC);
 disp(['Getting moon and planet distances for all ' num2str(nTot) ' points.'])
-[~, rNep_km] = GetMoonDist(sc, parentName, ets);
+[~, rP_km] = GetMoonDist(sc, parentName, ets);
 
 % Delete measurement times far from Neptune and junk data
 BmagSC = sqrt(BrSC.^2 + BthSC.^2 + BphiSC.^2);
 moonProx_RP = 0.1;
 PlanetMaxDist_RP = 60;
 finiteMax_nT = 17e3;
-RPunit = ' R_U';
+RPunit = [' R_' parentName(1)];
 disp(['Excluding all points satisfying at least one of the following:' newline ...
       'Planetocentric distance > ' num2str(PlanetMaxDist_RP) RPunit newline ...
       'Suspect measurements, |B| > ' num2str(finiteMax_nT) 'nT.'])
 % Full limits
-exclude = find(rNep_km/Rp_km > PlanetMaxDist_RP | BmagSC > finiteMax_nT);
+exclude = find(rP_km/Rp_km > PlanetMaxDist_RP | BmagSC > finiteMax_nT);
 ets(exclude) = [];
 BrSC(exclude) = [];
 BthSC(exclude) = [];
@@ -54,14 +54,141 @@ t_h = ets / 3600;
 disp(['Getting ' sc ' positions for ' num2str(npts) ' pts.'])
 [r_km, theta, phi, xyz_km, spkParent] = GetPosSpice(sc, parentName, t_h);
 
+tCA_h = -90752.0566;
+tRel_h = t_h - tCA_h;
+Descrip = 'Time relative to CA (h)';
+
+COMPARE_PDS = 1;
+if COMPARE_PDS
+    offset = 0;%-0.0825;
+    offset_th = 0;
+    r = magData{2}' * Rp_km; r(exclude) = [];
+    th = deg2rad(offset_th + 90 - magData{3}'); th(exclude) = [];
+    ph = deg2rad(offset -magData{4}'); ph(exclude) = [];
+    r_Rp = r / Rp_km;
+    x = r .* sin(th) .* cos(ph);
+    y = r .* sin(th) .* sin(ph);
+    z = r .* cos(th);
+    figure; hold on
+    dx = x - xyz_km(1,:);
+    dy = y - xyz_km(2,:);
+    dz = z - xyz_km(3,:);
+    dr = sqrt(dx.^2 + dy.^2 + dz.^2);
+    plot(tRel_h, dx, 'DisplayName', '\Delta x')
+    plot(tRel_h, dy, 'DisplayName', '\Delta y')
+    plot(tRel_h, dz, 'DisplayName', '\Delta z')
+    plot(tRel_h, dr, 'DisplayName', '\Delta r')
+    xlabel(Descrip);
+    ylabel('Coordinate diff (km)');
+    title('Location difference in NLS frame, PDS - SPICE');
+    legend()
+    r_km = r; theta = th; phi = ph; xyz_km = [x; y; z];
+end
+
+rotMat = cspice_pxform('NLS', 'NLS_RADEC', ets);
+vecMat = zeros(3,1,npts);
+vecMat(:,1,:) = repmat([0;0;Rp_km], 1, npts);
+vecOut = squeeze(pagemtimes(rotMat, vecMat));
+diff = vecOut - squeeze(vecMat);
+rdiff = sqrt(diff(1,:).^2 + diff(2,:).^2 + diff(3,:).^2);
+figure; hold on
+plot(tRel_h, diff(1,:), 'DisplayName', '\Delta x')
+plot(tRel_h, diff(2,:), 'DisplayName', '\Delta y')
+plot(tRel_h, diff(3,:), 'DisplayName', '\Delta z')
+plot(tRel_h, rdiff, 'DisplayName', '\Delta r')
+xlabel(Descrip);
+ylabel('Coordinate diff (km)');
+title('IAU pole location in NLS frame by RA/DEC');
+legend()
+
 
 %% Plot and calculate products
-nOpts = 1; nMPopts = 1;
+nOpts = 1; nMPopts = 0;
 opts = 1:nOpts;
-MPopts = 1:(nMPopts + 1); % Add 1 to force noMP model in addition
+%MPopts = 1:(nMPopts + 1); % Add 1 to force noMP model in addition
+MPopts = -1:-1;
 for opt=opts
     for MPopt=MPopts
-        GetBplotAndLsq(ets, t_h, r_km, theta, phi, xyz_km, BrSC, BthSC, BphiSC, ...
-            scName, parentName, spkParent, orbStr, opt, MPopt, SEQUENTIAL);
+        GetBplotAndLsqNeptune(ets, t_h, r_km, theta, phi, xyz_km, BrSC, BthSC, BphiSC, ...
+            scName, parentName, spkParent, orbStr, opt, MPopt, SEQUENTIAL, exclude);
     end
+end
+
+
+%% Plot trajectory
+figure(1000); clf(); hold on;
+set(gcf,'Name', 'Trajectories');
+the = linspace(0,pi,19); ph = linspace(0,2*pi,12);
+[the2D, ph2D] = meshgrid(the,ph);
+xp = sin(the2D) .* cos(ph2D); yp = sin(the2D) .* sin(ph2D); zp = cos(the2D);
+surf(xp,yp,zp, 'FaceColor', 'b');
+axlim = 1.5;
+pbaspect([1 1 1]);
+xlim([-axlim,axlim]);ylim([-axlim,axlim]);zlim([-axlim,axlim]);
+grid on;
+xlabel('Despun NLS x (R_S)');ylabel('Despun NLS y (R_S)');zlabel('Despun NLS z (R_S)');
+title('Voyager 2 Neptune trajectory in despun NLS')
+
+tNLS_h = -90752.05106;
+tOff_h = tNLS_h - tCA_h;
+despin = 2*pi * (tRel_h - tOff_h) / 16.11;
+xSC = r_Rp .* sin(theta) .* cos(phi + despin);
+ySC = r_Rp .* sin(theta) .* sin(phi + despin);
+zSC = r_Rp .* cos(theta);
+scTraj{2} = plot3(xSC,ySC,zSC, 'LineWidth', 1.5); name{2} = "PDS";
+
+%t_h = linspace(cspice_str2et('1986-01-23T00:00:00.000'), cspice_str2et('1986-01-27T00:00:00.000'), 5000)/3600;
+[~, ~, ~, xyz_km, ~] = GetPosSpice(sc, parentName, t_h, 'NLS');
+xyz_Rp = xyz_km / Rp_km;
+r_Rp = sqrt(xyz_Rp(1,:).^2 + xyz_Rp(2,:).^2 + xyz_Rp(3,:).^2);
+theta = acos(xyz_Rp(3,:) ./ r_Rp);
+phi = atan2(xyz_Rp(2,:), xyz_Rp(1,:));
+
+x = r_Rp .* sin(theta) .* cos(phi + despin);
+y = r_Rp .* sin(theta) .* sin(phi + despin);
+z = r_Rp .* cos(theta);
+%x = xyz_Rp(1,:); y = xyz_Rp(2,:); z = xyz_Rp(3,:);
+scTraj{1} = plot3(x,y,z, 'LineWidth', 1.5); name{1} = "SPICE in NLS";
+
+POS = 0;
+if POS
+    fullOrbFormatSpec = '%19s%9f%9f%9f%[^\n\r]';
+    disp(['Importing POS file for ' parentName ' flyby.'])
+    datFile = fullfile(['MAG/' sc '/VG2_POS_NLSCOORDS_12S.TAB']);
+    fileID = fopen(datFile,'r');
+    data = textscan(fileID, fullOrbFormatSpec, inf, 'Delimiter', '', 'TextType', 'char', 'EndOfLine', '\r\n');
+    fclose(fileID);
+
+    tSC_UTC = data{1}';
+    rSC_Rp = data{2}' * 24765 / Rp_km;
+    latSC_deg = data{3}';
+    WlonSC_deg = data{4}';
+    xSC_Rp = rSC_Rp .* cosd(latSC_deg) .* cosd(-WlonSC_deg);
+    ySC_Rp = rSC_Rp .* cosd(latSC_deg) .* sind(-WlonSC_deg);
+    zSC_Rp = rSC_Rp .* sind(latSC_deg);
+
+    tSC_h = cspice_str2et(tSC_UTC)/3600;
+    despinSC = 2*pi * (tSC_h - tNLS_h) / 16.11;
+    [x, y, z] = GetDespun([xSC_Rp; ySC_Rp; zSC_Rp], despin);
+    scTraj{3} = plot3(x,y,z, 'LineWidth', 1.5); name{3} = "PDS POS file";
+end
+
+[~, ~, ~, xyz_km, ~] = GetPosSpice(sc, parentName, t_h, 'NLS_OFFSET');
+[x, y, z] = GetDespun(xyz_km/Rp_km, despin);
+scTraj{4} = plot3(x,y,z, 'LineWidth', 1.5); name{4} = "SPICE in IAU - 12^\circ";
+
+[~, ~, ~, xyz_km, ~] = GetPosSpice(sc, parentName, t_h, 'NLS_O8');
+[x, y, z] = GetDespun(xyz_km/Rp_km, despin);
+scTraj{5} = plot3(x,y,z, 'LineWidth', 1.5); name{5} = "SPICE in NLS as defined in O8";
+
+legend([scTraj{1} scTraj{2} scTraj{4} scTraj{5}], [name{1}, name{2}, name{4}, name{5}])
+
+function [x, y, z] = GetDespun(xyz_Rp, despin)
+    r_Rp = sqrt(xyz_Rp(1,:).^2 + xyz_Rp(2,:).^2 + xyz_Rp(3,:).^2);
+    theta = acos(xyz_Rp(3,:) ./ r_Rp);
+    phi = atan2(xyz_Rp(2,:), xyz_Rp(1,:));
+
+    x = r_Rp .* sin(theta) .* cos(phi + despin);
+    y = r_Rp .* sin(theta) .* sin(phi + despin);
+    z = r_Rp .* cos(theta);
 end
