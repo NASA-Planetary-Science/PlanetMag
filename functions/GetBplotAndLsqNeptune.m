@@ -91,7 +91,7 @@ function GetBplotAndLsqNeptune(ets, t_h, r_km, theta, phi, xyz_km, BrSC, BthSC, 
     
     if INC_MM3
         fullOrbFormatSpec = '%23s%25f%25f%25f%25f%25f%25f%25f%25f%25f%[^\n\r]';
-        datFile = fullfile(['MAG/Voyager 2/VG2_comp.tab']);
+        datFile = fullfile('MAG/Voyager 2/VG2_comp.tab');
         fileID = fopen(datFile,'r');
         mmData = textscan(fileID, fullOrbFormatSpec, inf, 'Delimiter', '', 'TextType', 'char', ...
             'EndOfLine', '\r\n', 'HeaderLines', 1);
@@ -246,10 +246,10 @@ function GetBplotAndLsqNeptune(ets, t_h, r_km, theta, phi, xyz_km, BrSC, BthSC, 
 
     %%
     if INC_MM3
-        BrD = BrNM3 - BrMM3;
-        BthD = BthNM3 - BthMM3;
-        BphiD = BphiNM3 - BphiMM3;
-        BmagD = BmagNM3 - BmagMM3;
+        BrD = BrPDS_NM3 - BrMM3;
+        BthD = BthPDS_NM3 - BthMM3;
+        BphiD = BphiPDS_NM3 - BphiMM3;
+        BmagD = BmagPDS_NM3 - BmagMM3;
 
         figure; hold on;
         set(gcf,'Name', ['Vector comp diffs (Nmax=3), ' orbStr ', ' magModelDescrip ', PlanetMag - MoonMag']);
@@ -260,7 +260,7 @@ function GetBplotAndLsqNeptune(ets, t_h, r_km, theta, phi, xyz_km, BrSC, BthSC, 
         xlabel(xDescrip);
         ylabel('Component difference (nT)');
         xlim([-1,1])
-        title('Neptune field model comparison for Nmax=3, PlanetMag - MoonMag')
+        title('Neptune field model comparison for Nmax=3, PlanetMag - MoonMag, PDS trajec')
         legend('\Delta B_r', '\Delta B_\theta', '\Delta B_\phi', '\Delta |B|')
         
         BrLsq = BrD.^2;
@@ -269,6 +269,33 @@ function GetBplotAndLsqNeptune(ets, t_h, r_km, theta, phi, xyz_km, BrSC, BthSC, 
         chi2 = sum([BrLsq, BthLsq, BphiLsq], 'all') / 3 / npts;
         disp(['Overall, for this range and model chi^2 = ' sprintf('%.2f', chi2) '.'])
     end
+    
+    %%
+    if INC_PDS
+        BrD = BrPDS - BrSC;
+        BthD = BthPDS - BthSC;
+        BphiD = BphiPDS - BphiSC;
+        BmagD = BmagPDS - BmagSC;
+
+        figure; hold on;
+        set(gcf,'Name', ['Vector comp diffs, ' orbStr ', ' magModelDescrip ', PDS trajec - MAG']);
+        plot(xx, BrD);
+        plot(xx, BthD);
+        plot(xx, BphiD);
+        plot(xx, BmagD);
+        xlabel(xDescrip);
+        ylabel('Component difference (nT)');
+        xlim([-1,1])
+        title('Neptune field model comparison, PDS trajec - MAG')
+        legend('\Delta B_r', '\Delta B_\theta', '\Delta B_\phi', '\Delta |B|')
+        
+        BrLsq = BrD.^2;
+        BthLsq = BthD.^2;
+        BphiLsq = BphiD.^2;
+        chi2 = sum([BrLsq, BthLsq, BphiLsq], 'all') / 3 / npts;
+        disp(['Overall, for this range and model chi^2 = ' sprintf('%.2f', chi2) '.'])
+    end
+    
     %%
     if INC_N12
         BrD = BrN12 - BrSC;

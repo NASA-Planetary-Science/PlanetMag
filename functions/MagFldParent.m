@@ -10,7 +10,6 @@ if ~exist('SPHOUT', 'var'); SPHOUT = 0; end
 if ~exist('Nmaxin', 'var'); Nmaxin = Inf; end
 magPhase = deg2rad(magPhase_deg); % J2000 phase offset for magnetic moment orientation (longitude)
 npts = length(r_km);
-legendre_type = 0; % Legendre function implementation to use. 0 = Schmidt-norm explicit calc, 1 = unnorm explicit calc
 
 [g, h, G, H, PlanetEqRadius, Nmax, NmaxExt] = GetGaussCoeffs(planet, InternalFieldModel);
 
@@ -89,13 +88,8 @@ legendre_type = 0; % Legendre function implementation to use. 0 = Schmidt-norm e
             for m = 0:k    % order
                 A = Rp_m*(Rp_m./r).^(n+1);
                 dA = -(n+1)*(Rp_m./r).^(n+2);
-                if legendre_type == 0
-                    P = LegendreS(n,m,theta);
-                    dP = (1./r).*dLegendreS(n,m,theta);
-                else
-                    P = LegendreP(n,m,theta);
-                    dP = (1./r).*dLegendreP(n,m,theta);
-                end
+                P = LegendreS(n,m,theta);
+                dP = (1./r).*dLegendreS(n,m,theta);
                 Q = (g(n,m+1)*cos(m*phi)+h(n,m+1)*sin(m*phi));  % m index of g and h are offset by 1 because MATLAB cannot index 0
                 dQ = (1./(r.*sin(theta))) .* (-m*g(n,m+1)*sin(m*phi) + m*h(n,m+1)*cos(m*phi));
 
