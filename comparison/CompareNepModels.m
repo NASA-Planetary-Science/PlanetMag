@@ -85,22 +85,6 @@ if COMPARE_PDS
     r_km = r; theta = th; phi = ph; xyz_km = [x; y; z];
 end
 
-rotMat = cspice_pxform('NLS', 'NLS_RADEC', ets);
-vecMat = zeros(3,1,npts);
-vecMat(:,1,:) = repmat([0;0;Rp_km], 1, npts);
-vecOut = squeeze(pagemtimes(rotMat, vecMat));
-diff = vecOut - squeeze(vecMat);
-rdiff = sqrt(diff(1,:).^2 + diff(2,:).^2 + diff(3,:).^2);
-figure; hold on
-plot(tRel_h, diff(1,:), 'DisplayName', '\Delta x')
-plot(tRel_h, diff(2,:), 'DisplayName', '\Delta y')
-plot(tRel_h, diff(3,:), 'DisplayName', '\Delta z')
-plot(tRel_h, rdiff, 'DisplayName', '\Delta r')
-xlabel(Descrip);
-ylabel('Coordinate diff (km)');
-title('IAU pole location in NLS frame by RA/DEC');
-legend()
-
 
 %% Plot and calculate products
 nOpts = 1; nMPopts = 0;
@@ -118,10 +102,12 @@ end
 %% Plot trajectory
 figure(1000); clf(); hold on;
 set(gcf,'Name', 'Trajectories');
-the = linspace(0,pi,19); ph = linspace(0,2*pi,12);
+the = linspace(0,pi,19); ph = linspace(0,2*pi,37);
 [the2D, ph2D] = meshgrid(the,ph);
 xp = sin(the2D) .* cos(ph2D); yp = sin(the2D) .* sin(ph2D); zp = cos(the2D);
 surf(xp,yp,zp, 'FaceColor', 'b');
+plot3([0,1.25], [0,0], [0,0], 'Color', 'r', 'LineWidth', 2)
+scatter3(1.25, 0, 0, 15, 'r')
 axlim = 1.5;
 pbaspect([1 1 1]);
 xlim([-axlim,axlim]);ylim([-axlim,axlim]);zlim([-axlim,axlim]);
@@ -136,8 +122,13 @@ xSC = r_Rp .* sin(theta) .* cos(phi + despin);
 ySC = r_Rp .* sin(theta) .* sin(phi + despin);
 zSC = r_Rp .* cos(theta);
 scTraj{2} = plot3(xSC,ySC,zSC, 'LineWidth', 1.5); name{2} = "PDS";
+rCA = 1.180899;
+thCA = deg2rad(12.45913);
+phiCA = deg2rad(-167.7);
+CA = [rCA*sin(thCA)*cos(phiCA), rCA*sin(thCA)*sin(phiCA), rCA*cos(thCA)];
+CAlineSC = plot3([0,CA(1)], [0,CA(2)], [0,CA(3)], 'Color', 'k', 'LineWidth', 2); CAnameSC = "CA";
+scatter3(CA(1), CA(1), CA(1), 15, 'k')
 
-%t_h = linspace(cspice_str2et('1986-01-23T00:00:00.000'), cspice_str2et('1986-01-27T00:00:00.000'), 5000)/3600;
 [~, ~, ~, xyz_km, ~] = GetPosSpice(sc, parentName, t_h, 'NLS');
 xyz_Rp = xyz_km / Rp_km;
 r_Rp = sqrt(xyz_Rp(1,:).^2 + xyz_Rp(2,:).^2 + xyz_Rp(3,:).^2);
@@ -147,31 +138,12 @@ phi = atan2(xyz_Rp(2,:), xyz_Rp(1,:));
 x = r_Rp .* sin(theta) .* cos(phi + despin);
 y = r_Rp .* sin(theta) .* sin(phi + despin);
 z = r_Rp .* cos(theta);
-%x = xyz_Rp(1,:); y = xyz_Rp(2,:); z = xyz_Rp(3,:);
 scTraj{1} = plot3(x,y,z, 'LineWidth', 1.5); name{1} = "SPICE in NLS";
 
-POS = 0;
-if POS
-    fullOrbFormatSpec = '%19s%9f%9f%9f%[^\n\r]';
-    disp(['Importing POS file for ' parentName ' flyby.'])
-    datFile = fullfile(['MAG/' sc '/VG2_POS_NLSCOORDS_12S.TAB']);
-    fileID = fopen(datFile,'r');
-    data = textscan(fileID, fullOrbFormatSpec, inf, 'Delimiter', '', 'TextType', 'char', 'EndOfLine', '\r\n');
-    fclose(fileID);
-
-    tSC_UTC = data{1}';
-    rSC_Rp = data{2}' * 24765 / Rp_km;
-    latSC_deg = data{3}';
-    WlonSC_deg = data{4}';
-    xSC_Rp = rSC_Rp .* cosd(latSC_deg) .* cosd(-WlonSC_deg);
-    ySC_Rp = rSC_Rp .* cosd(latSC_deg) .* sind(-WlonSC_deg);
-    zSC_Rp = rSC_Rp .* sind(latSC_deg);
-
-    tSC_h = cspice_str2et(tSC_UTC)/3600;
-    despinSC = 2*pi * (tSC_h - tNLS_h) / 16.11;
-    [x, y, z] = GetDespun([xSC_Rp; ySC_Rp; zSC_Rp], despin);
-    scTraj{3} = plot3(x,y,z, 'LineWidth', 1.5); name{3} = "PDS POS file";
-end
+[~, ~, ~, CAN, ~] = GetPosSpice(sc, parentName, tNLS_h, 'NLS');
+CAN = CAN / Rp_km;
+CAline = plot3([0,CAN(1)], [0,CAN(2)], [0,CAN(3)], 'Color', 'y', 'LineWidth', 2); CAname = "CA (NLS)";
+scatter3(CAN(1), CAN(1), CAN(1), 15, 'y')
 
 [~, ~, ~, xyz_km, ~] = GetPosSpice(sc, parentName, t_h, 'NLS_OFFSET');
 [x, y, z] = GetDespun(xyz_km/Rp_km, despin);
@@ -179,7 +151,7 @@ scTraj{4} = plot3(x,y,z, 'LineWidth', 1.5); name{4} = "SPICE in IAU - 12^\circ";
 
 [~, ~, ~, xyz_km, ~] = GetPosSpice(sc, parentName, t_h, 'NLS_O8');
 [x, y, z] = GetDespun(xyz_km/Rp_km, despin);
-scTraj{5} = plot3(x,y,z, 'LineWidth', 1.5); name{5} = "SPICE in NLS as defined in O8";
+scTraj{5} = plot3(x,y,z, 'LineWidth', 1.5, 'Color', 'm'); name{5} = "SPICE in NLS as defined in O8";
 
 legend([scTraj{1} scTraj{2} scTraj{4} scTraj{5}], [name{1}, name{2}, name{4}, name{5}])
 

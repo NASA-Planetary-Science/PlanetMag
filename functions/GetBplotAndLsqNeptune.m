@@ -36,7 +36,6 @@ function GetBplotAndLsqNeptune(ets, t_h, r_km, theta, phi, xyz_km, BrSC, BthSC, 
     INC_NM3 = 1; NM3name = 'O8, NLS with J2000 pole, Nmax=3';
     INC_PDS_NM3 = 1; PDS_NM3name = 'O8 with PDS trajectory, Nmax=3';
     INC_O8 = 1;  O8name  = 'O8, NLS with 1989 pole (NLS\_O8)';
-    INC_N12_O8 = 1; N12_O8name = 'O8, IAU - 12^\circ with 1989 pole (NLS\_RADEC)';
     INC_N12 = 1; N12name = 'O8, IAU - 12^\circ (NLS\_OFFSET)';
     INC_MM3 = 1; MM3name = 'O8, MoonMag Nmax=3 with PDS trajec';
     
@@ -81,14 +80,6 @@ function GetBplotAndLsqNeptune(ets, t_h, r_km, theta, phi, xyz_km, BrSC, BthSC, 
         BphiN12 = BvecN12(3,:);
     end
     
-    if INC_N12_O8
-        [rN12_O8, thetaN12_O8, phiN12_O8, ~, ~] = GetPosSpice(char(scName), parentName, t_h, 'NLS_RADEC');
-        [BvecN12_O8, ~, ~] = MagFldParent(parentName, rN12_O8, thetaN12_O8, phiN12_O8, MagModel, CsheetModel, magPhase, 1, Nmax);
-        BrN12_O8 = BvecN12_O8(1,:);
-        BthN12_O8 = BvecN12_O8(2,:);
-        BphiN12_O8 = BvecN12_O8(3,:);
-    end
-    
     if INC_MM3
         fullOrbFormatSpec = '%23s%25f%25f%25f%25f%25f%25f%25f%25f%25f%[^\n\r]';
         datFile = fullfile('MAG/Voyager 2/VG2_comp.tab');
@@ -122,7 +113,6 @@ function GetBplotAndLsqNeptune(ets, t_h, r_km, theta, phi, xyz_km, BrSC, BthSC, 
     if INC_NM3; plot(xx, BrNM3, 'DisplayName', NM3name); end
     if INC_PDS_NM3; plot(xx, BrPDS_NM3, 'DisplayName', PDS_NM3name); end
     if INC_O8;  plot(xx, BrO8, 'DisplayName', O8name); end
-    if INC_N12_O8; plot(xx, BrN12_O8, 'DisplayName', N12_O8name); end
     if INC_N12; plot(xx, BrN12, 'DisplayName', N12name); end
     if INC_MM3; plot(xx, BrMM3, 'DisplayName', MM3name); end
     plot(xx, BrSC, 'DisplayName', 'Voyager 2 MAG');
@@ -138,7 +128,6 @@ function GetBplotAndLsqNeptune(ets, t_h, r_km, theta, phi, xyz_km, BrSC, BthSC, 
     if INC_NM3; plot(xx, BthNM3, 'DisplayName', NM3name); end
     if INC_PDS_NM3; plot(xx, BthPDS_NM3, 'DisplayName', PDS_NM3name); end
     if INC_O8;  plot(xx, BthO8, 'DisplayName', O8name); end
-    if INC_N12_O8; plot(xx, BthN12_O8, 'DisplayName', N12_O8name); end
     if INC_N12; plot(xx, BthN12, 'DisplayName', N12name); end
     if INC_MM3; plot(xx, BthMM3, 'DisplayName', MM3name); end
     plot(xx, BthSC, 'DisplayName', 'Voyager 2 MAG');
@@ -154,7 +143,6 @@ function GetBplotAndLsqNeptune(ets, t_h, r_km, theta, phi, xyz_km, BrSC, BthSC, 
     if INC_PDS_NM3; plot(xx, BphiPDS_NM3, 'DisplayName', PDS_NM3name); end
     if INC_NM3; plot(xx, BphiNM3, 'DisplayName', NM3name); end
     if INC_O8;  plot(xx, BphiO8, 'DisplayName', O8name); end
-    if INC_N12_O8; plot(xx, BphiN12_O8, 'DisplayName', N12_O8name); end
     if INC_N12; plot(xx, BphiN12, 'DisplayName', N12name); end
     if INC_MM3; plot(xx, BphiMM3, 'DisplayName', MM3name); end
     plot(xx, BphiSC, 'DisplayName', 'Voyager 2 MAG');
@@ -171,7 +159,6 @@ function GetBplotAndLsqNeptune(ets, t_h, r_km, theta, phi, xyz_km, BrSC, BthSC, 
     if INC_PDS_NM3; BmagPDS_NM3 = sqrt(BrPDS_NM3.^2 + BthPDS_NM3.^2 + BphiPDS_NM3.^2); end
     if INC_NM3; BmagNM3 = sqrt(BrNM3.^2 + BthNM3.^2 + BphiNM3.^2); end
     if INC_O8;  BmagO8 = sqrt(BrO8.^2 + BthO8.^2 + BphiO8.^2); end
-    if INC_N12_O8; BmagN12_O8 = sqrt(BrN12_O8.^2 + BthN12_O8.^2 + BphiN12_O8.^2); end
     if INC_N12; BmagN12 = sqrt(BrN12.^2 + BthN12.^2 + BphiN12.^2); end
     if INC_MM3; BmagMM3 = sqrt(BrMM3.^2 + BthMM3.^2 + BphiMM3.^2); end
     
@@ -183,7 +170,6 @@ function GetBplotAndLsqNeptune(ets, t_h, r_km, theta, phi, xyz_km, BrSC, BthSC, 
     if INC_PDS_NM3; plot(xx, BmagPDS_NM3, 'DisplayName', PDS_NM3name); end
     if INC_NM3; plot(xx, BmagNM3, 'DisplayName', NM3name); end
     if INC_O8;  plot(xx, BmagO8, 'DisplayName', O8name); end
-    if INC_N12_O8; plot(xx, BmagN12_O8, 'DisplayName', N12_O8name); end
     if INC_N12; plot(xx, BmagN12, 'DisplayName', N12name); end
     if INC_MM3; plot(xx, BmagMM3, 'DisplayName', MM3name); end
     plot(xx, BmagSC, 'DisplayName', 'Voyager 2 MAG');
@@ -204,7 +190,6 @@ function GetBplotAndLsqNeptune(ets, t_h, r_km, theta, phi, xyz_km, BrSC, BthSC, 
     if INC_PDS_NM3; plot(xx, BmagPDS_NM3, 'DisplayName', PDS_NM3name); end
     if INC_NM3; plot(xx, BmagNM3, 'DisplayName', NM3name); end
     if INC_O8;  plot(xx, BmagO8, 'DisplayName', O8name); end
-    if INC_N12_O8; plot(xx, BmagN12_O8, 'DisplayName', N12_O8name); end
     if INC_N12; plot(xx, BmagN12, 'DisplayName', N12name); end
     if INC_MM3; plot(xx, BmagMM3, 'DisplayName', MM3name); end
     plot(xx, BmagSC, 'DisplayName', 'Voyager 2 MAG');
@@ -331,7 +316,7 @@ function GetBplotAndLsqNeptune(ets, t_h, r_km, theta, phi, xyz_km, BrSC, BthSC, 
         BmagD = BmagO8 - BmagSC;
 
         figure; hold on;
-        set(gcf,'Name', ['Vector comp diffs, ' orbStr ', ' magModelDescrip ' - MAG, ' N12_O8name]);
+        set(gcf,'Name', ['Vector comp diffs, ' orbStr ', ' magModelDescrip ' - MAG, ' O8name]);
         plot(xx, BrD);
         plot(xx, BthD);
         plot(xx, BphiD);
