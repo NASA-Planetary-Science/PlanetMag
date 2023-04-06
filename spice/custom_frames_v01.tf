@@ -59,7 +59,7 @@ References
     7. Cassini 11 model for Saturn:
        Dougherty, M.K., Cao, H., Khurana, K.K., Hunt, G.J., Provan, G.,
        Kellock, S., Burton, M.E., Burk, T.A., Bunce, E.J., Cowley, S.W. and
-       Kivelson, M.G., 2018. Saturn’s magnetic field revealed by the Cassini
+       Kivelson, M.G., 2018. Saturn's magnetic field revealed by the Cassini
        Grand Finale. Science, 362(6410), p.eaat5434.
        https://doi.org/10.1126/science.aat5434
     
@@ -90,10 +90,6 @@ References
         Jovian magnetosphere. In Annales Geophysicae (Vol. 23, No. 3,
         pp. 809-826). Copernicus GmbH.
         https://doi.org/10.5194/angeo-23-809-2005
-        
-    13. Karkoschka, E., 2011. Neptune’s rotational period suggested by the
-        extraordinary stability of two features. Icarus, 215(1), pp.439-448.
-        https://doi.org/10.1016/j.icarus.2011.05.013
 
 
 Frames Definitions
@@ -108,7 +104,6 @@ Frames Definitions
       ULS                     J2000                  1850017
       NLS                     J2000                  1850018
       NLS_RADEC               J2000                  1850028
-      NLS_OFFSET              J2000                  1850038
             
       US3 frame:
         -- +Z is aligned with the Uranus spin pole (primary axis)
@@ -118,11 +113,12 @@ Frames Definitions
       ULS frame:
         -- +Z is aligned with the Uranus spin pole (primary axis)
         -- 302 degrees W longitude is at the location of Voyager 2
-           at 1800 SCET 1986-01-24 (near closest approach), as defined
-           in [8]. The Voyager 2 CA is located at 167.8713 degrees E
-           longitude in the IAU_URANUS frame at this time.
-           This results in a shift of -134.1287 degrees E longitude,
-           i.e. +X of ULS points toward IAU E longitude 225.8713.
+           closest approach, as defined in [8]. The Voyager 2 CA
+           is located at 167.3113 degrees E longitude in the
+           IAU_URANUS frame, at the time the reconstructed trajectory
+           minimizes the distance to the Uranus center of mass.
+           This results in a shift of -134.6887 degrees E longitude,
+           i.e. +X of ULS points toward IAU E longitude 225.3113.
         -- centered on the planet
       
       NLS frame:
@@ -130,25 +126,19 @@ Frames Definitions
            defined in [9] to be RA 298.90 degrees, DEC 42.84 degrees.
            These values are assumed to be in reference to J2000 or ICRF.
         -- 167.7 degrees W longitude is at the location of Voyager 2
-           near closest approach, at 0356 SCET day 237 (1989-08-25)
-           as defined in [9].
-           Voyager 2 was at 155.6860 degrees W longitude in the
+           near closest approach, at 0356 SCET day 237 as defined in [9].
+           Voyager 2 was at -155.6848 degrees E longitude in the
            IAU_NEPTUNE frame at this time, according to the VG2 SPK
            generated using the nep081.bsp generic kernel, and evaluated
            using that same kernel.
-           This results in a shift of 12.0140 degrees E longitude,
-           i.e. +X of NLS points toward IAU E longitude 12.0140.
-        -- rotates at a different rate than the IAU frame: 16.11 h [13],
-           different from the IAU System II definition of 15.9663 h.
+           This results in a shift of 12.0152 degrees E longitude,
+           i.e. +X of NLS points toward IAU E longitude 12.0152.
         -- centered on the planet
       
       NLS_RADEC frame:
         -- Exactly as NLS, but using the RA/DEC values defined in [9].
            The spin pole is displaced about 125 km along the 1-bar
            surface of the planet.
-           
-      NLS_OFFSET frame:
-        -- As defined for NLS currectly but with the IAU rotation rate.
     
         Name                  Relative to            NAIF ID
     ======================  =====================  ============
@@ -172,7 +162,7 @@ Frames Definitions
       USO                     J2000                  1850067
       NSO                     J2000                  1850068
       
-      Planet-Solar-Orbital frames:
+      Planet-Sun-Orbit frames:
         -- +X axis is along the geometric position of the Sun as seen
            from Jupiter (primary axis)
         -- +Y axis is in the direction of the inertial geometric velocity
@@ -276,24 +266,8 @@ Frames Definitions
     FRAME_1850017_SEC_FRAME        = 'IAU_URANUS'
     FRAME_1850017_SEC_SPEC         = 'LATITUDINAL'
     FRAME_1850017_SEC_UNITS        = 'DEGREES'
-    FRAME_1850017_SEC_LONGITUDE    = 225.8713
+    FRAME_1850017_SEC_LONGITUDE    = 225.3113
     FRAME_1850017_SEC_LATITUDE     =  0.0
-
-    FRAME_NLS_O8                   = 1850048
-    FRAME_1850048_NAME             = 'NLS_O8'
-    FRAME_1850048_CLASS            = 5
-    FRAME_1850048_CLASS_ID         = 1850048
-    FRAME_1850048_CENTER           = 899
-    FRAME_1850048_RELATIVE         = 'J2000'
-    FRAME_1850048_DEF_STYLE        = 'PARAMETERIZED'
-    FRAME_1850048_FAMILY           = 'EULER'
-    FRAME_1850048_EPOCH            = @1989-AUG-25/03:56:56.182
-    FRAME_1850048_AXES             = ( 3 1 3 )
-    FRAME_1850048_UNITS            = 'DEGREES'
-    FRAME_1850048_ANGLE_1_COEFFS   = ( -28.90 )
-    FRAME_1850048_ANGLE_2_COEFFS   = ( -47.16 )
-    FRAME_1850048_ANGLE_3_COEFFS   = ( -167.24248
-                                        -6.207324643518518E-03 )
 
     FRAME_NLS                      = 1850018
     FRAME_1850018_NAME             = 'NLS'
@@ -302,35 +276,42 @@ Frames Definitions
     FRAME_1850018_CENTER           = 899
     FRAME_1850018_RELATIVE         = 'J2000'
     FRAME_1850018_DEF_STYLE        = 'PARAMETERIZED'
-    FRAME_1850018_FAMILY           = 'EULER'
-    FRAME_1850018_EPOCH            = @1989-AUG-25/03:56:56.182
-    FRAME_1850018_AXES             = ( 3 1 3 )
-    FRAME_1850018_UNITS            = 'DEGREES'
-    FRAME_1850018_ANGLE_1_COEFFS   = ( -29.2678 )
-    FRAME_1850018_ANGLE_2_COEFFS   = ( -47.04556 )
-    FRAME_1850018_ANGLE_3_COEFFS   = ( -166.46207
-                                        -6.207324643518518E-03 )
+    FRAME_1850018_FAMILY           = 'TWO-VECTOR'
+    FRAME_1850018_PRI_AXIS         = 'Z'
+    FRAME_1850018_PRI_VECTOR_DEF   = 'CONSTANT'
+    FRAME_1850018_PRI_FRAME        = 'IAU_NEPTUNE'
+    FRAME_1850018_PRI_SPEC         = 'RECTANGULAR'
+    FRAME_1850018_PRI_VECTOR       = ( 0, 0, 1 )
+    FRAME_1850018_SEC_AXIS         = 'X'
+    FRAME_1850018_SEC_VECTOR_DEF   = 'CONSTANT'
+    FRAME_1850018_SEC_FRAME        = 'IAU_NEPTUNE'
+    FRAME_1850018_SEC_SPEC         = 'LATITUDINAL'
+    FRAME_1850018_SEC_UNITS        = 'DEGREES'
+    FRAME_1850018_SEC_LONGITUDE    = 12.0152
+    FRAME_1850018_SEC_LATITUDE     =  0.0
 
-    FRAME_NLS_OFFSET               = 1850038
-    FRAME_1850038_NAME             = 'NLS_OFFSET'
-    FRAME_1850038_CLASS            = 5
-    FRAME_1850038_CLASS_ID         = 1850038
-    FRAME_1850038_CENTER           = 899
-    FRAME_1850038_RELATIVE         = 'J2000'
-    FRAME_1850038_DEF_STYLE        = 'PARAMETERIZED'
-    FRAME_1850038_FAMILY           = 'TWO-VECTOR'
-    FRAME_1850038_PRI_AXIS         = 'Z'
-    FRAME_1850038_PRI_VECTOR_DEF   = 'CONSTANT'
-    FRAME_1850038_PRI_FRAME        = 'IAU_NEPTUNE'
-    FRAME_1850038_PRI_SPEC         = 'RECTANGULAR'
-    FRAME_1850038_PRI_VECTOR       = ( 0, 0, 1 )
-    FRAME_1850038_SEC_AXIS         = 'X'
-    FRAME_1850038_SEC_VECTOR_DEF   = 'CONSTANT'
-    FRAME_1850038_SEC_FRAME        = 'IAU_NEPTUNE'
-    FRAME_1850038_SEC_SPEC         = 'LATITUDINAL'
-    FRAME_1850038_SEC_UNITS        = 'DEGREES'
-    FRAME_1850038_SEC_LONGITUDE    = 12.014
-    FRAME_1850038_SEC_LATITUDE     =  0.0
+    FRAME_NLS_RADEC                = 1850028
+    FRAME_1850028_NAME             = 'NLS_RADEC'
+    FRAME_1850028_CLASS            = 5
+    FRAME_1850028_CLASS_ID         = 1850028
+    FRAME_1850028_CENTER           = 899
+    FRAME_1850028_RELATIVE         = 'J2000'
+    FRAME_1850028_DEF_STYLE        = 'PARAMETERIZED'
+    FRAME_1850028_FAMILY           = 'TWO-VECTOR'
+    FRAME_1850028_PRI_AXIS         = 'Z'
+    FRAME_1850028_PRI_VECTOR_DEF   = 'CONSTANT'
+    FRAME_1850028_PRI_SPEC         = 'RA/DEC'
+    FRAME_1850028_PRI_FRAME        = 'J2000'
+    FRAME_1850028_PRI_UNITS        = 'DEGREES'
+    FRAME_1850028_PRI_RA           = 298.90
+    FRAME_1850028_PRI_DEC          = 42.84
+    FRAME_1850028_SEC_AXIS         = 'X'
+    FRAME_1850028_SEC_VECTOR_DEF   = 'CONSTANT'
+    FRAME_1850028_SEC_FRAME        = 'IAU_NEPTUNE'
+    FRAME_1850028_SEC_SPEC         = 'LATITUDINAL'
+    FRAME_1850028_SEC_UNITS        = 'DEGREES'
+    FRAME_1850028_SEC_LONGITUDE    = 12.0152
+    FRAME_1850028_SEC_LATITUDE     =  0.0
         
     FRAME_IO_PHI_O                 = 1859501
     FRAME_1859501_NAME             = 'IO_PHI_O'
