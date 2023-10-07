@@ -10,7 +10,7 @@ function parentName = LoadSpice(moonName, sc)
         %generic = 'jup310.bsp';
     elseif any(strcmp(moonName, {'Mimas', 'Enceladus', 'Dione', 'Rhea', 'Titan', 'Saturn'}))
         parentName = 'Saturn';
-        generic = 'sat427.bsp';
+        generic = 'sat441.bsp';
     elseif any(strcmp(moonName, {'Miranda', 'Ariel', 'Umbriel', 'Titania', 'Oberon', 'Uranus'}))
         parentName = 'Uranus';
         generic = 'ura111.bsp';

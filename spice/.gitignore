@@ -1,10 +1,4 @@
-jup365.bsp
-jup380s.bsp
-jup310.bsp
-sat427.bsp
-ura111.bsp
-nep081.bsp
-nep097.bsp
+*.bsp
 Galileo*
 Juno*
 Cassini*
