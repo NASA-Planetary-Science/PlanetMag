@@ -1,4 +1,6 @@
 # PlanetMag
+<img src="misc/PlanetMag_logo.png" width=150 title="PlanetMag logo"/>
+
 Matlab software for evaluation of planetary magnetic field models and the oscillations applied to moons. PlanetMag uses the [SPICE toolkit](https://naif.jpl.nasa.gov/naif/toolkit.html) and published magnetospheric models derived from spacecraft data. All timing and phases are referenced to the J2000 epoch, 2000-Jan-01 12:00:00 TDB, which is equivalent to 11:58:55.816 am UTC on the same date.
 
 The main repository is mirrored at https://github.com/NASA-Planetary-Science/PlanetMag; any pull requests should be submitted to https://github.com/coreyjcochrane/PlanetMag.
