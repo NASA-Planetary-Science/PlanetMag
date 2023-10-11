@@ -21,7 +21,7 @@ switch coordType
     case 'SPRH'
         outCoords = [upper(parentName) '_SPRH'];
     otherwise
-        warning(['coordType "' coordType '" not recognized Defaulting to IAU.'])
+        warning(['coordType "' coordType '" not recognized. Defaulting to IAU.'])
         outCoords = ['IAU_' upper(moonName)];
 end
 
