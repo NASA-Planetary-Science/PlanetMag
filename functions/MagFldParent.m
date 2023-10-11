@@ -10,6 +10,10 @@ if ~exist('SPHOUT', 'var'); SPHOUT = 0; end
 if ~exist('Nmaxin', 'var'); Nmaxin = Inf; end
 magPhase = deg2rad(magPhase_deg); % J2000 phase offset for magnetic moment orientation (longitude)
 npts = length(r_km);
+% Ensure r, theta, phi have correct orientation
+if ~isrow(r_km); r_km = r_km'; end
+if ~isrow(theta); theta = theta'; end
+if ~isrow(phi); phi = phi'; end
 
 [g, h, G, H, PlanetEqRadius, Nmax, NmaxExt] = GetGaussCoeffs(planet, InternalFieldModel);
 
