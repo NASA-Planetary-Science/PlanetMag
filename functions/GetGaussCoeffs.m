@@ -161,8 +161,22 @@ function [g, h, G, H, PlanetEqRadius, Nmax, NmaxExt] = GetGaussCoeffs(planet, In
                 otherwise
                     error(['Magnetic field model "' InternalFieldModel '" not recognized.'])
 
-            end
+            end        
 
+        case 'PureHarmonic'
+            % Evaluate a single g,h spherical harmonic as detailed
+            % in the appropriate files. For testing and validation
+            % purposes.
+
+            Nmax = 10;
+            PlanetEqRadius = 1;
+            [g, h] = deal(zeros(Nmax, Nmax+1));
+            pureHarm = dlmread(fullfile([coeffPath 'coeffsPureHarmonic.csv']), ',', nHeadLines, 0);
+            n = pureHarm(1);
+            m = pureHarm(2);
+            g(n,m+1) = pureHarm(3);
+            h(n,m+1) = pureHarm(4);
+            
         otherwise
             error(['Planet name "' planet '" not recognized. Options are Jupiter, Saturn, Uranus, Neptune.'])
 
