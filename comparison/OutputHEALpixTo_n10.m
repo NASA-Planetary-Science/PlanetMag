@@ -23,23 +23,21 @@ pureHarmHeader = 'Contains ''g'' and ''h'' Schmidt semi-normalized spherical har
 pureHarmCols = sprintf('%12s,%12s,%12s,%12s', 'n', 'm', 'gnm', 'hnm');
 outHarmFileBase = fullfile('out', 'pureHarmMap_');
 
-% Loop over n and m for g
-gnm = 1.0; hnm = 0.0; outFlag = 'g';
+% Common value for g/h
+ghVal = 1.0;
+
+% Loop over n and m for g and h
 for n = 1:10
     for m = 0:n
         WritePureHarmFile(pureHarmFile, pureHarmHeader, pureHarmCols, outHarmFileBase, ...
-            n, m, gnm, hnm, r_RP, theta_rad, phi_rad, outFlag);
+            n, m, ghVal, 0.0, r_RP, theta_rad, phi_rad, 'g');
+        if m ~= 0
+            WritePureHarmFile(pureHarmFile, pureHarmHeader, pureHarmCols, outHarmFileBase, ...
+                n, m, 0.0, ghVal, r_RP, theta_rad, phi_rad, 'h');
+        end
     end
 end
 
-% Now do the same for h
-gnm = 0.0; hnm = 1.0; outFlag = 'h';
-for n = 1:10
-    for m = 0:n
-        WritePureHarmFile(pureHarmFile, pureHarmHeader, pureHarmCols, outHarmFileBase, ...
-            n, m, gnm, hnm, r_RP, theta_rad, phi_rad, outFlag);
-    end
-end
 
 function WritePureHarmFile(fpath, header, colNames, outFileBase, ...
     n, m, gnm, hnm, r_RP, theta_rad, phi_rad, outFlag)
