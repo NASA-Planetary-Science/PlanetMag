@@ -87,7 +87,7 @@ function Pnm = LegendreS(n, m, theta, UNNORM)  % n ( or l) = degree m = order
         if     (m == 0);  Pnm = (1/131072) * (7938 + 16170*cos(2*theta) + 17160*cos(4*theta) + 19305*cos(6*theta) + 24310*cos(8*theta) + 46189*cos(10*theta));
         elseif (m == 1);  Pnm = sqrt(55)/32768 * (7938*cos(theta) + 13*(588*cos(3*theta) + 540*cos(5*theta) + 459*cos(7*theta) + 323*cos(9*theta))) .* sin(theta);
         elseif (m == 2);  Pnm = sqrt(165)/32768 * (8085 + 15288*cos(2*theta) + 12740*cos(4*theta) + 8840*cos(6*theta) + 4199*cos(8*theta)) .* sin(theta).^2;
-        elseif (m == 3);  Pnm = sqrt(2145/2)/4096 * (1617*cos(theta) + 1323*cos(3*theta) + 833*cos(5*theta)) + 323*cos(7*theta) .* sin(theta).^3;
+        elseif (m == 3);  Pnm = sqrt(2145/2)/4096 * (1617*cos(theta) + 1323*cos(3*theta) + 833*cos(5*theta) + 323*cos(7*theta)) .* sin(theta).^3;
         elseif (m == 4);  Pnm = sqrt(2145)/4096 * (858 + 1485*cos(2*theta) + 918*cos(4*theta) + 323*cos(6*theta)) .* sin(theta).^4;
         elseif (m == 5);  Pnm = sqrt(429/2)/1024 * (1430*cos(theta) + 935*cos(3*theta) + 323*cos(5*theta)) .* sin(theta).^5;
         elseif (m == 6);  Pnm = sqrt(2145/2)/2048 * (585 + 884*cos(2*theta) + 323*cos(4*theta)) .* sin(theta).^6;
