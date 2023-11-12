@@ -1,6 +1,9 @@
 % Compare magnetic field measurements from spacecraft against the evaluated
 % magnetic field model(s).
 
+% NOTE: This script requires having run PlanetMag.m for the Galileo era for
+% all implemented planetary and magnetopause models using ALL_MODELS = 1.
+
 % Datasets:
 % Galileo MAG: https://doi.org/10.17189/1519667, volume GO-J-MAG-3-RDR-HIGHRES-V1.0
 % Juno MAG: https://doi.org/10.17189/1519711, volume JNO-J-3-FGM-CAL-V1.0

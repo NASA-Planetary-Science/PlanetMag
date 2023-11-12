@@ -1,10 +1,10 @@
-moonName = 'Earth';
+moonName = 'Europa';
 % Spacecraft era (sets timespan of field model)
-era = 'Swarm';
+era = 'Galileo';
 coordType = 'IAU';
 CALC_NEW = 1;
-ALL_MODELS = 0;
-DO_FFT = 1;
+ALL_MODELS = 1;
+DO_FFT = 0;
 DO_MPAUSE = 0;
 specificModel = 0; % Set this to 0 to use default, or a number to use an opt
 specificMPmodel = 0; % As above, for magnetopause models

@@ -110,7 +110,6 @@ function [Tpeak_h, B0vec, B1vec] = ...
     disp('Complete! Saving data.');
     save(fullfile([outData moonName 'FTdata']), 'B1vec1', 'B1vec2', 'B1vec3', 'B1mag', 'T_h', 'f_Hz', ...
         'coordType', 'SPHOUT', 'magModelDescrip', 'Tmax', 'Tinterest_h');
-    cspice_kclear;
     
     B0vec = [mean(BvecMoon(1,:)), mean(BvecMoon(2,:)), mean(BvecMoon(3,:))];
     
