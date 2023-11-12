@@ -165,7 +165,7 @@ if JUNOTOO && FLYBYS
     fbr_km = [fbr_km, jr_km];
     fbtheta = [fbtheta, jtheta];
     fbphi = [fbphi, jphi];
-    fbxyz_km = [fbxyz_km; jxyz_km];
+    fbxyz_km = [fbxyz_km, jxyz_km];
     r_RM = [r_RM, jr_RM];
     BxSC = [BxSC, jBx];
     BySC = [BySC, jBy];
