@@ -15,6 +15,10 @@ FULLORBITS = 1; % Whether to evalate goodness of fit from full-orbit data in Sys
 FLYBYS = 0; % Whether to evaluate goodness of fit from flyby data in moon coordinates
 JUNOTOO = 1;
 
+LoadSpice(moonName, char(scName));
+sc = 'Galileo Orbiter';
+R_P = 71492;
+
 switch moonName
     case 'Io'
         fbList = [0, 24, 27, 31, 32, 33];
@@ -127,7 +131,7 @@ if FLYBYS
 
     fbets = cspice_str2et(fbt_UTC);
     fbt_h = fbets / 3600;
-    [fbr_km, fbtheta, fbphi, xyz_km, ~] = GetPosSpice(sc, parentName, fbt_h);
+    [fbr_km, fbtheta, fbphi, fbxyz_km, ~] = GetPosSpice(sc, parentName, fbt_h);
     
     [BxSCS3, BySCS3, BzSCS3] = Bsph2Bxyz(fbBrSC, fbBthSC, fbBphiSC, fbtheta, fbphi);
     [BxSC, BySC, BzSC] = RotateBspice(BxSCS3, BySCS3, BzSCS3, fbets, spkParent, spkMoon);
@@ -137,7 +141,6 @@ end
 % Add Juno flyby data
 if JUNOTOO && FLYBYS
     sc = 'JUNO';
-    cspice_kclear;
     LoadSpice(moonName, 'Juno');
     fbjNum = 34;
     datFile = fullfile(['MAG/Juno/' moonName '/ORB' num2str(fbjNum) '_FGM_IAU.txt']);
@@ -153,7 +156,7 @@ if JUNOTOO && FLYBYS
     jets = cspice_str2et(jt_UTC);
     jt_h = jets / 3600;
     
-    [jr_km, jtheta, jphi, xyz_km, ~] = GetPosSpice(sc, parentName, jt_h);
+    [jr_km, jtheta, jphi, jxyz_km, ~] = GetPosSpice(sc, parentName, jt_h);
     jr_RM = GetTargetMoonDist(sc, moonName, parentName, jets);
     
     % Append to lists of coords to eval in Jupiter field model
@@ -162,6 +165,7 @@ if JUNOTOO && FLYBYS
     fbr_km = [fbr_km, jr_km];
     fbtheta = [fbtheta, jtheta];
     fbphi = [fbphi, jphi];
+    fbxyz_km = [fbxyz_km; jxyz_km];
     r_RM = [r_RM, jr_RM];
     BxSC = [BxSC, jBx];
     BySC = [BySC, jBy];
@@ -182,7 +186,7 @@ for opt=opts
             GetBplotAndLsq(ets, t_h, r_km, theta, phi, xyz_km, BrSC, BthSC, BphiSC, ...
                 scName, parentName, spkParent, orbStr, opt, MPopt, SEQUENTIAL);
         else
-            GetBplotAndLsqMoon(fbets, fbt_h, fbr_km, fbxyz_km, fbtheta, fbphi, ...
+            GetBplotAndLsqMoon(fbets, fbt_h, fbr_km, fbtheta, fbphi, fbxyz_km, ...
                 r_RM, BxSC, BySC, BzSC, ...
                 scName, parentName, spkParent, moonName, 'Galileo', fbStr, opt, MPopt, ...
                 SEQUENTIAL, jt_h);
