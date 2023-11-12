@@ -4,7 +4,10 @@ function parentName = LoadSpice(moonName, sc)
     leapseconds = 'naif0012.tls';
     frames = 'custom_frames_v01.tf';
     
-    if any(strcmp(moonName, {'Io', 'Europa', 'Ganymede', 'Callisto', 'Jupiter'}))
+    if any(strcmp(moonName, {'Moon', 'Earth'}))
+        parentName = 'Earth';
+        generic = 'de430.bsp';
+    elseif any(strcmp(moonName, {'Io', 'Europa', 'Ganymede', 'Callisto', 'Jupiter'}))
         parentName = 'Jupiter';
         generic = 'jup365.bsp';
         %generic = 'jup310.bsp';
@@ -22,6 +25,10 @@ function parentName = LoadSpice(moonName, sc)
     end
     
     switch(sc)
+        case 'Swarm'
+            planetData = 'pck00010.tpc';
+            pckEarth = 'earth_latest_high_prec.bpc';
+            spiceKernelList = { leapseconds planetData generic pckEarth frames };
         case 'Galileo'
             planetData = 'pck00010.tpc';
             galileoSpicePrime = fullfile(sc, 's980326a.bsp');

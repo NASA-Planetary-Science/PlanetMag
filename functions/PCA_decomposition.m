@@ -209,6 +209,7 @@ end
 
 %% List of excitation periods to invert over
 function [f, fSyn] = GetExcitations(moonName, etMid_day)
+    fEyr = 1 / 365.256 / 86400; % https://nssdc.gsfc.nasa.gov/planetary/factsheet/earthfact.html
     fJyr = 1 / 4332.589 / 86400; % https://nssdc.gsfc.nasa.gov/planetary/factsheet/jupiterfact.html
     fSyr = 1 / 10759.22 / 86400; % https://nssdc.gsfc.nasa.gov/planetary/factsheet/saturnfact.html
     fUyr = 1 / 30685.4 / 86400; % https://nssdc.gsfc.nasa.gov/planetary/factsheet/uranusfact.html
@@ -224,6 +225,14 @@ function [f, fSyn] = GetExcitations(moonName, etMid_day)
     fSynAdj = fPar - fOrbAdj;
     
     switch moonName
+
+        %% Earth moon
+        case 'Moon'
+            %fMoonTA = 1 / 3600 / 42.315044531808887029; % true anomaly period
+
+            f = [fSyn, fOrb];
+
+            f = [f, 2*fSyn];
 
         %% Jupiter moons 
         case 'Io'

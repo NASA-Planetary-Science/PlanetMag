@@ -11,7 +11,7 @@ function GetBplotAndLsq(ets, t_h, r_km, theta, phi, xyz_km, BrSC, BthSC, BphiSC,
     [MagModel, CsheetModel, MPmodel, magModelDescrip, ~] = GetModelOpts(parentName, opt, MPopt);
     magPhase = 0;
 
-    Nmax = 3;
+    Nmax = 10;
     disp(['Evaluating ' magModelDescrip ' field model with Nmax = ' num2str(Nmax) '.'])
     if strcmp(magModelDescrip, 'KS2005')
         [Bvec, Mdip_nT, Odip_km] = KSMagFldJupiter(r_km, theta, phi, ets, 1);
@@ -35,11 +35,14 @@ function GetBplotAndLsq(ets, t_h, r_km, theta, phi, xyz_km, BrSC, BthSC, BphiSC,
     Bphi = Bvec(3,:);
     
     defName = magModelDescrip;
-    scDataName = strcat(scName, ' MAG');
-    commonTitle = strcat(parentName, ' model comparison vs ', scName, ' data');
+    scDataName = [char(scName) ' MAG'];
+    commonTitle = [parentName ' model comparison vs ' char(scName) ' data'];
     if SEQUENTIAL
         xx = 1:npts;
         xDescrip = 'Measurement index';
+    elseif strcmp(parentName, 'Earth')
+        xx = t_h - 175308.0192178;
+        xDescrip = 'Time relative to NY 2020 (h)';
     elseif strcmp(parentName, 'Uranus')
         xx = t_h + 122154.0036;
         xDescrip = 'Time relative to CA (h)';

@@ -2,6 +2,9 @@ function [RparentEq_km, RparentPol_km, RmoonEq_km, a_AU, omegaParent_radps, omeg
         Tparent_s, Tmoon_s, nutPrecParent, nutPrecMoon] = GetBodyParams(moonName)
 
     switch(moonName)
+        case 'Moon'
+            moonID = 301;
+            parentID = 399;
         case 'Io'
             moonID = 501;
             parentID = 599;
@@ -47,6 +50,9 @@ function [RparentEq_km, RparentPol_km, RmoonEq_km, a_AU, omegaParent_radps, omeg
         case 'Triton'
             moonID = 801;
             parentID = 899;
+        case 'Earth'
+            moonID = 399;
+            parentID = 399;
         case 'Jupiter'
             moonID = 599;
             parentID = 599;
@@ -60,7 +66,7 @@ function [RparentEq_km, RparentPol_km, RmoonEq_km, a_AU, omegaParent_radps, omeg
             moonID = 899;
             parentID = 899;
         otherwise
-                error([moonName ' does not have a defined behavior in GetBodyParams.'])
+            error([moonName ' does not have a defined behavior in GetBodyParams.'])
     end
     
     % Fetch parent body radius from PCK file
@@ -99,6 +105,8 @@ function [RparentEq_km, RparentPol_km, RmoonEq_km, a_AU, omegaParent_radps, omeg
     end
     
     switch parentID
+        case 399
+            a_AU = 1.000;
         case 599
             a_AU = 5.204;
         case 699

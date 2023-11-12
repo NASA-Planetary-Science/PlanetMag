@@ -1,7 +1,7 @@
-moonName = 'Europa';
+moonName = 'Earth';
 % Spacecraft era (sets timespan of field model)
-era = 'Galileo';
-coordType = 'SPRH';
+era = 'Swarm';
+coordType = 'IAU';
 CALC_NEW = 1;
 ALL_MODELS = 0;
 DO_FFT = 1;
@@ -43,6 +43,9 @@ if CALC_NEW
     end
 
     switch era
+        case 'Swarm'
+            tStart_yr = 2020.0;
+            tEnd_yr = 2025.0;
         case 'Galileo'
             tStart_yr = 1995.9;
             tEnd_yr = 2003.75;
@@ -96,6 +99,7 @@ end
 
 if ALL_MODELS
     switch parentName
+        case 'Earth'; nOpts = 1; nMPopts = 0;
         case 'Jupiter'; nOpts = 7; nMPopts = 5;
         case 'Saturn';  nOpts = 2; nMPopts = 0;
         case 'Uranus';  nOpts = 2; nMPopts = 2;

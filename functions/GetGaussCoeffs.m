@@ -6,6 +6,24 @@ function [g, h, G, H, PlanetEqRadius, Nmax, NmaxExt] = GetGaussCoeffs(planet, In
     H = 0;
     NmaxExt = 0;
     switch(planet)
+        case 'Earth'
+            switch(InternalFieldModel)
+                case 'MagFldEarthIGRF13'
+                    % IGRF13, International Geomagnetic Reference Field:
+                    % the thirteenth generation. https://doi.org/10.1186/s40623-020-01288-x
+                    % Interior field parameters (Schmidt semi-normalized coefficients) in Gauss
+                    % referenced to JSIII (1965) coordinates, 1RJ = 71,323 km
+
+                    Nmax = 13; % order
+                    PlanetEqRadius = 6371.2; % km, as reported in the publication
+
+                    g = dlmread(fullfile([coeffPath 'coeffsEarthIGRF13g.csv']), ',', nHeadLines, 0);
+                    h = dlmread(fullfile([coeffPath 'coeffsEarthIGRF13h.csv']), ',', nHeadLines, 0);
+
+                otherwise
+                    error(['Magnetic field model "' InternalFieldModel '" not recognized.'])
+            end
+
         case 'Jupiter'
             switch(InternalFieldModel)
                 case 'MagFldJupiterVIP4'
