@@ -139,7 +139,7 @@ function [mpBvecOut, OUTSIDE_MP] = MpauseFld(nSW_pcc, vSW_kms, ets, xyz_km, ...
                 phiMP = atan2(xyzPSM_km(2,:), xyzPSM_km(1,:));
 
                 disp(['Evaluating ' MPmodel ' magnetopause model.'])
-                [mpBr, mpBth, mpBphi] = MPsphericalHarmonic(r_Rp/Rss_Rp, thMP, phiMP, Gnm, min([Nmax,10]));
+                [mpBr, mpBth, mpBphi] = MPsphericalHarmonic(r_Rp./Rss_Rp, thMP, phiMP, Gnm, min([Nmax,10]));
                 
                 mpBr = mpBr .* Cn;
                 mpBth = mpBth .* Cn;
@@ -424,7 +424,7 @@ end
 
 function xMP_km = GetMPsurfAB2005(Rss_km, xyzPSM_km)
     % Alexeev and Belenkaya (2005) model
-    xMP_km = Rss_km - (xyzPSM_km(2,:).^2 + xyzPSM_km(3,:).^2)/2/Rss_km;
+    xMP_km = Rss_km - (xyzPSM_km(2,:).^2 + xyzPSM_km(3,:).^2)/2 ./ Rss_km;
 end
 
 function rhoMP_km = GetMPsurfSM1996(Rss_km, xyzPSMdipO_km)
