@@ -18,7 +18,8 @@ Rp_km = 60268;
 for i = 1:2
     LoadSpice(parentName, char(scName(i)));
 end
-etStime = ["1980-11-12T23:45:42.725", "1981-08-26T03:24:04.760"];
+etStime = ['1980-11-12T23:45:42.725'; '1981-08-26T03:24:04.760'];
+etS = cspice_str2et(etStime);
 tCA_h = [-167724.2239, -160856.5842];
 
 figure(1000); clf(); hold on;
@@ -31,7 +32,9 @@ axlim = 30;
 pbaspect([1 1 1]);
 xlim([-axlim,axlim]);ylim([-axlim,axlim]);zlim([-axlim,axlim]);
 grid on;
-xlabel('x KSO (R_S, toward Sun)');ylabel('y KSO (R_S), \approx orbital v');zlabel('z KSO (R_S)');
+xlabel('x KSO (R_S, toward Sun)');
+ylabel('y KSO (R_S), \approx orbital v');
+zlabel('z KSO (R_S)');
 
 rotMat = cspice_pxform('IAU_SATURN', 'KSO', etS(1));
 vecMat = zeros(3,1);
@@ -71,8 +74,6 @@ for i=2:-1:1
         BthSC{i} = magData{7}';
         BphiSC{i} = magData{8}';
     end
-    
-    etS = cspice_str2et(char(etStime(i)));
 
     nTot = length(t_UTC{i});
     disp(['Converting UTC strings to TDB seconds for all ' num2str(nTot) ' points.'])
