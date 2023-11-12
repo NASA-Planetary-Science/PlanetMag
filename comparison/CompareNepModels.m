@@ -145,15 +145,11 @@ CAN = CAN / Rp_km;
 CAline = plot3([0,CAN(1)], [0,CAN(2)], [0,CAN(3)], 'Color', 'y', 'LineWidth', 2); CAname = "CA (NLS)";
 scatter3(CAN(1), CAN(1), CAN(1), 15, 'y')
 
-[~, ~, ~, xyz_km, ~] = GetPosSpice(sc, parentName, t_h, 'NLS_OFFSET');
+[~, ~, ~, xyz_km, ~] = GetPosSpice(sc, parentName, t_h, 'NLS_RADEC');
 [x, y, z] = GetDespun(xyz_km/Rp_km, despin);
-scTraj{4} = plot3(x,y,z, 'LineWidth', 1.5); name{4} = "SPICE in IAU - 12^\circ";
+scTraj{4} = plot3(x,y,z, 'LineWidth', 1.5, 'Color', 'm'); name{4} = "SPICE in NLS as defined in O8";
 
-[~, ~, ~, xyz_km, ~] = GetPosSpice(sc, parentName, t_h, 'NLS_O8');
-[x, y, z] = GetDespun(xyz_km/Rp_km, despin);
-scTraj{5} = plot3(x,y,z, 'LineWidth', 1.5, 'Color', 'm'); name{5} = "SPICE in NLS as defined in O8";
-
-legend([scTraj{1} scTraj{2} scTraj{4} scTraj{5}], [name{1}, name{2}, name{4}, name{5}])
+legend([scTraj{1} scTraj{2} scTraj{4}], [name{1}, name{2}, name{4}])
 
 function [x, y, z] = GetDespun(xyz_Rp, despin)
     r_Rp = sqrt(xyz_Rp(1,:).^2 + xyz_Rp(2,:).^2 + xyz_Rp(3,:).^2);
