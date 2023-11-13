@@ -1,4 +1,5 @@
-% Returns the value of the derivative of the Schmidt-seminormalized Legendre function of degree n and order m given the angle theta
+% Returns the value of the derivative of the Schmidt-seminormalized Legendre function of degree n 
+% and order m given the angle theta
 function dPnm = dLegendreP(n, m, theta, UNNORM)
     if ~exist('UNNORM', 'var'); UNNORM = 0; end
     

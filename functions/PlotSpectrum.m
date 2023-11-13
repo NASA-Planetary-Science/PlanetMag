@@ -1,3 +1,4 @@
+% Plot a pre-saved spectrum of magnetic oscillations as derived from an FFT. 
 function PlotSpectrum(moonName)
     outData = 'out/';
     load(fullfile([outData moonName 'FTdata']), 'B1vec1', 'B1vec2', 'B1vec3', 'B1mag', 'T_h', 'f_Hz', ...

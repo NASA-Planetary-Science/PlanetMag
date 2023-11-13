@@ -1,3 +1,50 @@
+% **PlanetMag**
+% 
+% Evaluates planetary magnetic field for a time series at the specified moon location and inverts
+% for the complex amplitudes of oscillation in that moon's frame.
+%
+% Parameters
+% ----------
+% moonName : char, 1xC
+%   Name of target moon for which to generate magnetic spectrum amplitudes.
+% era : char, 1xD
+%   Time period over which measurements will be evaluated. Options:
+%
+%     - 'Swarm'
+%     - 'Galileo'
+%     - 'Cassini'
+%     - 'Juno'
+%     - 'Clipper'
+%     - 'Voyager'
+%
+% coordType : char, 1xE
+%   Desired standard coordinates for magnetic spectrum inversion. Options:
+% 
+%     - 'IAU'
+%     - 'SPRH'
+%
+% CALC_NEW : bool
+%   Whether to perform calculations or attempt to reload saved data for plotting purposes.
+% ALL_MODELS : bool
+% DO_FFT : bool
+% DO_MPAUSE : bool
+% specificModel : int
+% specificMPmodel : int
+% outData : char, 1xF
+%   Directory to use for output complex spectrum amplitudes.
+% nptsApprox : int 
+%   Desired number of points to use in time series for inversion. A whole number of the period of 
+%   interest (typically synodic period, as it is the strongest oscillation) will ultimately be 
+%   selected, which is why this number is approximate.
+% magPhase : double
+%   Arbitrary offset in degrees by which to rotate the magnetospheric field evaluation.
+
+% Part of the PlanetMag framework for evaluation and study of planetary magnetic fields.
+% Created by Corey J. Cochrane and Marshall J. Styczinski
+% Maintained by Marshall J. Styczinski
+% Contact: corey.j.cochrane@jpl.nasa.gov
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
 moonName = 'Europa';
 % Spacecraft era (sets timespan of field model)
 era = 'Galileo';

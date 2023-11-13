@@ -1,11 +1,54 @@
-% Author: Corey J Cochrane and Marshall J Styczinski
-% Inputs: r from body center (km), colatitude from angular momentum 
-%   vector theta (rad), east longitude phi (rad) 
-% Outputs: Bvec = [Bx (nT); By (nT); Bz (nT)], Magnetic Moment Mdip, and Dipole Offset Odip
-% reference frame: IAU_PLANET (or US3 for Uranus), rotates with the planet
-
 function [Bvec_nT, Mdip_nT, Odip_km] = MagFldParent(planet, r_km, theta, phi, InternalFieldModel, ...
                        ExternalFieldModel, magPhase_deg, SPHOUT, Nmaxin)
+% **MagFldParent**
+%
+% Evaluate the magnetic field of the desired planet at specified locations 
+% according to the specified internal and external field models.
+% 
+% Parameters
+% ----------
+% planet : char, 1xC
+%   Name of the planet for which to evaluate the field.
+% r_km : double, 1xN
+%   Radius of evaluation points in km from planet barycenter.
+% theta : double, 1xN
+%   Planetocentric colatitude of evaluation points in rad. Must be the same
+%   length as r_km.
+% phi : double, 1xN
+%   Planetocentric east longitude of evaluation points in rad. Must be the 
+%   same length as r_km.
+%
+% Returns
+% -------
+% Bvec_nT : double, 3xN
+%   Magnetic field vector in standard coordinates (typically IAU or
+%   spherical coordinates if SPHOUT is true) at evaluation points in nT. Output rows are x, y, z
+%   respectively for cartesian or r, theta, phi for spherical.
+% Mdip_nT : double, 1x3
+%   Dipole magnetic moment in standard coordinates, as surface-equivalent
+%   nT, i.e. this value times the planet volume yields the magnetic moment in SI units.
+% Odip_km : double 1x3
+%   Dipole magnetic moment offset in km from planet barycenter in 
+%   standard coordinates.
+%
+% Note
+% ----
+% The standard reference frames used for each body, except as noted below, are IAU_BODY. The only exceptions to this rule are:
+%
+% * Uranus uses the US3 frame: System III coordinates with +z along the spin pole, opposite the 
+%   direction of IAU_URANUS.
+% * Neptune uses the NLS frame: The Neptune Longitude System derived from magnetic data. 
+%   IAU_NEPTUNE is a System II coordinate system that rotates with a stable atmospheric feature 
+%   at a different rate than the magnetic rotation rate inferred from Voyager 2 data.
+%
+% All standard frames rotate with the body (planet or moon).
+
+% Part of the PlanetMag framework for evaluation and study of planetary magnetic fields.
+% Created by Corey J. Cochrane and Marshall J. Styczinski
+% Maintained by Marshall J. Styczinski
+% Contact: corey.j.cochrane@jpl.nasa.gov
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
 if ~exist('SPHOUT', 'var'); SPHOUT = 0; end
 if ~exist('Nmaxin', 'var'); Nmaxin = Inf; end
 magPhase = deg2rad(magPhase_deg); % J2000 phase offset for magnetic moment orientation (longitude)

@@ -1,5 +1,7 @@
-% Returns the value of Schmidt-seminormalized Legendre function of degree n and order m given the angle theta
-function Pnm = LegendreP(n, m, theta, UNNORM)  % n ( or l) = degree m = order
+% Returns the value of Schmidt-seminormalized Legendre function of degree n and order m given the 
+% angle theta
+function Pnm = LegendreP(n, m, theta, UNNORM)
+% n ( or l) = degree m = order
     if ~exist('UNNORM', 'var'); UNNORM = 0; end
 
     if (n == 1)
