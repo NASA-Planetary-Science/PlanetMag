@@ -1,1 +1,12 @@
-/* This file intentionally left blank. */
+.rst-content .hidden {
+    display: none;
+}
+
+nav .hidden {
+    display: unset;
+}
+
+.rst-content .func {
+
+}
+

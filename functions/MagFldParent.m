@@ -1,7 +1,5 @@
 function [Bvec_nT, Mdip_nT, Odip_km] = MagFldParent(planet, r_km, theta, phi, InternalFieldModel, ...
                        ExternalFieldModel, magPhase_deg, SPHOUT, Nmaxin)
-% **MagFldParent**
-%
 % Evaluate the magnetic field of the desired planet at specified locations 
 % according to the specified internal and external field models.
 % 

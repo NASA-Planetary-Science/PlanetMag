@@ -7,6 +7,7 @@
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#project-information
 
 import os
+import sys
 
 project = 'PlanetMag'
 copyright = '2023, California Institute of Technology'
@@ -20,10 +21,11 @@ github_url = 'https://github.com/coreyjcochrane/planetmag'
 extensions = ['sphinxcontrib.matlab',
               'sphinx.ext.autodoc',
               'myst_parser',
-              'sphinx.ext.autosummary',
               'sphinx.ext.napoleon']
 source_suffix = ['.rst', '.md']
 matlab_src_dir = os.path.abspath('..')
+sys.path.insert(0, os.path.abspath('../'))
+autodoc_member_order = 'alphabetical'
 
 templates_path = ['_templates']
 exclude_patterns = ['_build', 'Thumbs.db', '.DS_Store']
@@ -34,11 +36,11 @@ exclude_patterns = ['_build', 'Thumbs.db', '.DS_Store']
 
 html_theme = 'sphinx_rtd_theme'  # Install with pip install sphinx-rtd-theme
 html_static_path = ['_static']
+html_css_files = ['css/custom.css']
 html_logo = '../misc/PlanetMag_logoDocs.png'
 html_favicon = '../misc/PlanetMag_logo.ico'
 
 html_theme_options = {
-    'body_min_width': 0,
     'display_version': True,
     'prev_next_buttons_location': 'bottom',
     'style_external_links': False,

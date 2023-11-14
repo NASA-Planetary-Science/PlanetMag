@@ -1,5 +1,5 @@
-% **PlanetMag**
-% 
+function PlanetMag(moonName, era, coordType, CALC_NEW, ALL_MODELS, DO_FFT, DO_MPAUSE, specificModel, ...
+    specificMPmodel, outData, nptsApprox, magPhase)
 % Evaluates planetary magnetic field for a time series at the specified moon location and inverts
 % for the complex amplitudes of oscillation in that moon's frame.
 %
@@ -45,20 +45,18 @@
 % Contact: corey.j.cochrane@jpl.nasa.gov
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-moonName = 'Europa';
-% Spacecraft era (sets timespan of field model)
-era = 'Galileo';
-coordType = 'IAU';
-CALC_NEW = 1;
-ALL_MODELS = 1;
-DO_FFT = 0;
-DO_MPAUSE = 0;
-specificModel = 0; % Set this to 0 to use default, or a number to use an opt
-specificMPmodel = 0; % As above, for magnetopause models
-outData = 'out/';
-
-nptsApprox = 12*365.25*3*24;
-magPhase = 0;
+if ~exist('moonName', 'var'); moonName = 'Europa'; end
+if ~exist('era', 'var'); era = 'Galileo'; end % Spacecraft era (sets timespan of field model)
+if ~exist('coordType', 'var'); coordType = 'IAU'; end
+if ~exist('CALC_NEW', 'var'); CALC_NEW = 1; end
+if ~exist('ALL_MODELS', 'var'); ALL_MODELS = 0; end
+if ~exist('DO_FFT', 'var'); DO_FFT = 0; end
+if ~exist('DO_MPAUSE', 'var'); DO_MPAUSE = 0; end
+if ~exist('specificModel', 'var'); specificModel = 0; end % Set this to 0 to use default, or a number to use an opt
+if ~exist('specificMPmodel', 'var'); specificMPmodel = 0; end % As above, for magnetopause models
+if ~exist('outData', 'var'); outData = 'out/'; end
+if ~exist('nptsApprox', 'var'); nptsApprox = 12*365.25*3*24; end
+if ~exist('magPhase', 'var'); magPhase = 0; end
 
 parentName = LoadSpice(moonName);
 
@@ -366,4 +364,5 @@ for opt=opts
 
         disp(['Saved Be data to file: ' outFname])
     end
+end
 end

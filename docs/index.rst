@@ -1,20 +1,21 @@
 PlanetMag documentation
 =======================
 
+This is the documentation for the code base of the PlanetMag framework.
 The software is hosted on GitHub at https://github.com/coreyjcochrane/planetmag.
 
-Actually do the :doc:`README<readme>`
+Please refer to the :doc:`README<readme>` for the overall package description, installation instructions, and copyright information.
 
 .. toctree::
-   README <readme>
-   api
-   Main scripts <primary>
-   :maxdepth: 2
+   :maxdepth: 4
    :caption: Contents:
 
-Indices and tables
-==================
+   README <readme>
+   primary
+   functions
+
+Package index
+=============
 
 * :ref:`genindex`
-* :ref:`modindex`
-* :ref:`search`
+
