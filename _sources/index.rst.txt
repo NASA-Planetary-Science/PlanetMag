@@ -1,20 +1,22 @@
-.. PlanetMag documentation master file, created by
-   sphinx-quickstart on Sun Nov 12 23:48:55 2023.
-   You can adapt this file completely to your liking, but it should at least
-   contain the root `toctree` directive.
+PlanetMag documentation
+=======================
 
-Welcome to PlanetMag's documentation!
-=====================================
+This is the documentation for the code base of the PlanetMag framework.
+The software is hosted on GitHub at https://github.com/coreyjcochrane/planetmag.
+
+Please refer to the :doc:`README<readme>` for the overall package description, installation instructions, and copyright information.
 
 .. toctree::
-   :maxdepth: 2
+   :maxdepth: 4
    :caption: Contents:
 
+   README <readme>
+   primary
+   functions
+   pythonModules
 
-
-Indices and tables
-==================
+Package index
+=============
 
 * :ref:`genindex`
-* :ref:`modindex`
-* :ref:`search`
+

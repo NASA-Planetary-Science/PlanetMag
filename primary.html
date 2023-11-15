@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>PlanetMag Matlab run scripts &mdash; PlanetMag v1.0.0 documentation</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/custom.css" type="text/css" />
+    <link rel="shortcut icon" href="_static/PlanetMag_logo.ico"/>
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="_static/jquery.js?v=5d32c60e"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js?v=0ec76b63"></script>
+        <script src="_static/doctools.js?v=888ff710"></script>
+        <script src="_static/sphinx_highlight.js?v=4825356b"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Matlab supporting functions" href="functions.html" />
+    <link rel="prev" title="PlanetMag" href="readme.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search"  style="background: #2980B9" >
+
+          
+          
+          <a href="index.html">
+            
+              <img src="_static/PlanetMag_logoDocs.png" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="readme.html">README</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">PlanetMag Matlab run scripts</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#planetmag"><code class="xref py py-func docutils literal notranslate"><span class="pre">PlanetMag()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#compareearmodels"><code class="xref py py-func docutils literal notranslate"><span class="pre">CompareEarModels()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#comparejupmodels"><code class="xref py py-func docutils literal notranslate"><span class="pre">CompareJupModels()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#comparesatmodels"><code class="xref py py-func docutils literal notranslate"><span class="pre">CompareSatModels()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#compareuramodels"><code class="xref py py-func docutils literal notranslate"><span class="pre">CompareUraModels()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#comparenepmodels"><code class="xref py py-func docutils literal notranslate"><span class="pre">CompareNepModels()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#spherical-harmonics-validation">Spherical harmonics validation</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="functions.html">Matlab supporting functions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="pythonModules.html">PlanetMag python documentation</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu"  style="background: #2980B9" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">PlanetMag</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">PlanetMag Matlab run scripts</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/primary.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="planetmag-matlab-run-scripts">
+<h1>PlanetMag Matlab run scripts<a class="headerlink" href="#planetmag-matlab-run-scripts" title="Permalink to this heading"></a></h1>
+<section id="planetmag">
+<h2><code class="xref py py-func docutils literal notranslate"><span class="pre">PlanetMag()</span></code><a class="headerlink" href="#planetmag" title="Permalink to this heading"></a></h2>
+<dl class="mat function">
+<dt class="sig sig-object mat" id="PlanetMag">
+<span class="sig-name descname"><span class="pre">PlanetMag</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">moonName</span></em>, <em class="sig-param"><span class="pre">era</span></em>, <em class="sig-param"><span class="pre">coordType</span></em>, <em class="sig-param"><span class="pre">CALC_NEW</span></em>, <em class="sig-param"><span class="pre">ALL_MODELS</span></em>, <em class="sig-param"><span class="pre">DO_FFT</span></em>, <em class="sig-param"><span class="pre">DO_MPAUSE</span></em>, <em class="sig-param"><span class="pre">specificModel</span></em>, <em class="sig-param"><span class="pre">specificMPmodel</span></em>, <em class="sig-param"><span class="pre">outData</span></em>, <em class="sig-param"><span class="pre">nptsApprox</span></em>, <em class="sig-param"><span class="pre">magPhase</span></em><span class="sig-paren">)</span><a class="headerlink" href="#PlanetMag" title="Permalink to this definition"></a></dt>
+<dd><p>Evaluates planetary magnetic field for a time series at the specified moon location and inverts
+for the complex amplitudes of oscillation in that moon’s frame.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>moonName</strong> (<span><code class="xref mat mat-obj docutils literal notranslate"><span class="pre">char,</span> <span class="pre">1xC</span></code></span>) – Name of target moon for which to generate magnetic spectrum amplitudes.</p></li>
+<li><p><strong>era</strong> (<span><code class="xref mat mat-obj docutils literal notranslate"><span class="pre">char,</span> <span class="pre">1xD</span></code></span>) – <p>Time period over which measurements will be evaluated. Options:</p>
+<blockquote>
+<div><ul>
+<li><p>’Swarm’</p></li>
+<li><p>’Galileo’</p></li>
+<li><p>’Cassini’</p></li>
+<li><p>’Juno’</p></li>
+<li><p>’Clipper’</p></li>
+<li><p>’Voyager’</p></li>
+</ul>
+</div></blockquote>
+</p></li>
+<li><p><strong>coordType</strong> (<span><code class="xref mat mat-obj docutils literal notranslate"><span class="pre">char,</span> <span class="pre">1xE</span></code></span>) – <p>Desired standard coordinates for magnetic spectrum inversion. Options:</p>
+<blockquote>
+<div><ul>
+<li><p>’IAU’</p></li>
+<li><p>’SPRH’</p></li>
+</ul>
+</div></blockquote>
+</p></li>
+<li><p><strong>CALC_NEW</strong> (<span><code class="xref mat mat-obj docutils literal notranslate"><span class="pre">bool</span></code></span>) – Whether to perform calculations or attempt to reload saved data for plotting purposes.</p></li>
+<li><p><strong>ALL_MODELS</strong> (<span><code class="xref mat mat-obj docutils literal notranslate"><span class="pre">bool</span></code></span>) – </p></li>
+<li><p><strong>DO_FFT</strong> (<span><code class="xref mat mat-obj docutils literal notranslate"><span class="pre">bool</span></code></span>) – </p></li>
+<li><p><strong>DO_MPAUSE</strong> (<span><code class="xref mat mat-obj docutils literal notranslate"><span class="pre">bool</span></code></span>) – </p></li>
+<li><p><strong>specificModel</strong> (<span><code class="xref mat mat-obj docutils literal notranslate"><span class="pre">int</span></code></span>) – </p></li>
+<li><p><strong>specificMPmodel</strong> (<span><code class="xref mat mat-obj docutils literal notranslate"><span class="pre">int</span></code></span>) – </p></li>
+<li><p><strong>outData</strong> (<span><code class="xref mat mat-obj docutils literal notranslate"><span class="pre">char,</span> <span class="pre">1xF</span></code></span>) – Directory to use for output complex spectrum amplitudes.</p></li>
+<li><p><strong>nptsApprox</strong> (<span><code class="xref mat mat-obj docutils literal notranslate"><span class="pre">int</span></code></span>) – Desired number of points to use in time series for inversion. A whole number of the period of
+interest (typically synodic period, as it is the strongest oscillation) will ultimately be
+selected, which is why this number is approximate.</p></li>
+<li><p><strong>magPhase</strong> (<span><code class="xref mat mat-obj docutils literal notranslate"><span class="pre">double</span></code></span>) – Arbitrary offset in degrees by which to rotate the magnetospheric field evaluation.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="compareearmodels">
+<h2><code class="xref py py-func docutils literal notranslate"><span class="pre">CompareEarModels()</span></code><a class="headerlink" href="#compareearmodels" title="Permalink to this heading"></a></h2>
+<dl class="mat function">
+<dt class="sig sig-object mat" id="comparison.CompareEarModels">
+<span class="sig-prename descclassname"><span class="pre">comparison.</span></span><span class="sig-name descname"><span class="pre">CompareEarModels</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#comparison.CompareEarModels" title="Permalink to this definition"></a></dt>
+<dd><p>Compare magnetic field measurements from spacecraft against the evaluated
+magnetic field model(s).</p>
+</dd></dl>
+
+</section>
+<section id="comparejupmodels">
+<h2><code class="xref py py-func docutils literal notranslate"><span class="pre">CompareJupModels()</span></code><a class="headerlink" href="#comparejupmodels" title="Permalink to this heading"></a></h2>
+<dl class="mat function">
+<dt class="sig sig-object mat" id="comparison.CompareJupModels">
+<span class="sig-prename descclassname"><span class="pre">comparison.</span></span><span class="sig-name descname"><span class="pre">CompareJupModels</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#comparison.CompareJupModels" title="Permalink to this definition"></a></dt>
+<dd><p>Compare magnetic field measurements from spacecraft against the evaluated
+magnetic field model(s).</p>
+</dd></dl>
+
+</section>
+<section id="comparesatmodels">
+<h2><code class="xref py py-func docutils literal notranslate"><span class="pre">CompareSatModels()</span></code><a class="headerlink" href="#comparesatmodels" title="Permalink to this heading"></a></h2>
+<dl class="mat function">
+<dt class="sig sig-object mat" id="comparison.CompareSatModels">
+<span class="sig-prename descclassname"><span class="pre">comparison.</span></span><span class="sig-name descname"><span class="pre">CompareSatModels</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#comparison.CompareSatModels" title="Permalink to this definition"></a></dt>
+<dd><p>Compare magnetic field measurements from spacecraft against the evaluated
+magnetic field model(s).</p>
+</dd></dl>
+
+</section>
+<section id="compareuramodels">
+<h2><code class="xref py py-func docutils literal notranslate"><span class="pre">CompareUraModels()</span></code><a class="headerlink" href="#compareuramodels" title="Permalink to this heading"></a></h2>
+<dl class="mat function">
+<dt class="sig sig-object mat" id="comparison.CompareUraModels">
+<span class="sig-prename descclassname"><span class="pre">comparison.</span></span><span class="sig-name descname"><span class="pre">CompareUraModels</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#comparison.CompareUraModels" title="Permalink to this definition"></a></dt>
+<dd><p>Compare magnetic field measurements from spacecraft against the evaluated
+magnetic field model(s).</p>
+</dd></dl>
+
+</section>
+<section id="comparenepmodels">
+<h2><code class="xref py py-func docutils literal notranslate"><span class="pre">CompareNepModels()</span></code><a class="headerlink" href="#comparenepmodels" title="Permalink to this heading"></a></h2>
+<dl class="mat function">
+<dt class="sig sig-object mat" id="comparison.CompareNepModels">
+<span class="sig-prename descclassname"><span class="pre">comparison.</span></span><span class="sig-name descname"><span class="pre">CompareNepModels</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#comparison.CompareNepModels" title="Permalink to this definition"></a></dt>
+<dd><p>Compare magnetic field measurements from spacecraft against the evaluated
+magnetic field model(s).</p>
+</dd></dl>
+
+</section>
+<section id="spherical-harmonics-validation">
+<h2>Spherical harmonics validation<a class="headerlink" href="#spherical-harmonics-validation" title="Permalink to this heading"></a></h2>
+<dl class="mat function">
+<dt class="sig sig-object mat" id="comparison.OutputHEALpixTo_n10">
+<span class="sig-prename descclassname"><span class="pre">comparison.</span></span><span class="sig-name descname"><span class="pre">OutputHEALpixTo_n10</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#comparison.OutputHEALpixTo_n10" title="Permalink to this definition"></a></dt>
+<dd><p>This script prints an evaluation of Legendre polynomials and their
+derivatives on a HEALpix map, for validation purposes. The HEALpix
+map must be supplied in a text file at the specified location. All
+harmonics are mapped, from n=1 to n=10.</p>
+</dd></dl>
+
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="readme.html" class="btn btn-neutral float-left" title="PlanetMag" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="functions.html" class="btn btn-neutral float-right" title="Matlab supporting functions" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, California Institute of Technology.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

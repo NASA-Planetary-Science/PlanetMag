@@ -1,0 +1,483 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Matlab supporting functions &mdash; PlanetMag v1.0.0 documentation</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/custom.css" type="text/css" />
+    <link rel="shortcut icon" href="_static/PlanetMag_logo.ico"/>
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="_static/jquery.js?v=5d32c60e"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js?v=0ec76b63"></script>
+        <script src="_static/doctools.js?v=888ff710"></script>
+        <script src="_static/sphinx_highlight.js?v=4825356b"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="PlanetMag python documentation" href="pythonModules.html" />
+    <link rel="prev" title="PlanetMag Matlab run scripts" href="primary.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search"  style="background: #2980B9" >
+
+          
+          
+          <a href="index.html">
+            
+              <img src="_static/PlanetMag_logoDocs.png" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="readme.html">README</a></li>
+<li class="toctree-l1"><a class="reference internal" href="primary.html">PlanetMag Matlab run scripts</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Matlab supporting functions</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#calculation-functions">Calculation functions</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#magfldparent"><code class="xref py py-func docutils literal notranslate"><span class="pre">MagFldParent()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#ksmagfldjupiter"><code class="xref py py-func docutils literal notranslate"><span class="pre">KSMagFldJupiter()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#mpausefld"><code class="xref py py-func docutils literal notranslate"><span class="pre">MpauseFld()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#magfldparentsingle"><code class="xref py py-func docutils literal notranslate"><span class="pre">MagFldParentSingle()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#legendrep"><code class="xref py py-func docutils literal notranslate"><span class="pre">LegendreP()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#legendres"><code class="xref py py-func docutils literal notranslate"><span class="pre">LegendreS()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#dlegendrep"><code class="xref py py-func docutils literal notranslate"><span class="pre">dLegendreP()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#dlegendres"><code class="xref py py-func docutils literal notranslate"><span class="pre">dLegendreS()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#bsph2bxyz"><code class="xref py py-func docutils literal notranslate"><span class="pre">Bsph2Bxyz()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#bxyz2bsph"><code class="xref py py-func docutils literal notranslate"><span class="pre">Bxyz2Bsph()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#calcexcitationsfft"><code class="xref py py-func docutils literal notranslate"><span class="pre">CalcExcitationsFFT()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#convertswarmcdf"><code class="xref py py-func docutils literal notranslate"><span class="pre">ConvertSwarmCDF()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#excitationspectrum"><code class="xref py py-func docutils literal notranslate"><span class="pre">ExcitationSpectrum()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#getbodyparams"><code class="xref py py-func docutils literal notranslate"><span class="pre">GetBodyParams()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#getbplotandlsq"><code class="xref py py-func docutils literal notranslate"><span class="pre">GetBplotAndLsq()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#getbplotandlsqmoon"><code class="xref py py-func docutils literal notranslate"><span class="pre">GetBplotAndLsqMoon()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#getbplotandlsqneptune"><code class="xref py py-func docutils literal notranslate"><span class="pre">GetBplotAndLsqNeptune()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#getgausscoeffs"><code class="xref py py-func docutils literal notranslate"><span class="pre">GetGaussCoeffs()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#getmodelopts"><code class="xref py py-func docutils literal notranslate"><span class="pre">GetModelOpts()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#getmoondist"><code class="xref py py-func docutils literal notranslate"><span class="pre">GetMoonDist()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#getposspice"><code class="xref py py-func docutils literal notranslate"><span class="pre">GetPosSpice()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#gettargetmoondist"><code class="xref py py-func docutils literal notranslate"><span class="pre">GetTargetMoonDist()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#loadspice"><code class="xref py py-func docutils literal notranslate"><span class="pre">LoadSpice()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#lshelltrace"><code class="xref py py-func docutils literal notranslate"><span class="pre">LshellTrace()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pca-decomposition"><code class="xref py py-func docutils literal notranslate"><span class="pre">PCA_decomposition()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#plotspectrum"><code class="xref py py-func docutils literal notranslate"><span class="pre">PlotSpectrum()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#rotatebspice"><code class="xref py py-func docutils literal notranslate"><span class="pre">RotateBspice()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#module-modelCoeffs.printIGRFcoeffs">Model coefficient functions</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#modelCoeffs.printIGRFcoeffs.printIGRFcoeffs"><code class="docutils literal notranslate"><span class="pre">printIGRFcoeffs()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#coeffsbode1994g"><code class="xref py py-func docutils literal notranslate"><span class="pre">coeffsBode1994G()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="pythonModules.html">PlanetMag python documentation</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu"  style="background: #2980B9" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">PlanetMag</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Matlab supporting functions</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/functions.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="matlab-supporting-functions">
+<h1>Matlab supporting functions<a class="headerlink" href="#matlab-supporting-functions" title="Permalink to this heading"></a></h1>
+<section id="calculation-functions">
+<h2>Calculation functions<a class="headerlink" href="#calculation-functions" title="Permalink to this heading"></a></h2>
+<section id="magfldparent">
+<h3><code class="xref py py-func docutils literal notranslate"><span class="pre">MagFldParent()</span></code><a class="headerlink" href="#magfldparent" title="Permalink to this heading"></a></h3>
+<dl class="mat function">
+<dt class="sig sig-object mat" id="functions.MagFldParent">
+<span class="sig-prename descclassname"><span class="pre">functions.</span></span><span class="sig-name descname"><span class="pre">MagFldParent</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">planet</span></em>, <em class="sig-param"><span class="pre">r_km</span></em>, <em class="sig-param"><span class="pre">theta</span></em>, <em class="sig-param"><span class="pre">phi</span></em>, <em class="sig-param"><span class="pre">InternalFieldModel</span></em>, <em class="sig-param"><span class="pre">ExternalFieldModel</span></em>, <em class="sig-param"><span class="pre">magPhase_deg</span></em>, <em class="sig-param"><span class="pre">SPHOUT</span></em>, <em class="sig-param"><span class="pre">Nmaxin</span></em><span class="sig-paren">)</span><a class="headerlink" href="#functions.MagFldParent" title="Permalink to this definition"></a></dt>
+<dd><p>Evaluate the magnetic field of the desired planet at specified locations
+according to the specified internal and external field models.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>planet</strong> (<span><code class="xref mat mat-obj docutils literal notranslate"><span class="pre">char,</span> <span class="pre">1xC</span></code></span>) – Name of the planet for which to evaluate the field.</p></li>
+<li><p><strong>r_km</strong> (<span><code class="xref mat mat-obj docutils literal notranslate"><span class="pre">double,</span> <span class="pre">1xN</span></code></span>) – Radius of evaluation points in km from planet barycenter.</p></li>
+<li><p><strong>theta</strong> (<span><code class="xref mat mat-obj docutils literal notranslate"><span class="pre">double,</span> <span class="pre">1xN</span></code></span>) – Planetocentric colatitude of evaluation points in rad. Must be the same
+length as r_km.</p></li>
+<li><p><strong>phi</strong> (<span><code class="xref mat mat-obj docutils literal notranslate"><span class="pre">double,</span> <span class="pre">1xN</span></code></span>) – Planetocentric east longitude of evaluation points in rad. Must be the
+same length as r_km.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><strong>Bvec_nT</strong> (<em>double, 3xN</em>) – Magnetic field vector in standard coordinates (typically IAU or
+spherical coordinates if SPHOUT is true) at evaluation points in nT. Output rows are x, y, z
+respectively for cartesian or r, theta, phi for spherical.</p></li>
+<li><p><strong>Mdip_nT</strong> (<em>double, 1x3</em>) – Dipole magnetic moment in standard coordinates, as surface-equivalent
+nT, i.e. this value times the planet volume yields the magnetic moment in SI units.</p></li>
+<li><p><strong>Odip_km</strong> (<em>double 1x3</em>) – Dipole magnetic moment offset in km from planet barycenter in
+standard coordinates.</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The standard reference frames used for each body, except as noted below, are IAU_BODY. The only exceptions to this rule are:</p>
+<ul class="simple">
+<li><p>Uranus uses the US3 frame: System III coordinates with +z along the spin pole, opposite the
+direction of IAU_URANUS.</p></li>
+<li><p>Neptune uses the NLS frame: The Neptune Longitude System derived from magnetic data.
+IAU_NEPTUNE is a System II coordinate system that rotates with a stable atmospheric feature
+at a different rate than the magnetic rotation rate inferred from Voyager 2 data.</p></li>
+</ul>
+<p>All standard frames rotate with the body (planet or moon).</p>
+</div>
+</dd></dl>
+
+</section>
+<section id="ksmagfldjupiter">
+<h3><code class="xref py py-func docutils literal notranslate"><span class="pre">KSMagFldJupiter()</span></code><a class="headerlink" href="#ksmagfldjupiter" title="Permalink to this heading"></a></h3>
+<dl class="mat function">
+<dt class="sig sig-object mat" id="functions.KSMagFldJupiter">
+<span class="sig-prename descclassname"><span class="pre">functions.</span></span><span class="sig-name descname"><span class="pre">KSMagFldJupiter</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">r_km</span></em>, <em class="sig-param"><span class="pre">theta</span></em>, <em class="sig-param"><span class="pre">phi</span></em>, <em class="sig-param"><span class="pre">ets</span></em>, <em class="sig-param"><span class="pre">SPHOUT</span></em><span class="sig-paren">)</span><a class="headerlink" href="#functions.KSMagFldJupiter" title="Permalink to this definition"></a></dt>
+<dd><p>Calculate magnetic field vectors, magnetic dipole moment,
+and dipole offset in System III coordinates based on VIP4
+Jupiter field model, plus the latest evolution of the Khurana
+current sheet model from K. Khurana.</p>
+</dd></dl>
+
+</section>
+<section id="mpausefld">
+<h3><code class="xref py py-func docutils literal notranslate"><span class="pre">MpauseFld()</span></code><a class="headerlink" href="#mpausefld" title="Permalink to this heading"></a></h3>
+<dl class="mat function">
+<dt class="sig sig-object mat" id="functions.MpauseFld">
+<span class="sig-prename descclassname"><span class="pre">functions.</span></span><span class="sig-name descname"><span class="pre">MpauseFld</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">nSW_pcc</span></em>, <em class="sig-param"><span class="pre">vSW_kms</span></em>, <em class="sig-param"><span class="pre">ets</span></em>, <em class="sig-param"><span class="pre">xyz_km</span></em>, <em class="sig-param"><span class="pre">Mdip_nT</span></em>, <em class="sig-param"><span class="pre">Odip_km</span></em>, <em class="sig-param"><span class="pre">S3coords</span></em>, <em class="sig-param"><span class="pre">parentName</span></em>, <em class="sig-param"><span class="pre">MPmodel</span></em>, <em class="sig-param"><span class="pre">SPHOUT</span></em>, <em class="sig-param"><span class="pre">Nmax</span></em><span class="sig-paren">)</span><a class="headerlink" href="#functions.MpauseFld" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</section>
+<section id="magfldparentsingle">
+<h3><code class="xref py py-func docutils literal notranslate"><span class="pre">MagFldParentSingle()</span></code><a class="headerlink" href="#magfldparentsingle" title="Permalink to this heading"></a></h3>
+<dl class="mat function">
+<dt class="sig sig-object mat" id="functions.MagFldParentSingle">
+<span class="sig-prename descclassname"><span class="pre">functions.</span></span><span class="sig-name descname"><span class="pre">MagFldParentSingle</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">g</span></em>, <em class="sig-param"><span class="pre">h</span></em>, <em class="sig-param"><span class="pre">r_km</span></em>, <em class="sig-param"><span class="pre">theta</span></em>, <em class="sig-param"><span class="pre">phi</span></em>, <em class="sig-param"><span class="pre">PlanetEqRadius</span></em>, <em class="sig-param"><span class="pre">InternalFieldModel</span></em>, <em class="sig-param"><span class="pre">ExternalFieldModel</span></em>, <em class="sig-param"><span class="pre">magPhase_deg</span></em>, <em class="sig-param"><span class="pre">Nmax</span></em>, <em class="sig-param"><span class="pre">NmaxExt</span></em>, <em class="sig-param"><span class="pre">SPHOUT</span></em><span class="sig-paren">)</span><a class="headerlink" href="#functions.MagFldParentSingle" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</section>
+<section id="legendrep">
+<h3><code class="xref py py-func docutils literal notranslate"><span class="pre">LegendreP()</span></code><a class="headerlink" href="#legendrep" title="Permalink to this heading"></a></h3>
+<dl class="mat function">
+<dt class="sig sig-object mat" id="functions.LegendreP">
+<span class="sig-prename descclassname"><span class="pre">functions.</span></span><span class="sig-name descname"><span class="pre">LegendreP</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">n</span></em>, <em class="sig-param"><span class="pre">m</span></em>, <em class="sig-param"><span class="pre">theta</span></em>, <em class="sig-param"><span class="pre">UNNORM</span></em><span class="sig-paren">)</span><a class="headerlink" href="#functions.LegendreP" title="Permalink to this definition"></a></dt>
+<dd><p>n ( or l) = degree m = order</p>
+</dd></dl>
+
+</section>
+<section id="legendres">
+<h3><code class="xref py py-func docutils literal notranslate"><span class="pre">LegendreS()</span></code><a class="headerlink" href="#legendres" title="Permalink to this heading"></a></h3>
+<dl class="mat function">
+<dt class="sig sig-object mat" id="functions.LegendreS">
+<span class="sig-prename descclassname"><span class="pre">functions.</span></span><span class="sig-name descname"><span class="pre">LegendreS</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">n</span></em>, <em class="sig-param"><span class="pre">m</span></em>, <em class="sig-param"><span class="pre">theta</span></em>, <em class="sig-param"><span class="pre">UNNORM</span></em><span class="sig-paren">)</span><a class="headerlink" href="#functions.LegendreS" title="Permalink to this definition"></a></dt>
+<dd><p>n ( or l) = degree m = order</p>
+</dd></dl>
+
+</section>
+<section id="dlegendrep">
+<h3><code class="xref py py-func docutils literal notranslate"><span class="pre">dLegendreP()</span></code><a class="headerlink" href="#dlegendrep" title="Permalink to this heading"></a></h3>
+<dl class="mat function">
+<dt class="sig sig-object mat" id="functions.dLegendreP">
+<span class="sig-prename descclassname"><span class="pre">functions.</span></span><span class="sig-name descname"><span class="pre">dLegendreP</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">n</span></em>, <em class="sig-param"><span class="pre">m</span></em>, <em class="sig-param"><span class="pre">theta</span></em>, <em class="sig-param"><span class="pre">UNNORM</span></em><span class="sig-paren">)</span><a class="headerlink" href="#functions.dLegendreP" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</section>
+<section id="dlegendres">
+<h3><code class="xref py py-func docutils literal notranslate"><span class="pre">dLegendreS()</span></code><a class="headerlink" href="#dlegendres" title="Permalink to this heading"></a></h3>
+<dl class="mat function">
+<dt class="sig sig-object mat" id="functions.dLegendreS">
+<span class="sig-prename descclassname"><span class="pre">functions.</span></span><span class="sig-name descname"><span class="pre">dLegendreS</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">n</span></em>, <em class="sig-param"><span class="pre">m</span></em>, <em class="sig-param"><span class="pre">theta</span></em>, <em class="sig-param"><span class="pre">UNNORM</span></em><span class="sig-paren">)</span><a class="headerlink" href="#functions.dLegendreS" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</section>
+<section id="bsph2bxyz">
+<h3><code class="xref py py-func docutils literal notranslate"><span class="pre">Bsph2Bxyz()</span></code><a class="headerlink" href="#bsph2bxyz" title="Permalink to this heading"></a></h3>
+<dl class="mat function">
+<dt class="sig sig-object mat" id="functions.Bsph2Bxyz">
+<span class="sig-prename descclassname"><span class="pre">functions.</span></span><span class="sig-name descname"><span class="pre">Bsph2Bxyz</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">Br</span></em>, <em class="sig-param"><span class="pre">Bth</span></em>, <em class="sig-param"><span class="pre">Bphi</span></em>, <em class="sig-param"><span class="pre">theta</span></em>, <em class="sig-param"><span class="pre">phi</span></em><span class="sig-paren">)</span><a class="headerlink" href="#functions.Bsph2Bxyz" title="Permalink to this definition"></a></dt>
+<dd><p>Convert vector components aligned to spherical coordinates
+into vector components aligned to cartesian axes.
+Source: Arfken, Weber, Harris, Mathematical Methods for Physicists,
+7th ed, pg. 199 for the unit vectors.</p>
+</dd></dl>
+
+</section>
+<section id="bxyz2bsph">
+<h3><code class="xref py py-func docutils literal notranslate"><span class="pre">Bxyz2Bsph()</span></code><a class="headerlink" href="#bxyz2bsph" title="Permalink to this heading"></a></h3>
+<dl class="mat function">
+<dt class="sig sig-object mat" id="functions.Bxyz2Bsph">
+<span class="sig-prename descclassname"><span class="pre">functions.</span></span><span class="sig-name descname"><span class="pre">Bxyz2Bsph</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">Bx</span></em>, <em class="sig-param"><span class="pre">By</span></em>, <em class="sig-param"><span class="pre">Bz</span></em>, <em class="sig-param"><span class="pre">theta</span></em>, <em class="sig-param"><span class="pre">phi</span></em><span class="sig-paren">)</span><a class="headerlink" href="#functions.Bxyz2Bsph" title="Permalink to this definition"></a></dt>
+<dd><p>Convert vector components aligned to cartesian axes
+into vector components aligned to spherical coordinates.
+Source: Arfken, Weber, Harris, Mathematical Methods for Physicists,
+7th ed, pg. 199 for the unit vectors.</p>
+</dd></dl>
+
+</section>
+<section id="calcexcitationsfft">
+<h3><code class="xref py py-func docutils literal notranslate"><span class="pre">CalcExcitationsFFT()</span></code><a class="headerlink" href="#calcexcitationsfft" title="Permalink to this heading"></a></h3>
+<dl class="mat function">
+<dt class="sig sig-object mat" id="functions.CalcExcitationsFFT">
+<span class="sig-prename descclassname"><span class="pre">functions.</span></span><span class="sig-name descname"><span class="pre">CalcExcitationsFFT</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#functions.CalcExcitationsFFT" title="Permalink to this definition"></a></dt>
+<dd><dl class="simple">
+<dt>NOTE: This script evaluates excitation moments with an FFT method.</dt><dd><p>This method is not recommended, as fine-tuning the sampling of the
+time series data to well-resolve one peak in the Fourier spectrum
+will necessarily contribute to spectral leakage for all other
+non-harmonic peaks. This forces the phases of each excitation
+moment relative to the reference time (J2000) to be incorrect.
+Instead, the method applied using principle component
+decomposition in PlanetMag is recommended.</p>
+</dd>
+</dl>
+<p>Procedure:
+0. Download SPICE kernels listed in loadSpice.
+1. Run a spectrum for a lot of eval points, ~1M+. Since Tinterest_h is
+not set, the synodic period is used and the periods with peaks above 1 nT
+are all returned.
+2. Run one spectrum per period of interest and save the resulting peak
+heights in x, y, and z to a text file.</p>
+</dd></dl>
+
+</section>
+<section id="convertswarmcdf">
+<h3><code class="xref py py-func docutils literal notranslate"><span class="pre">ConvertSwarmCDF()</span></code><a class="headerlink" href="#convertswarmcdf" title="Permalink to this heading"></a></h3>
+<dl class="mat function">
+<dt class="sig sig-object mat" id="functions.ConvertSwarmCDF">
+<span class="sig-prename descclassname"><span class="pre">functions.</span></span><span class="sig-name descname"><span class="pre">ConvertSwarmCDF</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">fNameIn</span></em>, <em class="sig-param"><span class="pre">fNameOut</span></em><span class="sig-paren">)</span><a class="headerlink" href="#functions.ConvertSwarmCDF" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</section>
+<section id="excitationspectrum">
+<h3><code class="xref py py-func docutils literal notranslate"><span class="pre">ExcitationSpectrum()</span></code><a class="headerlink" href="#excitationspectrum" title="Permalink to this heading"></a></h3>
+<dl class="mat function">
+<dt class="sig sig-object mat" id="functions.ExcitationSpectrum">
+<span class="sig-prename descclassname"><span class="pre">functions.</span></span><span class="sig-name descname"><span class="pre">ExcitationSpectrum</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">moonName</span></em>, <em class="sig-param"><span class="pre">nOsc</span></em>, <em class="sig-param"><span class="pre">rate</span></em>, <em class="sig-param"><span class="pre">Tinterest_h</span></em>, <em class="sig-param"><span class="pre">DO_EPO</span></em>, <em class="sig-param"><span class="pre">SPHOUT</span></em>, <em class="sig-param"><span class="pre">DO_MPAUSE</span></em><span class="sig-paren">)</span><a class="headerlink" href="#functions.ExcitationSpectrum" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</section>
+<section id="getbodyparams">
+<h3><code class="xref py py-func docutils literal notranslate"><span class="pre">GetBodyParams()</span></code><a class="headerlink" href="#getbodyparams" title="Permalink to this heading"></a></h3>
+<dl class="mat function">
+<dt class="sig sig-object mat" id="functions.GetBodyParams">
+<span class="sig-prename descclassname"><span class="pre">functions.</span></span><span class="sig-name descname"><span class="pre">GetBodyParams</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">moonName</span></em><span class="sig-paren">)</span><a class="headerlink" href="#functions.GetBodyParams" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</section>
+<section id="getbplotandlsq">
+<h3><code class="xref py py-func docutils literal notranslate"><span class="pre">GetBplotAndLsq()</span></code><a class="headerlink" href="#getbplotandlsq" title="Permalink to this heading"></a></h3>
+<dl class="mat function">
+<dt class="sig sig-object mat" id="functions.GetBplotAndLsq">
+<span class="sig-prename descclassname"><span class="pre">functions.</span></span><span class="sig-name descname"><span class="pre">GetBplotAndLsq</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">ets</span></em>, <em class="sig-param"><span class="pre">t_h</span></em>, <em class="sig-param"><span class="pre">r_km</span></em>, <em class="sig-param"><span class="pre">theta</span></em>, <em class="sig-param"><span class="pre">phi</span></em>, <em class="sig-param"><span class="pre">xyz_km</span></em>, <em class="sig-param"><span class="pre">BrSC</span></em>, <em class="sig-param"><span class="pre">BthSC</span></em>, <em class="sig-param"><span class="pre">BphiSC</span></em>, <em class="sig-param"><span class="pre">scName</span></em>, <em class="sig-param"><span class="pre">parentName</span></em>, <em class="sig-param"><span class="pre">S3coords</span></em>, <em class="sig-param"><span class="pre">orbStr</span></em>, <em class="sig-param"><span class="pre">opt</span></em>, <em class="sig-param"><span class="pre">MPopt</span></em>, <em class="sig-param"><span class="pre">SEQUENTIAL</span></em>, <em class="sig-param"><span class="pre">jt_h</span></em><span class="sig-paren">)</span><a class="headerlink" href="#functions.GetBplotAndLsq" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</section>
+<section id="getbplotandlsqmoon">
+<h3><code class="xref py py-func docutils literal notranslate"><span class="pre">GetBplotAndLsqMoon()</span></code><a class="headerlink" href="#getbplotandlsqmoon" title="Permalink to this heading"></a></h3>
+<dl class="mat function">
+<dt class="sig sig-object mat" id="functions.GetBplotAndLsqMoon">
+<span class="sig-prename descclassname"><span class="pre">functions.</span></span><span class="sig-name descname"><span class="pre">GetBplotAndLsqMoon</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">ets</span></em>, <em class="sig-param"><span class="pre">t_h</span></em>, <em class="sig-param"><span class="pre">r_km</span></em>, <em class="sig-param"><span class="pre">theta</span></em>, <em class="sig-param"><span class="pre">phi</span></em>, <em class="sig-param"><span class="pre">xyz_km</span></em>, <em class="sig-param"><span class="pre">r_RM</span></em>, <em class="sig-param"><span class="pre">BxSC</span></em>, <em class="sig-param"><span class="pre">BySC</span></em>, <em class="sig-param"><span class="pre">BzSC</span></em>, <em class="sig-param"><span class="pre">scName</span></em>, <em class="sig-param"><span class="pre">parentName</span></em>, <em class="sig-param"><span class="pre">S3coords</span></em>, <em class="sig-param"><span class="pre">moonName</span></em>, <em class="sig-param"><span class="pre">era</span></em>, <em class="sig-param"><span class="pre">fbStr</span></em>, <em class="sig-param"><span class="pre">opt</span></em>, <em class="sig-param"><span class="pre">MPopt</span></em>, <em class="sig-param"><span class="pre">SEQUENTIAL</span></em>, <em class="sig-param"><span class="pre">jt_h</span></em><span class="sig-paren">)</span><a class="headerlink" href="#functions.GetBplotAndLsqMoon" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</section>
+<section id="getbplotandlsqneptune">
+<h3><code class="xref py py-func docutils literal notranslate"><span class="pre">GetBplotAndLsqNeptune()</span></code><a class="headerlink" href="#getbplotandlsqneptune" title="Permalink to this heading"></a></h3>
+<dl class="mat function">
+<dt class="sig sig-object mat" id="functions.GetBplotAndLsqNeptune">
+<span class="sig-prename descclassname"><span class="pre">functions.</span></span><span class="sig-name descname"><span class="pre">GetBplotAndLsqNeptune</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">ets</span></em>, <em class="sig-param"><span class="pre">t_h</span></em>, <em class="sig-param"><span class="pre">r_km</span></em>, <em class="sig-param"><span class="pre">theta</span></em>, <em class="sig-param"><span class="pre">phi</span></em>, <em class="sig-param"><span class="pre">xyz_km</span></em>, <em class="sig-param"><span class="pre">BrSC</span></em>, <em class="sig-param"><span class="pre">BthSC</span></em>, <em class="sig-param"><span class="pre">BphiSC</span></em>, <em class="sig-param"><span class="pre">scName</span></em>, <em class="sig-param"><span class="pre">parentName</span></em>, <em class="sig-param"><span class="pre">S3coords</span></em>, <em class="sig-param"><span class="pre">orbStr</span></em>, <em class="sig-param"><span class="pre">opt</span></em>, <em class="sig-param"><span class="pre">MPopt</span></em>, <em class="sig-param"><span class="pre">SEQUENTIAL</span></em>, <em class="sig-param"><span class="pre">exclude</span></em><span class="sig-paren">)</span><a class="headerlink" href="#functions.GetBplotAndLsqNeptune" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</section>
+<section id="getgausscoeffs">
+<h3><code class="xref py py-func docutils literal notranslate"><span class="pre">GetGaussCoeffs()</span></code><a class="headerlink" href="#getgausscoeffs" title="Permalink to this heading"></a></h3>
+<dl class="mat function">
+<dt class="sig sig-object mat" id="functions.GetGaussCoeffs">
+<span class="sig-prename descclassname"><span class="pre">functions.</span></span><span class="sig-name descname"><span class="pre">GetGaussCoeffs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">planet</span></em>, <em class="sig-param"><span class="pre">InternalFieldModel</span></em><span class="sig-paren">)</span><a class="headerlink" href="#functions.GetGaussCoeffs" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</section>
+<section id="getmodelopts">
+<h3><code class="xref py py-func docutils literal notranslate"><span class="pre">GetModelOpts()</span></code><a class="headerlink" href="#getmodelopts" title="Permalink to this heading"></a></h3>
+<dl class="mat function">
+<dt class="sig sig-object mat" id="functions.GetModelOpts">
+<span class="sig-prename descclassname"><span class="pre">functions.</span></span><span class="sig-name descname"><span class="pre">GetModelOpts</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">parentName</span></em>, <em class="sig-param"><span class="pre">opt</span></em>, <em class="sig-param"><span class="pre">MPopt</span></em><span class="sig-paren">)</span><a class="headerlink" href="#functions.GetModelOpts" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</section>
+<section id="getmoondist">
+<h3><code class="xref py py-func docutils literal notranslate"><span class="pre">GetMoonDist()</span></code><a class="headerlink" href="#getmoondist" title="Permalink to this heading"></a></h3>
+<dl class="mat function">
+<dt class="sig sig-object mat" id="functions.GetMoonDist">
+<span class="sig-prename descclassname"><span class="pre">functions.</span></span><span class="sig-name descname"><span class="pre">GetMoonDist</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">sc</span></em>, <em class="sig-param"><span class="pre">parentName</span></em>, <em class="sig-param"><span class="pre">ets</span></em><span class="sig-paren">)</span><a class="headerlink" href="#functions.GetMoonDist" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</section>
+<section id="getposspice">
+<h3><code class="xref py py-func docutils literal notranslate"><span class="pre">GetPosSpice()</span></code><a class="headerlink" href="#getposspice" title="Permalink to this heading"></a></h3>
+<dl class="mat function">
+<dt class="sig sig-object mat" id="functions.GetPosSpice">
+<span class="sig-prename descclassname"><span class="pre">functions.</span></span><span class="sig-name descname"><span class="pre">GetPosSpice</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">moonName</span></em>, <em class="sig-param"><span class="pre">parentName</span></em>, <em class="sig-param"><span class="pre">t_h</span></em>, <em class="sig-param"><span class="pre">S3coords</span></em><span class="sig-paren">)</span><a class="headerlink" href="#functions.GetPosSpice" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</section>
+<section id="gettargetmoondist">
+<h3><code class="xref py py-func docutils literal notranslate"><span class="pre">GetTargetMoonDist()</span></code><a class="headerlink" href="#gettargetmoondist" title="Permalink to this heading"></a></h3>
+<dl class="mat function">
+<dt class="sig sig-object mat" id="functions.GetTargetMoonDist">
+<span class="sig-prename descclassname"><span class="pre">functions.</span></span><span class="sig-name descname"><span class="pre">GetTargetMoonDist</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">sc</span></em>, <em class="sig-param"><span class="pre">moonName</span></em>, <em class="sig-param"><span class="pre">parentName</span></em>, <em class="sig-param"><span class="pre">ets</span></em><span class="sig-paren">)</span><a class="headerlink" href="#functions.GetTargetMoonDist" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</section>
+<section id="loadspice">
+<h3><code class="xref py py-func docutils literal notranslate"><span class="pre">LoadSpice()</span></code><a class="headerlink" href="#loadspice" title="Permalink to this heading"></a></h3>
+<dl class="mat function">
+<dt class="sig sig-object mat" id="functions.LoadSpice">
+<span class="sig-prename descclassname"><span class="pre">functions.</span></span><span class="sig-name descname"><span class="pre">LoadSpice</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">moonName</span></em>, <em class="sig-param"><span class="pre">sc</span></em><span class="sig-paren">)</span><a class="headerlink" href="#functions.LoadSpice" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</section>
+<section id="lshelltrace">
+<h3><code class="xref py py-func docutils literal notranslate"><span class="pre">LshellTrace()</span></code><a class="headerlink" href="#lshelltrace" title="Permalink to this heading"></a></h3>
+<dl class="mat function">
+<dt class="sig sig-object mat" id="functions.LshellTrace">
+<span class="sig-prename descclassname"><span class="pre">functions.</span></span><span class="sig-name descname"><span class="pre">LshellTrace</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">parentName</span></em>, <em class="sig-param"><span class="pre">opt</span></em>, <em class="sig-param"><span class="pre">MPopt</span></em>, <em class="sig-param"><span class="pre">DO_MPAUSE</span></em>, <em class="sig-param"><span class="pre">sc</span></em>, <em class="sig-param"><span class="pre">t_h</span></em>, <em class="sig-param"><span class="pre">Nmaxin</span></em><span class="sig-paren">)</span><a class="headerlink" href="#functions.LshellTrace" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</section>
+<section id="pca-decomposition">
+<h3><code class="xref py py-func docutils literal notranslate"><span class="pre">PCA_decomposition()</span></code><a class="headerlink" href="#pca-decomposition" title="Permalink to this heading"></a></h3>
+<dl class="mat function">
+<dt class="sig sig-object mat" id="functions.PCA_decomposition">
+<span class="sig-prename descclassname"><span class="pre">functions.</span></span><span class="sig-name descname"><span class="pre">PCA_decomposition</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">ets</span></em>, <em class="sig-param"><span class="pre">moonName</span></em>, <em class="sig-param"><span class="pre">parentName</span></em>, <em class="sig-param"><span class="pre">Bvec</span></em>, <em class="sig-param"><span class="pre">descrip</span></em>, <em class="sig-param"><span class="pre">SPHOUT</span></em>, <em class="sig-param"><span class="pre">PLOT_DIAGNOSTIC</span></em>, <em class="sig-param"><span class="pre">COMPARE_SEUFERT</span></em><span class="sig-paren">)</span><a class="headerlink" href="#functions.PCA_decomposition" title="Permalink to this definition"></a></dt>
+<dd><p>Evaluates the excitation moments of the input time series Bx, By, and Bz
+by the method of Principal Component Analysis (PCA).
+In this method, the expected oscillation frequencies are each used to
+create “principal components”, the sinusoidal oscillations associated
+with each frequency (both cos and sin, for the real and imaginary part of
+e^-iωt, respectively). The principal components are used to construct a
+matrix, X, where each principal component is a row in X. The inverse of
+X^T * X is then calculated, which yields the eigenvectors as columns.
+Multiplying (Bi*X) by the column-eigenvector matrix then weights the
+principal components according to their degree of representation in the
+input series (where Bi is one of Bx/By/Bz or Br/Btheta/Bphi etc). This calculation is made
+for each B component to get the excitation moments for each.</p>
+</dd></dl>
+
+</section>
+<section id="plotspectrum">
+<h3><code class="xref py py-func docutils literal notranslate"><span class="pre">PlotSpectrum()</span></code><a class="headerlink" href="#plotspectrum" title="Permalink to this heading"></a></h3>
+<dl class="mat function">
+<dt class="sig sig-object mat" id="functions.PlotSpectrum">
+<span class="sig-prename descclassname"><span class="pre">functions.</span></span><span class="sig-name descname"><span class="pre">PlotSpectrum</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">moonName</span></em><span class="sig-paren">)</span><a class="headerlink" href="#functions.PlotSpectrum" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</section>
+<section id="rotatebspice">
+<h3><code class="xref py py-func docutils literal notranslate"><span class="pre">RotateBspice()</span></code><a class="headerlink" href="#rotatebspice" title="Permalink to this heading"></a></h3>
+<dl class="mat function">
+<dt class="sig sig-object mat" id="functions.RotateBspice">
+<span class="sig-prename descclassname"><span class="pre">functions.</span></span><span class="sig-name descname"><span class="pre">RotateBspice</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">Bx</span></em>, <em class="sig-param"><span class="pre">By</span></em>, <em class="sig-param"><span class="pre">Bz</span></em>, <em class="sig-param"><span class="pre">ets</span></em>, <em class="sig-param"><span class="pre">spkParent</span></em>, <em class="sig-param"><span class="pre">spkMoon</span></em><span class="sig-paren">)</span><a class="headerlink" href="#functions.RotateBspice" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</section>
+</section>
+<section id="module-modelCoeffs.printIGRFcoeffs">
+<span id="model-coefficient-functions"></span><h2>Model coefficient functions<a class="headerlink" href="#module-modelCoeffs.printIGRFcoeffs" title="Permalink to this heading"></a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="modelCoeffs.printIGRFcoeffs.printIGRFcoeffs">
+<span class="sig-prename descclassname"><span class="pre">modelCoeffs.printIGRFcoeffs.</span></span><span class="sig-name descname"><span class="pre">printIGRFcoeffs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fNameIn</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'IGRF13.shc'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fNameOut</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'coeffsEarthIGRF13'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">datDir</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'modelCoeffs'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#modelCoeffs.printIGRFcoeffs.printIGRFcoeffs" title="Permalink to this definition"></a></dt>
+<dd><p>Convert IGRF-13 spherical harmonic coefficients described in IGRF13.shc to a PlanetMag-compatible
+format.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>fNameIn</strong> (<em>str</em><em>, </em><em>default='IGRF13.shc'</em>) – File name for table of spherical harmonics</p></li>
+<li><p><strong>fNameOut</strong> (<em>str</em><em>, </em><em>default='coeffsEarthIGRF13'</em>) – File name base for output .csv files (one for g, one for h)</p></li>
+<li><p><strong>datDir</strong> (<em>str</em>) – Relative directory path where fNameIn is found and to which fNameOut will be printed</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<section id="coeffsbode1994g">
+<h3><code class="xref py py-func docutils literal notranslate"><span class="pre">coeffsBode1994G()</span></code><a class="headerlink" href="#coeffsbode1994g" title="Permalink to this heading"></a></h3>
+<dl class="mat function">
+<dt class="sig sig-object mat" id="modelCoeffs.coeffsBode1994G">
+<span class="sig-prename descclassname"><span class="pre">modelCoeffs.</span></span><span class="sig-name descname"><span class="pre">coeffsBode1994G</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">alpha</span></em><span class="sig-paren">)</span><a class="headerlink" href="#modelCoeffs.coeffsBode1994G" title="Permalink to this definition"></a></dt>
+<dd><p>Calculate magnetopause field coefficients for use with Engle (1992)
+method as a function of dipole “precession angle” alpha, as fit by
+Bode (1994) – see <a class="reference external" href="https://apps.dtic.mil/sti/pdfs/ADA284857.pdf">https://apps.dtic.mil/sti/pdfs/ADA284857.pdf</a>.
+alpha = 0 is when the the dipole nod longitude is at local noon.</p>
+</dd></dl>
+
+</section>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="primary.html" class="btn btn-neutral float-left" title="PlanetMag Matlab run scripts" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="pythonModules.html" class="btn btn-neutral float-right" title="PlanetMag python documentation" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, California Institute of Technology.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
