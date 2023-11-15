@@ -20,12 +20,18 @@ github_url = 'https://github.com/coreyjcochrane/planetmag'
 
 extensions = ['sphinx.ext.autodoc',
               'sphinx.ext.napoleon',
+              'sphinxcontrib.apidoc',
               'sphinxcontrib.matlab',
               'myst_parser']
 source_suffix = ['.rst', '.md']
 matlab_src_dir = os.path.abspath('..')
 sys.path.insert(0, os.path.abspath('../'))
-autodoc_member_order = 'alphabetical'
+
+apidoc_module_dir = '../'
+apidoc_output_dir = 'stubs/'
+apidoc_excluded_paths = ['config*', 'setup.py']
+apidoc_separate_modules = True
+apidoc_module_first = True
 
 templates_path = ['_templates']
 exclude_patterns = ['_build', 'Thumbs.db', '.DS_Store']
