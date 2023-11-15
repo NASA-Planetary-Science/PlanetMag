@@ -18,10 +18,10 @@ github_url = 'https://github.com/coreyjcochrane/planetmag'
 # -- General configuration ---------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#general-configuration
 
-extensions = ['sphinxcontrib.matlab',
-              'sphinx.ext.autodoc',
-              'myst_parser',
-              'sphinx.ext.napoleon']
+extensions = ['sphinx.ext.autodoc',
+              'sphinx.ext.napoleon',
+              'sphinxcontrib.matlab',
+              'myst_parser']
 source_suffix = ['.rst', '.md']
 matlab_src_dir = os.path.abspath('..')
 sys.path.insert(0, os.path.abspath('../'))
