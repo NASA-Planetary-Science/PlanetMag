@@ -33,6 +33,7 @@ sys.path.insert(0, _ROOT_DIR)
 #sys.path.insert(0, _PACKAGE_DIR)
 
 matlab_src_dir = _ROOT_DIR
+matlab_auto_link = 'all'
 
 apidoc_module_dir = _ROOT_DIR
 apidoc_output_dir = 'stubs'

@@ -1,8 +1,28 @@
 function Gnm = coeffsBode1994G(alpha)
-    % Calculate magnetopause field coefficients for use with Engle (1992)
-    % method as a function of dipole "precession angle" alpha, as fit by
-    % Bode (1994) -- see https://apps.dtic.mil/sti/pdfs/ADA284857.pdf.
-    % alpha = 0 is when the the dipole nod longitude is at local noon.
+% **Gnm**
+%
+% Calculate magnetopause field coefficients as fit by Bode (1994).
+%
+% For use with Engle (1992) method as a function of dipole "precession angle" alpha for Jupiter
+% See https://apps.dtic.mil/sti/pdfs/ADA284857.pdf.
+%
+% Parameters
+% ----------
+% alpha : double, 1xN
+%   Nod longitude for planetary dipole moment in degrees. This is the angle between the equatorial
+%   projection of the magnetic dipole moment vector and the direction of the Sun.
+%   alpha = 0 is when the the dipole north nod longitude is at local noon.
+%
+% Returns
+% -------
+% outputName : type, dims
+%   Description.
+
+% Part of the PlanetMag framework for evaluation and study of planetary magnetic fields.
+% Created by Corey J. Cochrane and Marshall J. Styczinski
+% Maintained by Marshall J. Styczinski
+% Contact: corey.j.cochrane@jpl.nasa.gov
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
     npts = length(alpha);
     Gnm = zeros(10, 11, npts);

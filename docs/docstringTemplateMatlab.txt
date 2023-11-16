@@ -38,7 +38,7 @@
 % Contact: corey.j.cochrane@jpl.nasa.gov
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-Keep the above informational notice intact, separated by docstring by an empty line, not preceded
+Keep the above informational notice intact, separated from docstring by an empty line, not preceded
 by a %. The informational notice must appear in the first function in each file, AFTER the
 docstring.
 
@@ -52,12 +52,12 @@ where it's required!):
 % Parameters
 % ----------
 % inputName : type, dims
-%     Description.
+%   Description.
 %
 % Returns
 % -------
 % outputName : type, dims
-%     Description.
+%   Description.
 
 % Part of the PlanetMag framework for evaluation and study of planetary magnetic fields.
 % Created by Corey J. Cochrane and Marshall J. Styczinski

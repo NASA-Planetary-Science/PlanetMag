@@ -1,5 +1,5 @@
-function PlanetMag(moonName, era, coordType, CALC_NEW, ALL_MODELS, DO_FFT, DO_MPAUSE, specificModel, ...
-    specificMPmodel, outData, nptsApprox, magPhase)
+function PlanetMag(moonName, era, coordType, CALC_NEW, ALL_MODELS, DO_FFT, DO_MPAUSE, ...
+    specificModel, specificMPmodel, outData, nptsApprox, magPhase)
 % Evaluates planetary magnetic field for a time series at the specified moon location and inverts
 % for the complex amplitudes of oscillation in that moon's frame.
 %
@@ -26,13 +26,20 @@ function PlanetMag(moonName, era, coordType, CALC_NEW, ALL_MODELS, DO_FFT, DO_MP
 % CALC_NEW : bool
 %   Whether to perform calculations or attempt to reload saved data for plotting purposes.
 % ALL_MODELS : bool
+%   Whether to run all implemented model options for the desired body.
 % DO_FFT : bool
+%   Whether to calculate and print an FFT from the time series after performing the inversion.
 % DO_MPAUSE : bool
+%   Whether to include a magnetopause screening current model.
 % specificModel : int
+%   Index number for the magnetospheric model to run. Options depend on the body, and setting to
+%   0 selects the default model. See GetModelOpts for a description of the options.
 % specificMPmodel : int
+%   Index number for the magnetopause model to run if DO_MPAUSE is true. 0 selects the default
+%   model See MpauseFld for a description of the options.
 % outData : char, 1xF
-%   Directory to use for output complex spectrum amplitudes.
-% nptsApprox : int 
+%   Directory to use for output of complex spectrum amplitudes.
+% nptsApprox : int
 %   Desired number of points to use in time series for inversion. A whole number of the period of 
 %   interest (typically synodic period, as it is the strongest oscillation) will ultimately be 
 %   selected, which is why this number is approximate.
