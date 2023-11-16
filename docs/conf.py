@@ -24,16 +24,24 @@ extensions = ['sphinx.ext.autodoc',
               'sphinxcontrib.matlab',
               'myst_parser']
 source_suffix = ['.rst', '.md']
-matlab_src_dir = os.path.abspath('..')
-sys.path.insert(0, os.path.abspath('../'))
 
-apidoc_module_dir = '../'
-apidoc_output_dir = 'stubs/'
+_HERE = os.path.dirname(__file__)
+_ROOT_DIR = os.path.abspath(os.path.join(_HERE, '..'))
+#_PACKAGE_DIR = os.path.abspath(os.path.join(_HERE, '../PlanetMag'))  # Not needed until Python conversion
+
+sys.path.insert(0, _ROOT_DIR)
+#sys.path.insert(0, _PACKAGE_DIR)
+
+matlab_src_dir = _ROOT_DIR
+
+apidoc_module_dir = _ROOT_DIR
+apidoc_output_dir = 'stubs'
+apidoc_template_dir = 'templates'
 apidoc_excluded_paths = ['config*', 'setup.py']
 apidoc_separate_modules = True
 apidoc_module_first = True
 
-templates_path = ['_templates']
+templates_path = ['templates']
 exclude_patterns = ['_build', 'Thumbs.db', '.DS_Store']
 
 
