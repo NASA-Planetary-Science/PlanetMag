@@ -1,3 +1,5 @@
+.. role:: mat:func
+   :class: func
 .. role:: func
    :class: func
 
@@ -10,138 +12,138 @@ Calculation functions
 .. mat:module:: functions
    :noindex:
 
-:func:`MagFldParent`
-++++++++++++++++++++
+:mat:func:`MagFldParent`
+++++++++++++++++++++++++
 
 .. mat:autofunction:: MagFldParent
 
-:func:`KSMagFldJupiter`
-+++++++++++++++++++++++
+:mat:func:`KSMagFldJupiter`
++++++++++++++++++++++++++++
 
 .. mat:autofunction:: KSMagFldJupiter
 
-:func:`MpauseFld`
-+++++++++++++++++
+:mat:func:`MpauseFld`
++++++++++++++++++++++
 
 .. mat:autofunction:: MpauseFld
 
-:func:`MagFldParentSingle`
-++++++++++++++++++++++++++
+:mat:func:`MagFldParentSingle`
+++++++++++++++++++++++++++++++
 
 .. mat:autofunction:: MagFldParentSingle
 
-:func:`LegendreP`
-+++++++++++++++++
+:mat:func:`LegendreP`
++++++++++++++++++++++
 
 .. mat:autofunction:: LegendreP
 
-:func:`LegendreS`
-+++++++++++++++++
+:mat:func:`LegendreS`
++++++++++++++++++++++
 
 .. mat:autofunction:: LegendreS
 
-:func:`dLegendreP`
-++++++++++++++++++
+:mat:func:`dLegendreP`
+++++++++++++++++++++++
 
 .. mat:autofunction:: dLegendreP
 
-:func:`dLegendreS`
-++++++++++++++++++
+:mat:func:`dLegendreS`
+++++++++++++++++++++++
 
 .. mat:autofunction:: dLegendreS
 
-:func:`Bsph2Bxyz`
-+++++++++++++++++
+:mat:func:`Bsph2Bxyz`
++++++++++++++++++++++
 
 .. mat:autofunction:: Bsph2Bxyz
 
-:func:`Bxyz2Bsph`
-+++++++++++++++++
+:mat:func:`Bxyz2Bsph`
++++++++++++++++++++++
 
 .. mat:autofunction:: Bxyz2Bsph
 
-:func:`CalcExcitationsFFT`
-++++++++++++++++++++++++++
+:mat:func:`CalcExcitationsFFT`
+++++++++++++++++++++++++++++++
 
 .. mat:autofunction:: CalcExcitationsFFT
 
-:func:`ConvertSwarmCDF`
-+++++++++++++++++++++++
+:mat:func:`ConvertSwarmCDF`
++++++++++++++++++++++++++++
 
 .. mat:autofunction:: ConvertSwarmCDF
 
-:func:`ExcitationSpectrum`
-++++++++++++++++++++++++++
+:mat:func:`ExcitationSpectrum`
+++++++++++++++++++++++++++++++
 
 .. mat:autofunction:: ExcitationSpectrum
 
-:func:`GetBodyParams`
-+++++++++++++++++++++
+:mat:func:`GetBodyParams`
++++++++++++++++++++++++++
 
 .. mat:autofunction:: GetBodyParams
 
-:func:`GetBplotAndLsq`
-++++++++++++++++++++++
+:mat:func:`GetBplotAndLsq`
+++++++++++++++++++++++++++
 
 .. mat:autofunction:: GetBplotAndLsq
 
-:func:`GetBplotAndLsqMoon`
-++++++++++++++++++++++++++
+:mat:func:`GetBplotAndLsqMoon`
+++++++++++++++++++++++++++++++
 
 .. mat:autofunction:: GetBplotAndLsqMoon
 
-:func:`GetBplotAndLsqNeptune`
-+++++++++++++++++++++++++++++
+:mat:func:`GetBplotAndLsqNeptune`
++++++++++++++++++++++++++++++++++
 
 .. mat:autofunction:: GetBplotAndLsqNeptune
 
-:func:`GetGaussCoeffs`
-++++++++++++++++++++++
+:mat:func:`GetGaussCoeffs`
+++++++++++++++++++++++++++
 
 .. mat:autofunction:: GetGaussCoeffs
 
-:func:`GetModelOpts`
-++++++++++++++++++++
+:mat:func:`GetModelOpts`
+++++++++++++++++++++++++
 
 .. mat:autofunction:: GetModelOpts
 
-:func:`GetMoonDist`
-+++++++++++++++++++
+:mat:func:`GetMoonDist`
++++++++++++++++++++++++
 
 .. mat:autofunction:: GetMoonDist
 
-:func:`GetPosSpice`
-+++++++++++++++++++
+:mat:func:`GetPosSpice`
++++++++++++++++++++++++
 
 .. mat:autofunction:: GetPosSpice
 
-:func:`GetTargetMoonDist`
-+++++++++++++++++++++++++
+:mat:func:`GetTargetMoonDist`
++++++++++++++++++++++++++++++
 
 .. mat:autofunction:: GetTargetMoonDist
 
-:func:`LoadSpice`
-+++++++++++++++++
+:mat:func:`LoadSpice`
++++++++++++++++++++++
 
 .. mat:autofunction:: LoadSpice
 
-:func:`LshellTrace`
-+++++++++++++++++++
+:mat:func:`LshellTrace`
++++++++++++++++++++++++
 
 .. mat:autofunction:: LshellTrace
 
-:func:`PCA_decomposition`
-+++++++++++++++++++++++++
+:mat:func:`PCA_decomposition`
++++++++++++++++++++++++++++++
 
 .. mat:autofunction:: PCA_decomposition
 
-:func:`PlotSpectrum`
-++++++++++++++++++++
+:mat:func:`PlotSpectrum`
+++++++++++++++++++++++++
 
 .. mat:autofunction:: PlotSpectrum
 
-:func:`RotateBspice`
-++++++++++++++++++++
+:mat:func:`RotateBspice`
+++++++++++++++++++++++++
 
 .. mat:autofunction:: RotateBspice
 

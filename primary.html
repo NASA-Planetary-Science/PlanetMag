@@ -49,12 +49,12 @@
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="readme.html">README</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">PlanetMag Matlab run scripts</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#planetmag"><code class="xref py py-func docutils literal notranslate"><span class="pre">PlanetMag()</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="#compareearmodels"><code class="xref py py-func docutils literal notranslate"><span class="pre">CompareEarModels()</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="#comparejupmodels"><code class="xref py py-func docutils literal notranslate"><span class="pre">CompareJupModels()</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="#comparesatmodels"><code class="xref py py-func docutils literal notranslate"><span class="pre">CompareSatModels()</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="#compareuramodels"><code class="xref py py-func docutils literal notranslate"><span class="pre">CompareUraModels()</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="#comparenepmodels"><code class="xref py py-func docutils literal notranslate"><span class="pre">CompareNepModels()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#planetmag"><code class="xref mat mat-func docutils literal notranslate"><span class="pre">PlanetMag()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#compareearmodels"><code class="xref mat mat-func docutils literal notranslate"><span class="pre">CompareEarModels()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#comparejupmodels"><code class="xref mat mat-func docutils literal notranslate"><span class="pre">CompareJupModels()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#comparesatmodels"><code class="xref mat mat-func docutils literal notranslate"><span class="pre">CompareSatModels()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#compareuramodels"><code class="xref mat mat-func docutils literal notranslate"><span class="pre">CompareUraModels()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#comparenepmodels"><code class="xref mat mat-func docutils literal notranslate"><span class="pre">CompareNepModels()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#spherical-harmonics-validation">Spherical harmonics validation</a></li>
 </ul>
 </li>
@@ -89,7 +89,7 @@
   <section id="planetmag-matlab-run-scripts">
 <h1>PlanetMag Matlab run scripts<a class="headerlink" href="#planetmag-matlab-run-scripts" title="Permalink to this heading"></a></h1>
 <section id="planetmag">
-<h2><code class="xref py py-func docutils literal notranslate"><span class="pre">PlanetMag()</span></code><a class="headerlink" href="#planetmag" title="Permalink to this heading"></a></h2>
+<h2><a class="reference internal" href="#PlanetMag" title="PlanetMag"><code class="xref mat mat-func docutils literal notranslate"><span class="pre">PlanetMag()</span></code></a><a class="headerlink" href="#planetmag" title="Permalink to this heading"></a></h2>
 <dl class="mat function">
 <dt class="sig sig-object mat" id="PlanetMag">
 <span class="sig-name descname"><span class="pre">PlanetMag</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">moonName</span></em>, <em class="sig-param"><span class="pre">era</span></em>, <em class="sig-param"><span class="pre">coordType</span></em>, <em class="sig-param"><span class="pre">CALC_NEW</span></em>, <em class="sig-param"><span class="pre">ALL_MODELS</span></em>, <em class="sig-param"><span class="pre">DO_FFT</span></em>, <em class="sig-param"><span class="pre">DO_MPAUSE</span></em>, <em class="sig-param"><span class="pre">specificModel</span></em>, <em class="sig-param"><span class="pre">specificMPmodel</span></em>, <em class="sig-param"><span class="pre">outData</span></em>, <em class="sig-param"><span class="pre">nptsApprox</span></em>, <em class="sig-param"><span class="pre">magPhase</span></em><span class="sig-paren">)</span><a class="headerlink" href="#PlanetMag" title="Permalink to this definition"></a></dt>
@@ -120,12 +120,14 @@ for the complex amplitudes of oscillation in that moon’s frame.</p>
 </div></blockquote>
 </p></li>
 <li><p><strong>CALC_NEW</strong> (<span><code class="xref mat mat-obj docutils literal notranslate"><span class="pre">bool</span></code></span>) – Whether to perform calculations or attempt to reload saved data for plotting purposes.</p></li>
-<li><p><strong>ALL_MODELS</strong> (<span><code class="xref mat mat-obj docutils literal notranslate"><span class="pre">bool</span></code></span>) – </p></li>
-<li><p><strong>DO_FFT</strong> (<span><code class="xref mat mat-obj docutils literal notranslate"><span class="pre">bool</span></code></span>) – </p></li>
-<li><p><strong>DO_MPAUSE</strong> (<span><code class="xref mat mat-obj docutils literal notranslate"><span class="pre">bool</span></code></span>) – </p></li>
-<li><p><strong>specificModel</strong> (<span><code class="xref mat mat-obj docutils literal notranslate"><span class="pre">int</span></code></span>) – </p></li>
-<li><p><strong>specificMPmodel</strong> (<span><code class="xref mat mat-obj docutils literal notranslate"><span class="pre">int</span></code></span>) – </p></li>
-<li><p><strong>outData</strong> (<span><code class="xref mat mat-obj docutils literal notranslate"><span class="pre">char,</span> <span class="pre">1xF</span></code></span>) – Directory to use for output complex spectrum amplitudes.</p></li>
+<li><p><strong>ALL_MODELS</strong> (<span><code class="xref mat mat-obj docutils literal notranslate"><span class="pre">bool</span></code></span>) – Whether to run all implemented model options for the desired body.</p></li>
+<li><p><strong>DO_FFT</strong> (<span><code class="xref mat mat-obj docutils literal notranslate"><span class="pre">bool</span></code></span>) – Whether to calculate and print an FFT from the time series after performing the inversion.</p></li>
+<li><p><strong>DO_MPAUSE</strong> (<span><code class="xref mat mat-obj docutils literal notranslate"><span class="pre">bool</span></code></span>) – Whether to include a magnetopause screening current model.</p></li>
+<li><p><strong>specificModel</strong> (<span><code class="xref mat mat-obj docutils literal notranslate"><span class="pre">int</span></code></span>) – Index number for the magnetospheric model to run. Options depend on the body, and setting to
+0 selects the default model. See <code class="xref py py-func docutils literal notranslate"><span class="pre">GetModelOpts()</span></code> for a description of the options.</p></li>
+<li><p><strong>specificMPmodel</strong> (<span><code class="xref mat mat-obj docutils literal notranslate"><span class="pre">int</span></code></span>) – Index number for the magnetopause model to run if DO_MPAUSE is true. 0 selects the default
+model See <code class="xref py py-func docutils literal notranslate"><span class="pre">MpauseFld()</span></code> for a description of the options.</p></li>
+<li><p><strong>outData</strong> (<span><code class="xref mat mat-obj docutils literal notranslate"><span class="pre">char,</span> <span class="pre">1xF</span></code></span>) – Directory to use for output of complex spectrum amplitudes.</p></li>
 <li><p><strong>nptsApprox</strong> (<span><code class="xref mat mat-obj docutils literal notranslate"><span class="pre">int</span></code></span>) – Desired number of points to use in time series for inversion. A whole number of the period of
 interest (typically synodic period, as it is the strongest oscillation) will ultimately be
 selected, which is why this number is approximate.</p></li>
@@ -137,7 +139,7 @@ selected, which is why this number is approximate.</p></li>
 
 </section>
 <section id="compareearmodels">
-<h2><code class="xref py py-func docutils literal notranslate"><span class="pre">CompareEarModels()</span></code><a class="headerlink" href="#compareearmodels" title="Permalink to this heading"></a></h2>
+<h2><a class="reference internal" href="#comparison.CompareEarModels" title="comparison.CompareEarModels"><code class="xref mat mat-func docutils literal notranslate"><span class="pre">CompareEarModels()</span></code></a><a class="headerlink" href="#compareearmodels" title="Permalink to this heading"></a></h2>
 <dl class="mat function">
 <dt class="sig sig-object mat" id="comparison.CompareEarModels">
 <span class="sig-prename descclassname"><span class="pre">comparison.</span></span><span class="sig-name descname"><span class="pre">CompareEarModels</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#comparison.CompareEarModels" title="Permalink to this definition"></a></dt>
@@ -147,7 +149,7 @@ magnetic field model(s).</p>
 
 </section>
 <section id="comparejupmodels">
-<h2><code class="xref py py-func docutils literal notranslate"><span class="pre">CompareJupModels()</span></code><a class="headerlink" href="#comparejupmodels" title="Permalink to this heading"></a></h2>
+<h2><a class="reference internal" href="#comparison.CompareJupModels" title="comparison.CompareJupModels"><code class="xref mat mat-func docutils literal notranslate"><span class="pre">CompareJupModels()</span></code></a><a class="headerlink" href="#comparejupmodels" title="Permalink to this heading"></a></h2>
 <dl class="mat function">
 <dt class="sig sig-object mat" id="comparison.CompareJupModels">
 <span class="sig-prename descclassname"><span class="pre">comparison.</span></span><span class="sig-name descname"><span class="pre">CompareJupModels</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#comparison.CompareJupModels" title="Permalink to this definition"></a></dt>
@@ -157,7 +159,7 @@ magnetic field model(s).</p>
 
 </section>
 <section id="comparesatmodels">
-<h2><code class="xref py py-func docutils literal notranslate"><span class="pre">CompareSatModels()</span></code><a class="headerlink" href="#comparesatmodels" title="Permalink to this heading"></a></h2>
+<h2><a class="reference internal" href="#comparison.CompareSatModels" title="comparison.CompareSatModels"><code class="xref mat mat-func docutils literal notranslate"><span class="pre">CompareSatModels()</span></code></a><a class="headerlink" href="#comparesatmodels" title="Permalink to this heading"></a></h2>
 <dl class="mat function">
 <dt class="sig sig-object mat" id="comparison.CompareSatModels">
 <span class="sig-prename descclassname"><span class="pre">comparison.</span></span><span class="sig-name descname"><span class="pre">CompareSatModels</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#comparison.CompareSatModels" title="Permalink to this definition"></a></dt>
@@ -167,7 +169,7 @@ magnetic field model(s).</p>
 
 </section>
 <section id="compareuramodels">
-<h2><code class="xref py py-func docutils literal notranslate"><span class="pre">CompareUraModels()</span></code><a class="headerlink" href="#compareuramodels" title="Permalink to this heading"></a></h2>
+<h2><a class="reference internal" href="#comparison.CompareUraModels" title="comparison.CompareUraModels"><code class="xref mat mat-func docutils literal notranslate"><span class="pre">CompareUraModels()</span></code></a><a class="headerlink" href="#compareuramodels" title="Permalink to this heading"></a></h2>
 <dl class="mat function">
 <dt class="sig sig-object mat" id="comparison.CompareUraModels">
 <span class="sig-prename descclassname"><span class="pre">comparison.</span></span><span class="sig-name descname"><span class="pre">CompareUraModels</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#comparison.CompareUraModels" title="Permalink to this definition"></a></dt>
@@ -177,7 +179,7 @@ magnetic field model(s).</p>
 
 </section>
 <section id="comparenepmodels">
-<h2><code class="xref py py-func docutils literal notranslate"><span class="pre">CompareNepModels()</span></code><a class="headerlink" href="#comparenepmodels" title="Permalink to this heading"></a></h2>
+<h2><a class="reference internal" href="#comparison.CompareNepModels" title="comparison.CompareNepModels"><code class="xref mat mat-func docutils literal notranslate"><span class="pre">CompareNepModels()</span></code></a><a class="headerlink" href="#comparenepmodels" title="Permalink to this heading"></a></h2>
 <dl class="mat function">
 <dt class="sig sig-object mat" id="comparison.CompareNepModels">
 <span class="sig-prename descclassname"><span class="pre">comparison.</span></span><span class="sig-name descname"><span class="pre">CompareNepModels</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#comparison.CompareNepModels" title="Permalink to this definition"></a></dt>

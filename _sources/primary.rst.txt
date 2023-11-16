@@ -1,39 +1,42 @@
+.. role:: mat:func
+   :class: func
+
 PlanetMag Matlab run scripts
 ============================
 
 .. mat:module:: .
    :noindex:
 
-:func:`PlanetMag`
-+++++++++++++++++
+:mat:func:`PlanetMag`
++++++++++++++++++++++
 
 .. mat:autofunction:: PlanetMag
 
 .. mat:module:: comparison
    :noindex:
 
-:func:`CompareEarModels`
-++++++++++++++++++++++++
+:mat:func:`CompareEarModels`
+++++++++++++++++++++++++++++
 
 .. mat:autofunction:: CompareEarModels
 
-:func:`CompareJupModels`
-++++++++++++++++++++++++
+:mat:func:`CompareJupModels`
+++++++++++++++++++++++++++++
 
 .. mat:autofunction:: CompareJupModels
 
-:func:`CompareSatModels`
-++++++++++++++++++++++++
+:mat:func:`CompareSatModels`
+++++++++++++++++++++++++++++
 
 .. mat:autofunction:: CompareSatModels
 
-:func:`CompareUraModels`
-++++++++++++++++++++++++
+:mat:func:`CompareUraModels`
+++++++++++++++++++++++++++++
 
 .. mat:autofunction:: CompareUraModels
 
-:func:`CompareNepModels`
-++++++++++++++++++++++++
+:mat:func:`CompareNepModels`
+++++++++++++++++++++++++++++
 
 .. mat:autofunction:: CompareNepModels
 
