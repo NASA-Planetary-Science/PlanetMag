@@ -21,7 +21,7 @@
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="PlanetMag python documentation" href="pythonModules.html" />
+    <link rel="next" title="PlanetMag Python documentation" href="pythonModules.html" />
     <link rel="prev" title="PlanetMag Matlab run scripts" href="primary.html" /> 
 </head>
 
@@ -87,7 +87,7 @@
 </li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="pythonModules.html">PlanetMag python documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="pythonModules.html">PlanetMag Python documentation</a></li>
 </ul>
 
         </div>
@@ -440,20 +440,21 @@ format.</p>
 <dt class="sig sig-object mat" id="modelCoeffs.coeffsBode1994G">
 <span class="sig-prename descclassname"><span class="pre">modelCoeffs.</span></span><span class="sig-name descname"><span class="pre">coeffsBode1994G</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">alpha</span></em><span class="sig-paren">)</span><a class="headerlink" href="#modelCoeffs.coeffsBode1994G" title="Permalink to this definition"></a></dt>
 <dd><p><strong>Gnm</strong></p>
-<p>Calculate magnetopause field coefficients as fit by Bode (1994).</p>
-<p>For use with Engle (1992) method as a function of dipole “precession angle” alpha for Jupiter
+<p>Calculate Jupiter magnetopause field coefficients as fit by Bode (1994).</p>
+<p>For use with Engle (1992) method as a function of dipole “precession angle” alpha for Jupiter.
 See <a class="reference external" href="https://apps.dtic.mil/sti/pdfs/ADA284857.pdf">https://apps.dtic.mil/sti/pdfs/ADA284857.pdf</a>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>alpha</strong> (<span><code class="xref mat mat-obj docutils literal notranslate"><span class="pre">double,</span> <span class="pre">1xN</span></code></span>) – Nod longitude for planetary dipole moment in degrees. This is the angle between the equatorial
 projection of the magnetic dipole moment vector and the direction of the Sun.
-alpha = 0 is when the the dipole north nod longitude is at local noon.</p>
+alpha = 0 is when the the dipole nod longitude is at local noon.</p>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p><strong>outputName</strong> – Description.</p>
+<dd class="field-even"><p><strong>Gnm</strong> – Numerical coefficients that describe the fit by Bode (1994) for each dipole angle alpha in the
+time series to be modeled.</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>type, dims</p>
+<dd class="field-odd"><p>double, 10x11xN</p>
 </dd>
 </dl>
 </dd></dl>
@@ -467,7 +468,7 @@ alpha = 0 is when the the dipole north nod longitude is at local noon.</p>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
         <a href="primary.html" class="btn btn-neutral float-left" title="PlanetMag Matlab run scripts" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="pythonModules.html" class="btn btn-neutral float-right" title="PlanetMag python documentation" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="pythonModules.html" class="btn btn-neutral float-right" title="PlanetMag Python documentation" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>
