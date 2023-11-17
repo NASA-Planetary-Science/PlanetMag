@@ -1,5 +1,3 @@
-% **FuncName**
-%
 % Brief description of function purpose.
 %
 % Extended description or important information needed for correct function use.
@@ -45,8 +43,6 @@ docstring.
 Copy-pastable bare template (the entire rest of this file--don't forget the informational notice
 where it's required!):
 
-% **FuncName**
-%
 % Brief description.
 %
 % Parameters

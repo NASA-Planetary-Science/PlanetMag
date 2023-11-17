@@ -1,6 +1,4 @@
 function Gnm = coeffsBode1994G(alpha)
-% **Gnm**
-%
 % Calculate Jupiter magnetopause field coefficients as fit by Bode (1994).
 %
 % For use with Engle (1992) method as a function of dipole "precession angle" alpha for Jupiter.
