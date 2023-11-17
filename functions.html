@@ -18,6 +18,7 @@
         <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js?v=0ec76b63"></script>
         <script src="_static/doctools.js?v=888ff710"></script>
         <script src="_static/sphinx_highlight.js?v=4825356b"></script>
+        <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
@@ -130,10 +131,10 @@ according to the specified internal and external field models.</p>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>planet</strong> (<span><code class="xref mat mat-obj docutils literal notranslate"><span class="pre">char,</span> <span class="pre">1xC</span></code></span>) – Name of the planet for which to evaluate the field.</p></li>
 <li><p><strong>r_km</strong> (<span><code class="xref mat mat-obj docutils literal notranslate"><span class="pre">double,</span> <span class="pre">1xN</span></code></span>) – Radius of evaluation points in km from planet barycenter.</p></li>
-<li><p><strong>theta</strong> (<span><code class="xref mat mat-obj docutils literal notranslate"><span class="pre">double,</span> <span class="pre">1xN</span></code></span>) – Planetocentric colatitude of evaluation points in rad. Must be the same
-length as r_km.</p></li>
-<li><p><strong>phi</strong> (<span><code class="xref mat mat-obj docutils literal notranslate"><span class="pre">double,</span> <span class="pre">1xN</span></code></span>) – Planetocentric east longitude of evaluation points in rad. Must be the
-same length as r_km.</p></li>
+<li><p><strong>theta</strong> (<span><code class="xref mat mat-obj docutils literal notranslate"><span class="pre">double,</span> <span class="pre">1xN</span></code></span>) – Planetocentric colatitude of evaluation points in radians. Must be the same length as r_km.</p></li>
+<li><p><strong>phi</strong> (<span><code class="xref mat mat-obj docutils literal notranslate"><span class="pre">double,</span> <span class="pre">1xN</span></code></span>) – Planetocentric east longitude of evaluation points in radians. Must be the same length as r_km.</p></li>
+<li><p><strong>InternalFieldModel</strong> (<span><code class="xref mat mat-obj docutils literal notranslate"><span class="pre">char,</span> <span class="pre">1xD</span></code></span>) – Code name for planetary intrinsic field model to evaluate. The only recognized option is
+<code class="docutils literal notranslate"><span class="pre">'None'</span></code>. If any other</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
@@ -239,9 +240,9 @@ vectors.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>Br</strong> (<span><code class="xref mat mat-obj docutils literal notranslate"><span class="pre">double,</span> <span class="pre">1xN</span></code></span>) – Radial (r-hat) component of vectors to be converted.</p></li>
-<li><p><strong>Bth</strong> (<span><code class="xref mat mat-obj docutils literal notranslate"><span class="pre">double,</span> <span class="pre">1xN</span></code></span>) – Colatitudinal (theta-hat) component of vectors to be converted.</p></li>
-<li><p><strong>Bphi</strong> (<span><code class="xref mat mat-obj docutils literal notranslate"><span class="pre">double,</span> <span class="pre">1xN</span></code></span>) – Longitudinal (phi-hat) component of vectors to be converted.</p></li>
+<li><p><strong>Br</strong> (<span><code class="xref mat mat-obj docutils literal notranslate"><span class="pre">double,</span> <span class="pre">1xN</span></code></span>) – Radial (<span class="math notranslate nohighlight">\(\hat{r}\)</span>) component of vectors to be converted.</p></li>
+<li><p><strong>Bth</strong> (<span><code class="xref mat mat-obj docutils literal notranslate"><span class="pre">double,</span> <span class="pre">1xN</span></code></span>) – Colatitudinal (<span class="math notranslate nohighlight">\(\hat{\theta}\)</span>) component of vectors to be converted.</p></li>
+<li><p><strong>Bphi</strong> (<span><code class="xref mat mat-obj docutils literal notranslate"><span class="pre">double,</span> <span class="pre">1xN</span></code></span>) – Longitudinal (<span class="math notranslate nohighlight">\(\hat{\phi}\)</span>) component of vectors to be converted.</p></li>
 <li><p><strong>theta</strong> (<span><code class="xref mat mat-obj docutils literal notranslate"><span class="pre">double,</span> <span class="pre">1xN</span></code></span>) – Colatitude for each location associated with each (Br, Bth, Bphi) vector in radians.</p></li>
 <li><p><strong>phi</strong> (<span><code class="xref mat mat-obj docutils literal notranslate"><span class="pre">double,</span> <span class="pre">1xN</span></code></span>) – East longitude for each location associated with each (Br, Bth, Bphi) vector in radians.</p></li>
 </ul>
@@ -280,9 +281,9 @@ vectors.</p>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p><ul class="simple">
-<li><p><strong>Br</strong> (<em>double, 1xN</em>) – Radial (r-hat) component of converted vectors.</p></li>
-<li><p><strong>Bth</strong> (<em>double, 1xN</em>) – Colatitudinal (theta-hat) component of converted vectors.</p></li>
-<li><p><strong>Bphi</strong> (<em>double, 1xN</em>) – Longitudinal (phi-hat) component of converted vectors.</p></li>
+<li><p><strong>Br</strong> (<em>double, 1xN</em>) – Radial (<span class="math notranslate nohighlight">\(\hat{r}\)</span>) component of converted vectors.</p></li>
+<li><p><strong>Bth</strong> (<em>double, 1xN</em>) – Colatitudinal (<span class="math notranslate nohighlight">\(\hat{\theta}\)</span>) component of converted vectors.</p></li>
+<li><p><strong>Bphi</strong> (<em>double, 1xN</em>) – Longitudinal (<span class="math notranslate nohighlight">\(\hat{\phi}\)</span>) component of converted vectors.</p></li>
 </ul>
 </p>
 </dd>
@@ -486,7 +487,7 @@ See <a class="reference external" href="https://apps.dtic.mil/sti/pdfs/ADA284857
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>alpha</strong> (<span><code class="xref mat mat-obj docutils literal notranslate"><span class="pre">double,</span> <span class="pre">1xN</span></code></span>) – Nod longitude for planetary dipole moment in degrees. This is the angle between the equatorial
 projection of the magnetic dipole moment vector and the direction of the Sun.
-alpha = 0 is when the the dipole nod longitude is at local noon.</p>
+<code class="docutils literal notranslate"><span class="pre">alpha</span> <span class="pre">=</span> <span class="pre">0</span></code> is when the the dipole nod longitude is at local noon.</p>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p><strong>Gnm</strong> – Numerical coefficients that describe the fit by Bode (1994) for each dipole angle alpha in the
