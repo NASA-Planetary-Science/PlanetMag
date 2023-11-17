@@ -1,50 +1,69 @@
-function PlanetMag(moonName, era, coordType, CALC_NEW, ALL_MODELS, DO_FFT, DO_MPAUSE, ...
-    specificModel, specificMPmodel, outData, nptsApprox, magPhase)
+function [T_h, B0vec, B1vec1, B1vec2, B1vec3, outFname, header] = PlanetMag(moonName, era, ...
+    coordType, CALC_NEW, ALL_MODELS, DO_FFT, DO_MPAUSE, specificModel, specificMPmodel, ...
+    outData, nptsApprox, magPhase)
 % Evaluates planetary magnetic field for a time series at the specified moon location and inverts
 % for the complex amplitudes of oscillation in that moon's frame.
 %
+% This function is intended to be run as a script, so all parameters are optional. 
+%
 % Parameters
 % ----------
-% moonName : char, 1xC
+% moonName : char, 1xC, default='Europa'
 %   Name of target moon for which to generate magnetic spectrum amplitudes.
-% era : char, 1xD
+% era : char, 1xD, default='Galileo'
 %   Time period over which measurements will be evaluated. Options:
 %
-%     - 'Swarm'
-%     - 'Galileo'
-%     - 'Cassini'
-%     - 'Juno'
-%     - 'Clipper'
-%     - 'Voyager'
+%     - ``'Swarm'``
+%     - ``'Galileo'``
+%     - ``'Cassini'``
+%     - ``'Juno'``
+%     - ``'Clipper'``
+%     - ``'Voyager'``
 %
-% coordType : char, 1xE
+% coordType : char, 1xE, default='IAU'
 %   Desired standard coordinates for magnetic spectrum inversion. Options:
 % 
-%     - 'IAU'
-%     - 'SPRH'
+%     - ``'IAU'``
+%     - ``'SPRH'``
 %
-% CALC_NEW : bool
+% CALC_NEW : bool, default=1
 %   Whether to perform calculations or attempt to reload saved data for plotting purposes.
-% ALL_MODELS : bool
+% ALL_MODELS : bool, default=0
 %   Whether to run all implemented model options for the desired body.
-% DO_FFT : bool
+% DO_FFT : bool, default=0
 %   Whether to calculate and print an FFT from the time series after performing the inversion.
-% DO_MPAUSE : bool
+% DO_MPAUSE : bool, default=0
 %   Whether to include a magnetopause screening current model.
-% specificModel : int
+% specificModel : int, default=0
 %   Index number for the magnetospheric model to run. Options depend on the body, and setting to
 %   0 selects the default model. See GetModelOpts for a description of the options.
-% specificMPmodel : int
+% specificMPmodel : int, default=0
 %   Index number for the magnetopause model to run if DO_MPAUSE is true. 0 selects the default
 %   model See MpauseFld for a description of the options.
-% outData : char, 1xF
+% outData : char, 1xF, default='out/'
 %   Directory to use for output of complex spectrum amplitudes.
-% nptsApprox : int
+% nptsApprox : int, default=12*365.25*3*24
 %   Desired number of points to use in time series for inversion. A whole number of the period of 
 %   interest (typically synodic period, as it is the strongest oscillation) will ultimately be 
 %   selected, which is why this number is approximate.
-% magPhase : double
+% magPhase : double, default=0
 %   Arbitrary offset in degrees by which to rotate the magnetospheric field evaluation.
+%
+% Returns
+% -------
+% T_h : double, 1xP
+%   Oscillation periods of significant peaks in the excitation spectrum in hours.
+% B0vec : double, 1x3
+%   Time-independent background magnetic field vector from evaluated time series in nT in the
+%   selected coordinates.
+% B1vec1, B1vec2, B1vec3 : complex double, 1xP
+%   Degree-1 complex excitation moments inverted from the evaluated time series in nT at the body
+%   center. Components 1, 2, and 3 are aligned with, respectively, x, y, z or r, theta, phi
+%   depending on the selected coordinates.
+% outFname : char, 1xC
+%   Output file name to which the excitations moments were written.
+% header : char, 1xD
+%   Column header printed to output file, which contains information about what data were saved.
 
 % Part of the PlanetMag framework for evaluation and study of planetary magnetic fields.
 % Created by Corey J. Cochrane and Marshall J. Styczinski
@@ -222,6 +241,7 @@ for opt=opts
         B0vec1 = BD.Bdvec1o * ones(1,npeaks);
         B0vec2 = BD.Bdvec2o * ones(1,npeaks);
         B0vec3 = BD.Bdvec3o * ones(1,npeaks);
+        B0vec = [BD.Bdvec1o, BD.Bdvec2o, BD.Bdvec3o];
         B1vec1_Re = BD.Bdvec1i;
         B1vec1_Im = BD.Bdvec1q;
         B1vec2_Re = BD.Bdvec2i;

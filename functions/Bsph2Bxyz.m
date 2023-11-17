@@ -9,11 +9,11 @@ function [Bx, By, Bz] = Bsph2Bxyz(Br, Bth, Bphi, theta, phi)
 % Parameters
 % ----------
 % Br : double, 1xN
-%   Radial (r-hat) component of vectors to be converted.
+%   Radial (:math:`\hat{r}`) component of vectors to be converted.
 % Bth : double, 1xN
-%   Colatitudinal (theta-hat) component of vectors to be converted.
+%   Colatitudinal (:math:`\hat{\theta}`) component of vectors to be converted.
 % Bphi : double, 1xN
-%   Longitudinal (phi-hat) component of vectors to be converted.
+%   Longitudinal (:math:`\hat{\phi}`) component of vectors to be converted.
 % theta : double, 1xN
 %   Colatitude for each location associated with each (Br, Bth, Bphi) vector in radians.
 % phi : double, 1xN

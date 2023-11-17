@@ -1,5 +1,5 @@
-function [Bvec_nT, Mdip_nT, Odip_km] = MagFldParent(planet, r_km, theta, phi, InternalFieldModel, ...
-                       ExternalFieldModel, magPhase_deg, SPHOUT, Nmaxin)
+function [Bvec_nT, Mdip_nT, Odip_km] = MagFldParent(planet, r_km, theta, phi, ...
+    InternalFieldModel, ExternalFieldModel, magPhase_deg, SPHOUT, Nmaxin)
 % Evaluate the magnetic field of the desired planet at specified locations 
 % according to the specified internal and external field models.
 % 
@@ -10,11 +10,12 @@ function [Bvec_nT, Mdip_nT, Odip_km] = MagFldParent(planet, r_km, theta, phi, In
 % r_km : double, 1xN
 %   Radius of evaluation points in km from planet barycenter.
 % theta : double, 1xN
-%   Planetocentric colatitude of evaluation points in rad. Must be the same
-%   length as r_km.
+%   Planetocentric colatitude of evaluation points in radians. Must be the same length as r_km.
 % phi : double, 1xN
-%   Planetocentric east longitude of evaluation points in rad. Must be the 
-%   same length as r_km.
+%   Planetocentric east longitude of evaluation points in radians. Must be the same length as r_km.
+% InternalFieldModel : char, 1xD
+%   Code name for planetary intrinsic field model to evaluate. The only recognized option is
+%   ``'None'``. If any other 
 %
 % Returns
 % -------

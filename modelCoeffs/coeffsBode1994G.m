@@ -9,7 +9,7 @@ function Gnm = coeffsBode1994G(alpha)
 % alpha : double, 1xN
 %   Nod longitude for planetary dipole moment in degrees. This is the angle between the equatorial
 %   projection of the magnetic dipole moment vector and the direction of the Sun.
-%   alpha = 0 is when the the dipole nod longitude is at local noon.
+%   ``alpha = 0`` is when the the dipole nod longitude is at local noon.
 %
 % Returns
 % -------
