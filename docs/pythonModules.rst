@@ -1,4 +1,4 @@
-PlanetMag python documentation
+PlanetMag Python documentation
 ------------------------------
 
 PlanetMag has not been ported to python yet. In the future it will be, and the documentation will live here.
