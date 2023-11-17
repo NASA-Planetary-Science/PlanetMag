@@ -231,10 +231,30 @@ current sheet model from K. Khurana.</p>
 <dl class="mat function">
 <dt class="sig sig-object mat" id="functions.Bsph2Bxyz">
 <span class="sig-prename descclassname"><span class="pre">functions.</span></span><span class="sig-name descname"><span class="pre">Bsph2Bxyz</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">Br</span></em>, <em class="sig-param"><span class="pre">Bth</span></em>, <em class="sig-param"><span class="pre">Bphi</span></em>, <em class="sig-param"><span class="pre">theta</span></em>, <em class="sig-param"><span class="pre">phi</span></em><span class="sig-paren">)</span><a class="headerlink" href="#functions.Bsph2Bxyz" title="Permalink to this definition"></a></dt>
-<dd><p>Convert vector components aligned to spherical coordinates
-into vector components aligned to cartesian axes.
-Source: Arfken, Weber, Harris, Mathematical Methods for Physicists,
-7th ed, pg. 199 for the unit vectors.</p>
+<dd><p>Convert spherical (r, theta, phi) vector to cartesian (x, y, z) vector.</p>
+<p>Convert vector components aligned to spherical coordinates into vector components aligned to
+cartesian axes.
+Source: Arfken, Weber, Harris, Mathematical Methods for Physicists, 7th ed, pg. 199 for the unit
+vectors.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>Br</strong> (<span><code class="xref mat mat-obj docutils literal notranslate"><span class="pre">double,</span> <span class="pre">1xN</span></code></span>) – Radial (r-hat) component of vectors to be converted.</p></li>
+<li><p><strong>Bth</strong> (<span><code class="xref mat mat-obj docutils literal notranslate"><span class="pre">double,</span> <span class="pre">1xN</span></code></span>) – Colatitudinal (theta-hat) component of vectors to be converted.</p></li>
+<li><p><strong>Bphi</strong> (<span><code class="xref mat mat-obj docutils literal notranslate"><span class="pre">double,</span> <span class="pre">1xN</span></code></span>) – Longitudinal (phi-hat) component of vectors to be converted.</p></li>
+<li><p><strong>theta</strong> (<span><code class="xref mat mat-obj docutils literal notranslate"><span class="pre">double,</span> <span class="pre">1xN</span></code></span>) – Colatitude for each location associated with each (Br, Bth, Bphi) vector in radians.</p></li>
+<li><p><strong>phi</strong> (<span><code class="xref mat mat-obj docutils literal notranslate"><span class="pre">double,</span> <span class="pre">1xN</span></code></span>) – East longitude for each location associated with each (Br, Bth, Bphi) vector in radians.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><strong>Bx</strong> (<em>double, 1xN</em>) – x-aligned component of converted vectors.</p></li>
+<li><p><strong>By</strong> (<em>double, 1xN</em>) – y-aligned component of converted vectors.</p></li>
+<li><p><strong>Bz</strong> (<em>double, 1xN</em>) – z-aligned component of converted vectors.</p></li>
+</ul>
+</p>
+</dd>
+</dl>
 </dd></dl>
 
 </section>
@@ -243,10 +263,30 @@ Source: Arfken, Weber, Harris, Mathematical Methods for Physicists,
 <dl class="mat function">
 <dt class="sig sig-object mat" id="functions.Bxyz2Bsph">
 <span class="sig-prename descclassname"><span class="pre">functions.</span></span><span class="sig-name descname"><span class="pre">Bxyz2Bsph</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">Bx</span></em>, <em class="sig-param"><span class="pre">By</span></em>, <em class="sig-param"><span class="pre">Bz</span></em>, <em class="sig-param"><span class="pre">theta</span></em>, <em class="sig-param"><span class="pre">phi</span></em><span class="sig-paren">)</span><a class="headerlink" href="#functions.Bxyz2Bsph" title="Permalink to this definition"></a></dt>
-<dd><p>Convert vector components aligned to cartesian axes
-into vector components aligned to spherical coordinates.
-Source: Arfken, Weber, Harris, Mathematical Methods for Physicists,
-7th ed, pg. 199 for the unit vectors.</p>
+<dd><p>Convert cartesian (x, y, z) vector to spherical (r, theta, phi) vector.</p>
+<p>Convert vector components aligned to cartesian axes into vector components aligned to spherical
+coordinates.
+Source: Arfken, Weber, Harris, Mathematical Methods for Physicists, 7th ed, pg. 199 for the unit
+vectors.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>Bx</strong> (<span><code class="xref mat mat-obj docutils literal notranslate"><span class="pre">double,</span> <span class="pre">1xN</span></code></span>) – x-aligned component of vectors to be converted.</p></li>
+<li><p><strong>By</strong> (<span><code class="xref mat mat-obj docutils literal notranslate"><span class="pre">double,</span> <span class="pre">1xN</span></code></span>) – y-aligned component of vectors to be converted.</p></li>
+<li><p><strong>Bz</strong> (<span><code class="xref mat mat-obj docutils literal notranslate"><span class="pre">double,</span> <span class="pre">1xN</span></code></span>) – z-aligned component of vectors to be converted.</p></li>
+<li><p><strong>theta</strong> (<span><code class="xref mat mat-obj docutils literal notranslate"><span class="pre">double,</span> <span class="pre">1xN</span></code></span>) – Colatitude for each location associated with each (Bx, By, Bz) vector in radians.</p></li>
+<li><p><strong>phi</strong> (<span><code class="xref mat mat-obj docutils literal notranslate"><span class="pre">double,</span> <span class="pre">1xN</span></code></span>) – East longitude for each location associated with each (Bx, By, Bz) vector in radians.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><strong>Br</strong> (<em>double, 1xN</em>) – Radial (r-hat) component of converted vectors.</p></li>
+<li><p><strong>Bth</strong> (<em>double, 1xN</em>) – Colatitudinal (theta-hat) component of converted vectors.</p></li>
+<li><p><strong>Bphi</strong> (<em>double, 1xN</em>) – Longitudinal (phi-hat) component of converted vectors.</p></li>
+</ul>
+</p>
+</dd>
+</dl>
 </dd></dl>
 
 </section>
@@ -439,8 +479,7 @@ format.</p>
 <dl class="mat function">
 <dt class="sig sig-object mat" id="modelCoeffs.coeffsBode1994G">
 <span class="sig-prename descclassname"><span class="pre">modelCoeffs.</span></span><span class="sig-name descname"><span class="pre">coeffsBode1994G</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">alpha</span></em><span class="sig-paren">)</span><a class="headerlink" href="#modelCoeffs.coeffsBode1994G" title="Permalink to this definition"></a></dt>
-<dd><p><strong>Gnm</strong></p>
-<p>Calculate Jupiter magnetopause field coefficients as fit by Bode (1994).</p>
+<dd><p>Calculate Jupiter magnetopause field coefficients as fit by Bode (1994).</p>
 <p>For use with Engle (1992) method as a function of dipole “precession angle” alpha for Jupiter.
 See <a class="reference external" href="https://apps.dtic.mil/sti/pdfs/ADA284857.pdf">https://apps.dtic.mil/sti/pdfs/ADA284857.pdf</a>.</p>
 <dl class="field-list simple">
