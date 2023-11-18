@@ -32,20 +32,10 @@ Calculation functions
 
 .. mat:autofunction:: MagFldParentSingle
 
-:mat:func:`LegendreP`
-+++++++++++++++++++++
-
-.. mat:autofunction:: LegendreP
-
 :mat:func:`LegendreS`
 +++++++++++++++++++++
 
 .. mat:autofunction:: LegendreS
-
-:mat:func:`dLegendreP`
-++++++++++++++++++++++
-
-.. mat:autofunction:: dLegendreP
 
 :mat:func:`dLegendreS`
 ++++++++++++++++++++++
@@ -107,10 +97,10 @@ Calculation functions
 
 .. mat:autofunction:: GetModelOpts
 
-:mat:func:`GetMoonDist`
-+++++++++++++++++++++++
+:mat:func:`GetMinMoonDist`
+++++++++++++++++++++++++++
 
-.. mat:autofunction:: GetMoonDist
+.. mat:autofunction:: GetMinMoonDist
 
 :mat:func:`GetPosSpice`
 +++++++++++++++++++++++
@@ -161,4 +151,3 @@ Model coefficient functions
 +++++++++++++++++++++++
 
 .. mat:autofunction:: coeffsBode1994G
-
