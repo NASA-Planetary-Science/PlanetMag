@@ -9,7 +9,7 @@ function [Bx, By, Bz] = Bsph2Bxyz(Br, Bth, Bphi, theta, phi)
 % Parameters
 % ----------
 % Br : double, 1xN
-%   Radial (:math:`\hat{r}\upphi\alpha\upalpha\ce{H2SO4^{3-}}`) component of vectors to be converted.
+%   Radial (:math:`\hat{r}`) component of vectors to be converted.
 % Bth : double, 1xN
 %   Colatitudinal (:math:`\hat{\theta}`) component of vectors to be converted.
 % Bphi : double, 1xN
