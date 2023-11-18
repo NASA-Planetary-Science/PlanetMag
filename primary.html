@@ -205,11 +205,24 @@ magnetic field model(s).</p>
 <h2>Spherical harmonics validation<a class="headerlink" href="#spherical-harmonics-validation" title="Permalink to this heading"></a></h2>
 <dl class="mat function">
 <dt class="sig sig-object mat" id="comparison.OutputHEALpixTo_n10">
-<span class="sig-prename descclassname"><span class="pre">comparison.</span></span><span class="sig-name descname"><span class="pre">OutputHEALpixTo_n10</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#comparison.OutputHEALpixTo_n10" title="Permalink to this definition"></a></dt>
-<dd><p>This script prints an evaluation of Legendre polynomials and their
-derivatives on a HEALpix map, for validation purposes. The HEALpix
-map must be supplied in a text file at the specified location. All
-harmonics are mapped, from n=1 to n=10.</p>
+<span class="sig-prename descclassname"><span class="pre">comparison.</span></span><span class="sig-name descname"><span class="pre">OutputHEALpixTo_n10</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">hpDir</span></em>, <em class="sig-param"><span class="pre">hpFname</span></em>, <em class="sig-param"><span class="pre">outDir</span></em>, <em class="sig-param"><span class="pre">outFbase</span></em><span class="sig-paren">)</span><a class="headerlink" href="#comparison.OutputHEALpixTo_n10" title="Permalink to this definition"></a></dt>
+<dd><p>Evaluates intermediate functions for each n,m on a HEALpix map and prints to disk.</p>
+<p>Prints an evaluation of Legendre polynomials and their derivatives on a HEALpix map, for
+validation purposes. The HEALpix map must be supplied in a text file at the specified location.
+All harmonics are mapped, from n=1 to n=10.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>hpDir</strong> (<span><code class="xref mat mat-obj docutils literal notranslate"><span class="pre">char,</span> <span class="pre">1xC,</span> <span class="pre">default=fullfile('~',</span> <span class="pre">'MoonMag',</span> <span class="pre">'outData')</span></code></span>) – Directory containing a file with pixel locations on a HEALpix grid where function outputs are to
+be compared.</p></li>
+<li><p><strong>hpFname</strong> (<span><code class="xref mat mat-obj docutils literal notranslate"><span class="pre">char,</span> <span class="pre">1xD,</span> <span class="pre">default='healpix_locs.txt'</span></code></span>) – File name where HEALpix locations are stored.</p></li>
+<li><p><strong>outDir</strong> (<span><code class="xref mat mat-obj docutils literal notranslate"><span class="pre">char,</span> <span class="pre">1xE,</span> <span class="pre">default='out'</span></code></span>) – Directory where a file with function outputs will be written.</p></li>
+<li><p><strong>outFbase</strong> (char, 1xF, default=’<a href="#id1"><span class="problematic" id="id2">pureHarmMap_</span></a>’) – File name pattern for function outputs.</p></li>
+<li><p><strong>ghVal</strong> (<span><code class="xref mat mat-obj docutils literal notranslate"><span class="pre">double,</span> <span class="pre">default=1.0</span></code></span>) – Common value for g and h in gauss used in MoonMag and <code class="xref py py-func docutils literal notranslate"><span class="pre">PlanetMag()</span></code> intermediate function
+evaluation.</p></li>
+</ul>
+</dd>
+</dl>
 </dd></dl>
 
 </section>
