@@ -17,6 +17,8 @@
         <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js?v=0ec76b63"></script>
         <script src="_static/doctools.js?v=888ff710"></script>
         <script src="_static/sphinx_highlight.js?v=4825356b"></script>
+        <script type="text/x-mathjax-config">MathJax.Hub.Config({"extensions": ["tex2jax.js"], "TeX": {"extensions": ["mhchem.js", "unicode.js"], "Macros": {"upalpha": "\\unicode{945}", "upbeta": "\\unicode{946}", "upgamma": "\\unicode{947}", "updelta": "\\unicode{948}", "upepsilon": "\\unicode{949}", "upzeta": "\\unicode{950}", "upeta": "\\unicode{951}", "uptheta": "\\unicode{952}", "upiota": "\\unicode{953}", "upkappa": "\\unicode{954}", "uplambda": "\\unicode{955}", "upmu": "\\unicode{956}", "upnu": "\\unicode{957}", "upxi": "\\unicode{958}", "upomicron": "\\unicode{959}", "uppi": "\\unicode{960}", "uprho": "\\unicode{961}", "upsigma": "\\unicode{963}", "uptau": "\\unicode{964}", "upupsilon": "\\unicode{965}", "upphi": "\\unicode{x03d5}", "upvarphi": "\\unicode{966}", "upchi": "\\unicode{967}", "uppsi": "\\unicode{968}", "upomega": "\\unicode{969}", "upAlpha": "\\unicode{913}", "upBeta": "\\unicode{914}", "upGamma": "\\unicode{915}", "upDelta": "\\unicode{916}", "upEpsilon": "\\unicode{917}", "upZeta": "\\unicode{918}", "upEta": "\\unicode{919}", "upTheta": "\\unicode{920}", "upIota": "\\unicode{921}", "upKappa": "\\unicode{922}", "upLambda": "\\unicode{923}", "upMu": "\\unicode{924}", "upNu": "\\unicode{925}", "upXi": "\\unicode{926}", "upOmicron": "\\unicode{927}", "upPi": "\\unicode{928}", "upRho": "\\unicode{929}", "upSigma": "\\unicode{931}", "upTau": "\\unicode{932}", "upUpsilon": "\\unicode{933}", "upPhi": "\\unicode{934}", "upChi": "\\unicode{935}", "upPsi": "\\unicode{936}", "upOmega": "\\unicode{937}"}}, "HTML-CSS": {"fonts": ["STIX-Web"]}})</script>
+        <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@2/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
@@ -238,9 +240,9 @@ vectors.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>Br</strong> (<span><code class="xref mat mat-obj docutils literal notranslate"><span class="pre">double,</span> <span class="pre">1xN</span></code></span>) – Radial (<span class="math">\hat{r}\upphi\alpha\upalpha\ce{H2SO4^{3-}}</span>) component of vectors to be converted.</p></li>
-<li><p><strong>Bth</strong> (<span><code class="xref mat mat-obj docutils literal notranslate"><span class="pre">double,</span> <span class="pre">1xN</span></code></span>) – Colatitudinal (<span class="math">\hat{\theta}</span>) component of vectors to be converted.</p></li>
-<li><p><strong>Bphi</strong> (<span><code class="xref mat mat-obj docutils literal notranslate"><span class="pre">double,</span> <span class="pre">1xN</span></code></span>) – Longitudinal (<span class="math">\hat{\phi}</span>) component of vectors to be converted.</p></li>
+<li><p><strong>Br</strong> (<span><code class="xref mat mat-obj docutils literal notranslate"><span class="pre">double,</span> <span class="pre">1xN</span></code></span>) – Radial (<span class="math notranslate nohighlight">\(\hat{r}\upphi\alpha\upalpha\ce{H2SO4^{3-}}\)</span>) component of vectors to be converted.</p></li>
+<li><p><strong>Bth</strong> (<span><code class="xref mat mat-obj docutils literal notranslate"><span class="pre">double,</span> <span class="pre">1xN</span></code></span>) – Colatitudinal (<span class="math notranslate nohighlight">\(\hat{\theta}\)</span>) component of vectors to be converted.</p></li>
+<li><p><strong>Bphi</strong> (<span><code class="xref mat mat-obj docutils literal notranslate"><span class="pre">double,</span> <span class="pre">1xN</span></code></span>) – Longitudinal (<span class="math notranslate nohighlight">\(\hat{\phi}\)</span>) component of vectors to be converted.</p></li>
 <li><p><strong>theta</strong> (<span><code class="xref mat mat-obj docutils literal notranslate"><span class="pre">double,</span> <span class="pre">1xN</span></code></span>) – Colatitude for each location associated with each (Br, Bth, Bphi) vector in radians.</p></li>
 <li><p><strong>phi</strong> (<span><code class="xref mat mat-obj docutils literal notranslate"><span class="pre">double,</span> <span class="pre">1xN</span></code></span>) – East longitude for each location associated with each (Br, Bth, Bphi) vector in radians.</p></li>
 </ul>
@@ -279,9 +281,9 @@ vectors.</p>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p><ul class="simple">
-<li><p><strong>Br</strong> (<em>double, 1xN</em>) – Radial (<span class="math">\hat{r}</span>) component of converted vectors.</p></li>
-<li><p><strong>Bth</strong> (<em>double, 1xN</em>) – Colatitudinal (<span class="math">\hat{\theta}</span>) component of converted vectors.</p></li>
-<li><p><strong>Bphi</strong> (<em>double, 1xN</em>) – Longitudinal (<span class="math">\hat{\phi}</span>) component of converted vectors.</p></li>
+<li><p><strong>Br</strong> (<em>double, 1xN</em>) – Radial (<span class="math notranslate nohighlight">\(\hat{r}\)</span>) component of converted vectors.</p></li>
+<li><p><strong>Bth</strong> (<em>double, 1xN</em>) – Colatitudinal (<span class="math notranslate nohighlight">\(\hat{\theta}\)</span>) component of converted vectors.</p></li>
+<li><p><strong>Bphi</strong> (<em>double, 1xN</em>) – Longitudinal (<span class="math notranslate nohighlight">\(\hat{\phi}\)</span>) component of converted vectors.</p></li>
 </ul>
 </p>
 </dd>
@@ -428,7 +430,7 @@ by the method of Principal Component Analysis (PCA).
 In this method, the expected oscillation frequencies are each used to
 create “principal components”, the sinusoidal oscillations associated
 with each frequency (both cos and sin, for the real and imaginary part of
-<span class="math">e^{-i\omega t}</span>, respectively). The principal components are used to construct a
+<span class="math notranslate nohighlight">\(e^{-i\omega t}\)</span>, respectively). The principal components are used to construct a
 matrix, X, where each principal component is a row in X. The inverse of
 X^T * X is then calculated, which yields the eigenvectors as columns.
 Multiplying (Bi*X) by the column-eigenvector matrix then weights the
