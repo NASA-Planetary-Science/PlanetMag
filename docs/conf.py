@@ -25,7 +25,7 @@ extensions = ['sphinx.ext.autodoc',
               'sphinx.ext.napoleon',
               'sphinxcontrib.apidoc',
               'sphinxcontrib.matlab',
-              'sphinx.ext.imgmath',
+              'sphinx.ext.mathjax',
               'myst_parser']
 source_suffix = ['.rst', '.md']
 mathjaxVer = 2
@@ -78,6 +78,7 @@ html_theme_options = {
 # This block is used when the sphinx.ext.mathjax extension is loaded
 latex_packages = ['upgreek', 'mhchem']
 if mathjaxVer == 3:
+    # Does not support STIX fonts as of v3.2.
     mathjax_path='https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js'
     mathjax3_config = {
       'loader': {'load': [f'[tex]/{pkg}' for pkg in latex_packages]},
@@ -92,14 +93,3 @@ else:
         'TeX': {'extensions': [f'{pkg}.js' for pkg in latex_packages], 'Macros': upgreekDefs},
         'HTML-CSS': {'fonts': ['STIX-Web']}
     }
-
-# This block is used when the sphinx.ext.imgmath extension is loaded. A package error prevents use
-# of the stix package.
-imgmath_image_format = 'svg'
-imgmath_use_preview = True
-imgmath_latex_preamble = r'\usepackage[notextcomp]{stix}' + \
-                         r'\usepackage[version=4]{mhchem}' + \
-                         r'\usepackage{siunitx}' + \
-                         r'\usepackage{upgreek}' + \
-                         r'\sisetup{group-separator={\,}, group-minimum-digits={5}, ' + \
-                             'group-digits={integer}}'

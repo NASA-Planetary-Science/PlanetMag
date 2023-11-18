@@ -21,6 +21,7 @@ def printIGRFcoeffs(fNameIn='IGRF13.shc', fNameOut='coeffsEarthIGRF13', datDir='
     datDir : str
         Relative directory path where fNameIn is found and to which fNameOut will be printed
     """
+
     fPathIn = os.path.join(datDir, fNameIn)
     fPathOut = os.path.join(datDir, fNameOut)
 
