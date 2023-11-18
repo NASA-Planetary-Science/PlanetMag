@@ -14,10 +14,10 @@ function OutputHEALpixTo_n10(hpDir, hpFname, outDir, outFbase)
 %   File name where HEALpix locations are stored.
 % outDir : char, 1xE, default='out'
 %   Directory where a file with function outputs will be written.
-% outFbase : char, 1xF, default='pureHarmMap_'
+% outFbase : char, 1xF, default='pureHarmMap\_'
 %   File name pattern for function outputs.
 % ghVal : double, default=1.0
-%   Common value for g and h in gauss used in MoonMag and PlanetMag intermediate function
+%   Common value for g and h in gauss used in MoonMag and P\lanetMag intermediate function
 %   evaluation.
 
 % Part of the PlanetMag framework for evaluation and study of planetary magnetic fields.
