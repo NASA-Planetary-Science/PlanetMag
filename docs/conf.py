@@ -22,6 +22,7 @@ extensions = ['sphinx.ext.autodoc',
               'sphinx.ext.napoleon',
               'sphinxcontrib.apidoc',
               'sphinxcontrib.matlab',
+              'sphinx.ext.imgmath',
               'myst_parser']
 source_suffix = ['.rst', '.md']
 
@@ -65,4 +66,23 @@ html_theme_options = {
     'collapse_navigation': True,
     'sticky_navigation': True,
     'navigation_depth': -1
+}
+
+
+# -- Options for LaTeX math formatting-----------
+# https://www.sphinx-doc.org/en/master/latex.html
+
+imgmath_image_format = 'svg'
+imgmath_use_preview = True
+imgmath_latex_preamble = r'\usepackage[notextcomp]{stix}' + \
+                         r'\usepackage[version=4]{mhchem}' + \
+                         r'\usepackage{siunitx}' + \
+                         r'\usepackage{upgreek}' + \
+                         r'\sisetup{group-separator={\,}, group-minimum-digits={5}, group-digits={integer}}'
+latex_elements = {
+    'extrapackages': r'\usepackage[notextcomp]{stix}' +
+                     r'\usepackage[version=4]{mhchem}' +
+                     r'\usepackage{siunitx}' +
+                     r'\usepackage{upgreek}',
+    'preamble': r'\sisetup{group-separator={\,}, group-minimum-digits={5}, group-digits={integer}}'
 }

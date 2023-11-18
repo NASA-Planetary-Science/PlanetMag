@@ -5,7 +5,7 @@ function BD = PCA_decomposition(ets, moonName, parentName, Bvec, descrip, ...
 % In this method, the expected oscillation frequencies are each used to
 % create "principal components", the sinusoidal oscillations associated
 % with each frequency (both cos and sin, for the real and imaginary part of
-% e^-iωt, respectively). The principal components are used to construct a
+% :math:`e^{-i\omega t}`, respectively). The principal components are used to construct a
 % matrix, X, where each principal component is a row in X. The inverse of
 % X^T * X is then calculated, which yields the eigenvectors as columns.
 % Multiplying (Bi*X) by the column-eigenvector matrix then weights the 
