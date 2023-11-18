@@ -18,7 +18,6 @@
         <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js?v=0ec76b63"></script>
         <script src="_static/doctools.js?v=888ff710"></script>
         <script src="_static/sphinx_highlight.js?v=4825356b"></script>
-        <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
@@ -240,9 +239,9 @@ vectors.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>Br</strong> (<span><code class="xref mat mat-obj docutils literal notranslate"><span class="pre">double,</span> <span class="pre">1xN</span></code></span>) – Radial (<span class="math notranslate nohighlight">\(\hat{r}\)</span>) component of vectors to be converted.</p></li>
-<li><p><strong>Bth</strong> (<span><code class="xref mat mat-obj docutils literal notranslate"><span class="pre">double,</span> <span class="pre">1xN</span></code></span>) – Colatitudinal (<span class="math notranslate nohighlight">\(\hat{\theta}\)</span>) component of vectors to be converted.</p></li>
-<li><p><strong>Bphi</strong> (<span><code class="xref mat mat-obj docutils literal notranslate"><span class="pre">double,</span> <span class="pre">1xN</span></code></span>) – Longitudinal (<span class="math notranslate nohighlight">\(\hat{\phi}\)</span>) component of vectors to be converted.</p></li>
+<li><p><strong>Br</strong> (<span><code class="xref mat mat-obj docutils literal notranslate"><span class="pre">double,</span> <span class="pre">1xN</span></code></span>) – Radial (<span class="math">\hat{r}\upphi</span>) component of vectors to be converted.</p></li>
+<li><p><strong>Bth</strong> (<span><code class="xref mat mat-obj docutils literal notranslate"><span class="pre">double,</span> <span class="pre">1xN</span></code></span>) – Colatitudinal (<span class="math">\hat{\theta}</span>) component of vectors to be converted.</p></li>
+<li><p><strong>Bphi</strong> (<span><code class="xref mat mat-obj docutils literal notranslate"><span class="pre">double,</span> <span class="pre">1xN</span></code></span>) – Longitudinal (<span class="math">\hat{\phi}</span>) component of vectors to be converted.</p></li>
 <li><p><strong>theta</strong> (<span><code class="xref mat mat-obj docutils literal notranslate"><span class="pre">double,</span> <span class="pre">1xN</span></code></span>) – Colatitude for each location associated with each (Br, Bth, Bphi) vector in radians.</p></li>
 <li><p><strong>phi</strong> (<span><code class="xref mat mat-obj docutils literal notranslate"><span class="pre">double,</span> <span class="pre">1xN</span></code></span>) – East longitude for each location associated with each (Br, Bth, Bphi) vector in radians.</p></li>
 </ul>
@@ -281,9 +280,9 @@ vectors.</p>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p><ul class="simple">
-<li><p><strong>Br</strong> (<em>double, 1xN</em>) – Radial (<span class="math notranslate nohighlight">\(\hat{r}\)</span>) component of converted vectors.</p></li>
-<li><p><strong>Bth</strong> (<em>double, 1xN</em>) – Colatitudinal (<span class="math notranslate nohighlight">\(\hat{\theta}\)</span>) component of converted vectors.</p></li>
-<li><p><strong>Bphi</strong> (<em>double, 1xN</em>) – Longitudinal (<span class="math notranslate nohighlight">\(\hat{\phi}\)</span>) component of converted vectors.</p></li>
+<li><p><strong>Br</strong> (<em>double, 1xN</em>) – Radial (<span class="math">\hat{r}</span>) component of converted vectors.</p></li>
+<li><p><strong>Bth</strong> (<em>double, 1xN</em>) – Colatitudinal (<span class="math">\hat{\theta}</span>) component of converted vectors.</p></li>
+<li><p><strong>Bphi</strong> (<em>double, 1xN</em>) – Longitudinal (<span class="math">\hat{\phi}</span>) component of converted vectors.</p></li>
 </ul>
 </p>
 </dd>
@@ -430,7 +429,7 @@ by the method of Principal Component Analysis (PCA).
 In this method, the expected oscillation frequencies are each used to
 create “principal components”, the sinusoidal oscillations associated
 with each frequency (both cos and sin, for the real and imaginary part of
-e^-iωt, respectively). The principal components are used to construct a
+<span class="math">e^{-i\omega t}</span>, respectively). The principal components are used to construct a
 matrix, X, where each principal component is a row in X. The inverse of
 X^T * X is then calculated, which yields the eigenvectors as columns.
 Multiplying (Bi*X) by the column-eigenvector matrix then weights the
