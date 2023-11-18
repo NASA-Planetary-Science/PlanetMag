@@ -22,9 +22,10 @@ extensions = ['sphinx.ext.autodoc',
               'sphinx.ext.napoleon',
               'sphinxcontrib.apidoc',
               'sphinxcontrib.matlab',
-              'sphinx.ext.imgmath',
+              'sphinx.ext.mathjax',
               'myst_parser']
 source_suffix = ['.rst', '.md']
+mathjaxVer = 2
 
 _HERE = os.path.dirname(__file__)
 _ROOT_DIR = os.path.abspath(os.path.join(_HERE, '..'))
@@ -52,7 +53,6 @@ exclude_patterns = ['_build', 'Thumbs.db', '.DS_Store']
 
 html_theme = 'sphinx_rtd_theme'  # Install with pip install sphinx-rtd-theme
 html_static_path = ['_static']
-html_css_files = ['css/custom.css']
 html_logo = '../misc/PlanetMag_logoDocs.png'
 html_favicon = '../misc/PlanetMag_logo.ico'
 
@@ -86,3 +86,74 @@ latex_elements = {
                      r'\usepackage{upgreek}',
     'preamble': r'\sisetup{group-separator={\,}, group-minimum-digits={5}, group-digits={integer}}'
 }
+
+latex_packages = ['upgreek', 'mhchem']
+if mathjaxVer == 3:
+    mathjax_path='https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js'
+    mathjax3_config = {
+      'loader': {'load': [f'[tex]/{pkg}' for pkg in latex_packages]},
+      'tex': {'packages': {'[+]': [latex_packages]}}
+    }
+else:
+    mathjax_path = 'https://cdn.jsdelivr.net/npm/mathjax@2/MathJax.js?config=TeX-AMS-MML_HTMLorMML'
+    latex_packages.remove('upgreek')
+    latex_packages += ['unicode']
+    upgreekDefs = r"""
+\def\upalpha{{\unicode{945}}}
+\def\upbeta{{\unicode{946}}}
+\def\upgamma{{\unicode{947}}}
+\def\updelta{{\unicode{948}}}
+\def\upepsilon{{\unicode{949}}}
+\def\upzeta{{\unicode{950}}}
+\def\upeta{{\unicode{951}}}
+\def\uptheta{{\unicode{952}}}
+\def\upiota{{\unicode{953}}}
+\def\upkappa{{\unicode{954}}}
+\def\uplambda{{\unicode{955}}}
+\def\upmu{{\unicode{956}}}
+\def\upnu{{\unicode{957}}}
+\def\upxi{{\unicode{958}}}
+\def\upomicron{{\unicode{959}}}
+\def\uppi{{\unicode{960}}}
+\def\uprho{{\unicode{961}}}
+\def\upsigma{{\unicode{963}}}
+\def\uptau{{\unicode{964}}}
+\def\upupsilon{{\unicode{965}}}
+\def\upphi{{\unicode{966}}}
+\def\upchi{{\unicode{967}}}
+\def\uppsi{{\unicode{968}}}
+\def\upomega{{\unicode{969}}}
+\def\upAlpha{{\unicode{913}}}
+\def\upBeta{{\unicode{914}}}
+\def\upGamma{{\unicode{915}}}
+\def\upDelta{{\unicode{916}}}
+\def\upEpsilon{{\unicode{917}}}
+\def\upZeta{{\unicode{918}}}
+\def\upEta{{\unicode{919}}}
+\def\upTheta{{\unicode{920}}}
+\def\upIota{{\unicode{921}}}
+\def\upKappa{{\unicode{922}}}
+\def\upLambda{{\unicode{923}}}
+\def\upMu{{\unicode{924}}}
+\def\upNu{{\unicode{925}}}
+\def\upXi{{\unicode{926}}}
+\def\upOmicron{{\unicode{927}}}
+\def\upPi{{\unicode{928}}}
+\def\upRho{{\unicode{929}}}
+\def\upSigma{{\unicode{931}}}
+\def\upTau{{\unicode{932}}}
+\def\upUpsilon{{\unicode{933}}}
+\def\upPhi{{\unicode{934}}}
+\def\upChi{{\unicode{935}}}
+\def\upPsi{{\unicode{936}}}
+\def\upOmega{{\unicode{937}}}"""
+    mathjax2_config = {
+        'extensions': ['tex2jax.js'] , #+ [f'TeX/{pkg}.js' for pkg in latex_packages],
+        'TeX': {'extensions': [f'{pkg}.js' for pkg in latex_packages],
+                'Macros': {'upphi': r'\unicode{x03d5}'}},
+        'HTML-CSS': {'fonts': ['STIX-Web']}
+    }
+    # mathjax2_config = {
+    #     'loader': {'load': [f'[tex]/{pkg}' for pkg in latex_packages]},
+    #     'tex': {'packages': {'[+]': [latex_packages]}}
+    # }
