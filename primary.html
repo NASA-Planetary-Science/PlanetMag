@@ -219,8 +219,10 @@ files will be loaded.</p></li>
 <li><p><strong>moonName</strong> (<span><code class="xref mat mat-obj docutils literal notranslate"><span class="pre">char,</span> <span class="pre">1xC,</span> <span class="pre">default='Ganymede'</span></code></span>) – Name of moon for which <code class="docutils literal notranslate"><span class="pre">scName</span></code> has flyby data. Flyby data is not used if <code class="docutils literal notranslate"><span class="pre">FULLORBITS</span></code> is
 true, but a name must be passed for kernel loading.</p></li>
 <li><p><strong>orbNum</strong> (<span><code class="xref mat mat-obj docutils literal notranslate"><span class="pre">int,</span> <span class="pre">default=-1</span></code></span>) – <p>Orbit number to use for data comparison. Accepts the following special options:</p>
-<p>-<code class="docutils literal notranslate"><span class="pre">-1</span></code>: Use all orbits for which data is available.
--<code class="docutils literal notranslate"><span class="pre">-2</span></code>: Use all orbits for which flyby data is available for <code class="docutils literal notranslate"><span class="pre">moonName</span></code>.</p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">-1</span></code>: Use all orbits for which data is available.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">-2</span></code>: Use all orbits for which flyby data is available for <code class="docutils literal notranslate"><span class="pre">moonName</span></code>.</p></li>
+</ul>
 </p></li>
 <li><p><strong>moonProx_RP</strong> (<span><code class="xref mat mat-obj docutils literal notranslate"><span class="pre">double,</span> <span class="pre">default=0.1</span></code></span>) – Minimum distance to major moons of the system within which measurements will be ignored in
 model validation due to local perturbations, in units of the parent planet’s radius.</p></li>
