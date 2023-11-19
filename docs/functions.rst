@@ -56,11 +56,6 @@ Additional supporting functions
 
 .. mat:autofunction:: Bxyz2Bsph
 
-:mat:func:`CalcExcitationsFFT`
-++++++++++++++++++++++++++++++
-
-.. mat:autofunction:: CalcExcitationsFFT
-
 :mat:func:`ConvertSwarmCDF`
 +++++++++++++++++++++++++++
 
