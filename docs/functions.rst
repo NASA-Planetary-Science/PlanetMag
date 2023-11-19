@@ -126,10 +126,10 @@ Additional supporting functions
 
 .. mat:autofunction:: LshellTrace
 
-:mat:func:`PCA_decomposition`
-+++++++++++++++++++++++++++++
+:mat:func:`PCAdecomposition`
+++++++++++++++++++++++++++++
 
-.. mat:autofunction:: PCA_decomposition
+.. mat:autofunction:: PCAdecomposition
 
 :mat:func:`PlotSpectrum`
 ++++++++++++++++++++++++

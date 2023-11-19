@@ -1,17 +1,15 @@
 function CalcExcitationsFFT()
 % Calculate excitation moments using a Fast Fourier Transform (FFT) method.
+%
 % This script is included for historical comparison purposes only.
 %
 % Note
 % ----
-% This script evaluates excitation moments with an FFT method.
-% This method is not recommended, as fine-tuning the sampling of the
-% time series data to well-resolve one peak in the Fourier spectrum
-% will necessarily contribute to spectral leakage for all other
-% non-harmonic peaks. This forces the phases of each excitation
-% moment relative to the reference time (J2000) to be incorrect.
-% Instead, the method applied using principle component
-% decomposition in PlanetMag is recommended.
+% This script evaluates excitation moments with an FFT method. This method is not recommended, as
+% fine-tuning the sampling of the time series data to well-resolve one peak in the Fourier spectrum
+% will necessarily contribute to spectral leakage for all other non-harmonic peaks. This forces the
+% phases of each excitation moment relative to the reference time (J2000) to be incorrect. Instead,
+% the method applied using principle component decomposition with PCAdecomposition is recommended.
 %
 % Procedure:
 % 0. Download SPICE kernels listed in loadSpice.
@@ -20,6 +18,22 @@ function CalcExcitationsFFT()
 % are all returned.
 % 2. Run one spectrum per period of interest and save the resulting peak
 % heights in x, y, and z to a text file.
+%
+% Parameters
+% ----------
+% inputName : type, dims
+%   Description.
+%
+% Returns
+% -------
+% outputName : type, dims
+%   Description.
+
+% Part of the PlanetMag framework for evaluation and study of planetary magnetic fields.
+% Created by Corey J. Cochrane and Marshall J. Styczinski
+% Maintained by Marshall J. Styczinski
+% Contact: corey.j.cochrane@jpl.nasa.gov
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
     moonName = 'Ganymede';
     outData = 'out/';

@@ -236,7 +236,7 @@ function [T_h, B0vec, B1vec1, B1vec2, B1vec3, outFname, header] = PlanetMag(moon
                 load(fullfile([outData 'evalB' moonName fEnd]));
             end
     
-            BD = PCA_decomposition(t_h*3600, moonName, parentName, BvecMoon, ...
+            BD = PCAdecomposition(t_h*3600, moonName, parentName, BvecMoon, ...
                 magModelDescrip, SPHOUT, 1, 1);
     
             T_h = 1 ./ BD.f / 3600;
