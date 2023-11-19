@@ -44,3 +44,11 @@ Spherical harmonics validation
 ++++++++++++++++++++++++++++++
 
 .. mat:autofunction:: OutputHEALpixTo_n10
+
+.. mat:module:: test
+   :noindex:
+
+Basic testing
++++++++++++++
+
+.. mat:autofunction:: PMtest

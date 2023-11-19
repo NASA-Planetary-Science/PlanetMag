@@ -55,6 +55,7 @@
 <li class="toctree-l2"><a class="reference internal" href="#compareuramodels"><code class="xref mat mat-func docutils literal notranslate"><span class="pre">CompareUraModels()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#comparenepmodels"><code class="xref mat mat-func docutils literal notranslate"><span class="pre">CompareNepModels()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#spherical-harmonics-validation">Spherical harmonics validation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#basic-testing">Basic testing</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="functions.html">Matlab supporting functions</a></li>
@@ -91,7 +92,7 @@
 <h2><a class="reference internal" href="#PlanetMag" title="PlanetMag"><code class="xref mat mat-func docutils literal notranslate"><span class="pre">PlanetMag()</span></code></a><a class="headerlink" href="#planetmag" title="Permalink to this heading"></a></h2>
 <dl class="mat function">
 <dt class="sig sig-object mat" id="PlanetMag">
-<span class="sig-name descname"><span class="pre">PlanetMag</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">moonName</span></em>, <em class="sig-param"><span class="pre">era</span></em>, <em class="sig-param"><span class="pre">coordType</span></em>, <em class="sig-param"><span class="pre">CALC_NEW</span></em>, <em class="sig-param"><span class="pre">ALL_MODELS</span></em>, <em class="sig-param"><span class="pre">DO_FFT</span></em>, <em class="sig-param"><span class="pre">DO_MPAUSE</span></em>, <em class="sig-param"><span class="pre">specificModel</span></em>, <em class="sig-param"><span class="pre">specificMPmodel</span></em>, <em class="sig-param"><span class="pre">outData</span></em>, <em class="sig-param"><span class="pre">nptsApprox</span></em>, <em class="sig-param"><span class="pre">magPhase</span></em><span class="sig-paren">)</span><a class="headerlink" href="#PlanetMag" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">PlanetMag</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">moonName</span></em>, <em class="sig-param"><span class="pre">era</span></em>, <em class="sig-param"><span class="pre">coordType</span></em>, <em class="sig-param"><span class="pre">CALC_NEW</span></em>, <em class="sig-param"><span class="pre">ALL_MODELS</span></em>, <em class="sig-param"><span class="pre">DO_FFT</span></em>, <em class="sig-param"><span class="pre">DO_MPAUSE</span></em>, <em class="sig-param"><span class="pre">LIVE_PLOTS</span></em>, <em class="sig-param"><span class="pre">specificModel</span></em>, <em class="sig-param"><span class="pre">specificMPmodel</span></em>, <em class="sig-param"><span class="pre">outData</span></em>, <em class="sig-param"><span class="pre">nptsApprox</span></em>, <em class="sig-param"><span class="pre">magPhase</span></em><span class="sig-paren">)</span><a class="headerlink" href="#PlanetMag" title="Permalink to this definition"></a></dt>
 <dd><p>Evaluates planetary magnetic field for a time series at the specified moon location and inverts
 for the complex amplitudes of oscillation in that moon’s frame.</p>
 <p>This function is intended to be run as a script, so all parameters are optional.</p>
@@ -123,6 +124,7 @@ for the complex amplitudes of oscillation in that moon’s frame.</p>
 <li><p><strong>ALL_MODELS</strong> (<span><code class="xref mat mat-obj docutils literal notranslate"><span class="pre">bool,</span> <span class="pre">default=0</span></code></span>) – Whether to run all implemented model options for the desired body.</p></li>
 <li><p><strong>DO_FFT</strong> (<span><code class="xref mat mat-obj docutils literal notranslate"><span class="pre">bool,</span> <span class="pre">default=0</span></code></span>) – Whether to calculate and print an FFT from the time series after performing the inversion.</p></li>
 <li><p><strong>DO_MPAUSE</strong> (<span><code class="xref mat mat-obj docutils literal notranslate"><span class="pre">bool,</span> <span class="pre">default=0</span></code></span>) – Whether to include a magnetopause screening current model.</p></li>
+<li><p><strong>LIVE_PLOTS</strong> (<span><code class="xref mat mat-obj docutils literal notranslate"><span class="pre">bool,</span> <span class="pre">default=0</span></code></span>) – Whether to load interactive figure windows for plots (true) or print them to disk (false).</p></li>
 <li><p><strong>specificModel</strong> (<span><code class="xref mat mat-obj docutils literal notranslate"><span class="pre">int,</span> <span class="pre">default=0</span></code></span>) – Index number for the magnetospheric model to run. Options depend on the body, and setting to
 0 selects the default model. See <code class="xref py py-func docutils literal notranslate"><span class="pre">GetModelOpts()</span></code> for a description of the options.</p></li>
 <li><p><strong>specificMPmodel</strong> (<span><code class="xref mat mat-obj docutils literal notranslate"><span class="pre">int,</span> <span class="pre">default=0</span></code></span>) – Index number for the magnetopause model to run if DO_MPAUSE is true. 0 selects the default
@@ -155,9 +157,35 @@ depending on the selected coordinates.</p></li>
 <h2><a class="reference internal" href="#comparison.CompareEarModels" title="comparison.CompareEarModels"><code class="xref mat mat-func docutils literal notranslate"><span class="pre">CompareEarModels()</span></code></a><a class="headerlink" href="#compareearmodels" title="Permalink to this heading"></a></h2>
 <dl class="mat function">
 <dt class="sig sig-object mat" id="comparison.CompareEarModels">
-<span class="sig-prename descclassname"><span class="pre">comparison.</span></span><span class="sig-name descname"><span class="pre">CompareEarModels</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#comparison.CompareEarModels" title="Permalink to this definition"></a></dt>
-<dd><p>Compare magnetic field measurements from spacecraft against the evaluated
-magnetic field model(s).</p>
+<span class="sig-prename descclassname"><span class="pre">comparison.</span></span><span class="sig-name descname"><span class="pre">CompareEarModels</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">LIVE_PLOTS</span></em>, <em class="sig-param"><span class="pre">scName</span></em>, <em class="sig-param"><span class="pre">xtn</span></em>, <em class="sig-param"><span class="pre">SEQUENTIAL</span></em><span class="sig-paren">)</span><a class="headerlink" href="#comparison.CompareEarModels" title="Permalink to this definition"></a></dt>
+<dd><p>Compare magnetic field measurements from spacecraft near Earth against each implemented magnetic
+field model.</p>
+<p>Datasets:</p>
+<blockquote>
+<div><ul class="simple">
+<li><dl class="simple">
+<dt>Swarm MAG data: <a class="reference external" href="https://earth.esa.int/web/guest/swarm/data-access">https://earth.esa.int/web/guest/swarm/data-access</a></dt><dd><ul>
+<li><p>Current direct link for 1 s decimated measurements:
+<a class="reference external" href="https://swarm-diss.eo.esa.int/#swarm/Level1b/Latest_baselines/MAGx_LR">https://swarm-diss.eo.esa.int/#swarm/Level1b/Latest_baselines/MAGx_LR</a></p></li>
+</ul>
+</dd>
+</dl>
+</li>
+</ul>
+</div></blockquote>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>LIVE_PLOTS</strong> (<span><code class="xref mat mat-obj docutils literal notranslate"><span class="pre">bool,</span> <span class="pre">default=0</span></code></span>) – Whether to load interactive figure windows for plots (true) or print them to disk (false).</p></li>
+<li><p><strong>scName</strong> (<span><code class="xref mat mat-obj docutils literal notranslate"><span class="pre">string,</span> <span class="pre">default=&quot;Swarm&quot;</span></code></span>) – Spacecraft name for which magnetic field data will be compared against implemented models. A
+directory must exist with this name in the <code class="docutils literal notranslate"><span class="pre">MAG</span></code> directory within the top-level PlanetMag
+directory. This directory will be searched for data files with the <code class="docutils literal notranslate"><span class="pre">xtn</span></code> extension, and each
+of these files will be loaded.</p></li>
+<li><p><strong>xtn</strong> (<span><code class="xref mat mat-obj docutils literal notranslate"><span class="pre">char,</span> <span class="pre">1xD,</span> <span class="pre">default='.tab'</span></code></span>) – File extension for data files found in <code class="docutils literal notranslate"><span class="pre">fullfile('MAG',</span> <span class="pre">sc)</span></code>, beginning with <code class="docutils literal notranslate"><span class="pre">'.'</span></code>.</p></li>
+<li><p><strong>SEQUENTIAL</strong> (<span><code class="xref mat mat-obj docutils literal notranslate"><span class="pre">bool</span></code></span>) – Whether to plot points by index or hours relative to a reference time.</p></li>
+</ul>
+</dd>
+</dl>
 </dd></dl>
 
 </section>
@@ -165,9 +193,52 @@ magnetic field model(s).</p>
 <h2><a class="reference internal" href="#comparison.CompareJupModels" title="comparison.CompareJupModels"><code class="xref mat mat-func docutils literal notranslate"><span class="pre">CompareJupModels()</span></code></a><a class="headerlink" href="#comparejupmodels" title="Permalink to this heading"></a></h2>
 <dl class="mat function">
 <dt class="sig sig-object mat" id="comparison.CompareJupModels">
-<span class="sig-prename descclassname"><span class="pre">comparison.</span></span><span class="sig-name descname"><span class="pre">CompareJupModels</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#comparison.CompareJupModels" title="Permalink to this definition"></a></dt>
-<dd><p>Compare magnetic field measurements from spacecraft against the evaluated
-magnetic field model(s).</p>
+<span class="sig-prename descclassname"><span class="pre">comparison.</span></span><span class="sig-name descname"><span class="pre">CompareJupModels</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">LIVE_PLOTS</span></em>, <em class="sig-param"><span class="pre">scName</span></em>, <em class="sig-param"><span class="pre">moonName</span></em>, <em class="sig-param"><span class="pre">orbNum</span></em>, <em class="sig-param"><span class="pre">moonProx_RP</span></em>, <em class="sig-param"><span class="pre">PlanetMinDist_RP</span></em>, <em class="sig-param"><span class="pre">PlanetMaxDist_RP</span></em>, <em class="sig-param"><span class="pre">SEQUENTIAL</span></em>, <em class="sig-param"><span class="pre">FULLORBITS</span></em>, <em class="sig-param"><span class="pre">FLYBYS</span></em>, <em class="sig-param"><span class="pre">JUNOTOO</span></em><span class="sig-paren">)</span><a class="headerlink" href="#comparison.CompareJupModels" title="Permalink to this definition"></a></dt>
+<dd><p>Compare magnetic field measurements from spacecraft near Jupiter against each implemented
+magnetic field model.</p>
+<p>Datasets:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>Galileo MAG: <a class="reference external" href="https://doi.org/10.17189/1519667">https://doi.org/10.17189/1519667</a>, volume GO-J-MAG-3-RDR-HIGHRES-V1.0</p></li>
+<li><p>Juno MAG: <a class="reference external" href="https://doi.org/10.17189/1519711">https://doi.org/10.17189/1519711</a>, volume JNO-J-3-FGM-CAL-V1.0</p></li>
+</ul>
+</div></blockquote>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This script requires having run PlanetMag.m for the Galileo era for all implemented planetary and
+magnetopause models using <code class="docutils literal notranslate"><span class="pre">ALL_MODELS=1</span></code>.</p>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>LIVE_PLOTS</strong> (<span><code class="xref mat mat-obj docutils literal notranslate"><span class="pre">bool,</span> <span class="pre">default=0</span></code></span>) – Whether to load interactive figure windows for plots (true) or print them to disk (false).</p></li>
+<li><p><strong>scName</strong> (<span><code class="xref mat mat-obj docutils literal notranslate"><span class="pre">string,</span> <span class="pre">default=&quot;Galileo&quot;</span></code></span>) – Spacecraft name for which magnetic field data will be compared against implemented models. A
+directory must exist with this name in the <code class="docutils literal notranslate"><span class="pre">MAG</span></code> directory within the top-level PlanetMag
+directory. This directory will be searched for body-specific data files, and each of these
+files will be loaded.</p></li>
+<li><p><strong>moonName</strong> (<span><code class="xref mat mat-obj docutils literal notranslate"><span class="pre">char,</span> <span class="pre">1xC,</span> <span class="pre">default='Ganymede'</span></code></span>) – Name of moon for which <code class="docutils literal notranslate"><span class="pre">scName</span></code> has flyby data. Flyby data is not used if <code class="docutils literal notranslate"><span class="pre">FULLORBITS</span></code> is
+true, but a name must be passed for kernel loading.</p></li>
+<li><p><strong>orbNum</strong> (<span><code class="xref mat mat-obj docutils literal notranslate"><span class="pre">int,</span> <span class="pre">default=-1</span></code></span>) – <p>Orbit number to use for data comparison. Accepts the following special options:</p>
+<p>-<code class="docutils literal notranslate"><span class="pre">-1</span></code>: Use all orbits for which data is available.
+-<code class="docutils literal notranslate"><span class="pre">-2</span></code>: Use all orbits for which flyby data is available for <code class="docutils literal notranslate"><span class="pre">moonName</span></code>.</p>
+</p></li>
+<li><p><strong>moonProx_RP</strong> (<span><code class="xref mat mat-obj docutils literal notranslate"><span class="pre">double,</span> <span class="pre">default=0.1</span></code></span>) – Minimum distance to major moons of the system within which measurements will be ignored in
+model validation due to local perturbations, in units of the parent planet’s radius.</p></li>
+<li><p><strong>PlanetMinDist_RP</strong> (<span><code class="xref mat mat-obj docutils literal notranslate"><span class="pre">double,</span> <span class="pre">default=10</span></code></span>) – Minimum distance to parent planet within which measurements will be ignored, in units of the
+parent planet’s radius.</p></li>
+<li><p><strong>PlanetMaxDist_RP</strong> (<span><code class="xref mat mat-obj docutils literal notranslate"><span class="pre">double,</span> <span class="pre">default=20</span></code></span>) – Maximum distance away from parent planet beyond which measurements will be ignored, in units of
+the parent planet’s radius.</p></li>
+<li><p><strong>SEQUENTIAL</strong> (<span><code class="xref mat mat-obj docutils literal notranslate"><span class="pre">bool,</span> <span class="pre">default=1</span></code></span>) – Whether to plot points by index or hours relative to a reference time (J2000).</p></li>
+<li><p><strong>FULLORBITS</strong> (<span><code class="xref mat mat-obj docutils literal notranslate"><span class="pre">bool,</span> <span class="pre">default=1</span></code></span>) – Whether to evalate goodness of fit from full-orbit data in System III coordinates beyond some
+threshold distance <code class="docutils literal notranslate"><span class="pre">rMinMoon_RP</span></code>. Independent of <code class="docutils literal notranslate"><span class="pre">FLYBYS</span></code>.</p></li>
+<li><p><strong>FLYBYS</strong> (<span><code class="xref mat mat-obj docutils literal notranslate"><span class="pre">bool,</span> <span class="pre">default=0</span></code></span>) – Whether to evaluate goodness of fit from flyby data in moon coordinates. Measurements are only
+used if they are beyond <code class="docutils literal notranslate"><span class="pre">rMinMoon_RP</span></code> away from the target moon. Independent of
+<code class="docutils literal notranslate"><span class="pre">FULLORBITS</span></code>.</p></li>
+<li><p><strong>JUNOTOO</strong> (<span><code class="xref mat mat-obj docutils literal notranslate"><span class="pre">bool,</span> <span class="pre">default=1</span></code></span>) – Whether to include Juno flyby data if <code class="docutils literal notranslate"><span class="pre">FLYBYS</span></code> is also true. Currently, only Ganymede flyby
+data is implemented.</p></li>
+</ul>
+</dd>
+</dl>
 </dd></dl>
 
 </section>
@@ -175,9 +246,29 @@ magnetic field model(s).</p>
 <h2><a class="reference internal" href="#comparison.CompareSatModels" title="comparison.CompareSatModels"><code class="xref mat mat-func docutils literal notranslate"><span class="pre">CompareSatModels()</span></code></a><a class="headerlink" href="#comparesatmodels" title="Permalink to this heading"></a></h2>
 <dl class="mat function">
 <dt class="sig sig-object mat" id="comparison.CompareSatModels">
-<span class="sig-prename descclassname"><span class="pre">comparison.</span></span><span class="sig-name descname"><span class="pre">CompareSatModels</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#comparison.CompareSatModels" title="Permalink to this definition"></a></dt>
-<dd><p>Compare magnetic field measurements from spacecraft against the evaluated
-magnetic field model(s).</p>
+<span class="sig-prename descclassname"><span class="pre">comparison.</span></span><span class="sig-name descname"><span class="pre">CompareSatModels</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">LIVE_PLOTS</span></em>, <em class="sig-param"><span class="pre">scNames</span></em>, <em class="sig-param"><span class="pre">SEQUENTIAL</span></em><span class="sig-paren">)</span><a class="headerlink" href="#comparison.CompareSatModels" title="Permalink to this definition"></a></dt>
+<dd><p>Compare magnetic field measurements from spacecraft near Saturn against each implemented magnetic
+field model.</p>
+<p>Datasets:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>Voyager 1 MAG: <a class="reference external" href="https://doi.org/10.17189/1522661">https://doi.org/10.17189/1522661</a>, volume VG1-S-MAG-4-SUMM-L1COORDS-48SEC-V1.0</p></li>
+<li><p>Voyager 2 MAG: <a class="reference external" href="https://doi.org/10.17189/1520002">https://doi.org/10.17189/1520002</a>, volume VG2-S-MAG-4-SUMM-L1COORDS-48SEC-V1.1</p></li>
+</ul>
+</div></blockquote>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>LIVE_PLOTS</strong> (<span><code class="xref mat mat-obj docutils literal notranslate"><span class="pre">bool,</span> <span class="pre">default=0</span></code></span>) – Whether to load interactive figure windows for plots (true) or print them to disk (false).</p></li>
+<li><p><strong>scNames</strong> (<span><code class="xref mat mat-obj docutils literal notranslate"><span class="pre">string,</span> <span class="pre">1xS,</span> <span class="pre">default=[&quot;Voyager</span> <span class="pre">1&quot;,</span> <span class="pre">&quot;Voyager</span> <span class="pre">2&quot;]</span></code></span>) – Spacecraft names for which magnetic field data will be compared against implemented models. A
+directory must exist with each name in the <code class="docutils literal notranslate"><span class="pre">MAG</span></code> directory within the top-level PlanetMag
+directory. These directories will be searched for data files with the <code class="docutils literal notranslate"><span class="pre">.tab</span></code> extension, and
+each of these files will be loaded.</p></li>
+<li><p><strong>SEQUENTIAL</strong> (<span><code class="xref mat mat-obj docutils literal notranslate"><span class="pre">bool,</span> <span class="pre">default=0</span></code></span>) – Whether to plot points by index or hours relative to a reference time (typically closest
+approach).</p></li>
+</ul>
+</dd>
+</dl>
 </dd></dl>
 
 </section>
@@ -185,9 +276,28 @@ magnetic field model(s).</p>
 <h2><a class="reference internal" href="#comparison.CompareUraModels" title="comparison.CompareUraModels"><code class="xref mat mat-func docutils literal notranslate"><span class="pre">CompareUraModels()</span></code></a><a class="headerlink" href="#compareuramodels" title="Permalink to this heading"></a></h2>
 <dl class="mat function">
 <dt class="sig sig-object mat" id="comparison.CompareUraModels">
-<span class="sig-prename descclassname"><span class="pre">comparison.</span></span><span class="sig-name descname"><span class="pre">CompareUraModels</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#comparison.CompareUraModels" title="Permalink to this definition"></a></dt>
-<dd><p>Compare magnetic field measurements from spacecraft against the evaluated
-magnetic field model(s).</p>
+<span class="sig-prename descclassname"><span class="pre">comparison.</span></span><span class="sig-name descname"><span class="pre">CompareUraModels</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">LIVE_PLOTS</span></em>, <em class="sig-param"><span class="pre">scName</span></em>, <em class="sig-param"><span class="pre">SEQUENTIAL</span></em><span class="sig-paren">)</span><a class="headerlink" href="#comparison.CompareUraModels" title="Permalink to this definition"></a></dt>
+<dd><p>Compare magnetic field measurements from spacecraft near Uranus against each implemented magnetic
+field model.</p>
+<p>Datasets:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>Voyager 2 MAG: <a class="reference external" href="https://doi.org/10.17189/1520034">https://doi.org/10.17189/1520034</a>, volume VG2-U-MAG-4-RDR-U1COORDS-48SEC-V1.0</p></li>
+</ul>
+</div></blockquote>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>LIVE_PLOTS</strong> (<span><code class="xref mat mat-obj docutils literal notranslate"><span class="pre">bool,</span> <span class="pre">default=0</span></code></span>) – Whether to load interactive figure windows for plots (true) or print them to disk (false).</p></li>
+<li><p><strong>scName</strong> (<span><code class="xref mat mat-obj docutils literal notranslate"><span class="pre">string,</span> <span class="pre">default=&quot;Voyager</span> <span class="pre">2&quot;</span></code></span>) – Spacecraft name for which magnetic field data will be compared against implemented models. A
+directory must exist with this name in the <code class="docutils literal notranslate"><span class="pre">MAG</span></code> directory within the top-level PlanetMag
+directory. This directory will be searched for body-specific data files, and each of these
+files will be loaded.</p></li>
+<li><p><strong>SEQUENTIAL</strong> (<span><code class="xref mat mat-obj docutils literal notranslate"><span class="pre">bool,</span> <span class="pre">default=0</span></code></span>) – Whether to plot points by index or hours relative to a reference time (typically closest
+approach).</p></li>
+</ul>
+</dd>
+</dl>
 </dd></dl>
 
 </section>
@@ -195,9 +305,28 @@ magnetic field model(s).</p>
 <h2><a class="reference internal" href="#comparison.CompareNepModels" title="comparison.CompareNepModels"><code class="xref mat mat-func docutils literal notranslate"><span class="pre">CompareNepModels()</span></code></a><a class="headerlink" href="#comparenepmodels" title="Permalink to this heading"></a></h2>
 <dl class="mat function">
 <dt class="sig sig-object mat" id="comparison.CompareNepModels">
-<span class="sig-prename descclassname"><span class="pre">comparison.</span></span><span class="sig-name descname"><span class="pre">CompareNepModels</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#comparison.CompareNepModels" title="Permalink to this definition"></a></dt>
-<dd><p>Compare magnetic field measurements from spacecraft against the evaluated
-magnetic field model(s).</p>
+<span class="sig-prename descclassname"><span class="pre">comparison.</span></span><span class="sig-name descname"><span class="pre">CompareNepModels</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">LIVE_PLOTS</span></em>, <em class="sig-param"><span class="pre">scName</span></em>, <em class="sig-param"><span class="pre">SEQUENTIAL</span></em><span class="sig-paren">)</span><a class="headerlink" href="#comparison.CompareNepModels" title="Permalink to this definition"></a></dt>
+<dd><p>Compare magnetic field measurements from spacecraft near Neptune against each implemented
+magnetic field model.</p>
+<p>Datasets:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>Voyager 2 MAG: <a class="reference external" href="https://doi.org/10.17189/1519975">https://doi.org/10.17189/1519975</a>, volume VG2-N-MAG-4-SUMM-NLSCOORDS-12SEC-V1.0</p></li>
+</ul>
+</div></blockquote>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>LIVE_PLOTS</strong> (<span><code class="xref mat mat-obj docutils literal notranslate"><span class="pre">bool,</span> <span class="pre">default=0</span></code></span>) – Whether to load interactive figure windows for plots (true) or print them to disk (false).</p></li>
+<li><p><strong>scName</strong> (<span><code class="xref mat mat-obj docutils literal notranslate"><span class="pre">string,</span> <span class="pre">default=&quot;Voyager</span> <span class="pre">2&quot;</span></code></span>) – Spacecraft name for which magnetic field data will be compared against implemented models. A
+directory must exist with this name in the <code class="docutils literal notranslate"><span class="pre">MAG</span></code> directory within the top-level PlanetMag
+directory. This directory will be searched for body-specific data files, and each of these
+files will be loaded.</p></li>
+<li><p><strong>SEQUENTIAL</strong> (<span><code class="xref mat mat-obj docutils literal notranslate"><span class="pre">bool,</span> <span class="pre">default=0</span></code></span>) – Whether to plot points by index or hours relative to a reference time (typically closest
+approach).</p></li>
+</ul>
+</dd>
+</dl>
 </dd></dl>
 
 </section>
@@ -223,6 +352,25 @@ evaluation.</p></li>
 </ul>
 </dd>
 </dl>
+</dd></dl>
+
+</section>
+<section id="basic-testing">
+<h2>Basic testing<a class="headerlink" href="#basic-testing" title="Permalink to this heading"></a></h2>
+<dl class="mat function">
+<dt class="sig sig-object mat" id="test.PMtest">
+<span class="sig-prename descclassname"><span class="pre">test.</span></span><span class="sig-name descname"><span class="pre">PMtest</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">LIVE_PLOTS</span></em><span class="sig-paren">)</span><a class="headerlink" href="#test.PMtest" title="Permalink to this definition"></a></dt>
+<dd><p>Test script to run each focus feature of PlanetMag to check for errors.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>LIVE_PLOTS</strong> (<span><code class="xref mat mat-obj docutils literal notranslate"><span class="pre">bool,</span> <span class="pre">default=0</span></code></span>) – Whether to load interactive figure windows for plots (true) or print them to disk (false).</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Setting <code class="docutils literal notranslate"><span class="pre">LIVE_PLOTS</span></code> to true will use a lot of system memory, causing a freeze if insufficient
+memory is available.</p>
+</div>
 </dd></dl>
 
 </section>

@@ -56,9 +56,7 @@
 <li class="toctree-l3"><a class="reference internal" href="#ksmagfldjupiter"><code class="xref mat mat-func docutils literal notranslate"><span class="pre">KSMagFldJupiter()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#mpausefld"><code class="xref mat mat-func docutils literal notranslate"><span class="pre">MpauseFld()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#magfldparentsingle"><code class="xref mat mat-func docutils literal notranslate"><span class="pre">MagFldParentSingle()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="#legendrep"><code class="xref mat mat-func docutils literal notranslate"><span class="pre">LegendreP()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#legendres"><code class="xref mat mat-func docutils literal notranslate"><span class="pre">LegendreS()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="#dlegendrep"><code class="xref mat mat-func docutils literal notranslate"><span class="pre">dLegendreP()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#dlegendres"><code class="xref mat mat-func docutils literal notranslate"><span class="pre">dLegendreS()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#bsph2bxyz"><code class="xref mat mat-func docutils literal notranslate"><span class="pre">Bsph2Bxyz()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#bxyz2bsph"><code class="xref mat mat-func docutils literal notranslate"><span class="pre">Bxyz2Bsph()</span></code></a></li>
@@ -71,7 +69,7 @@
 <li class="toctree-l3"><a class="reference internal" href="#getbplotandlsqneptune"><code class="xref mat mat-func docutils literal notranslate"><span class="pre">GetBplotAndLsqNeptune()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#getgausscoeffs"><code class="xref mat mat-func docutils literal notranslate"><span class="pre">GetGaussCoeffs()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#getmodelopts"><code class="xref mat mat-func docutils literal notranslate"><span class="pre">GetModelOpts()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="#getmoondist"><code class="xref mat mat-func docutils literal notranslate"><span class="pre">GetMoonDist()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#getminmoondist"><code class="xref mat mat-func docutils literal notranslate"><span class="pre">GetMinMoonDist()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#getposspice"><code class="xref mat mat-func docutils literal notranslate"><span class="pre">GetPosSpice()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#gettargetmoondist"><code class="xref mat mat-func docutils literal notranslate"><span class="pre">GetTargetMoonDist()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#loadspice"><code class="xref mat mat-func docutils literal notranslate"><span class="pre">LoadSpice()</span></code></a></li>
@@ -193,30 +191,39 @@ current sheet model from K. Khurana.</p>
 <dd></dd></dl>
 
 </section>
-<section id="legendrep">
-<h3><a class="reference internal" href="#functions.LegendreP" title="functions.LegendreP"><code class="xref mat mat-func docutils literal notranslate"><span class="pre">LegendreP()</span></code></a><a class="headerlink" href="#legendrep" title="Permalink to this heading"></a></h3>
-<dl class="mat function">
-<dt class="sig sig-object mat" id="functions.LegendreP">
-<span class="sig-prename descclassname"><span class="pre">functions.</span></span><span class="sig-name descname"><span class="pre">LegendreP</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">n</span></em>, <em class="sig-param"><span class="pre">m</span></em>, <em class="sig-param"><span class="pre">theta</span></em>, <em class="sig-param"><span class="pre">UNNORM</span></em><span class="sig-paren">)</span><a class="headerlink" href="#functions.LegendreP" title="Permalink to this definition"></a></dt>
-<dd><p>n ( or l) = degree m = order</p>
-</dd></dl>
-
-</section>
 <section id="legendres">
 <h3><a class="reference internal" href="#functions.LegendreS" title="functions.LegendreS"><code class="xref mat mat-func docutils literal notranslate"><span class="pre">LegendreS()</span></code></a><a class="headerlink" href="#legendres" title="Permalink to this heading"></a></h3>
 <dl class="mat function">
 <dt class="sig sig-object mat" id="functions.LegendreS">
 <span class="sig-prename descclassname"><span class="pre">functions.</span></span><span class="sig-name descname"><span class="pre">LegendreS</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">n</span></em>, <em class="sig-param"><span class="pre">m</span></em>, <em class="sig-param"><span class="pre">theta</span></em>, <em class="sig-param"><span class="pre">UNNORM</span></em><span class="sig-paren">)</span><a class="headerlink" href="#functions.LegendreS" title="Permalink to this definition"></a></dt>
-<dd><p>n ( or l) = degree m = order</p>
+<dd><p>Evaluate Schmidt semi-normalized associated Legendre functions for a single n,m.</p>
+<p>Returns the value of Schmidt semi-normalized associated Legendre functions <span class="math notranslate nohighlight">\(S_n^m\)</span> of
+degree n and order m at a list of colatitudes theta. The Condon–Shortley phase is omitted.
+The Schmidt normalization is</p>
+<div class="math notranslate nohighlight">
+\[S_n^m(\theta) = \sqrt{(2 - \delta_{m0})\frac{(n-m)!}{(n+m)!}} P_n^m(\cos\theta)\]</div>
+<p>where <span class="math notranslate nohighlight">\(P_n^m\)</span> are the unnormalized associated Legendre functions without the
+Condon–Shortley phase and <span class="math notranslate nohighlight">\(\delta_{m,m'}\)</span> is the Kronecker delta function, which is 0
+unless <span class="math notranslate nohighlight">\(m = m'\)</span>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>n</strong> (<span><code class="xref mat mat-obj docutils literal notranslate"><span class="pre">int</span></code></span>) – Degree n and order m for which to evaluate Legendre functions.</p></li>
+<li><p><strong>m</strong> (<span><code class="xref mat mat-obj docutils literal notranslate"><span class="pre">int</span></code></span>) – Degree n and order m for which to evaluate Legendre functions.</p></li>
+<li><p><strong>theta</strong> (<span><code class="xref mat mat-obj docutils literal notranslate"><span class="pre">double,</span> <span class="pre">1xN</span></code></span>) – Colatitudes in radians at which to evaluate Legendre functions.</p></li>
+<li><p><strong>UNNORM</strong> (<span><code class="xref mat mat-obj docutils literal notranslate"><span class="pre">bool,</span> <span class="pre">default=0</span></code></span>) – Whether to return <strong>un</strong>-normalized associated Legendre functions <span class="math notranslate nohighlight">\(P_n^m(\cos\theta)\)</span>.
+As with the default, semi-normalized <span class="math notranslate nohighlight">\(S_n^m\)</span>, the Condon–Shortley phase is omitted.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>Snm</strong> – Schmidt semi-normalized associated Legendre function evaluation at given colatitudes for the
+specified n,m.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>double, 1xN</p>
+</dd>
+</dl>
 </dd></dl>
-
-</section>
-<section id="dlegendrep">
-<h3><a class="reference internal" href="#functions.dLegendreP" title="functions.dLegendreP"><code class="xref mat mat-func docutils literal notranslate"><span class="pre">dLegendreP()</span></code></a><a class="headerlink" href="#dlegendrep" title="Permalink to this heading"></a></h3>
-<dl class="mat function">
-<dt class="sig sig-object mat" id="functions.dLegendreP">
-<span class="sig-prename descclassname"><span class="pre">functions.</span></span><span class="sig-name descname"><span class="pre">dLegendreP</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">n</span></em>, <em class="sig-param"><span class="pre">m</span></em>, <em class="sig-param"><span class="pre">theta</span></em>, <em class="sig-param"><span class="pre">UNNORM</span></em><span class="sig-paren">)</span><a class="headerlink" href="#functions.dLegendreP" title="Permalink to this definition"></a></dt>
-<dd></dd></dl>
 
 </section>
 <section id="dlegendres">
@@ -224,7 +231,31 @@ current sheet model from K. Khurana.</p>
 <dl class="mat function">
 <dt class="sig sig-object mat" id="functions.dLegendreS">
 <span class="sig-prename descclassname"><span class="pre">functions.</span></span><span class="sig-name descname"><span class="pre">dLegendreS</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">n</span></em>, <em class="sig-param"><span class="pre">m</span></em>, <em class="sig-param"><span class="pre">theta</span></em>, <em class="sig-param"><span class="pre">UNNORM</span></em><span class="sig-paren">)</span><a class="headerlink" href="#functions.dLegendreS" title="Permalink to this definition"></a></dt>
-<dd></dd></dl>
+<dd><p>Evaluate the derivative of Schmidt semi-normalized associated Legendre functions for a single
+n,m.</p>
+<p>Returns the value of the <span class="math notranslate nohighlight">\(\theta\)</span> derivative of Schmidt semi-normalized associated Legendre
+functions <span class="math notranslate nohighlight">\(\frac{dS_n^m}{d\theta}\)</span> of degree n and order m at a list of colatitudes theta.
+The Condon–Shortley phase is omitted. See <code class="xref py py-func docutils literal notranslate"><span class="pre">LegendreS()</span></code> for more information on the normalization.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>n</strong> (<span><code class="xref mat mat-obj docutils literal notranslate"><span class="pre">int</span></code></span>) – Degree n and order m for which to evaluate Legendre function derivatives.</p></li>
+<li><p><strong>m</strong> (<span><code class="xref mat mat-obj docutils literal notranslate"><span class="pre">int</span></code></span>) – Degree n and order m for which to evaluate Legendre function derivatives.</p></li>
+<li><p><strong>theta</strong> (<span><code class="xref mat mat-obj docutils literal notranslate"><span class="pre">double,</span> <span class="pre">1xN</span></code></span>) – Colatitudes in radians at which to evaluate Legendre function derivatives.</p></li>
+<li><p><strong>UNNORM</strong> (<span><code class="xref mat mat-obj docutils literal notranslate"><span class="pre">bool,</span> <span class="pre">default=0</span></code></span>) – Whether to return <strong>un</strong>-normalized associated Legendre function derivatives
+<span class="math notranslate nohighlight">\(\frac{dP_n^m(\cos\theta)}{d\theta}\)</span>. As with the default, the Condon–Shortley phase is
+omitted.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>dSnm</strong> – Schmidt semi-normalized associated Legendre function derivative evaluation at given colatitudes
+for the specified n,m.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>double, 1xN</p>
+</dd>
+</dl>
+</dd></dl>
 
 </section>
 <section id="bsph2bxyz">
@@ -296,16 +327,18 @@ vectors.</p>
 <dl class="mat function">
 <dt class="sig sig-object mat" id="functions.CalcExcitationsFFT">
 <span class="sig-prename descclassname"><span class="pre">functions.</span></span><span class="sig-name descname"><span class="pre">CalcExcitationsFFT</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#functions.CalcExcitationsFFT" title="Permalink to this definition"></a></dt>
-<dd><dl class="simple">
-<dt>NOTE: This script evaluates excitation moments with an FFT method.</dt><dd><p>This method is not recommended, as fine-tuning the sampling of the
+<dd><p>Calculate excitation moments using a Fast Fourier Transform (FFT) method.
+This script is included for historical comparison purposes only.
+NOTE: This script evaluates excitation moments with an FFT method.</p>
+<blockquote>
+<div><p>This method is not recommended, as fine-tuning the sampling of the
 time series data to well-resolve one peak in the Fourier spectrum
 will necessarily contribute to spectral leakage for all other
 non-harmonic peaks. This forces the phases of each excitation
 moment relative to the reference time (J2000) to be incorrect.
 Instead, the method applied using principle component
 decomposition in <code class="xref py py-func docutils literal notranslate"><span class="pre">PlanetMag()</span></code> is recommended.</p>
-</dd>
-</dl>
+</div></blockquote>
 <p>Procedure:
 0. Download SPICE kernels listed in loadSpice.
 1. Run a spectrum for a lot of eval points, ~1M+. Since Tinterest_h is
@@ -320,8 +353,25 @@ heights in x, y, and z to a text file.</p>
 <h3><a class="reference internal" href="#functions.ConvertSwarmCDF" title="functions.ConvertSwarmCDF"><code class="xref mat mat-func docutils literal notranslate"><span class="pre">ConvertSwarmCDF()</span></code></a><a class="headerlink" href="#convertswarmcdf" title="Permalink to this heading"></a></h3>
 <dl class="mat function">
 <dt class="sig sig-object mat" id="functions.ConvertSwarmCDF">
-<span class="sig-prename descclassname"><span class="pre">functions.</span></span><span class="sig-name descname"><span class="pre">ConvertSwarmCDF</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">fNameIn</span></em>, <em class="sig-param"><span class="pre">fNameOut</span></em><span class="sig-paren">)</span><a class="headerlink" href="#functions.ConvertSwarmCDF" title="Permalink to this definition"></a></dt>
-<dd></dd></dl>
+<span class="sig-prename descclassname"><span class="pre">functions.</span></span><span class="sig-name descname"><span class="pre">ConvertSwarmCDF</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">fNameIn</span></em>, <em class="sig-param"><span class="pre">fNameOut</span></em>, <em class="sig-param"><span class="pre">fDir</span></em><span class="sig-paren">)</span><a class="headerlink" href="#functions.ConvertSwarmCDF" title="Permalink to this definition"></a></dt>
+<dd><p>Convert magnetic field data files from the Swarm mission from CDF to ASCII text.</p>
+<p>Converts CDF file containing Swarm data to .tab text file with positions and field vector
+components aligned to the IAU_EARTH frame. Spice kernels must already be loaded (use
+<code class="xref py py-func docutils literal notranslate"><span class="pre">LoadSpice()</span></code> with <code class="docutils literal notranslate"><span class="pre">'Earth',</span> <span class="pre">'Swarm'</span></code>). Note that all indices pertaining to timestamps,
+locations, and measurement data and the corresponding coordinate systems must be set bespoke
+to each CDF file. Converting this function to work with other missions’ data products will
+require a careful examination of the second output from cdfread (info) and the ordering of the
+contents in info.Variables.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>fNameIn</strong> (<span><code class="xref mat mat-obj docutils literal notranslate"><span class="pre">char,</span> <span class="pre">1xC</span></code></span>) – Name of .cdf input file.</p></li>
+<li><p><strong>fNameOut</strong> (<span><code class="xref mat mat-obj docutils literal notranslate"><span class="pre">char,</span> <span class="pre">1xD</span></code></span>) – Name of .tab output file.</p></li>
+<li><p><strong>fDir</strong> (<span><code class="xref mat mat-obj docutils literal notranslate"><span class="pre">char,</span> <span class="pre">1xE,</span> <span class="pre">default=fullfile('MAG',</span> <span class="pre">'Swarm')</span></code></span>) – Directory where input file is located and output file will be printed.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
 
 </section>
 <section id="excitationspectrum">
@@ -380,12 +430,45 @@ heights in x, y, and z to a text file.</p>
 <dd></dd></dl>
 
 </section>
-<section id="getmoondist">
-<h3><a class="reference internal" href="#functions.GetMoonDist" title="functions.GetMoonDist"><code class="xref mat mat-func docutils literal notranslate"><span class="pre">GetMoonDist()</span></code></a><a class="headerlink" href="#getmoondist" title="Permalink to this heading"></a></h3>
+<section id="getminmoondist">
+<h3><a class="reference internal" href="#functions.GetMinMoonDist" title="functions.GetMinMoonDist"><code class="xref mat mat-func docutils literal notranslate"><span class="pre">GetMinMoonDist()</span></code></a><a class="headerlink" href="#getminmoondist" title="Permalink to this heading"></a></h3>
 <dl class="mat function">
-<dt class="sig sig-object mat" id="functions.GetMoonDist">
-<span class="sig-prename descclassname"><span class="pre">functions.</span></span><span class="sig-name descname"><span class="pre">GetMoonDist</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">sc</span></em>, <em class="sig-param"><span class="pre">parentName</span></em>, <em class="sig-param"><span class="pre">ets</span></em><span class="sig-paren">)</span><a class="headerlink" href="#functions.GetMoonDist" title="Permalink to this definition"></a></dt>
-<dd></dd></dl>
+<dt class="sig sig-object mat" id="functions.GetMinMoonDist">
+<span class="sig-prename descclassname"><span class="pre">functions.</span></span><span class="sig-name descname"><span class="pre">GetMinMoonDist</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">sc</span></em>, <em class="sig-param"><span class="pre">parentName</span></em>, <em class="sig-param"><span class="pre">ets</span></em><span class="sig-paren">)</span><a class="headerlink" href="#functions.GetMinMoonDist" title="Permalink to this definition"></a></dt>
+<dd><p>Get distance from a target to the nearest major moon of a planetary system.</p>
+<p>Uses loaded SPICE kernels to determine the distance from the target to the major moons of the
+specified parent body at given ephemeris times (ETs). ETs are in terms of seconds relative to
+J2000. Position vectors are evaluated in IAU coordinates for the parent body since we only
+consider line-of-sight distance. Returns the distance to the nearest moon at each ET and the
+radial distance to the parent body center of mass, both in km.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>sc</strong> (<span><code class="xref mat mat-obj docutils literal notranslate"><span class="pre">char,</span> <span class="pre">1xC</span></code></span>) – Name of target body (e.g. spacecraft) understood by SPICE when upper-cased.</p></li>
+<li><p><strong>parentName</strong> (<span><code class="xref mat mat-obj docutils literal notranslate"><span class="pre">char,</span> <span class="pre">1xD</span></code></span>) – <p>Name of parent body from which to determine relative distance to the target and for the moons
+of this body. Must be one of the following:</p>
+<blockquote>
+<div><p>-<code class="docutils literal notranslate"><span class="pre">Earth</span></code>
+-<code class="docutils literal notranslate"><span class="pre">Jupiter</span></code>
+-<code class="docutils literal notranslate"><span class="pre">Saturn</span></code>
+-<code class="docutils literal notranslate"><span class="pre">Uranus</span></code>
+-<code class="docutils literal notranslate"><span class="pre">Neptune</span></code></p>
+</div></blockquote>
+<p>and have SPICE kernels present in the loaded kernel pool sufficient to determine all relative
+locations.</p>
+</p></li>
+<li><p><strong>ets</strong> (<span><code class="xref mat mat-obj docutils literal notranslate"><span class="pre">double,</span> <span class="pre">1xN</span></code></span>) – Ephemeris times in TDB seconds relative to J2000.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><strong>rMinMoon_km</strong> (<em>double, 1xN</em>) – Radial distance from the target to the nearest major moon of the parent body in km.</p></li>
+<li><p><strong>rPar_km</strong> (<em>double, 1xN</em>) – Radial distance from the target to the parent body in km.</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
 
 </section>
 <section id="getposspice">
@@ -393,7 +476,37 @@ heights in x, y, and z to a text file.</p>
 <dl class="mat function">
 <dt class="sig sig-object mat" id="functions.GetPosSpice">
 <span class="sig-prename descclassname"><span class="pre">functions.</span></span><span class="sig-name descname"><span class="pre">GetPosSpice</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">moonName</span></em>, <em class="sig-param"><span class="pre">parentName</span></em>, <em class="sig-param"><span class="pre">t_h</span></em>, <em class="sig-param"><span class="pre">S3coords</span></em><span class="sig-paren">)</span><a class="headerlink" href="#functions.GetPosSpice" title="Permalink to this definition"></a></dt>
-<dd></dd></dl>
+<dd><p>Retrieve locations of a target relative to a parent body at specified ephemeris times.</p>
+<p>Uses loaded SPICE kernels to determine the position of one body relative to another in a specific
+coordinate system. If the coordinates are not passed, standard cartesian coordinates are
+selected. Ephemeris times are passed in terms of hours relative to J2000.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>moonName</strong> (<span><code class="xref mat mat-obj docutils literal notranslate"><span class="pre">char,</span> <span class="pre">1xC</span></code></span>) – Name of target body, which must match a code name understood by SPICE and present in the loaded
+kernel pool when upper-cased. Can be any body loaded in the kernel pool for which sufficient
+data is present to determine location relative to the parent.</p></li>
+<li><p><strong>parentName</strong> (<span><code class="xref mat mat-obj docutils literal notranslate"><span class="pre">char,</span> <span class="pre">1xD</span></code></span>) – Name of parent body understood by SPICE when upper-cased.</p></li>
+<li><p><strong>t_h</strong> (<span><code class="xref mat mat-obj docutils literal notranslate"><span class="pre">double,</span> <span class="pre">1xN</span></code></span>) – Ephemeris times in TDB hours relative to J2000.</p></li>
+<li><p><strong>S3coords</strong> (<span><code class="xref mat mat-obj docutils literal notranslate"><span class="pre">char,</span> <span class="pre">1xE,</span> <span class="pre">optional</span></code></span>) – Standard (System III) coordinates to use for the parent body. Defaults to ULS for Uranus, NLS
+for Neptune, or IAU_PARENT for any other parent body. Any coordinate system understood by SPICE
+will return a result, but the first 3 return values from this function will only be converted
+correctly into spherical coordinates if cartesian coordinates are specified. Magnetic field
+model evaluations will only work correctly with the default coordinates.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><strong>r_km</strong> (<em>double, 1xN</em>) – Radii from parent body center of mass in km.</p></li>
+<li><p><strong>theta_rad</strong> (<em>double, 1xN</em>) – Colatitude of positions relative to parent body spin pole in radians.</p></li>
+<li><p><strong>phi_rad</strong> (<em>double, 1xN</em>) – East longitude of positions relative to IAU-defined parent body prime meridian in radians.</p></li>
+<li><p><strong>xyz_km</strong> (<em>double, 3xN</em>) – Position vectors of target body for each time in the selected coordinates.</p></li>
+<li><p><strong>S3coords</strong> (<em>char, 1xE</em>) – Coordinate system of position vectors.</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
 
 </section>
 <section id="gettargetmoondist">
@@ -401,15 +514,91 @@ heights in x, y, and z to a text file.</p>
 <dl class="mat function">
 <dt class="sig sig-object mat" id="functions.GetTargetMoonDist">
 <span class="sig-prename descclassname"><span class="pre">functions.</span></span><span class="sig-name descname"><span class="pre">GetTargetMoonDist</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">sc</span></em>, <em class="sig-param"><span class="pre">moonName</span></em>, <em class="sig-param"><span class="pre">parentName</span></em>, <em class="sig-param"><span class="pre">ets</span></em><span class="sig-paren">)</span><a class="headerlink" href="#functions.GetTargetMoonDist" title="Permalink to this definition"></a></dt>
-<dd></dd></dl>
+<dd><p>Get distance between two targets at given ephemeris times.</p>
+<p>Uses loaded SPICE kernels to determine the distance from the first target to the second in terms
+of planetary equatorial radii of the second target. Planetary radius is as defined in the
+last-loaded text PCK file. Ephemeris times are passed in terms of seconds relative to J2000.
+Position vectors are evaluated in IAU coordinates for the parent body of the second target
+because these coordinates are always defined in SPICE and we are only finding the line-of-sight
+distance, so the coordinates don’t matter.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>sc</strong> (<span><code class="xref mat mat-obj docutils literal notranslate"><span class="pre">char,</span> <span class="pre">1xC</span></code></span>) – Name of target body (e.g. spacecraft) understood by SPICE when upper-cased.</p></li>
+<li><p><strong>moonName</strong> (<span><code class="xref mat mat-obj docutils literal notranslate"><span class="pre">char,</span> <span class="pre">1xD</span></code></span>) – Name of target body from which to determine relative distance. Must match a code name
+understood by SPICE and present in the loaded kernel pool when upper-cased. Can be any body
+loaded in the kernel pool for which sufficient data is present to determine sc location
+relative to this body AND for which a radius can be determined from loaded PCK files.</p></li>
+<li><p><strong>parentName</strong> (<span><code class="xref mat mat-obj docutils literal notranslate"><span class="pre">char,</span> <span class="pre">1xE</span></code></span>) – Name of parent body understood by SPICE when upper-cased to use for evaluation of position
+vectors.</p></li>
+<li><p><strong>ets</strong> (<span><code class="xref mat mat-obj docutils literal notranslate"><span class="pre">double,</span> <span class="pre">1xN</span></code></span>) – Ephemeris times in TDB seconds relative to J2000.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>r_RM</strong> – Distance between target bodies in equatorial radii of the second target body (moonName).</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>double, 1xN</p>
+</dd>
+</dl>
+</dd></dl>
 
 </section>
 <section id="loadspice">
 <h3><a class="reference internal" href="#functions.LoadSpice" title="functions.LoadSpice"><code class="xref mat mat-func docutils literal notranslate"><span class="pre">LoadSpice()</span></code></a><a class="headerlink" href="#loadspice" title="Permalink to this heading"></a></h3>
 <dl class="mat function">
 <dt class="sig sig-object mat" id="functions.LoadSpice">
-<span class="sig-prename descclassname"><span class="pre">functions.</span></span><span class="sig-name descname"><span class="pre">LoadSpice</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">moonName</span></em>, <em class="sig-param"><span class="pre">sc</span></em><span class="sig-paren">)</span><a class="headerlink" href="#functions.LoadSpice" title="Permalink to this definition"></a></dt>
-<dd></dd></dl>
+<span class="sig-prename descclassname"><span class="pre">functions.</span></span><span class="sig-name descname"><span class="pre">LoadSpice</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">moonName</span></em>, <em class="sig-param"><span class="pre">sc</span></em>, <em class="sig-param"><span class="pre">spiceDir</span></em><span class="sig-paren">)</span><a class="headerlink" href="#functions.LoadSpice" title="Permalink to this definition"></a></dt>
+<dd><p>Load SPICE kernels needed to determine positions for an input spacecraft and target moon.</p>
+<p>Loads into the SPICE kernel pool all those kernels needed to evaluate spacecraft and moon
+positions relative to the parent planet.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>moonName</strong> (<span><code class="xref mat mat-obj docutils literal notranslate"><span class="pre">char,</span> <span class="pre">1xC</span></code></span>) – <p>Name of target body. Currently implemented options are:</p>
+<blockquote>
+<div><p>-<code class="docutils literal notranslate"><span class="pre">Moon</span></code>
+-<code class="docutils literal notranslate"><span class="pre">Io</span></code>
+-<code class="docutils literal notranslate"><span class="pre">Europa</span></code>
+-<code class="docutils literal notranslate"><span class="pre">Ganymede</span></code>
+-<code class="docutils literal notranslate"><span class="pre">Callisto</span></code>
+-<code class="docutils literal notranslate"><span class="pre">Mimas</span></code>
+-<code class="docutils literal notranslate"><span class="pre">Enceladus</span></code>
+-<code class="docutils literal notranslate"><span class="pre">Dione</span></code>
+-<code class="docutils literal notranslate"><span class="pre">Rhea</span></code>
+-<code class="docutils literal notranslate"><span class="pre">Titan</span></code>
+-<code class="docutils literal notranslate"><span class="pre">Miranda</span></code>
+-<code class="docutils literal notranslate"><span class="pre">Ariel</span></code>
+-<code class="docutils literal notranslate"><span class="pre">Umbriel</span></code>
+-<code class="docutils literal notranslate"><span class="pre">Titania</span></code>
+-<code class="docutils literal notranslate"><span class="pre">Oberon</span></code>
+-<code class="docutils literal notranslate"><span class="pre">Triton</span></code></p>
+</div></blockquote>
+<p>and their parent planets. The same binary kernels are loaded for any body within a particular
+planetary system, as these kernels contain information for all listed satellites and the
+planet.</p>
+</p></li>
+<li><p><strong>sc</strong> (<span><code class="xref mat mat-obj docutils literal notranslate"><span class="pre">char,</span> <span class="pre">1xD</span></code></span>) – <p>Spacecraft name for which trajectories will be loaded from relevant binary SPICE kernels.
+Currently implemented options are:</p>
+<blockquote>
+<div><p>-<code class="docutils literal notranslate"><span class="pre">Swarm</span></code>
+-<code class="docutils literal notranslate"><span class="pre">Galileo</span></code>
+-<code class="docutils literal notranslate"><span class="pre">Juno</span></code>
+-<code class="docutils literal notranslate"><span class="pre">Voyager</span> <span class="pre">1</span></code>
+-<code class="docutils literal notranslate"><span class="pre">Voyager</span> <span class="pre">2</span></code></p>
+</div></blockquote>
+</p></li>
+<li><p><strong>spiceDir</strong> (<span><code class="xref mat mat-obj docutils literal notranslate"><span class="pre">char,</span> <span class="pre">1xE,</span> <span class="pre">default='spice'</span></code></span>) – Directory where SPICE kernel files are located.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>parentName</strong> – Name of the parent body.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>char, 1xF</p>
+</dd>
+</dl>
+</dd></dl>
 
 </section>
 <section id="lshelltrace">
@@ -417,7 +606,39 @@ heights in x, y, and z to a text file.</p>
 <dl class="mat function">
 <dt class="sig sig-object mat" id="functions.LshellTrace">
 <span class="sig-prename descclassname"><span class="pre">functions.</span></span><span class="sig-name descname"><span class="pre">LshellTrace</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">parentName</span></em>, <em class="sig-param"><span class="pre">opt</span></em>, <em class="sig-param"><span class="pre">MPopt</span></em>, <em class="sig-param"><span class="pre">DO_MPAUSE</span></em>, <em class="sig-param"><span class="pre">sc</span></em>, <em class="sig-param"><span class="pre">t_h</span></em>, <em class="sig-param"><span class="pre">Nmaxin</span></em><span class="sig-paren">)</span><a class="headerlink" href="#functions.LshellTrace" title="Permalink to this definition"></a></dt>
-<dd></dd></dl>
+<dd><p>Determine the L shell of the target body at specified ephemeris times.</p>
+<p>Trace magnetic field line from the location of a target (e.g. a spacecraft) to the magnetic
+dipole equator to determine the radial distance in planetary radii to the planet’s center of mass
+at that location, also known as the L shell.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p><strong>This function is a work in progress and does not work correctly yet.</strong></p>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>parentName</strong> (<span><code class="xref mat mat-obj docutils literal notranslate"><span class="pre">char,</span> <span class="pre">1xC</span></code></span>) – Parent body name recognized by SPICE. Sufficient kernels must be loaded in the pool to
+determine the location of the target relative to this body at each ephemeris time.</p></li>
+<li><p><strong>opt</strong> (<span><code class="xref mat mat-obj docutils literal notranslate"><span class="pre">int</span></code></span>) – Magnetospheric field model option selection. 0 selects the default model—see <code class="xref py py-func docutils literal notranslate"><span class="pre">GetModelOpts()</span></code> for
+more details.</p></li>
+<li><p><strong>MPopt</strong> (<span><code class="xref mat mat-obj docutils literal notranslate"><span class="pre">int</span></code></span>) – Magnetopause current magnetic field model option selection. 0 selects the default model—see
+<code class="xref py py-func docutils literal notranslate"><span class="pre">GetModelOpts()</span></code> for more details.</p></li>
+<li><p><strong>DO_MPAUSE</strong> (<span><code class="xref mat mat-obj docutils literal notranslate"><span class="pre">bool</span></code></span>) – Whether to include magnetopause currents in the magnetic field model.</p></li>
+<li><p><strong>sc</strong> (<span><code class="xref mat mat-obj docutils literal notranslate"><span class="pre">char,</span> <span class="pre">1xD</span></code></span>) – Target body for which to evaluate L shells.</p></li>
+<li><p><strong>t_h</strong> (<span><code class="xref mat mat-obj docutils literal notranslate"><span class="pre">double,</span> <span class="pre">1xN</span></code></span>) – Ephemeris times to evaluate in TDB hours relative to J2000.</p></li>
+<li><p><strong>Nmaxin</strong> (<span><code class="xref mat mat-obj docutils literal notranslate"><span class="pre">int,</span> <span class="pre">default=Inf</span></code></span>) – Spherical harmonic degree to which to limit magnetic field model evaluation in tracing field
+lines. Using the default (Inf) makes use of the highest degree both implemented in <code class="xref py py-func docutils literal notranslate"><span class="pre">MagFldParent()</span></code>
+and present in the model coefficients.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>L</strong> – L shell of each evaluation spacetime point for the target.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>double, 1xN</p>
+</dd>
+</dl>
+</dd></dl>
 
 </section>
 <section id="pca-decomposition">
