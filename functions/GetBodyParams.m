@@ -1,5 +1,61 @@
 function [RparentEq_km, RparentPol_km, RmoonEq_km, a_AU, omegaParent_radps, omegaMoon_radps, ...
         Tparent_s, Tmoon_s, nutPrecParent, nutPrecMoon] = GetBodyParams(moonName)
+% Return physical properties of the target moon, its orbit, and the parent planet.
+%
+% Parameters
+% ----------
+% moonName : char, 1xC
+%   Name of the target moon. Currently implemented options are:
+%   
+%       - ``Moon``
+%       - ``Io``
+%       - ``Europa``
+%       - ``Ganymede``
+%       - ``Callisto``
+%       - ``Mimas``
+%       - ``Enceladus``
+%       - ``Dione``
+%       - ``Rhea``
+%       - ``Titan``
+%       - ``Miranda``
+%       - ``Ariel``
+%       - ``Umbriel``
+%       - ``Titania``
+%       - ``Oberon``
+%       - ``Triton``
+%
+% and their parent planets.
+%
+% Returns
+% -------
+% RparentEq_km : double
+%   Equatorial radius of the parent planet in km.
+% RparentPol_km : double
+%   Polar radius of the parent planet in km.
+% RmoonEq_km : double
+%   Equatorial radius of the target moon in km.
+% a_AU : double
+%   Semimajor axis of the parent planet's solar orbit in AU.
+% omegaParent_radps : double
+%   Angular rotation rate of the parent planet in radians/s.
+% omegaMoon_radps : double
+%   Angular rotation rate of the target moon in radians/s.
+% Tparent_s : double
+%   Sidereal rotation period of the parent planet in s.
+% Tmoon_s : double
+%   Sidereal rotation period of the target moon in s.
+% nutPrecParent : double, 1xN'
+%   Nutation/precession rate coefficients as specified in the latest IAU report implemented in the
+%   loaded PCK file. Size depends on the body and which rates are defined.
+% nutPrecMoon : double, 1xM'
+%   Nutation/precession rate coefficients as specified in the latest IAU report implemented in the
+%   loaded PCK file. Size depends on the body and which rates are defined.
+
+% Part of the PlanetMag framework for evaluation and study of planetary magnetic fields.
+% Created by Corey J. Cochrane and Marshall J. Styczinski
+% Maintained by Marshall J. Styczinski
+% Contact: corey.j.cochrane@jpl.nasa.gov
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
     switch(moonName)
         case 'Moon'

@@ -15,11 +15,11 @@ function [rMinMoon_km, rPar_km] = GetMinMoonDist(sc, parentName, ets)
 %   Name of parent body from which to determine relative distance to the target and for the moons
 %   of this body. Must be one of the following:
 %
-%       -``Earth``
-%       -``Jupiter``
-%       -``Saturn``
-%       -``Uranus``
-%       -``Neptune``
+%       - ``Earth``
+%       - ``Jupiter``
+%       - ``Saturn``
+%       - ``Uranus``
+%       - ``Neptune``
 % 
 %   and have SPICE kernels present in the loaded kernel pool sufficient to determine all relative
 %   locations.

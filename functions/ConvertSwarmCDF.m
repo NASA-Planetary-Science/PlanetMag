@@ -56,13 +56,13 @@ function ConvertSwarmCDF(fNameIn, fNameOut, fDir)
     % Rotate B from ITRF93 (the only ITRF frame implemented in spice at
     % current, and close to the ITRF08 coordinates used for Swarm) to
     % Earth IAU coordinates
-    [Bx_nT, By_nT, Bz_nT] = RotateBspice(BxITRF08_nT, ByITRF08_nT, BzITRF08_nT, ets, 'ITRF93', 'IAU_EARTH');
+    [Bx_nT, By_nT, Bz_nT] = RotateVecSpice(BxITRF08_nT, ByITRF08_nT, BzITRF08_nT, ets, 'ITRF93', 'IAU_EARTH');
     
     % Now do the same transformation for position vectors
     xITRF08_km = r_km .* sin(thITRF08_rad) .* cos(phiITRF08_rad);
     yITRF08_km = r_km .* sin(thITRF08_rad) .* sin(phiITRF08_rad);
     zITRF08_km = r_km .* cos(thITRF08_rad);
-    [xIAU_km, yIAU_km, zIAU_km] = RotateBspice(xITRF08_km, yITRF08_km, zITRF08_km, ets, 'ITRF93', 'IAU_EARTH');
+    [xIAU_km, yIAU_km, zIAU_km] = RotateVecSpice(xITRF08_km, yITRF08_km, zITRF08_km, ets, 'ITRF93', 'IAU_EARTH');
     % Get spherical coordinates for conversions and printing
     theta = acos(zIAU_km ./ r_km);
     phi = atan2(xIAU_km, yIAU_km);

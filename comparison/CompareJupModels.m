@@ -28,8 +28,8 @@ function CompareJupModels(LIVE_PLOTS, scName, moonName, orbNum, moonProx_RP, Pla
 % orbNum : int, default=-1
 %   Orbit number to use for data comparison. Accepts the following special options:
 %
-%   -``-1``: Use all orbits for which data is available.
-%   -``-2``: Use all orbits for which flyby data is available for ``moonName``.
+%   - ``-1``: Use all orbits for which data is available.
+%   - ``-2``: Use all orbits for which flyby data is available for ``moonName``.
 %
 % moonProx_RP : double, default=0.1
 %   Minimum distance to major moons of the system within which measurements will be ignored in
@@ -192,7 +192,7 @@ function CompareJupModels(LIVE_PLOTS, scName, moonName, orbNum, moonProx_RP, Pla
         [fbr_km, fbtheta, fbphi, fbxyz_km, ~] = GetPosSpice(sc, parentName, fbt_h);
         
         [BxSCS3, BySCS3, BzSCS3] = Bsph2Bxyz(fbBrSC, fbBthSC, fbBphiSC, fbtheta, fbphi);
-        [BxSC, BySC, BzSC] = RotateBspice(BxSCS3, BySCS3, BzSCS3, fbets, spkParent, spkMoon);
+        [BxSC, BySC, BzSC] = RotateVecSpice(BxSCS3, BySCS3, BzSCS3, fbets, spkParent, spkMoon);
         r_RM = GetTargetMoonDist(sc, moonName, parentName, fbets);
     end
     

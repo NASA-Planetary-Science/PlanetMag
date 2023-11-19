@@ -42,6 +42,10 @@ Calculation functions
 
 .. mat:autofunction:: dLegendreS
 
+
+Additional supporting functions
+-------------------------------
+
 :mat:func:`Bsph2Bxyz`
 +++++++++++++++++++++
 
@@ -132,10 +136,10 @@ Calculation functions
 
 .. mat:autofunction:: PlotSpectrum
 
-:mat:func:`RotateBspice`
-++++++++++++++++++++++++
+:mat:func:`RotateVecSpice`
+++++++++++++++++++++++++++
 
-.. mat:autofunction:: RotateBspice
+.. mat:autofunction:: RotateVecSpice
 
 Model coefficient functions
 ---------------------------

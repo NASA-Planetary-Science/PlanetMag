@@ -21,12 +21,9 @@ function [Br, Bth, Bphi] = Bxyz2Bsph(Bx, By, Bz, theta, phi)
 %
 % Returns
 % -------
-% Br : double, 1xN
-%   Radial (:math:`\hat{r}`) component of converted vectors.
-% Bth : double, 1xN
-%   Colatitudinal (:math:`\hat{\theta}`) component of converted vectors.
-% Bphi : double, 1xN
-%   Longitudinal (:math:`\hat{\phi}`) component of converted vectors.
+% Br, Bth, Bphi : double, 1xN
+%   Radial (:math:`\hat{r}`), colatitudinal (:math:`\hat{\theta}`), and azimuthal
+%   (:math:`\hat{\phi}`) components of converted vectors.
 
 % Part of the PlanetMag framework for evaluation and study of planetary magnetic fields.
 % Created by Corey J. Cochrane and Marshall J. Styczinski

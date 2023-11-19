@@ -21,12 +21,8 @@ function [Bx, By, Bz] = Bsph2Bxyz(Br, Bth, Bphi, theta, phi)
 %
 % Returns
 % -------
-% Bx : double, 1xN
-%   x-aligned component of converted vectors.
-% By : double, 1xN
-%   y-aligned component of converted vectors.
-% Bz : double, 1xN
-%   z-aligned component of converted vectors.
+% Bx, By, Bz : double, 1xN
+%   x-, y-, and z-aligned components of converted vectors.
 
 % Part of the PlanetMag framework for evaluation and study of planetary magnetic fields.
 % Created by Corey J. Cochrane and Marshall J. Styczinski

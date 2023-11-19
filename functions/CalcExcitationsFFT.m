@@ -1,15 +1,18 @@
 function CalcExcitationsFFT()
 % Calculate excitation moments using a Fast Fourier Transform (FFT) method.
 % This script is included for historical comparison purposes only.
-%% NOTE: This script evaluates excitation moments with an FFT method.
-%        This method is not recommended, as fine-tuning the sampling of the
-%        time series data to well-resolve one peak in the Fourier spectrum
-%        will necessarily contribute to spectral leakage for all other
-%        non-harmonic peaks. This forces the phases of each excitation
-%        moment relative to the reference time (J2000) to be incorrect.
-%        Instead, the method applied using principle component
-%        decomposition in PlanetMag is recommended.
-%%
+%
+% Note
+% ----
+% This script evaluates excitation moments with an FFT method.
+% This method is not recommended, as fine-tuning the sampling of the
+% time series data to well-resolve one peak in the Fourier spectrum
+% will necessarily contribute to spectral leakage for all other
+% non-harmonic peaks. This forces the phases of each excitation
+% moment relative to the reference time (J2000) to be incorrect.
+% Instead, the method applied using principle component
+% decomposition in PlanetMag is recommended.
+%
 % Procedure:
 % 0. Download SPICE kernels listed in loadSpice.
 % 1. Run a spectrum for a lot of eval points, ~1M+. Since Tinterest_h is

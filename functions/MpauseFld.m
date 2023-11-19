@@ -224,38 +224,38 @@ function [mpBvecOut, OUTSIDE_MP] = MpauseFld(nSW_pcc, vSW_kms, ets, xyz_km, ...
             rho_km = sqrt(xyzPSMdipO_km(2,:).^2 + xyzPSMdipO_km(3,:).^2);
             OUTSIDE_MP = rho_km > rhoSM1996_km;
             
-        elseif strcmp(MPmodel, 'AE2022')
+        elseif strcmp(MPmodel, 'AE2021')
             % Box harmonic model from Arridge and Eggington (2022) for
             % magnetopause current fields.
-            Rss_Rp = 19; % Fixed value inferred by AE2022 from results of Toth et al. (2004)
+            Rss_Rp = 19; % Fixed value inferred by AE2021 from results of Toth et al. (2004)
             Rp_km = 25559;
             Rss_km = Rss_Rp * Rp_km;
             xyz_Rp = xyz_km / Rp_km;
             r_Rp = r_km / Rp_km;
             % Import model coefficients
-            aik =  dlmread(fullfile([coeffPath 'coeffsUranusAE2022a.csv']), ',', nHeadLines, 0);
-            bik =  dlmread(fullfile([coeffPath 'coeffsUranusAE2022b.csv']), ',', nHeadLines, 0);
-            cjl =  dlmread(fullfile([coeffPath 'coeffsUranusAE2022c.csv']), ',', nHeadLines, 0);
-            djl =  dlmread(fullfile([coeffPath 'coeffsUranusAE2022d.csv']), ',', nHeadLines, 0);
-            pqrs = dlmread(fullfile([coeffPath 'coeffsUranusAE2022pqrs.csv']), ',', nHeadLines, 0);
+            aik =  dlmread(fullfile([coeffPath 'coeffsUranusAE2021a.csv']), ',', nHeadLines, 0);
+            bik =  dlmread(fullfile([coeffPath 'coeffsUranusAE2021b.csv']), ',', nHeadLines, 0);
+            cjl =  dlmread(fullfile([coeffPath 'coeffsUranusAE2021c.csv']), ',', nHeadLines, 0);
+            djl =  dlmread(fullfile([coeffPath 'coeffsUranusAE2021d.csv']), ',', nHeadLines, 0);
+            pqrs = dlmread(fullfile([coeffPath 'coeffsUranusAE2021pqrs.csv']), ',', nHeadLines, 0);
             % Get "attack angle" of dipole vs. upstream direction
             % (approximated by Uranus-Sun direction)
             MdipPSM_nT = squeeze(pagemtimes(rotMatS3_PSM, Mdip_nT'));
             alpha = cspice_vsep(MdipPSM_nT, repmat([1;0;0], 1,npts));
             Psi = pi/2 - alpha;
             
-            % AE2022 model uses cartesian USM coordinates
+            % AE2021 model uses cartesian USM coordinates
             MPcoords = 'USM';
             xyzPSM_Rp = xyzPSM_km / Rp_km;
             [mpBx, mpBy, mpBz] = MPboxHarmonic(xyzPSM_Rp, Psi, aik, bik, cjl, djl, pqrs);
             mpBvec = [mpBx; mpBy; mpBz];
             
-            % Use paraboloid model described in AE2022 based on Shue et al.
+            % Use paraboloid model described in AE2021 based on Shue et al.
             % (1997) model
-            xi = 0.72; % Fixed value inferred by AE2022 from Toth et al. (2004)
+            xi = 0.72; % Fixed value inferred by AE2021 from Toth et al. (2004)
             thDSZ = acos(xyzPSM_km(1,:) ./ r_km);
-            rAE2022_km = GetMPsurfS1997(Rss_km, xi, thDSZ);
-            OUTSIDE_MP = r_km > rAE2022_km;
+            rAE2021_km = GetMPsurfS1997(Rss_km, xi, thDSZ);
+            OUTSIDE_MP = r_km > rAE2021_km;
             
         else
             

@@ -31,7 +31,7 @@ function GetBplotAndLsqMoon(ets, t_h, r_km, theta, phi, xyz_km, ...
     spkParent = ['IAU_' upper(parentName)];
     spkMoon = ['IAU_' upper(moonName)];
     [BxS3, ByS3, BzS3] = Bsph2Bxyz(Bvec(1,:), Bvec(2,:), Bvec(3,:), theta, phi);
-    [Bx, By, Bz] = RotateBspice(BxS3, ByS3, BzS3, ets, spkParent, spkMoon);
+    [Bx, By, Bz] = RotateVecSpice(BxS3, ByS3, BzS3, ets, spkParent, spkMoon);
     
     % Get excitation moments from longer time series with each model
     excMomentsFile = fullfile([outData 'Be1xyz_' moonName '_' era '_' fEnd '.txt']);
