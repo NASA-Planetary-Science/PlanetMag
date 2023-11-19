@@ -1,13 +1,30 @@
-% Converts CDF file containing Swarm data to .tab text file with positions
-% and field vector components aligned to the IAU_EARTH frame. Spice kernels
-% must already be loaded (use LoadSpice('Earth', 'Swarm')).
-% Note that all indices pertaining to timestamps, locations, and measurement
-% data and the corresponding coordinate systems must be set bespoke to each
-% CDF file. Converting this function to work with other missions' data
-% products will require a careful examination of the second output from
-% cdfread (info) and the ordering of the contents in info.Variables.
-function ConvertSwarmCDF(fNameIn, fNameOut)
-    fDir = fullfile('MAG', 'Swarm');
+function ConvertSwarmCDF(fNameIn, fNameOut, fDir)
+% Convert magnetic field data files from the Swarm mission from CDF to ASCII text.
+%
+% Converts CDF file containing Swarm data to .tab text file with positions and field vector
+% components aligned to the IAU_EARTH frame. Spice kernels must already be loaded (use
+% LoadSpice with ``'Earth', 'Swarm'``). Note that all indices pertaining to timestamps, 
+% locations, and measurement data and the corresponding coordinate systems must be set bespoke
+% to each CDF file. Converting this function to work with other missions' data products will
+% require a careful examination of the second output from cdfread (info) and the ordering of the
+% contents in info.Variables.
+%
+% Parameters
+% ----------
+% fNameIn : char, 1xC
+%   Name of .cdf input file.
+% fNameOut : char, 1xD
+%   Name of .tab output file.
+% fDir : char, 1xE, default=fullfile('MAG', 'Swarm')
+%   Directory where input file is located and output file will be printed.
+
+% Part of the PlanetMag framework for evaluation and study of planetary magnetic fields.
+% Created by Corey J. Cochrane and Marshall J. Styczinski
+% Maintained by Marshall J. Styczinski
+% Contact: corey.j.cochrane@jpl.nasa.gov
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+    if ~exist('fDir', 'var'); fDir = fullfile('MAG', 'Swarm'); end
     [data, ~] = cdfread(fullfile(fDir, fNameIn)); % Load CDF file
     [Nmeas, ~] = size(data);
 

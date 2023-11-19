@@ -1,6 +1,60 @@
-function parentName = LoadSpice(moonName, sc)
+function parentName = LoadSpice(moonName, sc, spiceDir)
+% Load SPICE kernels needed to determine positions for an input spacecraft and target moon.
+%
+% Loads into the SPICE kernel pool all those kernels needed to evaluate spacecraft and moon
+% positions relative to the parent planet.
+%
+% Parameters
+% ----------
+% moonName : char, 1xC
+%   Name of target body. Currently implemented options are:
+%   
+%       -``Moon``
+%       -``Io``
+%       -``Europa``
+%       -``Ganymede``
+%       -``Callisto``
+%       -``Mimas``
+%       -``Enceladus``
+%       -``Dione``
+%       -``Rhea``
+%       -``Titan``
+%       -``Miranda``
+%       -``Ariel``
+%       -``Umbriel``
+%       -``Titania``
+%       -``Oberon``
+%       -``Triton``
+%
+%   and their parent planets. The same binary kernels are loaded for any body within a particular
+%   planetary system, as these kernels contain information for all listed satellites and the
+%   planet.
+% sc : char, 1xD
+%   Spacecraft name for which trajectories will be loaded from relevant binary SPICE kernels.
+%   Currently implemented options are:
+%
+%       -``Swarm``
+%       -``Galileo``
+%       -``Juno``
+%       -``Voyager 1``
+%       -``Voyager 2``
+%
+% spiceDir : char, 1xE, default='spice'
+%   Directory where SPICE kernel files are located.
+%
+% Returns
+% -------
+% parentName : char, 1xF
+%   Name of the parent body.
+
+% Part of the PlanetMag framework for evaluation and study of planetary magnetic fields.
+% Created by Corey J. Cochrane and Marshall J. Styczinski
+% Maintained by Marshall J. Styczinski
+% Contact: corey.j.cochrane@jpl.nasa.gov
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
     if ~exist('sc', 'var'); sc = ''; end
-    spiceDir = 'spice/';
+    if ~exist('spiceDir', 'var'); spiceDir = 'spice'; end
     leapseconds = 'naif0012.tls';
     frames = 'custom_frames_v01.tf';
     

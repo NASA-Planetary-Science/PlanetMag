@@ -46,7 +46,7 @@ function OutputHEALpixTo_n10(hpDir, hpFname, outDir, outFbase)
     pureHarmHeader = ['Contains ''g'' and ''h'' Schmidt semi-normalized spherical harmonic ' ...
         'coefficients for evaluation of a pure harmonic. For testing and validation purposes.'];
     pureHarmCols = sprintf('%12s,%12s,%12s,%12s', 'n', 'm', 'gnm', 'hnm');
-    outHarmFileBase = fullfile('out', outFbase);
+    outHarmFileBase = fullfile(outDir, outFbase);
 
     % Loop over n and m for g and h
     for n = 1:10

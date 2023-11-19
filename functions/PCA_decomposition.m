@@ -26,8 +26,8 @@ end
 ets=ets(:); % Ensures ets is a row vector
 npts = length(ets);
 ets_ca = ets(round(length(ets)/2));
+% ets_ca = 1228738876.0; % for Triton flyby at AOL 50 degrees
 etMid_day = ets_ca / 86400;
-%ets_ca = 1228738876.0; % for Triton flyby at AOL 50  degrees
 
 [f, fSyn] = GetExcitations(moonName, etMid_day);
 

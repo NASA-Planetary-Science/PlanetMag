@@ -1,6 +1,47 @@
-%% This doesn't work correctly yet.
-
 function L = LshellTrace(parentName, opt, MPopt, DO_MPAUSE, sc, t_h, Nmaxin)
+% Determine the L shell of the target body at specified ephemeris times.
+%
+% Trace magnetic field line from the location of a target (e.g. a spacecraft) to the magnetic
+% dipole equator to determine the radial distance in planetary radii to the planet's center of mass
+% at that location, also known as the L shell.
+%
+% Note
+% ----
+% **This function is a work in progress and does not work correctly yet.**
+%
+% Parameters
+% ----------
+% parentName : char, 1xC
+%   Parent body name recognized by SPICE. Sufficient kernels must be loaded in the pool to
+%   determine the location of the target relative to this body at each ephemeris time.
+% opt : int
+%   Magnetospheric field model option selection. 0 selects the default model---see GetModelOpts for
+%   more details.
+% MPopt : int
+%   Magnetopause current magnetic field model option selection. 0 selects the default model---see
+%   GetModelOpts for more details.
+% DO_MPAUSE : bool
+%   Whether to include magnetopause currents in the magnetic field model.
+% sc : char, 1xD
+%   Target body for which to evaluate L shells.
+% t_h : double, 1xN
+%   Ephemeris times to evaluate in TDB hours relative to J2000.
+% Nmaxin : int, default=Inf
+%   Spherical harmonic degree to which to limit magnetic field model evaluation in tracing field
+%   lines. Using the default (Inf) makes use of the highest degree both implemented in MagFldParent
+%   and present in the model coefficients.
+%
+% Returns
+% -------
+% L : double, 1xN
+%   L shell of each evaluation spacetime point for the target.
+
+% Part of the PlanetMag framework for evaluation and study of planetary magnetic fields.
+% Created by Corey J. Cochrane and Marshall J. Styczinski
+% Maintained by Marshall J. Styczinski
+% Contact: corey.j.cochrane@jpl.nasa.gov
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
     if ~exist('Nmaxin', 'var'); Nmaxin = Inf; end
 
     [MagModel, CsheetModel, MPmodel, magModelDescrip, ~] = GetModelOpts(parentName, opt, MPopt);
