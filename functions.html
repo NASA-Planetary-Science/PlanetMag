@@ -246,31 +246,83 @@ theta, phi for spherical.</p>
 <h3><a class="reference internal" href="#functions.ICAdecomposition" title="functions.ICAdecomposition"><code class="xref mat mat-func docutils literal notranslate"><span class="pre">ICAdecomposition()</span></code></a><a class="headerlink" href="#icadecomposition" title="Permalink to this heading"></a></h3>
 <dl class="mat function">
 <dt class="sig sig-object mat" id="functions.ICAdecomposition">
-<span class="sig-prename descclassname"><span class="pre">functions.</span></span><span class="sig-name descname"><span class="pre">ICAdecomposition</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">ets</span></em>, <em class="sig-param"><span class="pre">moonName</span></em>, <em class="sig-param"><span class="pre">parentName</span></em>, <em class="sig-param"><span class="pre">Bvec</span></em>, <em class="sig-param"><span class="pre">descrip</span></em>, <em class="sig-param"><span class="pre">SPHOUT</span></em>, <em class="sig-param"><span class="pre">PLOT_DIAGNOSTIC</span></em>, <em class="sig-param"><span class="pre">COMPARE_SEUFERT</span></em>, <em class="sig-param"><span class="pre">LIVE_PLOTS</span></em><span class="sig-paren">)</span><a class="headerlink" href="#functions.ICAdecomposition" title="Permalink to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">functions.</span></span><span class="sig-name descname"><span class="pre">ICAdecomposition</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">moonName</span></em>, <em class="sig-param"><span class="pre">parentName</span></em>, <em class="sig-param"><span class="pre">ets</span></em>, <em class="sig-param"><span class="pre">Bvec</span></em>, <em class="sig-param"><span class="pre">descrip</span></em>, <em class="sig-param"><span class="pre">SPHOUT</span></em>, <em class="sig-param"><span class="pre">PLOT_DIAGNOSTIC</span></em>, <em class="sig-param"><span class="pre">COMPARE_SEUFERT</span></em>, <em class="sig-param"><span class="pre">LIVE_PLOTS</span></em><span class="sig-paren">)</span><a class="headerlink" href="#functions.ICAdecomposition" title="Permalink to this definition"></a></dt>
 <dd><p>Decomposes the input magnetic field vector time series into complex excitation moments using
 <em class="dfn">Independent Component Analysis (ICA)</em>.</p>
 <p>The methodology applied to invert the imput magnetic field vector time series <code class="docutils literal notranslate"><span class="pre">Bvec</span></code> for its
 complex excitation moments (the independent components of ICA) is described in detail in Hyvarinen
 and Oja (2000) <a class="reference external" href="https://doi.org/10.1016/S0893-6080(00)00026-5">https://doi.org/10.1016/S0893-6080(00)00026-5</a>. In this method, the expected signal
-components <span class="math notranslate nohighlight">\(\mathbf{s} = (s_1, \dots, s_p)\)</span>, are found from the input measurements <span class="math notranslate nohighlight">\(\mathbf{x} = (x_1, \dots, x_n)\)</span> by inverting the estimated mixing matrix <span class="math notranslate nohighlight">\(\mathbf{A}\)</span> and multiplying <span class="math notranslate nohighlight">\(\mathbf{A}^{-1}\)</span> by the input time series, where <span class="math notranslate nohighlight">\(\mathbf{x} = \mathbf{As}\)</span>. The signal components <span class="math notranslate nohighlight">\(\mathbf{s}_j\)</span> for vector component <span class="math notranslate nohighlight">\(j\)</span> in our case are a list of cos and sin waves, representing the real and imaginary parts of <span class="math notranslate nohighlight">\(e^{-i\omega t}\)</span>, respectively, oscillating with the expected frequencies <span class="math notranslate nohighlight">\(\mathbf{f} = (f_1, \dots, f_p)\)</span>, evaluated at each ephemeris time in the input time series <code class="docutils literal notranslate"><span class="pre">ets</span></code>, and weighted by the excitation moments <span class="math notranslate nohighlight">\(\mathbf{B}_j^e\)</span>. Each unweighted signal component comprises a column of <span class="math notranslate nohighlight">\(\mathbf{X}\)</span>. The eigenvectors of <span class="math notranslate nohighlight">\(\mathbf{X}\)</span> are the columns of the weight matrix <span class="math notranslate nohighlight">\(\mathbf{W} = (\mathbf{X}^T \mathbf{X})^{-1}\)</span>. We find the excitation moments from <span class="math notranslate nohighlight">\(\mathbf{B}_j^e = \mathbf{X}(\mathbf{B}_j\mathbf{XW})^T\)</span>, because each row of this product describes the
-oscillation frequencies <span class="math notranslate nohighlight">\(f_k\)</span> are each used to create “principal
-components”, the sinusoidal oscillations associated
-with each frequency (both cos and sin, for the ). The principal components are used to construct a
-matrix, X, where each principal component is a row in X. The inverse of
-X^T * X is then calculated, which yields the eigenvectors as columns.
-Multiplying (Bi*X) by the column-eigenvector matrix then weights the
-principal components according to their degree of representation in the
-input series (where Bi is one of Bx/By/Bz or Br/Btheta/Bphi etc). This calculation is made
-for each B component to get the excitation moments for each.</p>
+components <span class="math notranslate nohighlight">\(\mathbf{s} = (s_1, \dots, s_p)\)</span> are found from the input measurements
+<span class="math notranslate nohighlight">\(\mathbf{x} = (x_1, \dots, x_n)\)</span> by inverting the estimated mixing matrix <span class="math notranslate nohighlight">\(\mathbf{A}\)</span>
+and multiplying <span class="math notranslate nohighlight">\(\mathbf{A}^{-1}\)</span> by the input time series, where
+<span class="math notranslate nohighlight">\(\mathbf{x} = \mathbf{As}\)</span>. The signal components <span class="math notranslate nohighlight">\(\mathbf{s}_j\)</span> for vector component
+<span class="math notranslate nohighlight">\(j\)</span> in our case are a list of cos and sin waves, representing the real and imaginary parts
+of <span class="math notranslate nohighlight">\(e^{-i\omega_k t}\)</span> respectively, oscillating with the expected frequencies
+<span class="math notranslate nohighlight">\(\mathbf{f} = (f_1, \dots, f_p)\)</span>, evaluated at each ephemeris time in the input time series
+<code class="docutils literal notranslate"><span class="pre">ets</span></code>, and weighted by the excitation moments <span class="math notranslate nohighlight">\(\mathbf{B}_j^e\)</span>. Each unweighted signal
+component comprises a column of <span class="math notranslate nohighlight">\(\mathbf{X}\)</span>. The eigenvectors of <span class="math notranslate nohighlight">\(\mathbf{X}\)</span> are the
+columns of the weight matrix <span class="math notranslate nohighlight">\(\mathbf{W} = (\mathbf{X}^T\mathbf{X})^{-1}\)</span>. We find the
+excitation moments from</p>
+<div class="math notranslate nohighlight">
+\[\mathbf{B}_j^e = \mathbf{B}_j\mathbf{XW},\]</div>
+<p>with each element <span class="math notranslate nohighlight">\(B_{jk}^e\)</span> corresponding to a real (cos) or imaginary (sin) wave with
+frequency <span class="math notranslate nohighlight">\(f_k\)</span>. The complex excitation moments are constructed by combining the real and
+imaginary parts for each <span class="math notranslate nohighlight">\(f_k\)</span>, and the reproduced time series is found by taking the real
+part of</p>
+<div class="math notranslate nohighlight">
+\[\tilde{B}_j(t) = \sum_k \tilde{B}_{jk}^e e^{-i\omega_k t},\]</div>
+<p>or for the input time series</p>
+<div class="math notranslate nohighlight">
+\[\tilde{\mathbf{B}}_j = \mathbf{X}(\mathbf{B}_j^e)^T,\]</div>
+<p>where <span class="math notranslate nohighlight">\(\tilde{B}\)</span> denotes a complex magnetic field quantity.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>SPHOUT</strong> (<span><code class="xref mat mat-obj docutils literal notranslate"><span class="pre">bool,</span> <span class="pre">default=0</span></code></span>) – Whether to return vectors aligned to spherical coordinate axes (true) or cartesian (false).</p>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>moonName</strong> (<span><code class="xref mat mat-obj docutils literal notranslate"><span class="pre">char,</span> <span class="pre">1xC</span></code></span>) – Name of moon for which to evaluate excitation moments.</p></li>
+<li><p><strong>parentName</strong> (<span><code class="xref mat mat-obj docutils literal notranslate"><span class="pre">char,</span> <span class="pre">1xD</span></code></span>) – Name of parent planet for the moon for which to evaluate excitation moments.</p></li>
+<li><p><strong>ets</strong> (<span><code class="xref mat mat-obj docutils literal notranslate"><span class="pre">double,</span> <span class="pre">1xN</span></code></span>) – Ephemeris times associated with input time series magnetic field vectors in TDB seconds relative
+to J2000.</p></li>
+<li><p><strong>Bvec</strong> (<span><code class="xref mat mat-obj docutils literal notranslate"><span class="pre">double,</span> <span class="pre">3xN</span></code></span>) – Magnetic field vectors at each measurement time.</p></li>
+<li><p><strong>descrip</strong> (<span><code class="xref mat mat-obj docutils literal notranslate"><span class="pre">char,</span> <span class="pre">1xE</span></code></span>) – Text description of the magnetic field model that was evalauted for the input time series.</p></li>
+<li><p><strong>SPHOUT</strong> (<span><code class="xref mat mat-obj docutils literal notranslate"><span class="pre">bool,</span> <span class="pre">default=0</span></code></span>) – Whether to return vectors aligned to spherical coordinate axes (true) or cartesian (false).</p></li>
+<li><p><strong>PLOT_DIAGNOSTIC</strong> (<span><code class="xref mat mat-obj docutils literal notranslate"><span class="pre">bool,</span> <span class="pre">default=1</span></code></span>) – Whether to plot comparisons between the input and reproduced time series.</p></li>
+<li><p><strong>COMPARE_SEUFERT</strong> (<span><code class="xref mat mat-obj docutils literal notranslate"><span class="pre">bool,</span> <span class="pre">default=0</span></code></span>) – Whether to plot coordinate directions aligned to the axes presented in Seufert et al. (2011)
+<a class="reference external" href="https://doi.org/10.1016/j.icarus.2011.03.017">https://doi.org/10.1016/j.icarus.2011.03.017</a>. Only has an effect when <code class="docutils literal notranslate"><span class="pre">SPHOUT</span></code> is true,
+because Seufert et al. used spherical coordinates for evaluating the excitation spectra of
+Jupiter’s moons.</p></li>
+<li><p><strong>LIVE_PLOTS</strong> (<span><code class="xref mat mat-obj docutils literal notranslate"><span class="pre">bool,</span> <span class="pre">default=0</span></code></span>) – Whether to load interactive figure windows for plots (true) or print them to disk (false).</p></li>
+</ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p><strong>outputName</strong> – Description.</p>
+<dd class="field-even"><p><p><strong>BD</strong> –</p>
+<p>Contains fields:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p><strong>f</strong> (<cite>double, 1xP</cite>) – Frequencies of estimated excitation moments in Hz.</p></li>
+<li><p><strong>BexcVec1i</strong> (<cite>double, 1xP</cite>) – Real part (i for “in-phase”) of excitation moments for
+vector component 1 (x or r) in nT.</p></li>
+<li><p><strong>BexcVec1q</strong> (<cite>double, 1xP</cite>) – Imaginary part (q for “quadrature”) of excitation moments
+for vector component 1 in nT.</p></li>
+<li><p><strong>BexcVec1o</strong> (<cite>double</cite>) – Vector component 1 of uniform background field in nT.</p></li>
+<li><p><strong>BexcVec2i</strong> (<cite>double, 1xP</cite>) – Real part (i for “in-phase”) of excitation moments for
+vector component 2 (y or theta) in nT.</p></li>
+<li><p><strong>BexcVec2q</strong> (<cite>double, 1xP</cite>) – Imaginary part (q for “quadrature”) of excitation moments
+for vector component 2 in nT.</p></li>
+<li><p><strong>BexcVec2o</strong> (<cite>double</cite>) – Vector component 2 of uniform background field in nT.</p></li>
+<li><p><strong>BexcVec3i</strong> (<cite>double, 1xP</cite>) – Real part (i for “in-phase”) of excitation moments for
+vector component 3 (z or phi) in nT.</p></li>
+<li><p><strong>BexcVec3q</strong> (<cite>double, 1xP</cite>) – Imaginary part (q for “quadrature”) of excitation moments
+for vector component 3 in nT.</p></li>
+<li><p><strong>BexcVec3o</strong> (<cite>double</cite>) – Vector component 3 of uniform background field in nT.</p></li>
+<li><p><strong>rmse</strong> (<cite>double</cite>) – Normalized root-mean-squared error calculated from comparing input
+and reproduced time series data.</p></li>
+<li><p><strong>Rsquared</strong> (<cite>double</cite>) – <span class="math notranslate nohighlight">\(R^2\)</span> value for the reproduced time series.</p></li>
+</ul>
+</div></blockquote>
+</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>type, dims</p>
+<dd class="field-odd"><p>struct</p>
 </dd>
 </dl>
 </dd></dl>
