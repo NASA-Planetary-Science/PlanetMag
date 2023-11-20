@@ -92,7 +92,7 @@
 <h2><a class="reference internal" href="#PlanetMag" title="PlanetMag"><code class="xref mat mat-func docutils literal notranslate"><span class="pre">PlanetMag()</span></code></a><a class="headerlink" href="#planetmag" title="Permalink to this heading"></a></h2>
 <dl class="mat function">
 <dt class="sig sig-object mat" id="PlanetMag">
-<span class="sig-name descname"><span class="pre">PlanetMag</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">moonName</span></em>, <em class="sig-param"><span class="pre">era</span></em>, <em class="sig-param"><span class="pre">coordType</span></em>, <em class="sig-param"><span class="pre">CALC_NEW</span></em>, <em class="sig-param"><span class="pre">ALL_MODELS</span></em>, <em class="sig-param"><span class="pre">DO_FFT</span></em>, <em class="sig-param"><span class="pre">DO_MPAUSE</span></em>, <em class="sig-param"><span class="pre">LIVE_PLOTS</span></em>, <em class="sig-param"><span class="pre">specificModel</span></em>, <em class="sig-param"><span class="pre">specificMPmodel</span></em>, <em class="sig-param"><span class="pre">outData</span></em>, <em class="sig-param"><span class="pre">nptsApprox</span></em>, <em class="sig-param"><span class="pre">magPhase</span></em><span class="sig-paren">)</span><a class="headerlink" href="#PlanetMag" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">PlanetMag</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">moonName</span></em>, <em class="sig-param"><span class="pre">era</span></em>, <em class="sig-param"><span class="pre">coordType</span></em>, <em class="sig-param"><span class="pre">CALC_NEW</span></em>, <em class="sig-param"><span class="pre">ALL_MODELS</span></em>, <em class="sig-param"><span class="pre">DO_FFT</span></em>, <em class="sig-param"><span class="pre">DO_MPAUSE</span></em>, <em class="sig-param"><span class="pre">LIVE_PLOTS</span></em>, <em class="sig-param"><span class="pre">specificModel</span></em>, <em class="sig-param"><span class="pre">specificMPmodel</span></em>, <em class="sig-param"><span class="pre">outData</span></em>, <em class="sig-param"><span class="pre">fPatternFT</span></em>, <em class="sig-param"><span class="pre">nptsApprox</span></em>, <em class="sig-param"><span class="pre">magPhase_deg</span></em><span class="sig-paren">)</span><a class="headerlink" href="#PlanetMag" title="Permalink to this definition"></a></dt>
 <dd><p>Evaluates planetary magnetic field for a time series at the specified moon location and inverts
 for the complex amplitudes of oscillation in that moon’s frame.</p>
 <p>This function is intended to be run as a script, so all parameters are optional.</p>
@@ -100,7 +100,8 @@ for the complex amplitudes of oscillation in that moon’s frame.</p>
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>moonName</strong> (<span><code class="xref mat mat-obj docutils literal notranslate"><span class="pre">char,</span> <span class="pre">1xC,</span> <span class="pre">default='Europa'</span></code></span>) – Name of target moon for which to generate magnetic spectrum amplitudes.</p></li>
-<li><p><strong>era</strong> (<span><code class="xref mat mat-obj docutils literal notranslate"><span class="pre">char,</span> <span class="pre">1xD,</span> <span class="pre">default='Galileo'</span></code></span>) – <p>Time period over which measurements will be evaluated. Options:</p>
+<li><p><strong>era</strong> (<span><code class="xref mat mat-obj docutils literal notranslate"><span class="pre">char,</span> <span class="pre">1xD,</span> <span class="pre">default='Galileo'</span></code></span>) – <p>Time period over which measurements will be evaluated, corresponding to the prime mission
+lifetime. Options:</p>
 <blockquote>
 <div><ul>
 <li><p><code class="docutils literal notranslate"><span class="pre">'Swarm'</span></code></p></li>
@@ -129,11 +130,12 @@ for the complex amplitudes of oscillation in that moon’s frame.</p>
 0 selects the default model. See <code class="xref py py-func docutils literal notranslate"><span class="pre">GetModelOpts()</span></code> for a description of the options.</p></li>
 <li><p><strong>specificMPmodel</strong> (<span><code class="xref mat mat-obj docutils literal notranslate"><span class="pre">int,</span> <span class="pre">default=0</span></code></span>) – Index number for the magnetopause model to run if DO_MPAUSE is true. 0 selects the default
 model See <code class="xref py py-func docutils literal notranslate"><span class="pre">MpauseFld()</span></code> for a description of the options.</p></li>
-<li><p><strong>outData</strong> (<span><code class="xref mat mat-obj docutils literal notranslate"><span class="pre">char,</span> <span class="pre">1xF,</span> <span class="pre">default='out/'</span></code></span>) – Directory to use for output of complex spectrum amplitudes.</p></li>
+<li><p><strong>outData</strong> (<span><code class="xref mat mat-obj docutils literal notranslate"><span class="pre">char,</span> <span class="pre">1xF,</span> <span class="pre">default='out'</span></code></span>) – Directory to use for output of complex spectrum amplitudes.</p></li>
+<li><p><strong>fPatternFT</strong> (<span><code class="xref mat mat-obj docutils literal notranslate"><span class="pre">char,</span> <span class="pre">1xG,</span> <span class="pre">default='FTdata'</span></code></span>) – Pattern for file names of FFT spectrum data saved to disk.</p></li>
 <li><p><strong>nptsApprox</strong> (<span><code class="xref mat mat-obj docutils literal notranslate"><span class="pre">int,</span> <span class="pre">default=12*365.25*3*24</span></code></span>) – Desired number of points to use in time series for inversion. A whole number of the period of
 interest (typically synodic period, as it is the strongest oscillation) will ultimately be
 selected, which is why this number is approximate.</p></li>
-<li><p><strong>magPhase</strong> (<span><code class="xref mat mat-obj docutils literal notranslate"><span class="pre">double,</span> <span class="pre">default=0</span></code></span>) – Arbitrary offset in degrees by which to rotate the magnetospheric field evaluation.</p></li>
+<li><p><strong>magPhase_deg</strong> (<span><code class="xref mat mat-obj docutils literal notranslate"><span class="pre">double,</span> <span class="pre">default=0</span></code></span>) – Arbitrary offset in degrees by which to rotate the magnetospheric field evaluation.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
@@ -144,8 +146,8 @@ selected coordinates.</p></li>
 <li><p><strong>B1vec1, B1vec2, B1vec3</strong> (<em>complex double, 1xP</em>) – Degree-1 complex excitation moments inverted from the evaluated time series in nT at the body
 center. Components 1, 2, and 3 are aligned with, respectively, x, y, z or r, theta, phi
 depending on the selected coordinates.</p></li>
-<li><p><strong>outFname</strong> (<em>char, 1xC</em>) – Output file name to which the excitations moments were written.</p></li>
-<li><p><strong>header</strong> (<em>char, 1xD</em>) – Column header printed to output file, which contains information about what data were saved.</p></li>
+<li><p><strong>outFname</strong> (<em>char, 1xH</em>) – Output file name to which the excitations moments were written.</p></li>
+<li><p><strong>header</strong> (<em>char, 1xI</em>) – Column header printed to output file, which contains information about what data were saved.</p></li>
 </ul>
 </p>
 </dd>

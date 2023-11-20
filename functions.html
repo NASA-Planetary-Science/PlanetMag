@@ -56,6 +56,7 @@
 <li class="toctree-l3"><a class="reference internal" href="#ksmagfldjupiter"><code class="xref mat mat-func docutils literal notranslate"><span class="pre">KSMagFldJupiter()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#mpausefld"><code class="xref mat mat-func docutils literal notranslate"><span class="pre">MpauseFld()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#magfldparentsingle"><code class="xref mat mat-func docutils literal notranslate"><span class="pre">MagFldParentSingle()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#icadecomposition"><code class="xref mat mat-func docutils literal notranslate"><span class="pre">ICAdecomposition()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#legendres"><code class="xref mat mat-func docutils literal notranslate"><span class="pre">LegendreS()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#dlegendres"><code class="xref mat mat-func docutils literal notranslate"><span class="pre">dLegendreS()</span></code></a></li>
 </ul>
@@ -63,13 +64,13 @@
 <li class="toctree-l2"><a class="reference internal" href="#additional-supporting-functions">Additional supporting functions</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#bsph2bxyz"><code class="xref mat mat-func docutils literal notranslate"><span class="pre">Bsph2Bxyz()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#bxyz2bsph"><code class="xref mat mat-func docutils literal notranslate"><span class="pre">Bxyz2Bsph()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="#calcexcitationsfft"><code class="xref mat mat-func docutils literal notranslate"><span class="pre">CalcExcitationsFFT()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#convertswarmcdf"><code class="xref mat mat-func docutils literal notranslate"><span class="pre">ConvertSwarmCDF()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#excitationspectrum"><code class="xref mat mat-func docutils literal notranslate"><span class="pre">ExcitationSpectrum()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#getbodyparams"><code class="xref mat mat-func docutils literal notranslate"><span class="pre">GetBodyParams()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#getbplotandlsq"><code class="xref mat mat-func docutils literal notranslate"><span class="pre">GetBplotAndLsq()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#getbplotandlsqmoon"><code class="xref mat mat-func docutils literal notranslate"><span class="pre">GetBplotAndLsqMoon()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#getbplotandlsqneptune"><code class="xref mat mat-func docutils literal notranslate"><span class="pre">GetBplotAndLsqNeptune()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#getexcitations"><code class="xref mat mat-func docutils literal notranslate"><span class="pre">GetExcitations()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#getgausscoeffs"><code class="xref mat mat-func docutils literal notranslate"><span class="pre">GetGaussCoeffs()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#getmodelopts"><code class="xref mat mat-func docutils literal notranslate"><span class="pre">GetModelOpts()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#getminmoondist"><code class="xref mat mat-func docutils literal notranslate"><span class="pre">GetMinMoonDist()</span></code></a></li>
@@ -77,7 +78,6 @@
 <li class="toctree-l3"><a class="reference internal" href="#gettargetmoondist"><code class="xref mat mat-func docutils literal notranslate"><span class="pre">GetTargetMoonDist()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#loadspice"><code class="xref mat mat-func docutils literal notranslate"><span class="pre">LoadSpice()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#lshelltrace"><code class="xref mat mat-func docutils literal notranslate"><span class="pre">LshellTrace()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="#pca-decomposition"><code class="xref mat mat-func docutils literal notranslate"><span class="pre">PCA_decomposition()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#plotspectrum"><code class="xref mat mat-func docutils literal notranslate"><span class="pre">PlotSpectrum()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#rotatevecspice"><code class="xref mat mat-func docutils literal notranslate"><span class="pre">RotateVecSpice()</span></code></a></li>
 </ul>
@@ -125,35 +125,12 @@
 <dl class="mat function">
 <dt class="sig sig-object mat" id="functions.MagFldParent">
 <span class="sig-prename descclassname"><span class="pre">functions.</span></span><span class="sig-name descname"><span class="pre">MagFldParent</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">planet</span></em>, <em class="sig-param"><span class="pre">r_km</span></em>, <em class="sig-param"><span class="pre">theta</span></em>, <em class="sig-param"><span class="pre">phi</span></em>, <em class="sig-param"><span class="pre">InternalFieldModel</span></em>, <em class="sig-param"><span class="pre">ExternalFieldModel</span></em>, <em class="sig-param"><span class="pre">magPhase_deg</span></em>, <em class="sig-param"><span class="pre">SPHOUT</span></em>, <em class="sig-param"><span class="pre">Nmaxin</span></em><span class="sig-paren">)</span><a class="headerlink" href="#functions.MagFldParent" title="Permalink to this definition"></a></dt>
-<dd><p>Evaluate the magnetic field of the desired planet at specified locations
-according to the specified internal and external field models.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>planet</strong> (<span><code class="xref mat mat-obj docutils literal notranslate"><span class="pre">char,</span> <span class="pre">1xC</span></code></span>) – Name of the planet for which to evaluate the field.</p></li>
-<li><p><strong>r_km</strong> (<span><code class="xref mat mat-obj docutils literal notranslate"><span class="pre">double,</span> <span class="pre">1xN</span></code></span>) – Radius of evaluation points in km from planet barycenter.</p></li>
-<li><p><strong>theta</strong> (<span><code class="xref mat mat-obj docutils literal notranslate"><span class="pre">double,</span> <span class="pre">1xN</span></code></span>) – Planetocentric colatitude of evaluation points in radians. Must be the same length as r_km.</p></li>
-<li><p><strong>phi</strong> (<span><code class="xref mat mat-obj docutils literal notranslate"><span class="pre">double,</span> <span class="pre">1xN</span></code></span>) – Planetocentric east longitude of evaluation points in radians. Must be the same length as r_km.</p></li>
-<li><p><strong>InternalFieldModel</strong> (<span><code class="xref mat mat-obj docutils literal notranslate"><span class="pre">char,</span> <span class="pre">1xD</span></code></span>) – Code name for planetary intrinsic field model to evaluate. The only recognized option is
-<code class="docutils literal notranslate"><span class="pre">'None'</span></code>. If any other</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p><ul class="simple">
-<li><p><strong>Bvec_nT</strong> (<em>double, 3xN</em>) – Magnetic field vector in standard coordinates (typically IAU or
-spherical coordinates if SPHOUT is true) at evaluation points in nT. Output rows are x, y, z
-respectively for cartesian or r, theta, phi for spherical.</p></li>
-<li><p><strong>Mdip_nT</strong> (<em>double, 1x3</em>) – Dipole magnetic moment in standard coordinates, as surface-equivalent
-nT, i.e. this value times the planet volume yields the magnetic moment in SI units.</p></li>
-<li><p><strong>Odip_km</strong> (<em>double 1x3</em>) – Dipole magnetic moment offset in km from planet barycenter in
-standard coordinates.</p></li>
-</ul>
-</p>
-</dd>
-</dl>
+<dd><p>Evaluate the magnetic field of the desired planet at specified locations according to the
+specified internal and external field models.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>The standard reference frames used for each body, except as noted below, are IAU_BODY. The only exceptions to this rule are:</p>
+<p>The standard reference frames used for each body, except as noted below, are IAU_BODY. The only
+exceptions to this rule are:</p>
 <ul class="simple">
 <li><p>Uranus uses the US3 frame: System III coordinates with +z along the spin pole, opposite the
 direction of IAU_URANUS.</p></li>
@@ -163,6 +140,38 @@ at a different rate than the magnetic rotation rate inferred from Voyager 2 data
 </ul>
 <p>All standard frames rotate with the body (planet or moon).</p>
 </div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>planet</strong> (<span><code class="xref mat mat-obj docutils literal notranslate"><span class="pre">char,</span> <span class="pre">1xC</span></code></span>) – Name of the planet for which to evaluate the field.</p></li>
+<li><p><strong>r_km</strong> (<span><code class="xref mat mat-obj docutils literal notranslate"><span class="pre">double,</span> <span class="pre">1xN</span></code></span>) – Radius of evaluation points in km from planet barycenter.</p></li>
+<li><p><strong>theta</strong> (<span><code class="xref mat mat-obj docutils literal notranslate"><span class="pre">double,</span> <span class="pre">1xN</span></code></span>) – Planetocentric colatitude of evaluation points in radians. Must be the same length as r_km.</p></li>
+<li><p><strong>phi</strong> (<span><code class="xref mat mat-obj docutils literal notranslate"><span class="pre">double,</span> <span class="pre">1xN</span></code></span>) – Planetocentric east longitude of evaluation points in radians. Must be the same length as r_km.</p></li>
+<li><p><strong>InternalFieldModel</strong> (<span><code class="xref mat mat-obj docutils literal notranslate"><span class="pre">char,</span> <span class="pre">1xD</span></code></span>) – Code name for planetary intrinsic field model to evaluate. Refer to <code class="xref py py-func docutils literal notranslate"><span class="pre">GetModelOpts()</span></code> for a listing
+of valid options. Also accepts the special option <code class="docutils literal notranslate"><span class="pre">'None'</span></code>, which skips evaluation of the
+intrinsic field model.</p></li>
+<li><p><strong>ExternalFieldModel</strong> (<span><code class="xref mat mat-obj docutils literal notranslate"><span class="pre">char,</span> <span class="pre">1xE</span></code></span>) – Code name for current sheet field model to evaluate. Refer to <code class="xref py py-func docutils literal notranslate"><span class="pre">GetModelOpts()</span></code> for a listing of
+valid options. Also accepts the special option <code class="docutils literal notranslate"><span class="pre">'None'</span></code>, which skips evaluation of the
+current sheet field model.</p></li>
+<li><p><strong>magPhase_deg</strong> (<span><code class="xref mat mat-obj docutils literal notranslate"><span class="pre">double,</span> <span class="pre">default=0</span></code></span>) – Arbitrary offset in degrees by which to rotate the magnetospheric field evaluation.</p></li>
+<li><p><strong>SPHOUT</strong> (<span><code class="xref mat mat-obj docutils literal notranslate"><span class="pre">bool,</span> <span class="pre">default=0</span></code></span>) – Whether to return vectors aligned to spherical coordinate axes (true) or cartesian (false).</p></li>
+<li><p><strong>Nmaxin</strong> (<span><code class="xref mat mat-obj docutils literal notranslate"><span class="pre">int,</span> <span class="pre">default=Inf</span></code></span>) – Maximum degree to which to limit intrinsic field models. Only has an effect if the value passed
+is less than the lesser of the model maximum degree and the maximum implemented in spherical
+harmonic calculations (currently 10).</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><strong>Bvec_nT</strong> (<em>double, 3xN</em>) – Magnetic field vector in standard coordinates (typically IAU or spherical coordinates if SPHOUT
+is true) at evaluation points in nT. Output rows are x, y, z respectively for cartesian or r,
+theta, phi for spherical.</p></li>
+<li><p><strong>Mdip_nT</strong> (<em>double, 1x3</em>) – Dipole magnetic moment in standard cartesian coordinates, as surface-equivalent nT, i.e. this
+value times the planet volume yields the magnetic moment in SI units.</p></li>
+<li><p><strong>Odip_km</strong> (<em>double, 1x3</em>) – Dipole magnetic moment offset in km from planet barycenter in standard cartesian coordinates.</p></li>
+</ul>
+</p>
+</dd>
+</dl>
 </dd></dl>
 
 </section>
@@ -183,7 +192,9 @@ current sheet model from K. Khurana.</p>
 <dl class="mat function">
 <dt class="sig sig-object mat" id="functions.MpauseFld">
 <span class="sig-prename descclassname"><span class="pre">functions.</span></span><span class="sig-name descname"><span class="pre">MpauseFld</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">nSW_pcc</span></em>, <em class="sig-param"><span class="pre">vSW_kms</span></em>, <em class="sig-param"><span class="pre">ets</span></em>, <em class="sig-param"><span class="pre">xyz_km</span></em>, <em class="sig-param"><span class="pre">Mdip_nT</span></em>, <em class="sig-param"><span class="pre">Odip_km</span></em>, <em class="sig-param"><span class="pre">S3coords</span></em>, <em class="sig-param"><span class="pre">parentName</span></em>, <em class="sig-param"><span class="pre">MPmodel</span></em>, <em class="sig-param"><span class="pre">SPHOUT</span></em>, <em class="sig-param"><span class="pre">Nmax</span></em><span class="sig-paren">)</span><a class="headerlink" href="#functions.MpauseFld" title="Permalink to this definition"></a></dt>
-<dd></dd></dl>
+<dd><p>SPHOUT : bool, default=0
+Whether to return vectors aligned to spherical coordinate axes (true) or cartesian (false).</p>
+</dd></dl>
 
 </section>
 <section id="magfldparentsingle">
@@ -191,7 +202,78 @@ current sheet model from K. Khurana.</p>
 <dl class="mat function">
 <dt class="sig sig-object mat" id="functions.MagFldParentSingle">
 <span class="sig-prename descclassname"><span class="pre">functions.</span></span><span class="sig-name descname"><span class="pre">MagFldParentSingle</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">g</span></em>, <em class="sig-param"><span class="pre">h</span></em>, <em class="sig-param"><span class="pre">r_km</span></em>, <em class="sig-param"><span class="pre">theta</span></em>, <em class="sig-param"><span class="pre">phi</span></em>, <em class="sig-param"><span class="pre">PlanetEqRadius</span></em>, <em class="sig-param"><span class="pre">InternalFieldModel</span></em>, <em class="sig-param"><span class="pre">ExternalFieldModel</span></em>, <em class="sig-param"><span class="pre">magPhase_deg</span></em>, <em class="sig-param"><span class="pre">Nmax</span></em>, <em class="sig-param"><span class="pre">NmaxExt</span></em>, <em class="sig-param"><span class="pre">SPHOUT</span></em><span class="sig-paren">)</span><a class="headerlink" href="#functions.MagFldParentSingle" title="Permalink to this definition"></a></dt>
-<dd></dd></dl>
+<dd><p>Evaluate the magnetic field of the desired planet at specified locations according to the
+specified internal and external field models.</p>
+<p>See MagFldPlanet for additional notes.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>g</strong> (<span><code class="xref mat mat-obj docutils literal notranslate"><span class="pre">double,</span> <span class="pre">(Nmax)x(Nmax+1)</span></code></span>) – Internal field g coefficients in Schmidt normalization in G.</p></li>
+<li><p><strong>h</strong> (<span><code class="xref mat mat-obj docutils literal notranslate"><span class="pre">double,</span> <span class="pre">(Nmax)x(Nmax+1)</span></code></span>) – Internal field h coefficients in Schmidt normalization in G.</p></li>
+<li><p><strong>r_km</strong> (<span><code class="xref mat mat-obj docutils literal notranslate"><span class="pre">double</span></code></span>) – Radius of evaluation point in km from planet barycenter.</p></li>
+<li><p><strong>theta</strong> (<span><code class="xref mat mat-obj docutils literal notranslate"><span class="pre">double</span></code></span>) – Planetocentric colatitude of evaluation points in radians.</p></li>
+<li><p><strong>phi</strong> (<span><code class="xref mat mat-obj docutils literal notranslate"><span class="pre">double</span></code></span>) – Planetocentric east longitude of evaluation point in radians.</p></li>
+<li><p><strong>PlanetEqRadius</strong> (<span><code class="xref mat mat-obj docutils literal notranslate"><span class="pre">double</span></code></span>) – Equatorial radius of planet in km associated with input <code class="docutils literal notranslate"><span class="pre">g</span></code> and <code class="docutils literal notranslate"><span class="pre">h</span></code> values.</p></li>
+<li><p><strong>InternalFieldModel</strong> (<span><code class="xref mat mat-obj docutils literal notranslate"><span class="pre">char,</span> <span class="pre">1xD</span></code></span>) – Code name for planetary intrinsic field model to evaluate. Refer to <code class="xref py py-func docutils literal notranslate"><span class="pre">GetModelOpts()</span></code> for a listing
+of valid options. Also accepts the special option <code class="docutils literal notranslate"><span class="pre">'None'</span></code>, which skips evaluation of the
+intrinsic field model.</p></li>
+<li><p><strong>ExternalFieldModel</strong> (<span><code class="xref mat mat-obj docutils literal notranslate"><span class="pre">char,</span> <span class="pre">1xE</span></code></span>) – Code name for current sheet field model to evaluate. Refer to <code class="xref py py-func docutils literal notranslate"><span class="pre">GetModelOpts()</span></code> for a listing of
+valid options. Also accepts the special option <code class="docutils literal notranslate"><span class="pre">'None'</span></code>, which skips evaluation of the
+current sheet field model.</p></li>
+<li><p><strong>magPhase_deg</strong> (<span><code class="xref mat mat-obj docutils literal notranslate"><span class="pre">double,</span> <span class="pre">default=0</span></code></span>) – Arbitrary offset in degrees by which to rotate the magnetospheric field evaluation.</p></li>
+<li><p><strong>Nmax</strong> (<span><code class="xref mat mat-obj docutils literal notranslate"><span class="pre">int,</span> <span class="pre">default=Inf</span></code></span>) – Maximum degree to which to limit intrinsic field models. Only has an effect if the value passed
+is less than the lesser of the model maximum degree and the maximum implemented in spherical
+harmonic calculations (currently 10).</p></li>
+<li><p><strong>NmaxExt</strong> (<span><code class="xref mat mat-obj docutils literal notranslate"><span class="pre">int,</span> <span class="pre">default=Inf</span></code></span>) – Maximum degree to which to limit external field models. Only has an effect if the value passed
+is less than the lesser of the model maximum degree and the maximum implemented in external
+field calculations (currently 1).</p></li>
+<li><p><strong>SPHOUT</strong> (<span><code class="xref mat mat-obj docutils literal notranslate"><span class="pre">bool,</span> <span class="pre">default=0</span></code></span>) – Whether to return vectors aligned to spherical coordinate axes (true) or cartesian (false).</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>Bvec_nT</strong> – Magnetic field vector in standard coordinates (typically IAU or spherical coordinates if SPHOUT
+is true) at evaluation points in nT. Output rows are x, y, z respectively for cartesian or r,
+theta, phi for spherical.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>double, 3x1</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="icadecomposition">
+<h3><a class="reference internal" href="#functions.ICAdecomposition" title="functions.ICAdecomposition"><code class="xref mat mat-func docutils literal notranslate"><span class="pre">ICAdecomposition()</span></code></a><a class="headerlink" href="#icadecomposition" title="Permalink to this heading"></a></h3>
+<dl class="mat function">
+<dt class="sig sig-object mat" id="functions.ICAdecomposition">
+<span class="sig-prename descclassname"><span class="pre">functions.</span></span><span class="sig-name descname"><span class="pre">ICAdecomposition</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">ets</span></em>, <em class="sig-param"><span class="pre">moonName</span></em>, <em class="sig-param"><span class="pre">parentName</span></em>, <em class="sig-param"><span class="pre">Bvec</span></em>, <em class="sig-param"><span class="pre">descrip</span></em>, <em class="sig-param"><span class="pre">SPHOUT</span></em>, <em class="sig-param"><span class="pre">PLOT_DIAGNOSTIC</span></em>, <em class="sig-param"><span class="pre">COMPARE_SEUFERT</span></em>, <em class="sig-param"><span class="pre">LIVE_PLOTS</span></em><span class="sig-paren">)</span><a class="headerlink" href="#functions.ICAdecomposition" title="Permalink to this definition"></a></dt>
+<dd><p>Decomposes the input magnetic field vector time series into complex excitation moments using
+<em class="dfn">Independent Component Analysis (ICA)</em>.</p>
+<p>The methodology applied to invert the imput magnetic field vector time series <code class="docutils literal notranslate"><span class="pre">Bvec</span></code> for its
+complex excitation moments (the independent components of ICA) is described in detail in Hyvarinen
+and Oja (2000) <a class="reference external" href="https://doi.org/10.1016/S0893-6080(00)00026-5">https://doi.org/10.1016/S0893-6080(00)00026-5</a>. In this method, the expected signal
+components <span class="math notranslate nohighlight">\(\mathbf{s} = (s_1, \dots, s_p)\)</span>, are found from the input measurements <span class="math notranslate nohighlight">\(\mathbf{x} = (x_1, \dots, x_n)\)</span> by inverting the estimated mixing matrix <span class="math notranslate nohighlight">\(\mathbf{A}\)</span> and multiplying <span class="math notranslate nohighlight">\(\mathbf{A}^{-1}\)</span> by the input time series, where <span class="math notranslate nohighlight">\(\mathbf{x} = \mathbf{As}\)</span>. The signal components <span class="math notranslate nohighlight">\(\mathbf{s}_j\)</span> for vector component <span class="math notranslate nohighlight">\(j\)</span> in our case are a list of cos and sin waves, representing the real and imaginary parts of <span class="math notranslate nohighlight">\(e^{-i\omega t}\)</span>, respectively, oscillating with the expected frequencies <span class="math notranslate nohighlight">\(\mathbf{f} = (f_1, \dots, f_p)\)</span>, evaluated at each ephemeris time in the input time series <code class="docutils literal notranslate"><span class="pre">ets</span></code>, and weighted by the excitation moments <span class="math notranslate nohighlight">\(\mathbf{B}_j^e\)</span>. Each unweighted signal component comprises a column of <span class="math notranslate nohighlight">\(\mathbf{X}\)</span>. The eigenvectors of <span class="math notranslate nohighlight">\(\mathbf{X}\)</span> are the columns of the weight matrix <span class="math notranslate nohighlight">\(\mathbf{W} = (\mathbf{X}^T \mathbf{X})^{-1}\)</span>. We find the excitation moments from <span class="math notranslate nohighlight">\(\mathbf{B}_j^e = \mathbf{X}(\mathbf{B}_j\mathbf{XW})^T\)</span>, because each row of this product describes the
+oscillation frequencies <span class="math notranslate nohighlight">\(f_k\)</span> are each used to create “principal
+components”, the sinusoidal oscillations associated
+with each frequency (both cos and sin, for the ). The principal components are used to construct a
+matrix, X, where each principal component is a row in X. The inverse of
+X^T * X is then calculated, which yields the eigenvectors as columns.
+Multiplying (Bi*X) by the column-eigenvector matrix then weights the
+principal components according to their degree of representation in the
+input series (where Bi is one of Bx/By/Bz or Br/Btheta/Bphi etc). This calculation is made
+for each B component to get the excitation moments for each.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>SPHOUT</strong> (<span><code class="xref mat mat-obj docutils literal notranslate"><span class="pre">bool,</span> <span class="pre">default=0</span></code></span>) – Whether to return vectors aligned to spherical coordinate axes (true) or cartesian (false).</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>outputName</strong> – Description.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>type, dims</p>
+</dd>
+</dl>
+</dd></dl>
 
 </section>
 <section id="legendres">
@@ -325,34 +407,6 @@ vectors.</p>
 </dd></dl>
 
 </section>
-<section id="calcexcitationsfft">
-<h3><a class="reference internal" href="#functions.CalcExcitationsFFT" title="functions.CalcExcitationsFFT"><code class="xref mat mat-func docutils literal notranslate"><span class="pre">CalcExcitationsFFT()</span></code></a><a class="headerlink" href="#calcexcitationsfft" title="Permalink to this heading"></a></h3>
-<dl class="mat function">
-<dt class="sig sig-object mat" id="functions.CalcExcitationsFFT">
-<span class="sig-prename descclassname"><span class="pre">functions.</span></span><span class="sig-name descname"><span class="pre">CalcExcitationsFFT</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#functions.CalcExcitationsFFT" title="Permalink to this definition"></a></dt>
-<dd><p>Calculate excitation moments using a Fast Fourier Transform (FFT) method.
-This script is included for historical comparison purposes only.</p>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>This script evaluates excitation moments with an FFT method.
-This method is not recommended, as fine-tuning the sampling of the
-time series data to well-resolve one peak in the Fourier spectrum
-will necessarily contribute to spectral leakage for all other
-non-harmonic peaks. This forces the phases of each excitation
-moment relative to the reference time (J2000) to be incorrect.
-Instead, the method applied using principle component
-decomposition in <code class="xref py py-func docutils literal notranslate"><span class="pre">PlanetMag()</span></code> is recommended.</p>
-<p>Procedure:
-0. Download SPICE kernels listed in loadSpice.
-1. Run a spectrum for a lot of eval points, ~1M+. Since Tinterest_h is
-not set, the synodic period is used and the periods with peaks above 1 nT
-are all returned.
-2. Run one spectrum per period of interest and save the resulting peak
-heights in x, y, and z to a text file.</p>
-</div>
-</dd></dl>
-
-</section>
 <section id="convertswarmcdf">
 <h3><a class="reference internal" href="#functions.ConvertSwarmCDF" title="functions.ConvertSwarmCDF"><code class="xref mat mat-func docutils literal notranslate"><span class="pre">ConvertSwarmCDF()</span></code></a><a class="headerlink" href="#convertswarmcdf" title="Permalink to this heading"></a></h3>
 <dl class="mat function">
@@ -382,8 +436,46 @@ contents in info.Variables.</p>
 <h3><a class="reference internal" href="#functions.ExcitationSpectrum" title="functions.ExcitationSpectrum"><code class="xref mat mat-func docutils literal notranslate"><span class="pre">ExcitationSpectrum()</span></code></a><a class="headerlink" href="#excitationspectrum" title="Permalink to this heading"></a></h3>
 <dl class="mat function">
 <dt class="sig sig-object mat" id="functions.ExcitationSpectrum">
-<span class="sig-prename descclassname"><span class="pre">functions.</span></span><span class="sig-name descname"><span class="pre">ExcitationSpectrum</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">moonName</span></em>, <em class="sig-param"><span class="pre">nOsc</span></em>, <em class="sig-param"><span class="pre">rate</span></em>, <em class="sig-param"><span class="pre">Tinterest_h</span></em>, <em class="sig-param"><span class="pre">DO_EPO</span></em>, <em class="sig-param"><span class="pre">SPHOUT</span></em>, <em class="sig-param"><span class="pre">DO_MPAUSE</span></em><span class="sig-paren">)</span><a class="headerlink" href="#functions.ExcitationSpectrum" title="Permalink to this definition"></a></dt>
-<dd></dd></dl>
+<span class="sig-prename descclassname"><span class="pre">functions.</span></span><span class="sig-name descname"><span class="pre">ExcitationSpectrum</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">moonName</span></em>, <em class="sig-param"><span class="pre">nOsc</span></em>, <em class="sig-param"><span class="pre">rate</span></em>, <em class="sig-param"><span class="pre">Tinterest_h</span></em>, <em class="sig-param"><span class="pre">outData</span></em>, <em class="sig-param"><span class="pre">fPatternFT</span></em>, <em class="sig-param"><span class="pre">fPatternTseries</span></em>, <em class="sig-param"><span class="pre">magPhase</span></em>, <em class="sig-param"><span class="pre">DO_EPO</span></em>, <em class="sig-param"><span class="pre">SPHOUT</span></em>, <em class="sig-param"><span class="pre">DO_MPAUSE</span></em><span class="sig-paren">)</span><a class="headerlink" href="#functions.ExcitationSpectrum" title="Permalink to this definition"></a></dt>
+<dd><p>Calculate a Fast Fourier Transform (FFT) spectrum of magnetic oscillations for a given moon.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Although this function returns degree-1 complex excitation moments, these moments cannot be used
+for reproducing the input time series for any period except Tinterest_h. This is because the phase
+for each peak in the FFT can be tuned only based on the time step of the input time series—if a
+given oscillation period does not cover a whole number of time steps, the calculated phase of the
+complex peak amplitude in the FFT will drift.</p>
+<p>For calculating excitation moments, instead use <code class="xref py py-func docutils literal notranslate"><span class="pre">ICAdecomposition()</span></code>.</p>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>moonName</strong> (<span><code class="xref mat mat-obj docutils literal notranslate"><span class="pre">char,</span> <span class="pre">1xC</span></code></span>) – Name of target moon for which to calculate an excitation spectrum.</p></li>
+<li><p><strong>nOsc</strong> (<span><code class="xref mat mat-obj docutils literal notranslate"><span class="pre">int,</span> <span class="pre">default=5000</span></code></span>) – Number of oscillations of <code class="docutils literal notranslate"><span class="pre">Tinterest_h</span></code> over which to span the time series to transform.</p></li>
+<li><p><strong>rate</strong> (<span><code class="xref mat mat-obj docutils literal notranslate"><span class="pre">int,</span> <span class="pre">default=100</span></code></span>) – Number of time steps to use for each oscillation period.</p></li>
+<li><p><strong>Tinterest_h</strong> (<span><code class="xref mat mat-obj docutils literal notranslate"><span class="pre">double,</span> <span class="pre">optional</span></code></span>) – Period of key magnetic oscillation to which to tune the FFT. The excitation moment for this
+period is the one most accurately reproduced from the FFT inversion. The default value is the
+synodic period, as evaluated from values returned by <code class="xref py py-func docutils literal notranslate"><span class="pre">GetBodyParams()</span></code>.</p></li>
+<li><p><strong>outData</strong> (<span><code class="xref mat mat-obj docutils literal notranslate"><span class="pre">char,</span> <span class="pre">1xF,</span> <span class="pre">default='out'</span></code></span>) – Directory to use for output of complex spectrum amplitudes.</p></li>
+<li><p><strong>fPatternFT</strong> (<span><code class="xref mat mat-obj docutils literal notranslate"><span class="pre">char,</span> <span class="pre">1xG,</span> <span class="pre">default='FTdata'</span></code></span>) – Pattern for file names of FFT spectrum data saved to disk.</p></li>
+<li><p><strong>fPatternTseries</strong> (<span><code class="xref mat mat-obj docutils literal notranslate"><span class="pre">char,</span> <span class="pre">1xH,</span> <span class="pre">default='TseriesData'</span></code></span>) – Pattern for file names of time series data saved to disk.</p></li>
+<li><p><strong>magPhase</strong> (<span><code class="xref mat mat-obj docutils literal notranslate"><span class="pre">double,</span> <span class="pre">default=0</span></code></span>) – Arbitrary offset in radians by which to rotate the magnetospheric field evaluation.</p></li>
+<li><p><strong>DO_EPO</strong> (<span><code class="xref mat mat-obj docutils literal notranslate"><span class="pre">bool,</span> <span class="pre">default=0</span></code></span>) – Whether to perform calculations for Europa in EphiO coordinates (true) or cartesian (false).</p></li>
+<li><p><strong>SPHOUT</strong> (<span><code class="xref mat mat-obj docutils literal notranslate"><span class="pre">bool,</span> <span class="pre">default=0</span></code></span>) – Whether to return vectors aligned to spherical coordinate axes (true) or cartesian (false).</p></li>
+<li><p><strong>DO_MPAUSE</strong> (<span><code class="xref mat mat-obj docutils literal notranslate"><span class="pre">bool,</span> <span class="pre">default=0</span></code></span>) – Whether to include a magnetopause current magnetic field model in spectrum evaluation.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><strong>Tpeak_h</strong> (<em>double, 1xP</em>) – Oscillation periods in hours associated with peaks in the excitation spectrum greater than 1 nT.</p></li>
+<li><p><strong>B0vec</strong> (<em>double, 1x3</em>) – Background uniform magnetic field vector from evaluated time series.</p></li>
+<li><p><strong>B1vec</strong> (<em>complex double, 3xP</em>) – Degree-1 complex excitation moments in the selected coordinates cooresponding to each peak in
+<code class="docutils literal notranslate"><span class="pre">Tpeak_h</span></code>.</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
 
 </section>
 <section id="getbodyparams">
@@ -398,22 +490,22 @@ contents in info.Variables.</p>
 <li><p><strong>moonName</strong> (<span><code class="xref mat mat-obj docutils literal notranslate"><span class="pre">char,</span> <span class="pre">1xC</span></code></span>) – <p>Name of the target moon. Currently implemented options are:</p>
 <blockquote>
 <div><ul>
-<li><p><code class="docutils literal notranslate"><span class="pre">Moon</span></code></p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">Io</span></code></p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">Europa</span></code></p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">Ganymede</span></code></p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">Callisto</span></code></p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">Mimas</span></code></p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">Enceladus</span></code></p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">Dione</span></code></p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">Rhea</span></code></p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">Titan</span></code></p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">Miranda</span></code></p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">Ariel</span></code></p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">Umbriel</span></code></p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">Titania</span></code></p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">Oberon</span></code></p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">Triton</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">'Moon'</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">'Io'</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">'Europa'</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">'Ganymede'</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">'Callisto'</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">'Mimas'</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">'Enceladus'</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">'Dione'</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">'Rhea'</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">'Titan'</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">'Miranda'</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">'Ariel'</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">'Umbriel'</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">'Titania'</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">'Oberon'</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">'Triton'</span></code></p></li>
 </ul>
 </div></blockquote>
 </p></li>
@@ -465,6 +557,33 @@ loaded PCK file. Size depends on the body and which rates are defined.</p></li>
 <dd></dd></dl>
 
 </section>
+<section id="getexcitations">
+<h3><a class="reference internal" href="#functions.GetExcitations" title="functions.GetExcitations"><code class="xref mat mat-func docutils literal notranslate"><span class="pre">GetExcitations()</span></code></a><a class="headerlink" href="#getexcitations" title="Permalink to this heading"></a></h3>
+<dl class="mat function">
+<dt class="sig sig-object mat" id="functions.GetExcitations">
+<span class="sig-prename descclassname"><span class="pre">functions.</span></span><span class="sig-name descname"><span class="pre">GetExcitations</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">moonName</span></em>, <em class="sig-param"><span class="pre">etMid_day</span></em><span class="sig-paren">)</span><a class="headerlink" href="#functions.GetExcitations" title="Permalink to this definition"></a></dt>
+<dd><p>Retrieve a list of excitation frequencies to invert.</p>
+<p>Returned excitation frequencies consist of combinations of precise orbital periods, including
+those adjusted for nutation and precession. For most bodies, one or more empirically determined
+oscillation periods are also included, such as those corresponding to the true anomaly period.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>moonName</strong> (<span><code class="xref mat mat-obj docutils literal notranslate"><span class="pre">char,</span> <span class="pre">1xC</span></code></span>) – Name of moon for which to return excitation frequencies.</p></li>
+<li><p><strong>etMid_day</strong> (<span><code class="xref mat mat-obj docutils literal notranslate"><span class="pre">double,</span> <span class="pre">default=0</span></code></span>) – Ephemeris time (ET) near the center of time series to be evaluated in days. Default is J2000.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><strong>f</strong> (<em>double, 1xP’</em>) – Frequencies of excitations in Hz.</p></li>
+<li><p><strong>fSyn</strong> (<em>double</em>) – Frequency of synodic period oscillation in Hz.</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
 <section id="getgausscoeffs">
 <h3><a class="reference internal" href="#functions.GetGaussCoeffs" title="functions.GetGaussCoeffs"><code class="xref mat mat-func docutils literal notranslate"><span class="pre">GetGaussCoeffs()</span></code></a><a class="headerlink" href="#getgausscoeffs" title="Permalink to this heading"></a></h3>
 <dl class="mat function">
@@ -487,7 +606,7 @@ validation purposes.</p></li>
 <div><ul>
 <li><dl class="simple">
 <dt><code class="docutils literal notranslate"><span class="pre">Earth</span></code></dt><dd><ul>
-<li><p><code class="docutils literal notranslate"><span class="pre">MagFldEarthIGRF13</span></code>: “International Geomagnetic Reference Field: the thirteenth
+<li><p><code class="docutils literal notranslate"><span class="pre">'MagFldEarthIGRF13'</span></code>: “International Geomagnetic Reference Field: the thirteenth
 generation.” <a class="reference external" href="https://doi.org/10.1186/s40623-020-01288-x">https://doi.org/10.1186/s40623-020-01288-x</a></p></li>
 </ul>
 </dd>
@@ -495,24 +614,24 @@ generation.” <a class="reference external" href="https://doi.org/10.1186/s4062
 </li>
 <li><dl class="simple">
 <dt><code class="docutils literal notranslate"><span class="pre">Jupiter</span></code></dt><dd><ul>
-<li><p><code class="docutils literal notranslate"><span class="pre">MagFldJupiterVIP4</span></code>: “New models of Jupiter’s magnetic field constrained by the Io
+<li><p><code class="docutils literal notranslate"><span class="pre">'MagFldJupiterVIP4'</span></code>: “New models of Jupiter’s magnetic field constrained by the Io
 flux tube footprint.” <a class="reference external" href="https://doi.org/10.1029/97JA03726">https://doi.org/10.1029/97JA03726</a>
 (Voyager–Io footprint–Pioneer degree 4 model.)</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">MagFldJupiterGSFCO4</span></code>: “The main magnetic field of Jupiter.”
+<li><p><code class="docutils literal notranslate"><span class="pre">'MagFldJupiterGSFCO4'</span></code>: “The main magnetic field of Jupiter.”
 <a class="reference external" href="https://doi.org/10.1029/JA081i016p02917">https://doi.org/10.1029/JA081i016p02917</a> The PlanetMag implementation is based on the
 update to System III (1965) conventions by Connerney (1992):
 <a class="reference external" href="https://core.ac.uk/download/pdf/83644007.pdf">https://core.ac.uk/download/pdf/83644007.pdf</a>. The model is named GSFC O4 after the
 institution where it was developed (Goddard Spaceflight Center, GSFC) and that it
 includes up to the octupole (degree 3) coefficients from a degree 4 expansion.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">MagFldJupiterGSFCO6</span></code>: Coefficients as repoted in “Magnetic Fields of the Outer
+<li><p><code class="docutils literal notranslate"><span class="pre">'MagFldJupiterGSFCO6'</span></code>: Coefficients as repoted in “Magnetic Fields of the Outer
 Planets.” <a class="reference external" href="https://doi.org/10.1007/s11214-009-9621-7">https://doi.org/10.1007/s11214-009-9621-7</a>, though originally described in
 Connerney (1992): <a class="reference external" href="https://core.ac.uk/download/pdf/83644007.pdf">https://core.ac.uk/download/pdf/83644007.pdf</a>. Also developed at
 GSFC, this model includes the octupole coefficients from a degree 6 expansion, hence
 the name O6.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">MagFldJupiterJRM09</span></code>: “A New Model of Jupiter’s Magnetic Field From Juno’s First
+<li><p><code class="docutils literal notranslate"><span class="pre">'MagFldJupiterJRM09'</span></code>: “A New Model of Jupiter’s Magnetic Field From Juno’s First
 Nine Orbits.” <a class="reference external" href="https://doi.org/10.1002/2018GL077312">https://doi.org/10.1002/2018GL077312</a> The Jupiter Reference Model
 after 9 orbits by Juno.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">MagFldJupiterJRM33</span></code>: “A New Model of Jupiter’s Magnetic Field at the Completion of
+<li><p><code class="docutils literal notranslate"><span class="pre">'MagFldJupiterJRM33'</span></code>: “A New Model of Jupiter’s Magnetic Field at the Completion of
 Juno’s Prime Mission.” <a class="reference external" href="https://doi.org/10.1029/2021JE007138">https://doi.org/10.1029/2021JE007138</a> The Jupiter Reference
 Model after 33 orbits of Jupiter by Juno.</p></li>
 </ul>
@@ -521,9 +640,9 @@ Model after 33 orbits of Jupiter by Juno.</p></li>
 </li>
 <li><dl class="simple">
 <dt><code class="docutils literal notranslate"><span class="pre">Saturn</span></code></dt><dd><ul>
-<li><p><code class="docutils literal notranslate"><span class="pre">MagFldSaturnBurton2010</span></code>: “Saturn’s internal planetary magnetic field.”
+<li><p><code class="docutils literal notranslate"><span class="pre">'MagFldSaturnBurton2010'</span></code>: “Saturn’s internal planetary magnetic field.”
 <a class="reference external" href="https://doi.org/10.1029/2010GL045148">https://doi.org/10.1029/2010GL045148</a></p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">MagFldSaturnCassini11</span></code>: “Saturn’s magnetic field revealed by the Cassini Grand
+<li><p><code class="docutils literal notranslate"><span class="pre">'MagFldSaturnCassini11'</span></code>: “Saturn’s magnetic field revealed by the Cassini Grand
 Finale.” <a class="reference external" href="https://doi.org/10.1126/science.aat5434">https://doi.org/10.1126/science.aat5434</a>, corrected values at
 <a class="reference external" href="https://doi.org/10.1126/science.aav6732">https://doi.org/10.1126/science.aav6732</a></p></li>
 </ul>
@@ -532,11 +651,11 @@ Finale.” <a class="reference external" href="https://doi.org/10.1126/science.a
 </li>
 <li><dl class="simple">
 <dt><code class="docutils literal notranslate"><span class="pre">Uranus</span></code></dt><dd><ul>
-<li><p><code class="docutils literal notranslate"><span class="pre">MagFldUranusQ3</span></code>: “The magnetic field of Uranus.”
+<li><p><code class="docutils literal notranslate"><span class="pre">'MagFldUranusQ3'</span></code>: “The magnetic field of Uranus.”
 <a class="reference external" href="https://doi.org/10.1029/JA092iA13p15329">https://doi.org/10.1029/JA092iA13p15329</a> The name Q3 comes from including only a
 dipole and quadrupole moment in a degree-3 spherical harmonic expansion. This model
 also includes degree-1 external field coefficients, i.e. a uniform background field.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">MagFldUranusAH5</span></code>: “Aurora and magnetic field of Uranus.”
+<li><p><code class="docutils literal notranslate"><span class="pre">'MagFldUranusAH5'</span></code>: “Aurora and magnetic field of Uranus.”
 <a class="reference external" href="https://doi.org/10.1029/2009JA014394">https://doi.org/10.1029/2009JA014394</a> AH5 stands for aurora hexadecapole L-shell = 5
 model.</p></li>
 </ul>
@@ -545,7 +664,7 @@ model.</p></li>
 </li>
 <li><dl class="simple">
 <dt><code class="docutils literal notranslate"><span class="pre">Neptune</span></code>:</dt><dd><ul>
-<li><p><code class="docutils literal notranslate"><span class="pre">MagFldNeptuneO8</span></code>: “The magnetic field of Neptune.”
+<li><p><code class="docutils literal notranslate"><span class="pre">'MagFldNeptuneO8'</span></code>: “The magnetic field of Neptune.”
 <a class="reference external" href="https://doi.org/10.1016/0273-1177(92)90394-D">https://doi.org/10.1016/0273-1177(92)90394-D</a> Named similarly to the Jupiter GSFC
 models, the Neptune O8 model is a degree-8 expansion that retains only up to the
 octupole moment.</p></li>
@@ -936,32 +1055,23 @@ and present in the model coefficients.</p></li>
 </dd></dl>
 
 </section>
-<section id="pca-decomposition">
-<h3><a class="reference internal" href="#functions.PCA_decomposition" title="functions.PCA_decomposition"><code class="xref mat mat-func docutils literal notranslate"><span class="pre">PCA_decomposition()</span></code></a><a class="headerlink" href="#pca-decomposition" title="Permalink to this heading"></a></h3>
-<dl class="mat function">
-<dt class="sig sig-object mat" id="functions.PCA_decomposition">
-<span class="sig-prename descclassname"><span class="pre">functions.</span></span><span class="sig-name descname"><span class="pre">PCA_decomposition</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">ets</span></em>, <em class="sig-param"><span class="pre">moonName</span></em>, <em class="sig-param"><span class="pre">parentName</span></em>, <em class="sig-param"><span class="pre">Bvec</span></em>, <em class="sig-param"><span class="pre">descrip</span></em>, <em class="sig-param"><span class="pre">SPHOUT</span></em>, <em class="sig-param"><span class="pre">PLOT_DIAGNOSTIC</span></em>, <em class="sig-param"><span class="pre">COMPARE_SEUFERT</span></em><span class="sig-paren">)</span><a class="headerlink" href="#functions.PCA_decomposition" title="Permalink to this definition"></a></dt>
-<dd><p>Evaluates the excitation moments of the input time series Bx, By, and Bz
-by the method of Principal Component Analysis (PCA).
-In this method, the expected oscillation frequencies are each used to
-create “principal components”, the sinusoidal oscillations associated
-with each frequency (both cos and sin, for the real and imaginary part of
-<span class="math notranslate nohighlight">\(e^{-i\omega t}\)</span>, respectively). The principal components are used to construct a
-matrix, X, where each principal component is a row in X. The inverse of
-X^T * X is then calculated, which yields the eigenvectors as columns.
-Multiplying (Bi*X) by the column-eigenvector matrix then weights the
-principal components according to their degree of representation in the
-input series (where Bi is one of Bx/By/Bz or Br/Btheta/Bphi etc). This calculation is made
-for each B component to get the excitation moments for each.</p>
-</dd></dl>
-
-</section>
 <section id="plotspectrum">
 <h3><a class="reference internal" href="#functions.PlotSpectrum" title="functions.PlotSpectrum"><code class="xref mat mat-func docutils literal notranslate"><span class="pre">PlotSpectrum()</span></code></a><a class="headerlink" href="#plotspectrum" title="Permalink to this heading"></a></h3>
 <dl class="mat function">
 <dt class="sig sig-object mat" id="functions.PlotSpectrum">
-<span class="sig-prename descclassname"><span class="pre">functions.</span></span><span class="sig-name descname"><span class="pre">PlotSpectrum</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">moonName</span></em><span class="sig-paren">)</span><a class="headerlink" href="#functions.PlotSpectrum" title="Permalink to this definition"></a></dt>
-<dd></dd></dl>
+<span class="sig-prename descclassname"><span class="pre">functions.</span></span><span class="sig-name descname"><span class="pre">PlotSpectrum</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">moonName</span></em>, <em class="sig-param"><span class="pre">LIVE_PLOTS</span></em>, <em class="sig-param"><span class="pre">dataDir</span></em>, <em class="sig-param"><span class="pre">fPattern</span></em><span class="sig-paren">)</span><a class="headerlink" href="#functions.PlotSpectrum" title="Permalink to this definition"></a></dt>
+<dd><p>Plot a pre-saved spectrum of magnetic oscillations as derived from an FFT.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>moonName</strong> (<span><code class="xref mat mat-obj docutils literal notranslate"><span class="pre">char,</span> <span class="pre">1xC</span></code></span>) – Name of the moon for which to plot a spectrum. An FFT data file must be present.</p></li>
+<li><p><strong>LIVE_PLOTS</strong> (<span><code class="xref mat mat-obj docutils literal notranslate"><span class="pre">bool,</span> <span class="pre">default=0</span></code></span>) – Whether to load interactive figure windows for plots (true) or print them to disk (false).</p></li>
+<li><p><strong>dataDir</strong> (<span><code class="xref mat mat-obj docutils literal notranslate"><span class="pre">char,</span> <span class="pre">1xD,</span> <span class="pre">default='out'</span></code></span>) – Directory where data files are saved.</p></li>
+<li><p><strong>fPattern</strong> (<span><code class="xref mat mat-obj docutils literal notranslate"><span class="pre">char,</span> <span class="pre">1xE,</span> <span class="pre">default='FTdata'</span></code></span>) – Pattern used for saved FFT data file names.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
 
 </section>
 <section id="rotatevecspice">
