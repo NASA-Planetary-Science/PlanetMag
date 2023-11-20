@@ -18,9 +18,10 @@ function PlotSpectrum(moonName, LIVE_PLOTS, dataDir, fPattern)
 % Contact: corey.j.cochrane@jpl.nasa.gov
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+    if ~exist('LIVE_PLOTS', 'var'); LIVE_PLOTS = 0; end
     if ~exist('dataDir', 'var'); dataDir = 'out'; end
     if ~exist('fPattern', 'var'); fPattern = 'FTdata'; end
-    load(fullfile(outData, [moonName 'FTdata']), 'B1vec1', 'B1vec2', 'B1vec3', 'B1mag', 'T_h', ...
+    load(fullfile(dataDir, [moonName fPattern]), 'B1vec1', 'B1vec2', 'B1vec3', 'B1mag', 'T_h', ...
          'f_Hz', 'coordType', 'SPHOUT', 'magModelDescrip', 'Tmax', 'Tinterest_h');
     LoadSpice(moonName);
     [~, ~, ~, ~, ~, ~, Tparent_s, Torb_s, ~, ~] = GetBodyParams(moonName);
