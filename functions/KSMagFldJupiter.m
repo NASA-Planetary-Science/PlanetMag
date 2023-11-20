@@ -3,6 +3,10 @@
 % https://doi.org/10.1029/2004JA010757 .
 % Author: Marshall J. Styczinski, itsmoosh@gmail.com
 % Last updated: 2022-02-07
+
+% SPHOUT : bool, default=0
+%   Whether to return vectors aligned to spherical coordinate axes (true) or cartesian (false).
+
 function [Bvec, Mdip, Odip] = KSMagFldJupiter(r_km, theta, phi, ets, SPHOUT)
     % Calculate magnetic field vectors, magnetic dipole moment,
     % and dipole offset in System III coordinates based on VIP4

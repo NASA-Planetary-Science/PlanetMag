@@ -32,6 +32,11 @@ Calculation functions
 
 .. mat:autofunction:: MagFldParentSingle
 
+:mat:func:`ICAdecomposition`
+++++++++++++++++++++++++++++
+
+.. mat:autofunction:: ICAdecomposition
+
 :mat:func:`LegendreS`
 +++++++++++++++++++++
 
@@ -86,6 +91,11 @@ Additional supporting functions
 
 .. mat:autofunction:: GetBplotAndLsqNeptune
 
+:mat:func:`GetExcitations`
+++++++++++++++++++++++++++
+
+.. mat:autofunction:: GetExcitations
+
 :mat:func:`GetGaussCoeffs`
 ++++++++++++++++++++++++++
 
@@ -120,11 +130,6 @@ Additional supporting functions
 +++++++++++++++++++++++
 
 .. mat:autofunction:: LshellTrace
-
-:mat:func:`PCAdecomposition`
-++++++++++++++++++++++++++++
-
-.. mat:autofunction:: PCAdecomposition
 
 :mat:func:`PlotSpectrum`
 ++++++++++++++++++++++++

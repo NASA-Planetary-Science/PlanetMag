@@ -1,5 +1,9 @@
 function [mpBvecOut, OUTSIDE_MP] = MpauseFld(nSW_pcc, vSW_kms, ets, xyz_km, ...
     Mdip_nT, Odip_km, S3coords, parentName, MPmodel, SPHOUT, Nmax)
+
+% SPHOUT : bool, default=0
+%   Whether to return vectors aligned to spherical coordinate axes (true) or cartesian (false).
+
     coeffPath = './modelCoeffs/';
     nHeadLines = 2;
     npts = length(ets);

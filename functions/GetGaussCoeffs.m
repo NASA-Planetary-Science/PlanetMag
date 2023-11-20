@@ -17,45 +17,45 @@ function [g, h, G, H, PlanetEqRadius, Nmax, NmaxExt] = GetGaussCoeffs(planet, In
 %   Published spherical harmonic model for the desired planet. Currently implemented are:
 %
 %       - ``Earth``
-%           - ``MagFldEarthIGRF13``: "International Geomagnetic Reference Field: the thirteenth
+%           - ``'MagFldEarthIGRF13'``: "International Geomagnetic Reference Field: the thirteenth
 %             generation." https://doi.org/10.1186/s40623-020-01288-x
 %       - ``Jupiter``
-%           - ``MagFldJupiterVIP4``: "New models of Jupiter's magnetic field constrained by the Io
+%           - ``'MagFldJupiterVIP4'``: "New models of Jupiter's magnetic field constrained by the Io
 %             flux tube footprint." https://doi.org/10.1029/97JA03726
 %             (Voyager--Io footprint--Pioneer degree 4 model.)
-%           - ``MagFldJupiterGSFCO4``: "The main magnetic field of Jupiter."
+%           - ``'MagFldJupiterGSFCO4'``: "The main magnetic field of Jupiter."
 %             https://doi.org/10.1029/JA081i016p02917 The P\lanetMag implementation is based on the
 %             update to System III (1965) conventions by Connerney (1992):
 %             https://core.ac.uk/download/pdf/83644007.pdf. The model is named GSFC O4 after the 
 %             institution where it was developed (Goddard Spaceflight Center, GSFC) and that it
 %             includes up to the octupole (degree 3) coefficients from a degree 4 expansion. 
-%           - ``MagFldJupiterGSFCO6``: Coefficients as repoted in "Magnetic Fields of the Outer
+%           - ``'MagFldJupiterGSFCO6'``: Coefficients as repoted in "Magnetic Fields of the Outer
 %             Planets." https://doi.org/10.1007/s11214-009-9621-7, though originally described in
 %             Connerney (1992): https://core.ac.uk/download/pdf/83644007.pdf. Also developed at
 %             GSFC, this model includes the octupole coefficients from a degree 6 expansion, hence
 %             the name O6.
-%           - ``MagFldJupiterJRM09``: "A New Model of Jupiter's Magnetic Field From Juno's First
+%           - ``'MagFldJupiterJRM09'``: "A New Model of Jupiter's Magnetic Field From Juno's First
 %             Nine Orbits." https://doi.org/10.1002/2018GL077312 The Jupiter Reference Model
 %             after 9 orbits by Juno.
-%           - ``MagFldJupiterJRM33``: "A New Model of Jupiter's Magnetic Field at the Completion of
+%           - ``'MagFldJupiterJRM33'``: "A New Model of Jupiter's Magnetic Field at the Completion of
 %             Juno's Prime Mission." https://doi.org/10.1029/2021JE007138 The Jupiter Reference
 %             Model after 33 orbits of Jupiter by Juno.
 %       - ``Saturn``
-%           - ``MagFldSaturnBurton2010``: "Saturn's internal planetary magnetic field."
+%           - ``'MagFldSaturnBurton2010'``: "Saturn's internal planetary magnetic field."
 %             https://doi.org/10.1029/2010GL045148
-%           - ``MagFldSaturnCassini11``: "Saturn's magnetic field revealed by the Cassini Grand
+%           - ``'MagFldSaturnCassini11'``: "Saturn's magnetic field revealed by the Cassini Grand
 %             Finale." https://doi.org/10.1126/science.aat5434, corrected values at
 %             https://doi.org/10.1126/science.aav6732
 %       - ``Uranus``
-%           - ``MagFldUranusQ3``: "The magnetic field of Uranus."
+%           - ``'MagFldUranusQ3'``: "The magnetic field of Uranus."
 %             https://doi.org/10.1029/JA092iA13p15329 The name Q3 comes from including only a
 %             dipole and quadrupole moment in a degree-3 spherical harmonic expansion. This model
 %             also includes degree-1 external field coefficients, i.e. a uniform background field.
-%           - ``MagFldUranusAH5``: "Aurora and magnetic field of Uranus."
+%           - ``'MagFldUranusAH5'``: "Aurora and magnetic field of Uranus."
 %             https://doi.org/10.1029/2009JA014394 AH5 stands for aurora hexadecapole L-shell = 5
 %             model.
 %       - ``Neptune``:
-%           - ``MagFldNeptuneO8``: "The magnetic field of Neptune."
+%           - ``'MagFldNeptuneO8'``: "The magnetic field of Neptune."
 %             https://doi.org/10.1016/0273-1177(92)90394-D Named similarly to the Jupiter GSFC
 %             models, the Neptune O8 model is a degree-8 expansion that retains only up to the
 %             octupole moment.

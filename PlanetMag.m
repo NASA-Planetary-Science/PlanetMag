@@ -1,6 +1,6 @@
 function [T_h, B0vec, B1vec1, B1vec2, B1vec3, outFname, header] = PlanetMag(moonName, era, ...
     coordType, CALC_NEW, ALL_MODELS, DO_FFT, DO_MPAUSE, LIVE_PLOTS, specificModel, specificMPmodel, ...
-    outData, nptsApprox, magPhase)
+    outData, fPatternFT, nptsApprox, magPhase_deg)
 % Evaluates planetary magnetic field for a time series at the specified moon location and inverts
 % for the complex amplitudes of oscillation in that moon's frame.
 %
@@ -11,7 +11,8 @@ function [T_h, B0vec, B1vec1, B1vec2, B1vec3, outFname, header] = PlanetMag(moon
 % moonName : char, 1xC, default='Europa'
 %   Name of target moon for which to generate magnetic spectrum amplitudes.
 % era : char, 1xD, default='Galileo'
-%   Time period over which measurements will be evaluated. Options:
+%   Time period over which measurements will be evaluated, corresponding to the prime mission
+%   lifetime. Options:
 %
 %     - ``'Swarm'``
 %     - ``'Galileo'``
@@ -42,13 +43,15 @@ function [T_h, B0vec, B1vec1, B1vec2, B1vec3, outFname, header] = PlanetMag(moon
 % specificMPmodel : int, default=0
 %   Index number for the magnetopause model to run if DO_MPAUSE is true. 0 selects the default
 %   model See MpauseFld for a description of the options.
-% outData : char, 1xF, default='out/'
+% outData : char, 1xF, default='out'
 %   Directory to use for output of complex spectrum amplitudes.
+% fPatternFT : char, 1xG, default='FTdata'
+%   Pattern for file names of FFT spectrum data saved to disk.
 % nptsApprox : int, default=12*365.25*3*24
 %   Desired number of points to use in time series for inversion. A whole number of the period of 
 %   interest (typically synodic period, as it is the strongest oscillation) will ultimately be 
 %   selected, which is why this number is approximate.
-% magPhase : double, default=0
+% magPhase_deg : double, default=0
 %   Arbitrary offset in degrees by which to rotate the magnetospheric field evaluation.
 %
 % Returns
@@ -62,9 +65,9 @@ function [T_h, B0vec, B1vec1, B1vec2, B1vec3, outFname, header] = PlanetMag(moon
 %   Degree-1 complex excitation moments inverted from the evaluated time series in nT at the body
 %   center. Components 1, 2, and 3 are aligned with, respectively, x, y, z or r, theta, phi
 %   depending on the selected coordinates.
-% outFname : char, 1xC
+% outFname : char, 1xH
 %   Output file name to which the excitations moments were written.
-% header : char, 1xD
+% header : char, 1xI
 %   Column header printed to output file, which contains information about what data were saved.
 
 % Part of the PlanetMag framework for evaluation and study of planetary magnetic fields.
@@ -74,18 +77,19 @@ function [T_h, B0vec, B1vec1, B1vec2, B1vec3, outFname, header] = PlanetMag(moon
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
     if ~exist('moonName', 'var'); moonName = 'Europa'; end
-    if ~exist('era', 'var'); era = 'Galileo'; end % Spacecraft era (sets timespan of field model)
+    if ~exist('era', 'var'); era = 'Galileo'; end
     if ~exist('coordType', 'var'); coordType = 'IAU'; end
     if ~exist('CALC_NEW', 'var'); CALC_NEW = 1; end
     if ~exist('ALL_MODELS', 'var'); ALL_MODELS = 0; end
     if ~exist('DO_FFT', 'var'); DO_FFT = 0; end
     if ~exist('DO_MPAUSE', 'var'); DO_MPAUSE = 0; end
     if ~exist('LIVE_PLOTS', 'var'); LIVE_PLOTS = 0; end
-    if ~exist('specificModel', 'var'); specificModel = 0; end % Set this to 0 to use default, or a number to use an opt
-    if ~exist('specificMPmodel', 'var'); specificMPmodel = 0; end % As above, for magnetopause models
-    if ~exist('outData', 'var'); outData = 'out/'; end
+    if ~exist('specificModel', 'var'); specificModel = 0; end
+    if ~exist('specificMPmodel', 'var'); specificMPmodel = 0; end
+    if ~exist('outData', 'var'); outData = 'out'; end
+    if ~exist('fPatternFT', 'var'); fPatternFT = 'FTdata'; end
     if ~exist('nptsApprox', 'var'); nptsApprox = 12*365.25*3*24; end
-    if ~exist('magPhase', 'var'); magPhase = 0; end
+    if ~exist('magPhase_deg', 'var'); magPhase_deg = 0; end
     
     parentName = LoadSpice(moonName);
     
@@ -143,7 +147,7 @@ function [T_h, B0vec, B1vec1, B1vec2, B1vec3, outFname, header] = PlanetMag(moon
                 end
             otherwise
                 if ~strcmp(era, 'None')
-                    warning(['era "' era '" not recognized. Starting at J2000 with 20 min cadence.'])
+                    warning(['era "' era '" not recognized. Starting at J2000 with 20 min steps.'])
                 end
                 tStart_yr = 2000;
                 tEnd_yr = tStart_yr + nptsApprox / (365.25*24*3);
@@ -191,14 +195,17 @@ function [T_h, B0vec, B1vec1, B1vec2, B1vec3, outFname, header] = PlanetMag(moon
     end
     for opt=opts
         for MPopt=MPopts
-            [MagModel, CsheetModel, MPmodel, magModelDescrip, fEnd] = GetModelOpts(parentName, opt, MPopt);
+            [MagModel, CsheetModel, MPmodel, magModelDescrip, fEnd] = GetModelOpts(parentName, ...
+                opt, MPopt);
     
             if CALC_NEW
                 disp(['Evaluating ' magModelDescrip ' field model.'])
                 if contains(magModelDescrip, 'KS2005')
-                    [Bvec, Mdip_nT, Odip_km] = KSMagFldJupiter(rM_km, thetaM, phiM, t_h*3600, SPHOUT);
+                    [Bvec, Mdip_nT, Odip_km] = KSMagFldJupiter(rM_km, thetaM, phiM, t_h*3600, ...
+                        SPHOUT);
                 else
-                    [Bvec, Mdip_nT, Odip_km] = MagFldParent(parentName, rM_km, thetaM, phiM, MagModel, CsheetModel, magPhase, SPHOUT);
+                    [Bvec, Mdip_nT, Odip_km] = MagFldParent(parentName, rM_km, thetaM, phiM, ...
+                        MagModel, CsheetModel, magPhase_deg, SPHOUT);
                 end
                 if DO_MPAUSE
     
@@ -231,13 +238,13 @@ function [T_h, B0vec, B1vec1, B1vec2, B1vec3, outFname, header] = PlanetMag(moon
                     BvecMoon = Bvec;
                 end
     
-                save(fullfile([outData 'evalB' moonName fEnd]), 't_h', 'BvecMoon', 'outCoords');
+                save(fullfile(outData, ['evalB' moonName fEnd]), 't_h', 'BvecMoon', 'outCoords');
             else
-                load(fullfile([outData 'evalB' moonName fEnd]));
+                load(fullfile(outData, ['evalB' moonName fEnd]));
             end
     
-            BD = PCAdecomposition(t_h*3600, moonName, parentName, BvecMoon, ...
-                magModelDescrip, SPHOUT, 1, 1);
+            BD = ICAdecomposition(t_h*3600, moonName, parentName, BvecMoon, magModelDescrip, ...
+                SPHOUT, 1, 1, LIVE_PLOTS);
     
             T_h = 1 ./ BD.f / 3600;
             npeaks = length(T_h);
@@ -275,10 +282,10 @@ function [T_h, B0vec, B1vec1, B1vec2, B1vec3, outFname, header] = PlanetMag(moon
                     approxDur_h = (tEnd_yr - tStart_yr) * 365.25*24;
                     nOsc = floor(approxDur_h / Tinterest_h);
                 end
-                [TfinalFFT_h, B0vecFFT, B1vecFFT] ...
-                            = ExcitationSpectrum(moonName, nOsc, rate, Tinterest_h, ...
-                                                 0, SPHOUT, DO_MPAUSE);
-                PlotSpectrum(moonName);
+                [TfinalFFT_h, B0vecFFT, B1vecFFT] = ExcitationSpectrum(moonName, nOsc, rate, ...
+                    Tinterest_h, outData, fPatternFT, fPatternTseries, magPhase_deg, 0, SPHOUT, ...
+                    DO_MPAUSE);
+                PlotSpectrum(moonName, LIVE_PLOTS, outData, fPatternFT);
             end
     
             npts = length(t_h);
@@ -293,14 +300,16 @@ function [T_h, B0vec, B1vec1, B1vec2, B1vec3, outFname, header] = PlanetMag(moon
     
             BeStrings = strings(npeaks,1);
             disp('Primary excitation modes:');
-            BeModes = sqrt(B1vec1_Re.^2 + B1vec1_Im.^2 + B1vec2_Re.^2 + B1vec2_Im.^2 + B1vec3_Re.^2 + B1vec3_Im.^2);
+            BeModes = sqrt(B1vec1_Re.^2 + B1vec1_Im.^2 + B1vec2_Re.^2 + B1vec2_Im.^2 + ...
+                B1vec3_Re.^2 + B1vec3_Im.^2);
             sortBeModes = sort(BeModes, 'descend');
             for i=1:npeaks
                 Bvec1Reprod(i,:) = real(B1vec1(i) * exp(-1i * omega_ph(i) * t_h));
                 Bvec2Reprod(i,:) = real(B1vec2(i) * exp(-1i * omega_ph(i) * t_h));
                 Bvec3Reprod(i,:) = real(B1vec3(i) * exp(-1i * omega_ph(i) * t_h));
                 indB = find(BeModes == sortBeModes(i));
-                BeStrings(i) = sprintf('|B| amp: %.4e   f_Hz: %.4e   T_h: %.18f', BeModes(indB), 1/3600/T_h(indB), T_h(indB));
+                BeStrings(i) = sprintf('|B| amp: %.4e   f_Hz: %.4e   T_h: %.18f', BeModes(indB), ...
+                    1/3600/T_h(indB), T_h(indB));
             end
             disp(BeStrings);
     
@@ -376,19 +385,23 @@ function [T_h, B0vec, B1vec1, B1vec2, B1vec3, outFname, header] = PlanetMag(moon
             remStrings = strings(nGreatest,1);
             for i=1:nGreatest
                 ind = find(Bdiff == maxBdiff(i));
-                remStrings(i) = sprintf('|B| amp: %.4e   f_Hz: %.4e   T_h: %.18f', Bdiff(ind), 1/3600/Tfinal_h(ind), Tfinal_h(ind));
+                remStrings(i) = sprintf('|B| amp: %.4e   f_Hz: %.4e   T_h: %.18f', Bdiff(ind), ...
+                    1/3600/Tfinal_h(ind), Tfinal_h(ind));
             end
             disp(remStrings);
     
             if SPHOUT
                 BeType = 'Be1sph_';
-                header = 'period(hr),B0r(nT),B0th(nT),B0phi(nT),Ber_Re(nT),Ber_Im(nT),Beth_Re(nT),Beth_Im(nT),Bephi_Re(nT),Bephi_Im(nT)';
+                header = ['period(hr),B0r(nT),B0th(nT),B0phi(nT),Ber_Re(nT),Ber_Im(nT),' ...
+                    'Beth_Re(nT),Beth_Im(nT),Bephi_Re(nT),Bephi_Im(nT)'];
             else
                 BeType = 'Be1xyz_';
-                header = 'period(hr),B0x(nT),B0y(nT),B0z(nT),Bex_Re(nT),Bex_Im(nT),Bey_Re(nT),Bey_Im(nT),Bez_Re(nT),Bez_Im(nT)';
+                header = ['period(hr),B0x(nT),B0y(nT),B0z(nT),Bex_Re(nT),Bex_Im(nT),Bey_Re(nT),' ...
+                    'Bey_Im(nT),Bez_Re(nT),Bez_Im(nT)'];
             end
             outFname = fullfile([outData BeType moonName '_' era '_' fEnd '.txt']);
-            spectrumData = [T_h' B0vec1' B0vec2' B0vec3' real(B1vec1)' imag(B1vec1)' real(B1vec2)' imag(B1vec2)' real(B1vec3)' imag(B1vec3)'];
+            spectrumData = [T_h' B0vec1' B0vec2' B0vec3' real(B1vec1)' imag(B1vec1)' ...
+                real(B1vec2)' imag(B1vec2)' real(B1vec3)' imag(B1vec3)'];
             dlmwrite(outFname, header, 'delimiter','');
             dlmwrite(outFname, spectrumData, 'delimiter',',', 'precision',18, '-append');
     

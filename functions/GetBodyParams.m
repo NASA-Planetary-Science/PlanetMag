@@ -7,22 +7,22 @@ function [RparentEq_km, RparentPol_km, RmoonEq_km, a_AU, omegaParent_radps, omeg
 % moonName : char, 1xC
 %   Name of the target moon. Currently implemented options are:
 %   
-%       - ``Moon``
-%       - ``Io``
-%       - ``Europa``
-%       - ``Ganymede``
-%       - ``Callisto``
-%       - ``Mimas``
-%       - ``Enceladus``
-%       - ``Dione``
-%       - ``Rhea``
-%       - ``Titan``
-%       - ``Miranda``
-%       - ``Ariel``
-%       - ``Umbriel``
-%       - ``Titania``
-%       - ``Oberon``
-%       - ``Triton``
+%       - ``'Moon'``
+%       - ``'Io'``
+%       - ``'Europa'``
+%       - ``'Ganymede'``
+%       - ``'Callisto'``
+%       - ``'Mimas'``
+%       - ``'Enceladus'``
+%       - ``'Dione'``
+%       - ``'Rhea'``
+%       - ``'Titan'``
+%       - ``'Miranda'``
+%       - ``'Ariel'``
+%       - ``'Umbriel'``
+%       - ``'Titania'``
+%       - ``'Oberon'``
+%       - ``'Triton'``
 %
 % and their parent planets.
 %
