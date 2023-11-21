@@ -1,5 +1,5 @@
 function GetBplotAndLsq(ets, t_h, r_km, theta, phi, xyz_km, BrSC, BthSC, BphiSC, scName, ...
-    parentName, S3coords, orbStr, opt, MPopt, SEQUENTIAL, jt_h)
+    parentName, S3coords, orbStr, opt, MPopt, SEQUENTIAL, coeffPath, jt_h)
 % Plots and calculates comparisons between modeled and measured magnetic fields.
 %
 % Generates time series data of a specified combination of magnetic field models implemented in
@@ -45,6 +45,8 @@ function GetBplotAndLsq(ets, t_h, r_km, theta, phi, xyz_km, BrSC, BthSC, BphiSC,
 %   available options.
 % SEQUENTIAL : bool, default=0
 %   Whether to plot points by index or hours relative to a reference time.
+% coeffPath : char, 1xE, default='modelCoeffs'
+%   Directory containing model coefficients files.
 % jt_h : double, 1xM, default=[]
 %   Ephemeris times of Juno measurements in TDB hours relative to J2000 to use in data comparisons.
 
@@ -55,6 +57,7 @@ function GetBplotAndLsq(ets, t_h, r_km, theta, phi, xyz_km, BrSC, BthSC, BphiSC,
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     
     if ~exist('SEQUENTIAL', 'var'); SEQUENTIAL = 0; end
+    if ~exist('coeffpath', 'var'); coeffPath = 'modelCoeffs'; end
     if ~exist('jt_h', 'var'); jt_h = []; end
 
     npts = length(t_h);
@@ -79,8 +82,8 @@ function GetBplotAndLsq(ets, t_h, r_km, theta, phi, xyz_km, BrSC, BthSC, BphiSC,
 
         nSW_pcc = 0.14 * ones(1,npts);
         vSW_kms = 400  * ones(1,npts);
-        [mpBvec, OUTSIDE_MP] = MpauseFld(nSW_pcc, vSW_kms, t_h*3600, xyz_km, ...
-            Mdip_nT, Odip_km, S3coords, parentName, MPmodel, 1);
+        [mpBvec, OUTSIDE_MP] = MpauseFld(nSW_pcc, vSW_kms, t_h*3600, xyz_km, Mdip_nT, Odip_km, ...
+            parentName, S3coords, MPmodel, coeffPath, 1);
         Bvec = Bvec + mpBvec;
         Bvec(:,OUTSIDE_MP) = 0;
 

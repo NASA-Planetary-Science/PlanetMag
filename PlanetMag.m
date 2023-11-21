@@ -1,6 +1,6 @@
 function [T_h, B0vec, B1vec1, B1vec2, B1vec3, outFname, header] = PlanetMag(moonName, era, ...
-    coordType, CALC_NEW, ALL_MODELS, DO_FFT, DO_MPAUSE, LIVE_PLOTS, specificModel, specificMPmodel, ...
-    outData, fPatternFT, nptsApprox, magPhase_deg)
+    coordType, CALC_NEW, ALL_MODELS, DO_FFT, DO_MPAUSE, LIVE_PLOTS, specificModel, ...
+    specificMPmodel, outData, coeffPath, fPatternFT, nptsApprox, magPhase_deg)
 % Evaluates planetary magnetic field for a time series at the specified moon location and inverts
 % for the complex amplitudes of oscillation in that moon's frame.
 %
@@ -45,6 +45,8 @@ function [T_h, B0vec, B1vec1, B1vec2, B1vec3, outFname, header] = PlanetMag(moon
 %   model See MpauseFld for a description of the options.
 % outData : char, 1xF, default='out'
 %   Directory to use for output of complex spectrum amplitudes.
+% coeffPath : char, 1xE, default='modelCoeffs'
+%   Directory containing model coefficients files.
 % fPatternFT : char, 1xG, default='FTdata'
 %   Pattern for file names of FFT spectrum data saved to disk.
 % nptsApprox : int, default=12*365.25*3*24
@@ -87,6 +89,7 @@ function [T_h, B0vec, B1vec1, B1vec2, B1vec3, outFname, header] = PlanetMag(moon
     if ~exist('specificModel', 'var'); specificModel = 0; end
     if ~exist('specificMPmodel', 'var'); specificMPmodel = 0; end
     if ~exist('outData', 'var'); outData = 'out'; end
+    if ~exist('coeffpath', 'var'); coeffPath = 'modelCoeffs'; end
     if ~exist('fPatternFT', 'var'); fPatternFT = 'FTdata'; end
     if ~exist('nptsApprox', 'var'); nptsApprox = 12*365.25*3*24; end
     if ~exist('magPhase_deg', 'var'); magPhase_deg = 0; end
@@ -212,7 +215,7 @@ function [T_h, B0vec, B1vec1, B1vec2, B1vec3, outFname, header] = PlanetMag(moon
                     nSW_pcc = 4 / a_AU^2 * ones(1,npts);
                     vSW_kms = 400  * ones(1,npts);
                     [mpBvec, OUTSIDE_MP] = MpauseFld(nSW_pcc, vSW_kms, t_h*3600, xyz_km, ...
-                        Mdip_nT, Odip_km, S3coords, parentName, MPmodel, SPHOUT);
+                        Mdip_nT, Odip_km, parentName, S3coords, MPmodel, coeffPath, SPHOUT);
                     Bvec = Bvec + mpBvec;
                     Bvec(:,OUTSIDE_MP) = 0;
     

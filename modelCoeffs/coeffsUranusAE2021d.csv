@@ -1,4 +1,4 @@
-Contains 'd' box harmonic coefficients for Arridge and Eggington (2022) magnetopause field model of Uranus in nT*R_U, organized as d_lj, so that each row represents a single l and each column a single j. Unlike spherical harmonics, there are no powers of j or l, so the indices are arbitrary. See https://doi.org/10.1016/j.icarus.2021.114562
+Contains 'd' box harmonic coefficients for Arridge and Eggington (2021) magnetopause field model of Uranus in nT*R_U, organized as d_lj, so that each row represents a single l and each column a single j. Unlike spherical harmonics, there are no powers of j or l, so the indices are arbitrary. See https://doi.org/10.1016/j.icarus.2021.114562
                    d1j,                     d2j,                  d3j,                   d4j
   -0.01585995912343289,   0.4876191637729948   ,  -0.8042519008224641,   0.31507763470267774
   -0.27099432374589316,  -1.3517952498602952   ,   1.9871775394184894,   0.5193719828782029

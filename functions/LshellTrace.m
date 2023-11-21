@@ -1,4 +1,4 @@
-function L = LshellTrace(parentName, opt, MPopt, DO_MPAUSE, sc, t_h, Nmaxin)
+function L = LshellTrace(parentName, opt, MPopt, DO_MPAUSE, sc, t_h, Nmaxin, coeffPath)
 % Determine the L shell of the target body at specified ephemeris times.
 %
 % Trace magnetic field line from the location of a target (e.g. a spacecraft) to the magnetic
@@ -30,6 +30,8 @@ function L = LshellTrace(parentName, opt, MPopt, DO_MPAUSE, sc, t_h, Nmaxin)
 %   Spherical harmonic degree to which to limit magnetic field model evaluation in tracing field
 %   lines. Using the default (Inf) makes use of the highest degree both implemented in MagFldParent
 %   and present in the model coefficients.
+% coeffPath : char, 1xE, default='modelCoeffs'
+%   Directory containing model coefficients files.
 %
 % Returns
 % -------
@@ -43,6 +45,7 @@ function L = LshellTrace(parentName, opt, MPopt, DO_MPAUSE, sc, t_h, Nmaxin)
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
     if ~exist('Nmaxin', 'var'); Nmaxin = Inf; end
+    if ~exist('coeffPath', 'var'); coeffPath = 'modelCoeffs'; end
 
     [MagModel, CsheetModel, MPmodel, magModelDescrip, ~] = GetModelOpts(parentName, opt, MPopt);
     if ~DO_MPAUSE; MPmodel = 'None'; end
@@ -113,8 +116,8 @@ function [Bvec, Bmag] = GetB(r_km, theta, phi, xyz_km, ets, Nmax, NmaxExt, Rp_km
 
         nSW_pcc = 0.14 * ones(1,npts);
         vSW_kms = 400  * ones(1,npts);
-        [mpBvec, OUTSIDE_MP] = MpauseFld(nSW_pcc, vSW_kms, ets, xyz_km, ...
-            Mdip_nT, Odip_km, S3coords, parentName, MPmodel, 1);
+        [mpBvec, OUTSIDE_MP] = MpauseFld(nSW_pcc, vSW_kms, ets, xyz_km, Mdip_nT, Odip_km, ...
+            parentName, S3coords, MPmodel, coeffPath, 1);
         Bvec = Bvec + mpBvec;
         Bvec(:,OUTSIDE_MP) = 0;
 

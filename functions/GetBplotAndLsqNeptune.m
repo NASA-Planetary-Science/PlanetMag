@@ -1,5 +1,5 @@
 function GetBplotAndLsqNeptune(ets, t_h, r_km, theta, phi, xyz_km, BrSC, BthSC, BphiSC, scName, ...
-    S3coords, orbStr, opt, MPopt, SEQUENTIAL, INC_PDS, INC_O8, INC_PDS_NM3, INC_NM3)
+    S3coords, orbStr, opt, MPopt, SEQUENTIAL, coeffPath, INC_PDS, INC_O8, INC_PDS_NM3, INC_NM3)
 % Plots and calculates comparisons between modeled and measured magnetic fields for Neptune.
 %
 % Generates time series data of a specified combination of magnetic field models implemented in
@@ -47,6 +47,8 @@ function GetBplotAndLsqNeptune(ets, t_h, r_km, theta, phi, xyz_km, BrSC, BthSC, 
 %   available options.
 % SEQUENTIAL : bool, default=0
 %   Whether to plot points by index or hours relative to a reference time.
+% coeffPath : char, 1xE, default='modelCoeffs'
+%   Directory containing model coefficients files.
 % INC_PDS : bool, default=1
 %   Whether to include the full O8 model, including unresolved coefficients, with PDS trajectory in
 %   NLS frame in coordinate/frame comparison.
@@ -69,6 +71,7 @@ function GetBplotAndLsqNeptune(ets, t_h, r_km, theta, phi, xyz_km, BrSC, BthSC, 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
     if ~exist('SEQUENTIAL', 'var'); SEQUENTIAL = 0; end
+    if ~exist('coeffpath', 'var'); coeffPath = 'modelCoeffs'; end
     if ~exist('INC_PDS', 'var'); INC_PDS = 1; end
     if ~exist('INC_O8', 'var'); INC_O8 = 1; end
     if ~exist('INC_PDS_NM3', 'var'); INC_PDS_NM3 = 1; end
@@ -101,8 +104,8 @@ function GetBplotAndLsqNeptune(ets, t_h, r_km, theta, phi, xyz_km, BrSC, BthSC, 
 
         nSW_pcc = 0.14 * ones(1,npts);
         vSW_kms = 400  * ones(1,npts);
-        [mpBvec, OUTSIDE_MP] = MpauseFld(nSW_pcc, vSW_kms, t_h*3600, xyz_km, ...
-            Mdip_nT, Odip_km, S3coords, parentName, MPmodel, 1);
+        [mpBvec, OUTSIDE_MP] = MpauseFld(nSW_pcc, vSW_kms, t_h*3600, xyz_km, Mdip_nT, Odip_km, ...
+            parentName, S3coords, MPmodel, coeffPath, 1);
         Bvec = Bvec + mpBvec;
         Bvec(:,OUTSIDE_MP) = 0;
 

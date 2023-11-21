@@ -177,15 +177,5 @@ function CompareNepModels(LIVE_PLOTS, scName, SEQUENTIAL)
     name{3} = "SPICE in NLS as defined in O8";
     
     legend([scTraj{1} scTraj{2} scTraj{3}], [name{1}, name{2}, name{3}])
-    
-    function [x, y, z] = GetDespun(xyz_Rp, despin)
-        r_Rp = sqrt(xyz_Rp(1,:).^2 + xyz_Rp(2,:).^2 + xyz_Rp(3,:).^2);
-        theta = acos(xyz_Rp(3,:) ./ r_Rp);
-        phi = atan2(xyz_Rp(2,:), xyz_Rp(1,:));
-    
-        x = r_Rp .* sin(theta) .* cos(phi + despin);
-        y = r_Rp .* sin(theta) .* sin(phi + despin);
-        z = r_Rp .* cos(theta);
-    end
 
 end

@@ -1,5 +1,5 @@
 function GetBplotAndLsqMoon(ets, t_h, r_km, theta, phi, xyz_km, r_RM, BxSC, BySC, BzSC, scName, ...
-    parentName, S3coords, moonName, era, fbStr, opt, MPopt, SEQUENTIAL, dataDir, jt_h)
+    parentName, S3coords, moonName, era, fbStr, opt, MPopt, SEQUENTIAL, dataDir, coeffPath, jt_h)
 % Plots and calculates comparisons between modeled and measured magnetic fields in the vicinity of
 % a target moon.
 %
@@ -59,6 +59,8 @@ function GetBplotAndLsqMoon(ets, t_h, r_km, theta, phi, xyz_km, r_RM, BxSC, BySC
 %   Whether to plot points by index or hours relative to a reference time (closest approach).
 % dataDir : char, 1xH, default='out'
 %   Name of directory where excitation moments are printed to disk.
+% coeffPath : char, 1xE, default='modelCoeffs'
+%   Directory containing model coefficients files.
 % jt_h : double, 1xM, default=[]
 %   Ephemeris times of Juno measurements in TDB hours relative to J2000 to use in data comparisons.
 
@@ -69,6 +71,7 @@ function GetBplotAndLsqMoon(ets, t_h, r_km, theta, phi, xyz_km, r_RM, BxSC, BySC
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
     if ~exist('dataDir', 'var'); dataDir = 'out'; end
+    if ~exist('coeffpath', 'var'); coeffPath = 'modelCoeffs'; end
     if ~exist('jt_h', 'var'); jt_h = []; end
     if isempty(jt_h); JUNOTOO=0; else; JUNOTOO=1; end
     
@@ -87,8 +90,8 @@ function GetBplotAndLsqMoon(ets, t_h, r_km, theta, phi, xyz_km, r_RM, BxSC, BySC
 
         nSW_pcc = 0.14 * ones(1,npts);
         vSW_kms = 400  * ones(1,npts);
-        [mpBvec, OUTSIDE_MP] = MpauseFld(nSW_pcc, vSW_kms, [t_h, jt_h]*3600, xyz_km, ...
-            Mdip_nT, Odip_km, S3coords, parentName, MPmodel, 1);
+        [mpBvec, OUTSIDE_MP] = MpauseFld(nSW_pcc, vSW_kms, [t_h, jt_h]*3600, xyz_km, Mdip_nT, ...
+            Odip_km, parentName, S3coords, MPmodel, coeffPath, 1);
         Bvec = Bvec + mpBvec;
         Bvec(:,OUTSIDE_MP) = 0;
 
@@ -197,7 +200,7 @@ function GetBplotAndLsqMoon(ets, t_h, r_km, theta, phi, xyz_km, r_RM, BxSC, BySC
     plot(xx, Bx);
     plot(xx, BxSC);
     plot(xx, BxExc);
-    if JUNOTOO; jvlines(xJuno, b000ff); end
+    if JUNOTOO; vlines(xJuno, b000ff); end
     xlabel(xDescrip);
     ylabel('Vector component (nT)');
     legend(magModelDescrip, strcat(scName, ' MAG'), excStr);
@@ -206,7 +209,7 @@ function GetBplotAndLsqMoon(ets, t_h, r_km, theta, phi, xyz_km, r_RM, BxSC, BySC
     plot(xx, By);
     plot(xx, BySC);
     plot(xx, ByExc);
-    if JUNOTOO; jvlines(xJuno, b000ff); end
+    if JUNOTOO; vlines(xJuno, b000ff); end
     xlabel(xDescrip);
     ylabel('Vector component (nT)');
     legend(magModelDescrip, strcat(scName, ' MAG'), excStr);
@@ -215,7 +218,7 @@ function GetBplotAndLsqMoon(ets, t_h, r_km, theta, phi, xyz_km, r_RM, BxSC, BySC
     plot(xx, Bz);
     plot(xx, BzSC);
     plot(xx, BzExc);
-    if JUNOTOO; jvlines(xJuno, b000ff); end
+    if JUNOTOO; vlines(xJuno, b000ff); end
     xlabel(xDescrip);
     ylabel('Vector component (nT)');
     legend(magModelDescrip, strcat(scName, ' MAG'), excStr);
@@ -235,7 +238,7 @@ function GetBplotAndLsqMoon(ets, t_h, r_km, theta, phi, xyz_km, r_RM, BxSC, BySC
     plot(xx, BxDexc);
     plot(xx, ByDexc);
     plot(xx, BzDexc);
-    if JUNOTOO; jvlines(xJuno, b000ff); end
+    if JUNOTOO; vlines(xJuno, b000ff); end
     xlabel(xDescrip);
     ylabel('Component difference (nT)');
     legend('\Delta B_x', '\Delta B_y', '\Delta B_z', '\Delta B^e_x', '\Delta B^e_y', ...
@@ -256,11 +259,4 @@ function GetBplotAndLsqMoon(ets, t_h, r_km, theta, phi, xyz_km, r_RM, BxSC, BySC
     chi2exc = sum([BxExcLsq, ByExcLsq, BzExcLsq], 'all') / 3 / nptsFar;
     disp(['Excitation moments only, beyond ' num2str(RMmin) ...
         ' R_' moonName(1) ': chi^2 = ' sprintf('%.2f', chi2exc) '.'])
-end
-
-function jvlines(x, color)
-    yLim = get(gca,'ylim');
-    for i=1:length(x)
-        plot([x(i), x(i)], yLim, 'Color', color);
-    end
 end

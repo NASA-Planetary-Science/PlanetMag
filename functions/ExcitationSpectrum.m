@@ -1,5 +1,5 @@
 function [Tpeak_h, B0vec, B1vec] = ExcitationSpectrum(moonName, nOsc, rate, Tinterest_h, ...
-    outData, fPatternFT, fPatternTseries, magPhase, DO_EPO, SPHOUT, DO_MPAUSE)
+    outData, coeffPath, fPatternFT, fPatternTseries, magPhase, DO_EPO, SPHOUT, DO_MPAUSE)
 % Calculate a Fast Fourier Transform (FFT) spectrum of magnetic oscillations for a given moon.
 %
 % Note
@@ -26,6 +26,8 @@ function [Tpeak_h, B0vec, B1vec] = ExcitationSpectrum(moonName, nOsc, rate, Tint
 %   synodic period, as evaluated from values returned by GetBodyParams.
 % outData : char, 1xF, default='out'
 %   Directory to use for output of complex spectrum amplitudes.
+% coeffPath : char, 1xE, default='modelCoeffs'
+%   Directory containing model coefficients files.
 % fPatternFT : char, 1xG, default='FTdata'
 %   Pattern for file names of FFT spectrum data saved to disk.
 % fPatternTseries : char, 1xH, default='TseriesData'
@@ -59,6 +61,7 @@ function [Tpeak_h, B0vec, B1vec] = ExcitationSpectrum(moonName, nOsc, rate, Tint
     if ~exist('nOsc', 'var'); nOsc = 5000; end
     if ~exist('rate', 'var'); rate = 100; end
     if ~exist('outData', 'var'); outData = 'out'; end
+    if ~exist('coeffPath', 'var'); coeffPath = 'modelCoeffs'; end
     if ~exist('fPatternFT', 'var'); fPatternFT = 'FTdata'; end
     if ~exist('fPatternTseries', 'var'); fPatternTseries = 'TseriesData'; end
     if ~exist('magPhase', 'var'); magPhase = 0; end
@@ -118,8 +121,8 @@ function [Tpeak_h, B0vec, B1vec] = ExcitationSpectrum(moonName, nOsc, rate, Tint
 
         nSW_pcc = 0.14 * ones(1,npts);
         vSW_kms = 400  * ones(1,npts);
-        [mpBvec, OUTSIDE_MP] = MpauseFld(nSW_pcc, vSW_kms, t_h*3600, xyz_km, ...
-            Mdip_nT, Odip_km, parentName, MPmodel, SPHOUT);
+        [mpBvec, OUTSIDE_MP] = MpauseFld(nSW_pcc, vSW_kms, t_h*3600, xyz_km, Mdip_nT, Odip_km, ...
+            parentName, S3coords, MPmodel, coeffPath, MPmodel, SPHOUT);
         Bvec = Bvec + mpBvec;
         Bvec(:,OUTSIDE_MP) = 0;
 
