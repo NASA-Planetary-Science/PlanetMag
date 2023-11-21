@@ -6,8 +6,8 @@
 Matlab supporting functions
 ===========================
 
-Calculation functions
----------------------
+Main calculation functions
+--------------------------
 
 .. mat:module:: functions
    :noindex:
@@ -48,8 +48,55 @@ Calculation functions
 .. mat:autofunction:: dLegendreS
 
 
+Magnetopause functions
+----------------------
+
+.. mat:module:: functions.magnetopauseModels
+   :noindex:
+
+:mat:func:`GetMPsurfAB2005`
++++++++++++++++++++++++++++
+
+.. mat:autofunction:: GetMPsurfAB2005
+
+:mat:func:`GetMPsurfS1997`
+++++++++++++++++++++++++++
+
+.. mat:autofunction:: GetMPsurfS1997
+
+:mat:func:`GetMPsurfSM1996`
++++++++++++++++++++++++++++
+
+.. mat:autofunction:: GetMPsurfSM1996
+
+:mat:func:`MPboxHarmonic`
++++++++++++++++++++++++++
+
+.. mat:autofunction:: MPboxHarmonic
+
+:mat:func:`MPsphericalHarmonic`
++++++++++++++++++++++++++++++++
+
+.. mat:autofunction:: MPsphericalHarmonic
+
+
+Khurana and Schwarzl (2005) Jupiter model functions
+---------------------------------------------------
+
+.. mat:module:: functions.KS2005functions
+   :noindex:
+
+:mat:func:`VIP4noDipole`
+++++++++++++++++++++++++
+
+.. mat:autofunction:: VIP4noDipole
+
+
 Additional supporting functions
 -------------------------------
+
+.. mat:module:: functions
+   :noindex:
 
 :mat:func:`Bsph2Bxyz`
 +++++++++++++++++++++
@@ -90,6 +137,11 @@ Additional supporting functions
 +++++++++++++++++++++++++++++++++
 
 .. mat:autofunction:: GetBplotAndLsqNeptune
+
+:mat:func:`GetDespun`
++++++++++++++++++++++
+
+.. mat:autofunction:: GetDespun
 
 :mat:func:`GetExcitations`
 ++++++++++++++++++++++++++
@@ -140,6 +192,11 @@ Additional supporting functions
 ++++++++++++++++++++++++++
 
 .. mat:autofunction:: RotateVecSpice
+
+:mat:func:`vlines`
+++++++++++++++++++
+
+.. mat:autofunction:: vlines
 
 Model coefficient functions
 ---------------------------

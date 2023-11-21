@@ -51,7 +51,7 @@
 <li class="toctree-l1"><a class="reference internal" href="readme.html">README</a></li>
 <li class="toctree-l1"><a class="reference internal" href="primary.html">PlanetMag Matlab run scripts</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Matlab supporting functions</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#calculation-functions">Calculation functions</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#main-calculation-functions">Main calculation functions</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#magfldparent"><code class="xref mat mat-func docutils literal notranslate"><span class="pre">MagFldParent()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#ksmagfldjupiter"><code class="xref mat mat-func docutils literal notranslate"><span class="pre">KSMagFldJupiter()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#mpausefld"><code class="xref mat mat-func docutils literal notranslate"><span class="pre">MpauseFld()</span></code></a></li>
@@ -59,6 +59,18 @@
 <li class="toctree-l3"><a class="reference internal" href="#icadecomposition"><code class="xref mat mat-func docutils literal notranslate"><span class="pre">ICAdecomposition()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#legendres"><code class="xref mat mat-func docutils literal notranslate"><span class="pre">LegendreS()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#dlegendres"><code class="xref mat mat-func docutils literal notranslate"><span class="pre">dLegendreS()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#magnetopause-functions">Magnetopause functions</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#getmpsurfab2005"><code class="xref mat mat-func docutils literal notranslate"><span class="pre">GetMPsurfAB2005()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#getmpsurfs1997"><code class="xref mat mat-func docutils literal notranslate"><span class="pre">GetMPsurfS1997()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#getmpsurfsm1996"><code class="xref mat mat-func docutils literal notranslate"><span class="pre">GetMPsurfSM1996()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#mpboxharmonic"><code class="xref mat mat-func docutils literal notranslate"><span class="pre">MPboxHarmonic()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#mpsphericalharmonic"><code class="xref mat mat-func docutils literal notranslate"><span class="pre">MPsphericalHarmonic()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#khurana-and-schwarzl-2005-jupiter-model-functions">Khurana and Schwarzl (2005) Jupiter model functions</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#vip4nodipole"><code class="xref mat mat-func docutils literal notranslate"><span class="pre">VIP4noDipole()</span></code></a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="#additional-supporting-functions">Additional supporting functions</a><ul>
@@ -70,6 +82,7 @@
 <li class="toctree-l3"><a class="reference internal" href="#getbplotandlsq"><code class="xref mat mat-func docutils literal notranslate"><span class="pre">GetBplotAndLsq()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#getbplotandlsqmoon"><code class="xref mat mat-func docutils literal notranslate"><span class="pre">GetBplotAndLsqMoon()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#getbplotandlsqneptune"><code class="xref mat mat-func docutils literal notranslate"><span class="pre">GetBplotAndLsqNeptune()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#getdespun"><code class="xref mat mat-func docutils literal notranslate"><span class="pre">GetDespun()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#getexcitations"><code class="xref mat mat-func docutils literal notranslate"><span class="pre">GetExcitations()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#getgausscoeffs"><code class="xref mat mat-func docutils literal notranslate"><span class="pre">GetGaussCoeffs()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#getmodelopts"><code class="xref mat mat-func docutils literal notranslate"><span class="pre">GetModelOpts()</span></code></a></li>
@@ -80,6 +93,7 @@
 <li class="toctree-l3"><a class="reference internal" href="#lshelltrace"><code class="xref mat mat-func docutils literal notranslate"><span class="pre">LshellTrace()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#plotspectrum"><code class="xref mat mat-func docutils literal notranslate"><span class="pre">PlotSpectrum()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#rotatevecspice"><code class="xref mat mat-func docutils literal notranslate"><span class="pre">RotateVecSpice()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#vlines"><code class="xref mat mat-func docutils literal notranslate"><span class="pre">vlines()</span></code></a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="#module-modelCoeffs.printIGRFcoeffs">Model coefficient functions</a><ul>
@@ -118,8 +132,8 @@
              
   <section id="matlab-supporting-functions">
 <h1>Matlab supporting functions<a class="headerlink" href="#matlab-supporting-functions" title="Permalink to this heading"></a></h1>
-<section id="calculation-functions">
-<h2>Calculation functions<a class="headerlink" href="#calculation-functions" title="Permalink to this heading"></a></h2>
+<section id="main-calculation-functions">
+<h2>Main calculation functions<a class="headerlink" href="#main-calculation-functions" title="Permalink to this heading"></a></h2>
 <section id="magfldparent">
 <h3><a class="reference internal" href="#functions.MagFldParent" title="functions.MagFldParent"><code class="xref mat mat-func docutils literal notranslate"><span class="pre">MagFldParent()</span></code></a><a class="headerlink" href="#magfldparent" title="Permalink to this heading"></a></h3>
 <dl class="mat function">
@@ -180,10 +194,11 @@ value times the planet volume yields the magnetic moment in SI units.</p></li>
 <dl class="mat function">
 <dt class="sig sig-object mat" id="functions.KSMagFldJupiter">
 <span class="sig-prename descclassname"><span class="pre">functions.</span></span><span class="sig-name descname"><span class="pre">KSMagFldJupiter</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">r_km</span></em>, <em class="sig-param"><span class="pre">theta</span></em>, <em class="sig-param"><span class="pre">phi</span></em>, <em class="sig-param"><span class="pre">ets</span></em>, <em class="sig-param"><span class="pre">SPHOUT</span></em><span class="sig-paren">)</span><a class="headerlink" href="#functions.KSMagFldJupiter" title="Permalink to this definition"></a></dt>
-<dd><p>Calculate magnetic field vectors, magnetic dipole moment,
-and dipole offset in System III coordinates based on VIP4
-Jupiter field model, plus the latest evolution of the Khurana
-current sheet model from K. Khurana.</p>
+<dd><p>For calculating Jupiter magnetic field, based on Fortran code from
+K. Khurana and H. Schwarzl after Khurana and Schwarzl (2005):
+<a class="reference external" href="https://doi.org/10.1029/2004JA010757">https://doi.org/10.1029/2004JA010757</a> .
+Author: Marshall J. Styczinski, <a class="reference external" href="mailto:itsmoosh&#37;&#52;&#48;gmail&#46;com">itsmoosh<span>&#64;</span>gmail<span>&#46;</span>com</a>
+Last updated: 2022-02-07</p>
 </dd></dl>
 
 </section>
@@ -191,29 +206,35 @@ current sheet model from K. Khurana.</p>
 <h3><a class="reference internal" href="#functions.MpauseFld" title="functions.MpauseFld"><code class="xref mat mat-func docutils literal notranslate"><span class="pre">MpauseFld()</span></code></a><a class="headerlink" href="#mpausefld" title="Permalink to this heading"></a></h3>
 <dl class="mat function">
 <dt class="sig sig-object mat" id="functions.MpauseFld">
-<span class="sig-prename descclassname"><span class="pre">functions.</span></span><span class="sig-name descname"><span class="pre">MpauseFld</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">nSW_pcc</span></em>, <em class="sig-param"><span class="pre">vSW_kms</span></em>, <em class="sig-param"><span class="pre">ets</span></em>, <em class="sig-param"><span class="pre">xyz_km</span></em>, <em class="sig-param"><span class="pre">Mdip_nT</span></em>, <em class="sig-param"><span class="pre">Odip_km</span></em>, <em class="sig-param"><span class="pre">S3coords</span></em>, <em class="sig-param"><span class="pre">parentName</span></em>, <em class="sig-param"><span class="pre">MPmodel</span></em>, <em class="sig-param"><span class="pre">coeffPath</span></em>, <em class="sig-param"><span class="pre">SPHOUT</span></em>, <em class="sig-param"><span class="pre">Nmax</span></em><span class="sig-paren">)</span><a class="headerlink" href="#functions.MpauseFld" title="Permalink to this definition"></a></dt>
-<dd><p>Brief description.</p>
+<span class="sig-prename descclassname"><span class="pre">functions.</span></span><span class="sig-name descname"><span class="pre">MpauseFld</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">nSW_pcc</span></em>, <em class="sig-param"><span class="pre">vSW_kms</span></em>, <em class="sig-param"><span class="pre">ets</span></em>, <em class="sig-param"><span class="pre">xyz_km</span></em>, <em class="sig-param"><span class="pre">Mdip_nT</span></em>, <em class="sig-param"><span class="pre">Odip_km</span></em>, <em class="sig-param"><span class="pre">parentName</span></em>, <em class="sig-param"><span class="pre">S3coords</span></em>, <em class="sig-param"><span class="pre">MPmodel</span></em>, <em class="sig-param"><span class="pre">coeffPath</span></em>, <em class="sig-param"><span class="pre">SPHOUT</span></em>, <em class="sig-param"><span class="pre">Nmax</span></em><span class="sig-paren">)</span><a class="headerlink" href="#functions.MpauseFld" title="Permalink to this definition"></a></dt>
+<dd><p>Evaluate the magnetic field contribution from a magnetopause current model at specific locations
+and times.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>inputName</strong> (<span><code class="xref mat mat-obj docutils literal notranslate"><span class="pre">type,</span> <span class="pre">dims</span></code></span>) – Description.</p></li>
+<li><p><strong>nSW_pcc</strong> (<span><code class="xref mat mat-obj docutils literal notranslate"><span class="pre">double,</span> <span class="pre">1xN</span></code></span>) – Ion density in the solar wind in particles per cubic centimeter.</p></li>
+<li><p><strong>vSW_kms</strong> (<span><code class="xref mat mat-obj docutils literal notranslate"><span class="pre">double,</span> <span class="pre">1xN</span></code></span>) – Speed of incident solar wind ions in km/s.</p></li>
+<li><p><strong>ets</strong> (<span><code class="xref mat mat-obj docutils literal notranslate"><span class="pre">double,</span> <span class="pre">1xN</span></code></span>) – Ephemeris times of each measurement in TDB seconds relative to J2000.</p></li>
 <li><p><strong>xyz_km</strong> (<span><code class="xref mat mat-obj docutils literal notranslate"><span class="pre">double,</span> <span class="pre">3xN</span></code></span>) – Cartesian coordinates of measurement locations in <code class="docutils literal notranslate"><span class="pre">S3coords</span></code> frame in km.</p></li>
-<li><p><strong>Mdip_nT</strong> (<span><code class="xref mat mat-obj docutils literal notranslate"><span class="pre">double,</span> <span class="pre">1x3</span></code></span>) – Dipole magnetic moment in standard cartesian coordinates, as surface-equivalent nT, i.e. this
-value times the planet volume yields the magnetic moment in SI units.</p></li>
+<li><p><strong>Mdip_nT</strong> (<span><code class="xref mat mat-obj docutils literal notranslate"><span class="pre">double,</span> <span class="pre">1x3</span></code></span>) – Dipole magnetic moment in standard cartesian coordinates, as surface-equivalent nT.</p></li>
 <li><p><strong>Odip_km</strong> (<span><code class="xref mat mat-obj docutils literal notranslate"><span class="pre">double,</span> <span class="pre">1x3</span></code></span>) – Dipole magnetic moment offset in km from planet barycenter in standard cartesian coordinates.</p></li>
-<li><p><strong>MPopt</strong> (<span><code class="xref mat mat-obj docutils literal notranslate"><span class="pre">int</span></code></span>) – Index of magnetopause current magnetic field model. See <code class="xref py py-func docutils literal notranslate"><span class="pre">GetModelOpts()</span></code> for more details and
+<li><p><strong>parentName</strong> (<span><code class="xref mat mat-obj docutils literal notranslate"><span class="pre">char,</span> <span class="pre">1xC</span></code></span>) – Name of parent planet the evaluated model applies to.</p></li>
+<li><p><strong>S3coords</strong> (<span><code class="xref mat mat-obj docutils literal notranslate"><span class="pre">char,</span> <span class="pre">1xD</span></code></span>) – Standard coordinate frame used for evaluation of magnetic fields.</p></li>
+<li><p><strong>MPmodel</strong> (<span><code class="xref mat mat-obj docutils literal notranslate"><span class="pre">char,</span> <span class="pre">1xE</span></code></span>) – Code name for magnetopause current field model to apply. See <code class="xref py py-func docutils literal notranslate"><span class="pre">GetModelOpts()</span></code> for more details and
 available options.</p></li>
+<li><p><strong>coeffPath</strong> (<span><code class="xref mat mat-obj docutils literal notranslate"><span class="pre">char,</span> <span class="pre">1xF,</span> <span class="pre">default='modelCoeffs'</span></code></span>) – Directory containing model coefficients files.</p></li>
 <li><p><strong>SPHOUT</strong> (<span><code class="xref mat mat-obj docutils literal notranslate"><span class="pre">bool,</span> <span class="pre">default=0</span></code></span>) – Whether to return vectors aligned to spherical coordinate axes (true) or cartesian (false).</p></li>
-<li><p><strong>Nmaxin</strong> (<span><code class="xref mat mat-obj docutils literal notranslate"><span class="pre">int,</span> <span class="pre">default=10</span></code></span>) – Maximum degree to which to limit intrinsic field models. Only has an effect if the value passed
-is less than the lesser of the model maximum degree and the maximum implemented in spherical
-harmonic calculations (currently 10).</p></li>
+<li><p><strong>Nmax</strong> (<span><code class="xref mat mat-obj docutils literal notranslate"><span class="pre">int,</span> <span class="pre">default=10</span></code></span>) – Maximum degree to which to limit spherical harmonic models. Only has an effect if the value
+passed is less than the lesser of the model maximum degree.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p><strong>outputName</strong> – Description.</p>
-</dd>
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>type, dims</p>
+<dd class="field-even"><p><ul class="simple">
+<li><p><strong>mpBvecOut</strong> (<em>double, 3xN</em>) – Contribution to magnetic field at measurement positions from magnetopause currents.</p></li>
+<li><p><strong>OUTSIDE_MP</strong> (<em>bool, 1xN</em>) – Whether each point is outside the magnetopause, and so should have the net magnetospheric field
+zeroed out.</p></li>
+</ul>
+</p>
 </dd>
 </dl>
 </dd></dl>
@@ -419,6 +440,172 @@ for the specified n,m.</p>
 
 </section>
 </section>
+<section id="magnetopause-functions">
+<h2>Magnetopause functions<a class="headerlink" href="#magnetopause-functions" title="Permalink to this heading"></a></h2>
+<section id="getmpsurfab2005">
+<h3><a class="reference internal" href="#functions.magnetopauseModels.GetMPsurfAB2005" title="functions.magnetopauseModels.GetMPsurfAB2005"><code class="xref mat mat-func docutils literal notranslate"><span class="pre">GetMPsurfAB2005()</span></code></a><a class="headerlink" href="#getmpsurfab2005" title="Permalink to this heading"></a></h3>
+<dl class="mat function">
+<dt class="sig sig-object mat" id="functions.magnetopauseModels.GetMPsurfAB2005">
+<span class="sig-prename descclassname"><span class="pre">functions.magnetopauseModels.</span></span><span class="sig-name descname"><span class="pre">GetMPsurfAB2005</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">Rss_km</span></em>, <em class="sig-param"><span class="pre">xyzPSM_km</span></em><span class="sig-paren">)</span><a class="headerlink" href="#functions.magnetopauseModels.GetMPsurfAB2005" title="Permalink to this definition"></a></dt>
+<dd><p>Determine paraboloid magnetopause surface shape based on Alexeev and Belenkaya (2005).</p>
+<p>Determines shape of magnetopause screening surface current shape from the model detailed by
+Alexeev and Belenkaya (2005) <a class="reference external" href="https://doi.org/10.5194/angeo-23-809-2005">https://doi.org/10.5194/angeo-23-809-2005</a>. This is a simple
+paraboloid with an input sub-solar magnetopause standoff distance.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>Rss_km</strong> (<span><code class="xref mat mat-obj docutils literal notranslate"><span class="pre">double,</span> <span class="pre">1xN</span></code></span>) – Sub-solar point magnetopause standoff distance in km.</p></li>
+<li><p><strong>xyzPSM_km</strong> (<span><code class="xref mat mat-obj docutils literal notranslate"><span class="pre">double,</span> <span class="pre">3xN</span></code></span>) – Cartesian coordinates of measurement locations in planet–solar–magnetospheric frame in km.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>xMP_km</strong> – Distance from body planet–solar–magnetospheric yz-plane to magnetopause surface for each (y,z)
+point, i.e. the x coordinate of the magnetopause in the PSM frame.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>double, 1xN</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="getmpsurfs1997">
+<h3><a class="reference internal" href="#functions.magnetopauseModels.GetMPsurfS1997" title="functions.magnetopauseModels.GetMPsurfS1997"><code class="xref mat mat-func docutils literal notranslate"><span class="pre">GetMPsurfS1997()</span></code></a><a class="headerlink" href="#getmpsurfs1997" title="Permalink to this heading"></a></h3>
+<dl class="mat function">
+<dt class="sig sig-object mat" id="functions.magnetopauseModels.GetMPsurfS1997">
+<span class="sig-prename descclassname"><span class="pre">functions.magnetopauseModels.</span></span><span class="sig-name descname"><span class="pre">GetMPsurfS1997</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">Rss_km</span></em>, <em class="sig-param"><span class="pre">xi</span></em>, <em class="sig-param"><span class="pre">thDSZ</span></em><span class="sig-paren">)</span><a class="headerlink" href="#functions.magnetopauseModels.GetMPsurfS1997" title="Permalink to this definition"></a></dt>
+<dd><p>Determine paraboloid magnetopause surface shape based on Shue et al (1997) model.</p>
+<p>Determines shape of magnetopause screening surface current shape from the model detailed by Shue
+et al. (1997) <a class="reference external" href="https://doi.org/10.1029/97JA00196">https://doi.org/10.1029/97JA00196</a>. This is a simple paraboloid with an input
+sub-solar magnetopause standoff distance.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>Rss_km</strong> (<span><code class="xref mat mat-obj docutils literal notranslate"><span class="pre">double,</span> <span class="pre">1xN</span></code></span>) – Sub-solar point magnetopause standoff distance in km.</p></li>
+<li><p><strong>xi</strong> (<span><code class="xref mat mat-obj docutils literal notranslate"><span class="pre">double,</span> <span class="pre">1x1</span> <span class="pre">or</span> <span class="pre">1xN</span></code></span>) – Exponent to scale paraboloid shape.</p></li>
+<li><p><strong>thDSZ</strong> (<span><code class="xref mat mat-obj docutils literal notranslate"><span class="pre">double,</span> <span class="pre">1xN</span></code></span>) – Colatitude in dipole–solar–zenith coordinates in radians, i.e. the angle between the
+planet–Sun direction and the evaluation point location vector.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>rMP_km</strong> – Distance from body center of mass to magnetopause surface for each colatitude <code class="docutils literal notranslate"><span class="pre">thDSZ</span></code>.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>double, 1xN</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="getmpsurfsm1996">
+<h3><a class="reference internal" href="#functions.magnetopauseModels.GetMPsurfSM1996" title="functions.magnetopauseModels.GetMPsurfSM1996"><code class="xref mat mat-func docutils literal notranslate"><span class="pre">GetMPsurfSM1996()</span></code></a><a class="headerlink" href="#getmpsurfsm1996" title="Permalink to this heading"></a></h3>
+<dl class="mat function">
+<dt class="sig sig-object mat" id="functions.magnetopauseModels.GetMPsurfSM1996">
+<span class="sig-prename descclassname"><span class="pre">functions.magnetopauseModels.</span></span><span class="sig-name descname"><span class="pre">GetMPsurfSM1996</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">Rss_km</span></em>, <em class="sig-param"><span class="pre">xyzPSMdipO_km</span></em><span class="sig-paren">)</span><a class="headerlink" href="#functions.magnetopauseModels.GetMPsurfSM1996" title="Permalink to this definition"></a></dt>
+<dd><p>Determine paraboloid magnetopause surface shape based on Schulz and McNab (1996)</p>
+<p>Determines shape of magnetopause screening surface current shape from the model detailed by Schulz
+and McNabb (1996) <a class="reference external" href="https://doi.org/10.1029/95JA02987">https://doi.org/10.1029/95JA02987</a>. This is a tanh paraboloid with an input
+sub-solar magnetopause standoff distance and dipole offset.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>Rss_km</strong> (<span><code class="xref mat mat-obj docutils literal notranslate"><span class="pre">double,</span> <span class="pre">1xN</span></code></span>) – Sub-solar point magnetopause standoff distance in km.</p></li>
+<li><p><strong>xyzPSMdipO_km</strong> (<span><code class="xref mat mat-obj docutils literal notranslate"><span class="pre">double,</span> <span class="pre">3xN</span></code></span>) – Dipole offset vector in planet–solar–magnetospheric coordinates in km.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>rhoMP_km</strong> – Distance from planet–Sun line in km, i.e. <span class="math notranslate nohighlight">\(\rho\)</span> in dipole–solar–zenith cylindrical
+coordinates.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>double, 1xN</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="mpboxharmonic">
+<h3><a class="reference internal" href="#functions.magnetopauseModels.MPboxHarmonic" title="functions.magnetopauseModels.MPboxHarmonic"><code class="xref mat mat-func docutils literal notranslate"><span class="pre">MPboxHarmonic()</span></code></a><a class="headerlink" href="#mpboxharmonic" title="Permalink to this heading"></a></h3>
+<dl class="mat function">
+<dt class="sig sig-object mat" id="functions.magnetopauseModels.MPboxHarmonic">
+<span class="sig-prename descclassname"><span class="pre">functions.magnetopauseModels.</span></span><span class="sig-name descname"><span class="pre">MPboxHarmonic</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">xyzPSM_Rp</span></em>, <em class="sig-param"><span class="pre">Psi</span></em>, <em class="sig-param"><span class="pre">a</span></em>, <em class="sig-param"><span class="pre">b</span></em>, <em class="sig-param"><span class="pre">c</span></em>, <em class="sig-param"><span class="pre">d</span></em>, <em class="sig-param"><span class="pre">pqrs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#functions.magnetopauseModels.MPboxHarmonic" title="Permalink to this definition"></a></dt>
+<dd><p>Calculate the magnetic field contributuon at specific points based on a box harmonix model.</p>
+<p>Applies a box harnomic model based on Tsyganenko (2002) <a class="reference external" href="https://doi.org/10.1029/2001JA000219">https://doi.org/10.1029/2001JA000219</a>
+as formulated by Arridge and Eggington (2021) <a class="reference external" href="https://doi.org/10.1016/j.icarus.2021.114562">https://doi.org/10.1016/j.icarus.2021.114562</a>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>xyzPSM_Rp</strong> (<span><code class="xref mat mat-obj docutils literal notranslate"><span class="pre">double,</span> <span class="pre">3xN</span></code></span>) – Cartesian coordinates of measurement locations in planet–solar–magnetospheric frame in units
+of planetary radii.</p></li>
+<li><p><strong>Psi</strong> (<span><code class="xref mat mat-obj docutils literal notranslate"><span class="pre">double,</span> <span class="pre">1xN</span></code></span>) – Dipole angle relative to perpendicular to pointing into the solar wind in radians, i.e.
+<code class="docutils literal notranslate"><span class="pre">Psi</span> <span class="pre">=</span> <span class="pre">0</span></code> is perpendicular to the solar wind direction, <code class="docutils literal notranslate"><span class="pre">Psi</span> <span class="pre">=</span> <span class="pre">pi/2</span></code> is directed into the
+solar wind, and <code class="docutils literal notranslate"><span class="pre">Psi</span> <span class="pre">=</span> <span class="pre">-pi/2</span></code> is directed along the solar wind velocity vector.</p></li>
+<li><p><strong>a</strong> (<span><code class="xref mat mat-obj docutils literal notranslate"><span class="pre">double,</span> <span class="pre">3x3</span></code></span>) – Model coefficients fit from Arridge and Eggington (2021).</p></li>
+<li><p><strong>b</strong> (<span><code class="xref mat mat-obj docutils literal notranslate"><span class="pre">double,</span> <span class="pre">3x3</span></code></span>) – Model coefficients fit from Arridge and Eggington (2021).</p></li>
+<li><p><strong>c</strong> (<span><code class="xref mat mat-obj docutils literal notranslate"><span class="pre">double,</span> <span class="pre">4x4</span></code></span>) – Model coefficients fit from Arridge and Eggington (2021).</p></li>
+<li><p><strong>d</strong> (<span><code class="xref mat mat-obj docutils literal notranslate"><span class="pre">double,</span> <span class="pre">4x4</span></code></span>) – Model coefficients fit from Arridge and Eggington (2021).</p></li>
+<li><p><strong>pqrs</strong> (<span><code class="xref mat mat-obj docutils literal notranslate"><span class="pre">double,</span> <span class="pre">4x4</span></code></span>) – Model coefficients fit from Arridge and Eggington (2021). p and r are 3x1, q and s are 4x1.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>Bx, By, Bz</strong> – Magnetic field contribution from magnetopause surface currents in planet–solar–magnetospheric
+coordinates.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>double, 1xN</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="mpsphericalharmonic">
+<h3><a class="reference internal" href="#functions.magnetopauseModels.MPsphericalHarmonic" title="functions.magnetopauseModels.MPsphericalHarmonic"><code class="xref mat mat-func docutils literal notranslate"><span class="pre">MPsphericalHarmonic()</span></code></a><a class="headerlink" href="#mpsphericalharmonic" title="Permalink to this heading"></a></h3>
+<dl class="mat function">
+<dt class="sig sig-object mat" id="functions.magnetopauseModels.MPsphericalHarmonic">
+<span class="sig-prename descclassname"><span class="pre">functions.magnetopauseModels.</span></span><span class="sig-name descname"><span class="pre">MPsphericalHarmonic</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">r_Rss</span></em>, <em class="sig-param"><span class="pre">thMP</span></em>, <em class="sig-param"><span class="pre">phiMP</span></em>, <em class="sig-param"><span class="pre">Gnm</span></em>, <em class="sig-param"><span class="pre">Nmax</span></em><span class="sig-paren">)</span><a class="headerlink" href="#functions.magnetopauseModels.MPsphericalHarmonic" title="Permalink to this definition"></a></dt>
+<dd><p>Evaluate external-source spherical harmonics for magnetopause surface currents, i.e. all hnm = 0.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>r_Rss</strong> (<span><code class="xref mat mat-obj docutils literal notranslate"><span class="pre">double,</span> <span class="pre">1xN</span></code></span>) – Radial distance from planet center of mass in units of the sub-solar magnetopause standoff
+distance.</p></li>
+<li><p><strong>thMP</strong> (<span><code class="xref mat mat-obj docutils literal notranslate"><span class="pre">double,</span> <span class="pre">1xN</span></code></span>) – Colatitude in solar–magnetospheric coordinates. The <span class="math notranslate nohighlight">\(\hat{z}\)</span> axis of this coordinate
+system is derived from <span class="math notranslate nohighlight">\(\hat{x}\times\hat{y}\)</span>, where <span class="math notranslate nohighlight">\(\hat{x}\)</span> the along the
+planet–Sun direction and <span class="math notranslate nohighlight">\(\hat{y}\)</span> is along <span class="math notranslate nohighlight">\(\mathbf{m}\times\hat{x}\)</span>, with
+<span class="math notranslate nohighlight">\(\mathbf{m}\)</span> the instantaneous magnetic dipole moment vector for the body.</p></li>
+<li><p><strong>phiMP</strong> (<span><code class="xref mat mat-obj docutils literal notranslate"><span class="pre">double,</span> <span class="pre">1xN</span></code></span>) – Azimuthal angle in solar-magnetospheric coordinates, i.e. the angle between the planet–Sun
+direction and the position vector’s projection into the dipole equatorial plane.</p></li>
+<li><p><strong>Gnm</strong> (<span><code class="xref mat mat-obj docutils literal notranslate"><span class="pre">double,</span> <span class="pre">(Nmax)x(Nmax+1)</span></code></span>) – Coefficients for external spherical harmonics in nT at body center.</p></li>
+<li><p><strong>Nmax</strong> (<span><code class="xref mat mat-obj docutils literal notranslate"><span class="pre">int</span></code></span>) – Maximum degree to which to limit spherical harmonic models. Only has an effect if the value
+passed is less than the lesser of the model maximum degree.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>Br, Bth, Bphi</strong> – External-source magnetic field vector components ailgned to spherical coordinates.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>double, 1xN</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+</section>
+<section id="khurana-and-schwarzl-2005-jupiter-model-functions">
+<h2>Khurana and Schwarzl (2005) Jupiter model functions<a class="headerlink" href="#khurana-and-schwarzl-2005-jupiter-model-functions" title="Permalink to this heading"></a></h2>
+<section id="vip4nodipole">
+<h3><a class="reference internal" href="#functions.KS2005functions.VIP4noDipole" title="functions.KS2005functions.VIP4noDipole"><code class="xref mat mat-func docutils literal notranslate"><span class="pre">VIP4noDipole()</span></code></a><a class="headerlink" href="#vip4nodipole" title="Permalink to this heading"></a></h3>
+<dl class="mat function">
+<dt class="sig sig-object mat" id="functions.KS2005functions.VIP4noDipole">
+<span class="sig-prename descclassname"><span class="pre">functions.KS2005functions.</span></span><span class="sig-name descname"><span class="pre">VIP4noDipole</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">r</span></em>, <em class="sig-param"><span class="pre">theta</span></em>, <em class="sig-param"><span class="pre">phi</span></em>, <em class="sig-param"><span class="pre">gVIP4</span></em>, <em class="sig-param"><span class="pre">hVIP4</span></em><span class="sig-paren">)</span><a class="headerlink" href="#functions.KS2005functions.VIP4noDipole" title="Permalink to this definition"></a></dt>
+<dd><p>Get magnetic field vectors in System III spherical coordinates for the
+non-dipole multipole moments of the VIP4 model. We omit the dipole
+moments because we have already accounted for them in evaluating the
+shielded dipole magnetosphere model.</p>
+</dd></dl>
+
+</section>
+</section>
 <section id="additional-supporting-functions">
 <h2>Additional supporting functions<a class="headerlink" href="#additional-supporting-functions" title="Permalink to this heading"></a></h2>
 <section id="bsph2bxyz">
@@ -511,7 +698,7 @@ contents in info.Variables.</p>
 <h3><a class="reference internal" href="#functions.ExcitationSpectrum" title="functions.ExcitationSpectrum"><code class="xref mat mat-func docutils literal notranslate"><span class="pre">ExcitationSpectrum()</span></code></a><a class="headerlink" href="#excitationspectrum" title="Permalink to this heading"></a></h3>
 <dl class="mat function">
 <dt class="sig sig-object mat" id="functions.ExcitationSpectrum">
-<span class="sig-prename descclassname"><span class="pre">functions.</span></span><span class="sig-name descname"><span class="pre">ExcitationSpectrum</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">moonName</span></em>, <em class="sig-param"><span class="pre">nOsc</span></em>, <em class="sig-param"><span class="pre">rate</span></em>, <em class="sig-param"><span class="pre">Tinterest_h</span></em>, <em class="sig-param"><span class="pre">outData</span></em>, <em class="sig-param"><span class="pre">fPatternFT</span></em>, <em class="sig-param"><span class="pre">fPatternTseries</span></em>, <em class="sig-param"><span class="pre">magPhase</span></em>, <em class="sig-param"><span class="pre">DO_EPO</span></em>, <em class="sig-param"><span class="pre">SPHOUT</span></em>, <em class="sig-param"><span class="pre">DO_MPAUSE</span></em><span class="sig-paren">)</span><a class="headerlink" href="#functions.ExcitationSpectrum" title="Permalink to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">functions.</span></span><span class="sig-name descname"><span class="pre">ExcitationSpectrum</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">moonName</span></em>, <em class="sig-param"><span class="pre">nOsc</span></em>, <em class="sig-param"><span class="pre">rate</span></em>, <em class="sig-param"><span class="pre">Tinterest_h</span></em>, <em class="sig-param"><span class="pre">outData</span></em>, <em class="sig-param"><span class="pre">coeffPath</span></em>, <em class="sig-param"><span class="pre">fPatternFT</span></em>, <em class="sig-param"><span class="pre">fPatternTseries</span></em>, <em class="sig-param"><span class="pre">magPhase</span></em>, <em class="sig-param"><span class="pre">DO_EPO</span></em>, <em class="sig-param"><span class="pre">SPHOUT</span></em>, <em class="sig-param"><span class="pre">DO_MPAUSE</span></em><span class="sig-paren">)</span><a class="headerlink" href="#functions.ExcitationSpectrum" title="Permalink to this definition"></a></dt>
 <dd><p>Calculate a Fast Fourier Transform (FFT) spectrum of magnetic oscillations for a given moon.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
@@ -532,6 +719,7 @@ calculated phase of the complex peak amplitude in the FFT will drift.</p>
 period is the one most accurately reproduced from the FFT inversion. The default value is the
 synodic period, as evaluated from values returned by <code class="xref py py-func docutils literal notranslate"><span class="pre">GetBodyParams()</span></code>.</p></li>
 <li><p><strong>outData</strong> (<span><code class="xref mat mat-obj docutils literal notranslate"><span class="pre">char,</span> <span class="pre">1xF,</span> <span class="pre">default='out'</span></code></span>) – Directory to use for output of complex spectrum amplitudes.</p></li>
+<li><p><strong>coeffPath</strong> (<span><code class="xref mat mat-obj docutils literal notranslate"><span class="pre">char,</span> <span class="pre">1xE,</span> <span class="pre">default='modelCoeffs'</span></code></span>) – Directory containing model coefficients files.</p></li>
 <li><p><strong>fPatternFT</strong> (<span><code class="xref mat mat-obj docutils literal notranslate"><span class="pre">char,</span> <span class="pre">1xG,</span> <span class="pre">default='FTdata'</span></code></span>) – Pattern for file names of FFT spectrum data saved to disk.</p></li>
 <li><p><strong>fPatternTseries</strong> (<span><code class="xref mat mat-obj docutils literal notranslate"><span class="pre">char,</span> <span class="pre">1xH,</span> <span class="pre">default='TseriesData'</span></code></span>) – Pattern for file names of time series data saved to disk.</p></li>
 <li><p><strong>magPhase</strong> (<span><code class="xref mat mat-obj docutils literal notranslate"><span class="pre">double,</span> <span class="pre">default=0</span></code></span>) – Arbitrary offset in radians by which to rotate the magnetospheric field evaluation.</p></li>
@@ -613,7 +801,7 @@ loaded PCK file. Size depends on the body and which rates are defined.</p></li>
 <h3><a class="reference internal" href="#functions.GetBplotAndLsq" title="functions.GetBplotAndLsq"><code class="xref mat mat-func docutils literal notranslate"><span class="pre">GetBplotAndLsq()</span></code></a><a class="headerlink" href="#getbplotandlsq" title="Permalink to this heading"></a></h3>
 <dl class="mat function">
 <dt class="sig sig-object mat" id="functions.GetBplotAndLsq">
-<span class="sig-prename descclassname"><span class="pre">functions.</span></span><span class="sig-name descname"><span class="pre">GetBplotAndLsq</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">ets</span></em>, <em class="sig-param"><span class="pre">t_h</span></em>, <em class="sig-param"><span class="pre">r_km</span></em>, <em class="sig-param"><span class="pre">theta</span></em>, <em class="sig-param"><span class="pre">phi</span></em>, <em class="sig-param"><span class="pre">xyz_km</span></em>, <em class="sig-param"><span class="pre">BrSC</span></em>, <em class="sig-param"><span class="pre">BthSC</span></em>, <em class="sig-param"><span class="pre">BphiSC</span></em>, <em class="sig-param"><span class="pre">scName</span></em>, <em class="sig-param"><span class="pre">parentName</span></em>, <em class="sig-param"><span class="pre">S3coords</span></em>, <em class="sig-param"><span class="pre">orbStr</span></em>, <em class="sig-param"><span class="pre">opt</span></em>, <em class="sig-param"><span class="pre">MPopt</span></em>, <em class="sig-param"><span class="pre">SEQUENTIAL</span></em>, <em class="sig-param"><span class="pre">jt_h</span></em><span class="sig-paren">)</span><a class="headerlink" href="#functions.GetBplotAndLsq" title="Permalink to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">functions.</span></span><span class="sig-name descname"><span class="pre">GetBplotAndLsq</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">ets</span></em>, <em class="sig-param"><span class="pre">t_h</span></em>, <em class="sig-param"><span class="pre">r_km</span></em>, <em class="sig-param"><span class="pre">theta</span></em>, <em class="sig-param"><span class="pre">phi</span></em>, <em class="sig-param"><span class="pre">xyz_km</span></em>, <em class="sig-param"><span class="pre">BrSC</span></em>, <em class="sig-param"><span class="pre">BthSC</span></em>, <em class="sig-param"><span class="pre">BphiSC</span></em>, <em class="sig-param"><span class="pre">scName</span></em>, <em class="sig-param"><span class="pre">parentName</span></em>, <em class="sig-param"><span class="pre">S3coords</span></em>, <em class="sig-param"><span class="pre">orbStr</span></em>, <em class="sig-param"><span class="pre">opt</span></em>, <em class="sig-param"><span class="pre">MPopt</span></em>, <em class="sig-param"><span class="pre">SEQUENTIAL</span></em>, <em class="sig-param"><span class="pre">coeffPath</span></em>, <em class="sig-param"><span class="pre">jt_h</span></em><span class="sig-paren">)</span><a class="headerlink" href="#functions.GetBplotAndLsq" title="Permalink to this definition"></a></dt>
 <dd><p>Plots and calculates comparisons between modeled and measured magnetic fields.</p>
 <p>Generates time series data of a specified combination of magnetic field models implemented in
 PlanetMag and compares against spacecraft measurements of the planetary magnetic field.
@@ -642,6 +830,7 @@ options.</p></li>
 <li><p><strong>MPopt</strong> (<span><code class="xref mat mat-obj docutils literal notranslate"><span class="pre">int</span></code></span>) – Index of magnetopause current magnetic field model. See <code class="xref py py-func docutils literal notranslate"><span class="pre">GetModelOpts()</span></code> for more details and
 available options.</p></li>
 <li><p><strong>SEQUENTIAL</strong> (<span><code class="xref mat mat-obj docutils literal notranslate"><span class="pre">bool,</span> <span class="pre">default=0</span></code></span>) – Whether to plot points by index or hours relative to a reference time.</p></li>
+<li><p><strong>coeffPath</strong> (<span><code class="xref mat mat-obj docutils literal notranslate"><span class="pre">char,</span> <span class="pre">1xE,</span> <span class="pre">default='modelCoeffs'</span></code></span>) – Directory containing model coefficients files.</p></li>
 <li><p><strong>jt_h</strong> (<span><code class="xref mat mat-obj docutils literal notranslate"><span class="pre">double,</span> <span class="pre">1xM,</span> <span class="pre">default=[]</span></code></span>) – Ephemeris times of Juno measurements in TDB hours relative to J2000 to use in data comparisons.</p></li>
 </ul>
 </dd>
@@ -653,7 +842,7 @@ available options.</p></li>
 <h3><a class="reference internal" href="#functions.GetBplotAndLsqMoon" title="functions.GetBplotAndLsqMoon"><code class="xref mat mat-func docutils literal notranslate"><span class="pre">GetBplotAndLsqMoon()</span></code></a><a class="headerlink" href="#getbplotandlsqmoon" title="Permalink to this heading"></a></h3>
 <dl class="mat function">
 <dt class="sig sig-object mat" id="functions.GetBplotAndLsqMoon">
-<span class="sig-prename descclassname"><span class="pre">functions.</span></span><span class="sig-name descname"><span class="pre">GetBplotAndLsqMoon</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">ets</span></em>, <em class="sig-param"><span class="pre">t_h</span></em>, <em class="sig-param"><span class="pre">r_km</span></em>, <em class="sig-param"><span class="pre">theta</span></em>, <em class="sig-param"><span class="pre">phi</span></em>, <em class="sig-param"><span class="pre">xyz_km</span></em>, <em class="sig-param"><span class="pre">r_RM</span></em>, <em class="sig-param"><span class="pre">BxSC</span></em>, <em class="sig-param"><span class="pre">BySC</span></em>, <em class="sig-param"><span class="pre">BzSC</span></em>, <em class="sig-param"><span class="pre">scName</span></em>, <em class="sig-param"><span class="pre">parentName</span></em>, <em class="sig-param"><span class="pre">S3coords</span></em>, <em class="sig-param"><span class="pre">moonName</span></em>, <em class="sig-param"><span class="pre">era</span></em>, <em class="sig-param"><span class="pre">fbStr</span></em>, <em class="sig-param"><span class="pre">opt</span></em>, <em class="sig-param"><span class="pre">MPopt</span></em>, <em class="sig-param"><span class="pre">SEQUENTIAL</span></em>, <em class="sig-param"><span class="pre">dataDir</span></em>, <em class="sig-param"><span class="pre">jt_h</span></em><span class="sig-paren">)</span><a class="headerlink" href="#functions.GetBplotAndLsqMoon" title="Permalink to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">functions.</span></span><span class="sig-name descname"><span class="pre">GetBplotAndLsqMoon</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">ets</span></em>, <em class="sig-param"><span class="pre">t_h</span></em>, <em class="sig-param"><span class="pre">r_km</span></em>, <em class="sig-param"><span class="pre">theta</span></em>, <em class="sig-param"><span class="pre">phi</span></em>, <em class="sig-param"><span class="pre">xyz_km</span></em>, <em class="sig-param"><span class="pre">r_RM</span></em>, <em class="sig-param"><span class="pre">BxSC</span></em>, <em class="sig-param"><span class="pre">BySC</span></em>, <em class="sig-param"><span class="pre">BzSC</span></em>, <em class="sig-param"><span class="pre">scName</span></em>, <em class="sig-param"><span class="pre">parentName</span></em>, <em class="sig-param"><span class="pre">S3coords</span></em>, <em class="sig-param"><span class="pre">moonName</span></em>, <em class="sig-param"><span class="pre">era</span></em>, <em class="sig-param"><span class="pre">fbStr</span></em>, <em class="sig-param"><span class="pre">opt</span></em>, <em class="sig-param"><span class="pre">MPopt</span></em>, <em class="sig-param"><span class="pre">SEQUENTIAL</span></em>, <em class="sig-param"><span class="pre">dataDir</span></em>, <em class="sig-param"><span class="pre">coeffPath</span></em>, <em class="sig-param"><span class="pre">jt_h</span></em><span class="sig-paren">)</span><a class="headerlink" href="#functions.GetBplotAndLsqMoon" title="Permalink to this definition"></a></dt>
 <dd><p>Plots and calculates comparisons between modeled and measured magnetic fields in the vicinity of
 a target moon.</p>
 <p>Generates time series data of a specified combination of magnetic field models implemented in
@@ -692,6 +881,7 @@ options.</p></li>
 available options.</p></li>
 <li><p><strong>SEQUENTIAL</strong> (<span><code class="xref mat mat-obj docutils literal notranslate"><span class="pre">bool,</span> <span class="pre">default=0</span></code></span>) – Whether to plot points by index or hours relative to a reference time (closest approach).</p></li>
 <li><p><strong>dataDir</strong> (<span><code class="xref mat mat-obj docutils literal notranslate"><span class="pre">char,</span> <span class="pre">1xH,</span> <span class="pre">default='out'</span></code></span>) – Name of directory where excitation moments are printed to disk.</p></li>
+<li><p><strong>coeffPath</strong> (<span><code class="xref mat mat-obj docutils literal notranslate"><span class="pre">char,</span> <span class="pre">1xE,</span> <span class="pre">default='modelCoeffs'</span></code></span>) – Directory containing model coefficients files.</p></li>
 <li><p><strong>jt_h</strong> (<span><code class="xref mat mat-obj docutils literal notranslate"><span class="pre">double,</span> <span class="pre">1xM,</span> <span class="pre">default=[]</span></code></span>) – Ephemeris times of Juno measurements in TDB hours relative to J2000 to use in data comparisons.</p></li>
 </ul>
 </dd>
@@ -703,7 +893,7 @@ available options.</p></li>
 <h3><a class="reference internal" href="#functions.GetBplotAndLsqNeptune" title="functions.GetBplotAndLsqNeptune"><code class="xref mat mat-func docutils literal notranslate"><span class="pre">GetBplotAndLsqNeptune()</span></code></a><a class="headerlink" href="#getbplotandlsqneptune" title="Permalink to this heading"></a></h3>
 <dl class="mat function">
 <dt class="sig sig-object mat" id="functions.GetBplotAndLsqNeptune">
-<span class="sig-prename descclassname"><span class="pre">functions.</span></span><span class="sig-name descname"><span class="pre">GetBplotAndLsqNeptune</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">ets</span></em>, <em class="sig-param"><span class="pre">t_h</span></em>, <em class="sig-param"><span class="pre">r_km</span></em>, <em class="sig-param"><span class="pre">theta</span></em>, <em class="sig-param"><span class="pre">phi</span></em>, <em class="sig-param"><span class="pre">xyz_km</span></em>, <em class="sig-param"><span class="pre">BrSC</span></em>, <em class="sig-param"><span class="pre">BthSC</span></em>, <em class="sig-param"><span class="pre">BphiSC</span></em>, <em class="sig-param"><span class="pre">scName</span></em>, <em class="sig-param"><span class="pre">S3coords</span></em>, <em class="sig-param"><span class="pre">orbStr</span></em>, <em class="sig-param"><span class="pre">opt</span></em>, <em class="sig-param"><span class="pre">MPopt</span></em>, <em class="sig-param"><span class="pre">SEQUENTIAL</span></em>, <em class="sig-param"><span class="pre">INC_PDS</span></em>, <em class="sig-param"><span class="pre">INC_O8</span></em>, <em class="sig-param"><span class="pre">INC_PDS_NM3</span></em>, <em class="sig-param"><span class="pre">INC_NM3</span></em><span class="sig-paren">)</span><a class="headerlink" href="#functions.GetBplotAndLsqNeptune" title="Permalink to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">functions.</span></span><span class="sig-name descname"><span class="pre">GetBplotAndLsqNeptune</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">ets</span></em>, <em class="sig-param"><span class="pre">t_h</span></em>, <em class="sig-param"><span class="pre">r_km</span></em>, <em class="sig-param"><span class="pre">theta</span></em>, <em class="sig-param"><span class="pre">phi</span></em>, <em class="sig-param"><span class="pre">xyz_km</span></em>, <em class="sig-param"><span class="pre">BrSC</span></em>, <em class="sig-param"><span class="pre">BthSC</span></em>, <em class="sig-param"><span class="pre">BphiSC</span></em>, <em class="sig-param"><span class="pre">scName</span></em>, <em class="sig-param"><span class="pre">S3coords</span></em>, <em class="sig-param"><span class="pre">orbStr</span></em>, <em class="sig-param"><span class="pre">opt</span></em>, <em class="sig-param"><span class="pre">MPopt</span></em>, <em class="sig-param"><span class="pre">SEQUENTIAL</span></em>, <em class="sig-param"><span class="pre">coeffPath</span></em>, <em class="sig-param"><span class="pre">INC_PDS</span></em>, <em class="sig-param"><span class="pre">INC_O8</span></em>, <em class="sig-param"><span class="pre">INC_PDS_NM3</span></em>, <em class="sig-param"><span class="pre">INC_NM3</span></em><span class="sig-paren">)</span><a class="headerlink" href="#functions.GetBplotAndLsqNeptune" title="Permalink to this definition"></a></dt>
 <dd><p>Plots and calculates comparisons between modeled and measured magnetic fields for Neptune.</p>
 <p>Generates time series data of a specified combination of magnetic field models implemented in
 PlanetMag and compares against spacecraft measurements of the planetary magnetic field.
@@ -735,6 +925,7 @@ options.</p></li>
 <li><p><strong>MPopt</strong> (<span><code class="xref mat mat-obj docutils literal notranslate"><span class="pre">int</span></code></span>) – Index of magnetopause current magnetic field model. See <code class="xref py py-func docutils literal notranslate"><span class="pre">GetModelOpts()</span></code> for more details and
 available options.</p></li>
 <li><p><strong>SEQUENTIAL</strong> (<span><code class="xref mat mat-obj docutils literal notranslate"><span class="pre">bool,</span> <span class="pre">default=0</span></code></span>) – Whether to plot points by index or hours relative to a reference time.</p></li>
+<li><p><strong>coeffPath</strong> (<span><code class="xref mat mat-obj docutils literal notranslate"><span class="pre">char,</span> <span class="pre">1xE,</span> <span class="pre">default='modelCoeffs'</span></code></span>) – Directory containing model coefficients files.</p></li>
 <li><p><strong>INC_PDS</strong> (<span><code class="xref mat mat-obj docutils literal notranslate"><span class="pre">bool,</span> <span class="pre">default=1</span></code></span>) – Whether to include the full O8 model, including unresolved coefficients, with PDS trajectory in
 NLS frame in coordinate/frame comparison.</p></li>
 <li><p><strong>INC_O8</strong> (<span><code class="xref mat mat-obj docutils literal notranslate"><span class="pre">bool,</span> <span class="pre">default=1</span></code></span>) – Whether to include the full O8 model, including unresolved coefficients, in the NLS frame as
@@ -746,6 +937,32 @@ in coordinate/frame comparison. This implementation uses the Neptune spin pole a
 the J2000 epoch and the System III rotation rate as reported in Ness et al. (1989)
 <a class="reference external" href="https://doi.org/10.1126/science.246.4936.1473">https://doi.org/10.1126/science.246.4936.1473</a>.</p></li>
 </ul>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="getdespun">
+<h3><a class="reference internal" href="#functions.GetDespun" title="functions.GetDespun"><code class="xref mat mat-func docutils literal notranslate"><span class="pre">GetDespun()</span></code></a><a class="headerlink" href="#getdespun" title="Permalink to this heading"></a></h3>
+<dl class="mat function">
+<dt class="sig sig-object mat" id="functions.GetDespun">
+<span class="sig-prename descclassname"><span class="pre">functions.</span></span><span class="sig-name descname"><span class="pre">GetDespun</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">xyz_Rp</span></em>, <em class="sig-param"><span class="pre">despin</span></em><span class="sig-paren">)</span><a class="headerlink" href="#functions.GetDespun" title="Permalink to this definition"></a></dt>
+<dd><p>Rotate Cartesian coordinates through some angle.</p>
+<p>Intended to “de-spin” a rotating coordinate system for convenience in plotting, e.g. in the case
+of a trajectory around a rotating planet that is evaluated in planetocentric coordinates.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>xyz_Rp</strong> (<span><code class="xref mat mat-obj docutils literal notranslate"><span class="pre">double,</span> <span class="pre">3xN</span></code></span>) – Cartesian position vectors in planetary radii.</p></li>
+<li><p><strong>despin</strong> (<span><code class="xref mat mat-obj docutils literal notranslate"><span class="pre">double,</span> <span class="pre">1xN</span></code></span>) – Angles by which to rotate each position vector, prograde (toward <span class="math notranslate nohighlight">\(+\hat{\phi}\)</span>). Thus, to
+despin the coordinates by <span class="math notranslate nohighlight">\(\Delta\phi\)</span>, negate the angles passed.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>x, y, z</strong> – Rotated Cartesian position vectors in planetary radii.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>double, 1xN</p>
 </dd>
 </dl>
 </dd></dl>
@@ -1212,7 +1429,7 @@ Currently implemented options are:</p>
 <h3><a class="reference internal" href="#functions.LshellTrace" title="functions.LshellTrace"><code class="xref mat mat-func docutils literal notranslate"><span class="pre">LshellTrace()</span></code></a><a class="headerlink" href="#lshelltrace" title="Permalink to this heading"></a></h3>
 <dl class="mat function">
 <dt class="sig sig-object mat" id="functions.LshellTrace">
-<span class="sig-prename descclassname"><span class="pre">functions.</span></span><span class="sig-name descname"><span class="pre">LshellTrace</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">parentName</span></em>, <em class="sig-param"><span class="pre">opt</span></em>, <em class="sig-param"><span class="pre">MPopt</span></em>, <em class="sig-param"><span class="pre">DO_MPAUSE</span></em>, <em class="sig-param"><span class="pre">sc</span></em>, <em class="sig-param"><span class="pre">t_h</span></em>, <em class="sig-param"><span class="pre">Nmaxin</span></em><span class="sig-paren">)</span><a class="headerlink" href="#functions.LshellTrace" title="Permalink to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">functions.</span></span><span class="sig-name descname"><span class="pre">LshellTrace</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">parentName</span></em>, <em class="sig-param"><span class="pre">opt</span></em>, <em class="sig-param"><span class="pre">MPopt</span></em>, <em class="sig-param"><span class="pre">DO_MPAUSE</span></em>, <em class="sig-param"><span class="pre">sc</span></em>, <em class="sig-param"><span class="pre">t_h</span></em>, <em class="sig-param"><span class="pre">Nmaxin</span></em>, <em class="sig-param"><span class="pre">coeffPath</span></em><span class="sig-paren">)</span><a class="headerlink" href="#functions.LshellTrace" title="Permalink to this definition"></a></dt>
 <dd><p>Determine the L shell of the target body at specified ephemeris times.</p>
 <p>Trace magnetic field line from the location of a target (e.g. a spacecraft) to the magnetic
 dipole equator to determine the radial distance in planetary radii to the planet’s center of mass
@@ -1236,6 +1453,7 @@ more details.</p></li>
 <li><p><strong>Nmaxin</strong> (<span><code class="xref mat mat-obj docutils literal notranslate"><span class="pre">int,</span> <span class="pre">default=Inf</span></code></span>) – Spherical harmonic degree to which to limit magnetic field model evaluation in tracing field
 lines. Using the default (Inf) makes use of the highest degree both implemented in <code class="xref py py-func docutils literal notranslate"><span class="pre">MagFldParent()</span></code>
 and present in the model coefficients.</p></li>
+<li><p><strong>coeffPath</strong> (<span><code class="xref mat mat-obj docutils literal notranslate"><span class="pre">char,</span> <span class="pre">1xE,</span> <span class="pre">default='modelCoeffs'</span></code></span>) – Directory containing model coefficients files.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
@@ -1289,6 +1507,24 @@ and present in the model coefficients.</p></li>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>double, 1xN</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="vlines">
+<h3><a class="reference internal" href="#functions.vlines" title="functions.vlines"><code class="xref mat mat-func docutils literal notranslate"><span class="pre">vlines()</span></code></a><a class="headerlink" href="#vlines" title="Permalink to this heading"></a></h3>
+<dl class="mat function">
+<dt class="sig sig-object mat" id="functions.vlines">
+<span class="sig-prename descclassname"><span class="pre">functions.</span></span><span class="sig-name descname"><span class="pre">vlines</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">x</span></em>, <em class="sig-param"><span class="pre">color</span></em><span class="sig-paren">)</span><a class="headerlink" href="#functions.vlines" title="Permalink to this definition"></a></dt>
+<dd><p>Plot vertical lines at specific x locations with the named color.</p>
+<p>Vertical lines are plotted on the currently focused axes object.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>x</strong> (<span><code class="xref mat mat-obj docutils literal notranslate"><span class="pre">double,</span> <span class="pre">1xN</span></code></span>) – x coordinates at which to plot vertical lines in data units.</p></li>
+<li><p><strong>color</strong> (<span><code class="xref mat mat-obj docutils literal notranslate"><span class="pre">char,</span> <span class="pre">1x7</span></code></span>) – Object interpretable by Matlab as a color (e.g. HTML color string <code class="docutils literal notranslate"><span class="pre">'#FF0000'</span></code>).</p></li>
+</ul>
 </dd>
 </dl>
 </dd></dl>
