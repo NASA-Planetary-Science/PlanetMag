@@ -1,47 +1,63 @@
-function [Bvec, Mdip, Odip] = KSMagFldJupiter(r_km, theta, phi, ets, SPHOUT)
-% For calculating Jupiter magnetic field, based on Fortran code from
-% K. Khurana and H. Schwarzl after Khurana and Schwarzl (2005):
-% https://doi.org/10.1029/2004JA010757 .
-% Author: Marshall J. Styczinski, itsmoosh@gmail.com
-% Last updated: 2022-02-07
-
+function [Bvec, Mdip, Odip] = KSMagFldJupiter(r_km, theta, phi, ets, SPHOUT, AS_CODED)
+% Calculate Jupiter magnetic field at evaluation points and times based on the Khurana and Schwarzl
+% (2005) model.
+%
+% Model implementation based on Fortran code from K. Khurana and H. Schwarzl after Khurana and
+% Schwarzl (2005) https://doi.org/10.1029/2004JA010757. Much of the original software was
+% refactored to create this module, although some functions (e.g. VIP4noDipole, Upot) were
+% difficult to interpret and so were translated near-exactly without refactoring. This functions
+% are identifiable from their use of non-descript variable naming, i.e. lots of single-letter
+% variable names. In several places, more precise model coefficients or corrections to certain
+% parameters have been implemented, but can be toggled off by setting ``AS_CODED`` to true, thereby
+% matching the behavior of the original Fortran software.
+%
+% See GetModelOpts or refer to Khurana and Schwarzl (2005) for a description of the model.
+%
+% Parameters
+% ----------
+% r_km : double, 1xN
+%   Radius of evaluation points in km from planet barycenter.
+% theta : double, 1xN
+%   Planetocentric colatitude of evaluation points in radians. Must be the same length as r_km.
+% phi : double, 1xN
+%   Planetocentric east longitude of evaluation points in radians. Must be the same length as r_km.
+% ets : double, 1xN
+%   Ephemeris times associated with evaluation points in TDB seconds relative to J2000. Must be the
+%   same length as r_km.
 % SPHOUT : bool, default=0
 %   Whether to return vectors aligned to spherical coordinate axes (true) or cartesian (false).
+% AS_CODED : bool, default=0
+%   Whether to use model coefficients and implementation matching the original Fortran code (true)
+%   or with increased precision and corrected parameters (false). Specifically, unless ``AS_CODED``
+%   is true:
+%
+%       - Convert distances to units of RJ = 71323 km as in VIP4 paper (Connerney et al., 1998
+%         https://doi.org/10.1029/97JA03726)
+%       - Use more precise VIP4 tables of g and h
+%       - Use corrected values for Jupiter rotation period and rate
+%
+% Returns
+% -------
+% Bvec_nT : double, 3xN
+%   Magnetic field vector in System III coordinates at evaluation points in nT. Output rows are x,
+%   y, z respectively for cartesian or r, theta, phi for spherical.
+% Mdip_nT : double, 1x3
+%   Dipole magnetic moment in coordinates matching Bvec_nT, as surface-equivalent nT, i.e. this
+%   vector times the planet volume yields the magnetic moment in SI units.
+% Odip_km : double, 1x3
+%   Dipole magnetic moment offset in km from planet barycenter in coordinates matching Bvec_nT.
 
-    % Calculate magnetic field vectors, magnetic dipole moment,
-    % and dipole offset in System III coordinates based on VIP4
-    % Jupiter field model, plus the latest evolution of the Khurana
-    % current sheet model from K. Khurana.
+% Part of the PlanetMag framework for evaluation and study of planetary magnetic fields.
+% Created by Corey J. Cochrane and Marshall J. Styczinski
+% Maintained by Marshall J. Styczinski
+% Contact: corey.j.cochrane@jpl.nasa.gov
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     
-    % Args:
-    %   latS3_deg: float, shape(1xN). System III latitude in degrees.
-    %   lonS3_deg: float, shape(1xN). System III east longitude
-    %       (right-handed) in degrees.
-    %   altJup_km: float, shape(1xN). Altitude above Jupiter's "surface" in
-    %       km.
-    %   ets: float, shape(1xN). Times in TDB seconds past J2000
-    %   NOTE: A leapseconds kernel must already be loaded with Mice using,
-    %       e.g. cspice_furnsh('naif0012.tls')
-    % Outputs:
-    %   Bvec: float, shape(3xN). Magnetic field vectors in Gauss, aligned
-    %       to Jupiter System III cartesian axes.
-    %   Mdip: float, shape(1x3). Magnetic dipole moment in Gm^3 relative to
-    %       System III coordinate system. Not currently implemented.
-    %   Odip: float, shape(1x3). Offset of magnetic dipole moment in km
-    %       relative to System III coordinate system. Not currently 
-    %       implemented.
+    if ~exist('SPHOUT', 'var'); SPHOUT = 0; end
+    if ~exist('AS_CODED', 'var'); AS_CODED = 0; end
     
-    % Whether to use the exact values used in Khurana's code. If False (0):
-    %   1. Convert distances to units of Rj = 71323 km as in VIP4 paper
-    %   2. Use more precise VIP4 tables of g and h
-    %   3. Use corrected values for Jupiter rotation period and rate
-    global trueToKK;
-    if ~exist('SPHOUT', 'var')
-        SPHOUT = 0;
-    end
-    
-    Rj = 71492;    
-    r = r_km / Rj;
+    RJ = 71492;    
+    r = r_km / RJ;
     ctimes = ctimer(ets);
     npts = length(ets);
     
@@ -51,53 +67,58 @@ function [Bvec, Mdip, Odip] = KSMagFldJupiter(r_km, theta, phi, ets, SPHOUT)
     Mode = 7;
     
     % Get VIP4 coefficients in G
-    [gVIP4, hVIP4] = VIP4coeffs();
+    [gVIP4, hVIP4] = VIP4coeffs(AS_CODED);
     % Convert to nT
     gVIP4 = gVIP4 * 1e5;
     hVIP4 = hVIP4 * 1e5;
     
     % parmod is a list of model parameters.
-    dipTilt_deg = 0; % Tilt of dipole axis (relative to JSM z axis? MJS note: I think this should always be zero if I have the definition correct.)
-    if trueToKK
-        B0 = sqrt(420543.0^2 + 65920.0^2 + 24992.0^2);
+    if AS_CODED
+        parmod.B0 = sqrt(420543.0^2 + 65920.0^2 + 24992.0^2);
     else
-        B0 = sqrt(gVIP4(1,1)^2 + gVIP4(1,2)^2 + hVIP4(1,2)^2);  % Magnitude of dipole moment in VIP4 model in nT
+        % Magnitude of dipole moment in VIP4 model in nT
+        parmod.B0 = sqrt(gVIP4(1,1)^2 + gVIP4(1,2)^2 + hVIP4(1,2)^2);
     end
-    Nmodes = 3;  % "Number of dipole modes" (?)
-    parmod = [ ...
-        dipTilt_deg, ...
-        B0, ...
-        Nmodes, ...
-        zeros(1,7)
-        ];
+    % Tilt of dipole axis (relative to ?)
+    % MJS note: I think this should always be zero, based on the definition of the JSM frame. See
+    % https://lasp.colorado.edu/mop/files/2015/02/CoOrd_systems12.pdf
+    parmod.dipTilt_deg = 0;
+    parmod.Nmodes = 3; % "Number of dipole modes" (?)
     
     % Dipole moment vector calculation
     g = gVIP4;
     h = hVIP4;
-    M0 = 4*pi*B0*1e-15*(Rj*1e3)^3 / (4e-7*pi);
+    M0 = 4*pi*parmod.B0*1e-15*(RJ*1e3)^3 / (4e-7*pi);
     Mdip = [g(1,2), h(1,2), g(1,1)];
-    %% Offset dipole -- see Koochak and Fraser-Snith 2017
-    % Note two typos in Koochak and Fraser-Snith (2017) Eq. 4: G11 and G20
-    % should be g11 and g20, and the g20 inside square brackets should be
-    % g21, see Fraser-Snith (1987).
-    L0 = 2*g(1,1)*g(2,1) + sqrt(3)*(g(2,1)*g(2,2) + h(1,2)*h(2,2));                 % L0 = 2*g10*g20 + sqrt(3)*(g11*g21 + h11*h21)
-    L1 =  -g(1,2)*g(2,1) + sqrt(3)*(g(1,1)*g(2,2) + g(1,2)*g(2,3) + h(1,2)*h(2,3)); % L1 =  -g11*g20 + sqrt(3)*(g10*g21 + g11*g22 + h11*h22)
-    L2 =  -h(1,2)*g(2,1) + sqrt(3)*(g(1,1)*h(2,2) - h(1,2)*g(2,3) + g(1,2)*h(2,3)); % L2 =  -h11*g20 + sqrt(3)*(g10*h21 - h11*g22 + g11*h22)
-    E = (L0*g(1,1) + L1*g(1,2) + L2*h(1,2)) / (4*B0^2);                             % E = (L0*g10 + L1*g11 + L2*h11) / (4*B0^2)
+    %% Offset dipole -- see Koochak and Fraser-Snith 2017 https://doi.org/10.1002/2017EA000280
+    % Note two typos in Koochak and Fraser-Snith (2017) Eq. 4: G11 and G20 should be g11 and g20,
+    % and the g20 inside square brackets should be g21 -- see Fraser-Snith (1987)
+    % https://doi.org/10.1029/RG025i001p00001.
+    % L0 = 2*g10*g20 + sqrt(3)*(g11*g21 + h11*h21)
+    % L1 =  -g11*g20 + sqrt(3)*(g10*g21 + g11*g22 + h11*h22)
+    % L2 =  -h11*g20 + sqrt(3)*(g10*h21 - h11*g22 + g11*h22)
+    % E = (L0*g10 + L1*g11 + L2*h11) / (4*B0^2)
+    L0 = 2*g(1,1)*g(2,1) + sqrt(3)*(g(2,1)*g(2,2) + h(1,2)*h(2,2));
+    L1 =  -g(1,2)*g(2,1) + sqrt(3)*(g(1,1)*g(2,2) + g(1,2)*g(2,3) + h(1,2)*h(2,3));
+    L2 =  -h(1,2)*g(2,1) + sqrt(3)*(g(1,1)*h(2,2) - h(1,2)*g(2,3) + g(1,2)*h(2,3));
+    E = (L0*g(1,1) + L1*g(1,2) + L2*h(1,2)) / (4*parmod.B0^2);
 
-    % unitless offset parameters
-    xi =   (L0 - g(1,1)*E) / (3*B0^2); % z-axis: xi =   (L0 - g10*E) / (3*B0^2)
-    eta =  (L1 - g(1,2)*E) / (3*B0^2); % x-axis: eta =  (L1 - g11*E) / (3*B0^2)
-    zeta = (L2 - h(1,2)*E) / (3*B0^2); % y-axis: zeta = (L2 - h11*E) / (3*B0^2)
+    % Unitless offset parameters
+    % x-axis offset: eta =  (L1 - g11*E) / (3*B0^2)
+    % y-axis offset: zeta = (L2 - h11*E) / (3*B0^2)
+    % z-axis offset: xi =   (L0 - g10*E) / (3*B0^2)
+    xi =   (L0 - g(1,1)*E) / (3*parmod.B0^2);
+    eta =  (L1 - g(1,2)*E) / (3*parmod.B0^2);
+    zeta = (L2 - h(1,2)*E) / (3*parmod.B0^2);
 
     % Dipole offset in km
     if SPHOUT
         rO_km = sqrt(eta^2 + zeta^2 + xi^2);
         thO_rad = acos(xi / rO_km);
         phiO_rad = atan2(zeta, eta);
-        Odip = Rj * [rO_km, thO_rad, phiO_rad];
+        Odip = RJ * [rO_km, thO_rad, phiO_rad];
     else
-        Odip = Rj * [eta, zeta, xi];
+        Odip = RJ * [eta, zeta, xi];
     end
     
     rho = r .* sin(theta);
@@ -106,15 +127,15 @@ function [Bvec, Mdip, Odip] = KSMagFldJupiter(r_km, theta, phi, ets, SPHOUT)
     zS3 = r .* cos(theta);
     
     % Convert Jupiter Sys3 Cartesian to Jupiter-Solar-Orbital coordinates
-    [xJSO, yJSO, zJSO] = JROT_S3CtoJSO(xS3, yS3, zS3, ctimes);
+    [xJSO, yJSO, zJSO] = JROT_S3CtoJSO(xS3, yS3, zS3, ctimesJROT_S3CtoJSO, AS_CODED);
     % Get local solar time
     localTime_rads = atan2(yJSO, xJSO);
     
     % Get Sun angles
-    [stheta, sphi, sphase] = JSun(ctimes);
+    [stheta, sphi, sphase] = JSun(ctimes, AS_CODED);
 
     % Get unit normals of zp axis
-    [RNx, RNy, RNz] = csheet_N(xS3, yS3, zS3, localTime_rads, stheta, ctimes);
+    [RNx, RNy, RNz] = csheet_N(xS3, yS3, zS3, localTime_rads, stheta, ctimes, AS_CODED);
     
     %% Calculate mapped locations in current sheet coordinates
     % z axis:
@@ -157,12 +178,11 @@ function [Bvec, Mdip, Odip] = KSMagFldJupiter(r_km, theta, phi, ets, SPHOUT)
 	Tzz = (dxpdx .* dypdy - dxpdy .* dypdx);
     
     % Get distance from System III equatorial plane to current sheet
-    zNS3 = csheet_struc(rho, phi, xJSO, yJSO, localTime_rads, stheta);
+    zNS3 = csheet_struc(rho, phi, xJSO, yJSO, localTime_rads, stheta, AS_CODED);
     % Get mapped coordinates in current sheet frame
     [rmap, pmap, zmap] = xyz2cyl(xp, yp, zS3 - zNS3);
     
     %% Calculate field at mapped location in cylindrical coordinates
-    
     scol = pi/2 - stheta;
     [scolOut, sphiOut] = get_mapped_sunangle(scol, sphi, ...
         xpx,xpy,xpz, ypx,ypy,ypz, zpx,zpy,zpz);
@@ -179,7 +199,6 @@ function [Bvec, Mdip, Odip] = KSMagFldJupiter(r_km, theta, phi, ets, SPHOUT)
     Bzmap = Bzds + Bzcs + Bzcss;
     
     %% Rotate to cartesian to apply T matrix
-    
     [BXcarMap, BYcarMap, BZcarMap] = Bcyl2Bxyz(Brmap, Bpmap, Bzmap, pmap);
     
     Bxfinal = Txx.*BXcarMap + Txy.*BYcarMap + Txz.*BZcarMap;
@@ -189,14 +208,14 @@ function [Bvec, Mdip, Odip] = KSMagFldJupiter(r_km, theta, phi, ets, SPHOUT)
     %% Rotate to spherical coordinates to sum VIP4 model vectors
     [Brfinal, Bthfinal, Bphifinal] = Bxyz2Bsph(Bxfinal, Byfinal, Bzfinal, theta, phi);
     
-    [BrVIP4, BthVIP4, BphiVIP4] = VIP4noDipole(r, theta, phi, gVIP4, hVIP4);
+    [BrVIP4, BthVIP4, BphiVIP4] = VIP4noDipole(r, theta, phi, gVIP4, hVIP4, AS_CODED);
     Br = Brfinal + BrVIP4;
     Bth = Bthfinal + BthVIP4;
     Bphi = Bphifinal + BphiVIP4;
     
     %% Adjust for whether each point is inside magnetopause or not
-    [BrS3IMF, BthS3IMF, BphiS3IMF] = getBIMF(theta, phi, ctimes);
-    ptInsideMpause = CheckIfInsideMappedMp(xS3, yS3, zS3, zNS3, ctimes);
+    [BrS3IMF, BthS3IMF, BphiS3IMF] = getBIMF(theta, phi, ctimes, AS_CODED);
+    ptInsideMpause = CheckIfInsideMappedMp(xS3, yS3, zS3, zNS3, ctimes, AS_CODED);
     
     Br(ptInsideMpause) = Br(ptInsideMpause) + BrS3IMF(ptInsideMpause);
     Bth(ptInsideMpause) = Bth(ptInsideMpause) + BthS3IMF(ptInsideMpause);
@@ -215,16 +234,16 @@ function [Bvec, Mdip, Odip] = KSMagFldJupiter(r_km, theta, phi, ets, SPHOUT)
 end
 
 
-function [stheta, sphi, sphase] = JSun(ctimes)
-% Calculate the direction and phase angle from Jupiter to the Sun
-% as a function of ctime, seconds past midnight Jan 1, 1966.
+function [stheta, sphi, sphase] = JSun(ctimes, AS_CODED)
+% Calculate the direction and phase angle from Jupiter to the Sun as a function of ctime, seconds
+% past midnight Jan 1, 1966.
 
     % Initialize outputs and working variables
     % fphi is phi in Jupiter fixed (non-rotating) coordinates, in degrees
     [stheta, fphi] = deal(zeros(size(ctimes)));
 
     [yrJup, omegaJ, omegayr, etime1, obliq, tan_ob, ...
-        aa, bb, deltaPhi] = JSunCoeffs();
+        aa, bb, deltaPhi] = JSunCoeffs(AS_CODED);
     yrSec = 365.25 * 86400;
     
     t = etimer(ctimes) - etime1;
@@ -252,8 +271,8 @@ function [stheta, sphi, sphase] = JSun(ctimes)
 
     % Adjust angles near the magnetotail
     stheta(stheta >= obliq) = obliq;
-    % MJS note: I don't think stheta should be able to be negative, so I
-    % think the following line is unnecessary.
+    % MJS note: I don't think stheta should be able to be negative, so I think the following line
+    % is unnecessary.
     stheta(-stheta >= obliq) = -obliq;
 
     % Now calculate orbital/solar phase (sphase)
@@ -272,7 +291,7 @@ function [stheta, sphi, sphase] = JSun(ctimes)
 end
 
 
-function [RNx, RNy, RNz] = csheet_N(xS3, yS3, zS3, RLT, stheta, ctimes)
+function [RNx, RNy, RNz] = csheet_N(xS3, yS3, zS3, RLT, stheta, ctimes, AS_CODED)
 % Get unit normals of current sheet axes
 
     delta = 0.1;
@@ -286,11 +305,11 @@ function [RNx, RNy, RNz] = csheet_N(xS3, yS3, zS3, RLT, stheta, ctimes)
     rhom = sqrt(xm.^2 + yS3.^2);
     phip = atan2(yS3, xp);
     phim = atan2(yS3, xm);
-    [xJSOp, yJSOp, ~] = JROT_S3CtoJSO(xp, yS3, zS3, ctimes);
-    [xJSOm, yJSOm, ~] = JROT_S3CtoJSO(xm, yS3, zS3, ctimes);
+    [xJSOp, yJSOp, ~] = JROT_S3CtoJSO(xp, yS3, zS3, ctimes, AS_CODED);
+    [xJSOm, yJSOm, ~] = JROT_S3CtoJSO(xm, yS3, zS3, ctimes, AS_CODED);
     
-    zNS3p = csheet_struc(rhop, phip, xJSOp, yJSOp, RLT, stheta);
-    zNS3m = csheet_struc(rhom, phim, xJSOm, yJSOm, RLT, stheta);
+    zNS3p = csheet_struc(rhop, phip, xJSOp, yJSOp, RLT, stheta, AS_CODED);
+    zNS3m = csheet_struc(rhom, phim, xJSOm, yJSOm, RLT, stheta, AS_CODED);
     dzdx = (zNS3p - zNS3m) / (2*delta);
     
     % Now calculate y derivatives
@@ -298,11 +317,11 @@ function [RNx, RNy, RNz] = csheet_N(xS3, yS3, zS3, RLT, stheta, ctimes)
     rhom = sqrt(xS3.^2 + ym.^2);
     phip = atan2(yp, xS3);
     phim = atan2(ym, xS3);
-    [xJSOp, yJSOp, ~] = JROT_S3CtoJSO(xS3, yp, zS3, ctimes);
-    [xJSOm, yJSOm, ~] = JROT_S3CtoJSO(xS3, ym, zS3, ctimes);
+    [xJSOp, yJSOp, ~] = JROT_S3CtoJSO(xS3, yp, zS3, ctimes, AS_CODED);
+    [xJSOm, yJSOm, ~] = JROT_S3CtoJSO(xS3, ym, zS3, ctimes, AS_CODED);
     
-    zNS3p = csheet_struc(rhop, phip, xJSOp, yJSOp, RLT, stheta);
-    zNS3m = csheet_struc(rhom, phim, xJSOm, yJSOm, RLT, stheta);
+    zNS3p = csheet_struc(rhop, phip, xJSOp, yJSOp, RLT, stheta, AS_CODED);
+    zNS3m = csheet_struc(rhom, phim, xJSOm, yJSOm, RLT, stheta, AS_CODED);
     dzdy = (zNS3p - zNS3m) / (2*delta);   
         
     RN = sqrt(dzdx.^2 + dzdy.^2 + 1);
@@ -312,12 +331,12 @@ function [RNx, RNy, RNz] = csheet_N(xS3, yS3, zS3, RLT, stheta, ctimes)
 end
 
 
-function zNS3 = csheet_struc(rho, phi, xJSO, yJSO, RLT, stheta)
+function zNS3 = csheet_struc(rho, phi, xJSO, yJSO, RLT, stheta, AS_CODED)
 % Get distance of the current sheet from the System III equatorial plane
 
     % Retrieve current sheet parameterization
     [period, omegaJ_deghr, X0, phip0, obliq, incl_solar, C, psi2, psi4] ...
-    = CsheetStrucCoeffs();
+    = CsheetStrucCoeffs(AS_CODED);
 
     % Avoid zero values in x
     xJSO(abs(xJSO) < 1e-9 & xJSO > 0) =  1e-9;
@@ -332,14 +351,14 @@ function zNS3 = csheet_struc(rho, phi, xJSO, yJSO, RLT, stheta)
     rho1 = sqrt((X0*tanh(xJSO/X0)).^2 + yJSO.^2);
     
     % Calculate distance from sheet to equatorial plane
-    zNS3 = rho1*tan(poleOffsetMax).*cos(phi - phip) + ...
-           xJSO.*(1 - tanh(abs(X0./xJSO))).*tan(stheta);
+    zNS3 = rho1*tan(poleOffsetMax).*cos(phi - phip) + xJSO.*(1 - tanh(abs(X0./xJSO))).*tan(stheta);
 end
 
 
-function [sthetaOut, sphiOut] = get_mapped_sunangle(stheta, sphi, ...
-        xpx,xpy,xpz, ypx,ypy,ypz, zpx,zpy,zpz)
+function [sthetaOut, sphiOut] = get_mapped_sunangle(stheta, sphi, xpx,xpy,xpz, ypx,ypy,ypz, ...
+    zpx,zpy,zpz)
 % Get angle to Sun in current sheet coordinates
+
     [xin, yin, zin] = sph2xyz(1, stheta, sphi);
     xout = xin.*xpx + yin.*xpy + zin.*xpz;
     yout = xin.*ypx + yin.*ypy + zin.*ypz;
@@ -348,8 +367,7 @@ function [sthetaOut, sphiOut] = get_mapped_sunangle(stheta, sphi, ...
 end
 
 
-function [Brds, Bpds, Bzds] = dipole_shield_cyl_S3(parmod, ...
-    rmap, pmap, zmapin, sphi)
+function [Brds, Bpds, Bzds] = dipole_shield_cyl_S3(parmod, rmap, pmap, zmapin, sphi)
 % Get dipole shield (?) field in cylindrical JS3 coordinates
 
     % Get mapped cartesian coords
@@ -357,7 +375,7 @@ function [Brds, Bpds, Bzds] = dipole_shield_cyl_S3(parmod, ...
     % Transform to pseudo-JSO position
     [xpJSO, ypJSO, zpJSO] = xyz2pJSO(xmap, ymap, zmap, sphi);
     % Get shielded dipole in pseudo-JSO coordinates
-    [BxpJSO, BypJSO, BzpJSO] = dipole_shielded(parmod, xpJSO, ypJSO, zpJSO);
+    [BxpJSO, BypJSO, BzpJSO] = dipole_shielded(parmod, xpJSO, ypJSO, zpJSO, AS_CODED);
     % Transform psuedo-JSO field vectors to JS3
     [Bx, By, Bz] = BpJSO2Bxyz(BxpJSO, BypJSO, BzpJSO, sphi);
     % Transform to cylindrical for output
@@ -365,27 +383,22 @@ function [Brds, Bpds, Bzds] = dipole_shield_cyl_S3(parmod, ...
 end
 
 
-function [BxpJSO, BypJSO, BzpJSO] = dipole_shielded(parmod, ...
-    xpJSO, ypJSO, zpJSO)
+function [BxpJSO, BypJSO, BzpJSO] = dipole_shielded(parmod, xpJSO, ypJSO, zpJSO, AS_CODED)
 % Get shielded dipole field in pseudo-JSO coordinates
 
-    psir = parmod(1);
-    B0 = parmod(2);
-    Nmodes = parmod(3);
-    
-    % In JSM coordinates, the dipole axis is always in the xz plane. In JSO
-    % and pJSO coordinates, the Jupiter spin axis and the Sun are in the xz
-    % plane, so this definition seems inconsistent with the frame choice.
-    B0x = B0 * sind(psir);
+    % In JSM coordinates, the dipole axis is always in the xz plane. In JSO and pJSO coordinates,
+    % the Jupiter spin axis and the Sun are in the xz plane, so this definition seems inconsistent
+    % with the frame choice.
+    B0x = parmod.B0 * sind(parmod.dipTilt_deg);
     B0y = 0;
-    B0z = B0 * cosd(psir);
+    B0z = parmod.B0 * cosd(parmod.dipTilt_deg);
     % Get dipole field
-    [Bxd, Byd, Bzd] = dipole(xpJSO, ypJSO, zpJSO, B0x, B0y, B0z);
+    [Bxd, Byd, Bzd] = dipole(xpJSO, ypJSO, zpJSO, B0x, B0y, B0z, AS_CODED);
     
     % Get B from magnetopause
     phi = atan2(zpJSO, ypJSO);
     rho = ypJSO .* cos(phi) + zpJSO .* sin(phi);
-    [Brho2, Bphi2, Bx2] = B_mp_perp(rho, phi, xpJSO, Nmodes);
+    [Brho2, Bphi2, Bx2] = B_mp_perp(rho, phi, xpJSO, parmod.Nmodes);
     
     % Rotate and combine
     By2 = Brho2 .* cos(phi) - Bphi2 .* sin(phi);
@@ -397,11 +410,11 @@ function [BxpJSO, BypJSO, BzpJSO] = dipole_shielded(parmod, ...
 end
 
 
-function [Bxd, Byd, Bzd] = dipole(x, y, z, B0x, B0y, B0z)
+function [Bxd, Byd, Bzd] = dipole(x, y, z, B0x, B0y, B0z, AS_CODED)
 % Calculate dipole field as a function of position and dipole components
-    global trueToKK;
-    if ~trueToKK
-        % Convert distances to Rj_VIP4 to fit with that model
+
+    if ~AS_CODED
+        % Convert distances to RJ_VIP4 to fit with that model
         conv = 71492/71323; x = x * conv; y = y * conv; z = z * conv;
     end
     
@@ -421,8 +434,7 @@ function [Bxd, Byd, Bzd] = dipole(x, y, z, B0x, B0y, B0z)
 end
 
 
-function [Brcs, Bpcs, Bzcs] = tail_mag_notilt(Mode, ...
-    rho, phi, z, localTime_rads)
+function [Brcs, Bpcs, Bzcs] = tail_mag_notilt(Mode, rho, phi, z, localTime_rads)
 % Get magnetotail field in current sheet coordinates
 
     % Initialize outputs
@@ -473,8 +485,8 @@ function [Brcs, Bpcs, Bzcs] = tail_mag_notilt(Mode, ...
     for L=Modes
         rhom = rho - drho;
         rhop = rho + drho;
-        % Simplifying from Khurana's code, zp and zm are used there with 
-        % dz = 0 for both. We just use zabs instead.
+        % Simplifying from Khurana's code, zp and zm are used there with dz = 0 for both. We just
+        % use zabs instead.
         zabs = abs(z);
         % Adjust positions within current sheet half-thickness D
         zabs(zabs < D) = 0.5 * (D + zabs(zabs < D).^2/D);
@@ -510,11 +522,10 @@ function [Brcss, Bpcss, Bzcss] = tail_mag_shield_cyl_S3(M, Mode, ...
 
     % Rotate from cylindrical to cartesian in current sheet coordinates
     [xcs, ycs, zcs] = cyl2xyz(rmap, pmap, zmap);
-    % MJS note: Khurana's code changes to xJSO, etc. here instead of S3.
-    % I think the pseudo- part comes in because we are rotating the xz
-    % plane to include the Sun, like in JSO coordinates, but the current
-    % sheet cylindrical coordinate system is rotated about the x axis
-    % relative to the standard JSO coordinates.
+    % MJS note: Khurana's code changes to xJSO, etc. here instead of S3. I think the pseudo- part
+    % comes in because we are rotating the xz plane to include the Sun, like in JSO coordinates,
+    % but the current sheet cylindrical coordinate system is rotated about the x axis relative to
+    % the standard JSO coordinates.
     % Rotate to pJSO coordinates
     [xpJSO, ypJSO, zpJSO] = xyz2pJSO(xcs, ycs, zcs, sphi);
     
@@ -540,8 +551,8 @@ function [BxJSO, ByJSO, BzJSO] = B_tail_shield(M, Mode, xJSO, yJSO, zJSO)
         Modes = 1:6;
     end
 
-    % Coefficient tables are scaled against distances in units of 100 Rj --
-    % scale input coordinates to match
+    % Coefficient tables are scaled against distances in units of 100 RJ -- scale input coordinates
+    % to match
     x = xJSO/100;
     y = yJSO/100;
     z = zJSO/100;
@@ -849,8 +860,7 @@ function [Bperpr, Bperpf, Bperpx] = B_mp_perp(rho, phi, x, Nmodes)
         KA = KA + 1;
     end
     
-    % Now calculate terms associated with 2nd derivative term and sin(phi),
-    % or something like that
+    % Now calculate terms associated with 2nd derivative term and sin(phi), or something like that
     for KB=(Modes4+1):Modes5
         expx = exp(x / B(KB));
         expp = exp(xp / B(KB));
@@ -911,7 +921,7 @@ function [Bperpr, Bperpf, Bperpx] = B_mp_perp(rho, phi, x, Nmodes)
 end
 
 
-function [BrS3IMF, BthS3IMF, BphiS3IMF] = getBIMF(theta, phi, ctimes)
+function [BrS3IMF, BthS3IMF, BphiS3IMF] = getBIMF(theta, phi, ctimes, AS_CODED)
 % Get IMF in JS3 spherical coordinates
 
     [eps1, eps2, ByConst, BzConst] = BIMFcoeffs();
@@ -925,20 +935,18 @@ function [BrS3IMF, BthS3IMF, BphiS3IMF] = getBIMF(theta, phi, ctimes)
     BzIMF = cMultFact * BzConst * ones(size(ctimes));
     
     % Rotate from JSM to System III cartesian
-    [BxS3IMF, ByS3IMF, BzS3IMF] = JROT_JSMtoS3C(BxIMF, ByIMF, BzIMF, ctimes);
+    [BxS3IMF, ByS3IMF, BzS3IMF] = JROT_JSMtoS3C(BxIMF, ByIMF, BzIMF, ctimes, AS_CODED);
     % Rotate from cartesian to spherical
     [BrS3IMF, BthS3IMF, BphiS3IMF] = Bxyz2Bsph(BxS3IMF, ByS3IMF, BzS3IMF, theta, phi);
 end
 
 
 function ptInsideMpause = CheckIfInsideMp(xJSM, yJSM, zJSM)
-% Return logical array indicating whether each point is inside the unmapped
-% magnetopause.
-% MJS note: In Khurana's code, this function is split into day- and
-% night-side calculations, but everything being done for each has identical
-% results. There are even typos copy-pasted between the two blocks (Fortran
-% is not case-sensitive so the typos are harmless here). I don't see how 
-% or why there is any separate handling there.
+% Return logical array indicating whether each point is inside the unmapped magnetopause.
+% MJS note: In Khurana's code, this function is split into day- and night-side calculations, but
+% everything being done for each has identical results. There are even typos copy-pasted between
+% the two blocks (Fortran is not case-sensitive so the typos are harmless here). I don't see how or
+% why there is any separate handling there.
 
     % Initialize
     ptInsideMpause = ones(size(xJSM));
@@ -973,34 +981,33 @@ function ptInsideMpause = CheckIfInsideMp(xJSM, yJSM, zJSM)
 end
 
 
-function ptInsideMpause = CheckIfInsideMappedMp(xS3, yS3, zS3, zNS3, ctimes)
-% Return logical array indicating whether each point is inside the mapped
-% magnetopause.
-    [xJSM, yJSM, zJSM] = JROT_S3CtoJSM(xS3, yS3, zS3+zNS3, ctimes);
+function ptInsideMpause = CheckIfInsideMappedMp(xS3, yS3, zS3, zNS3, ctimes, AS_CODED)
+% Return logical array indicating whether each point is inside the mapped magnetopause.
+
+    [xJSM, yJSM, zJSM] = JROT_S3CtoJSM(xS3, yS3, zS3+zNS3, ctimes, AS_CODED);
     ptInsideMpause = CheckIfInsideMp(xJSM, yJSM, zJSM);
 end
 
 
 %% Coordinate transformation functions
 
-function [xJSO, yJSO, zJSO] = JROT_S3CtoJSO(xS3C, yS3C, zS3c, ctimes)
-% Rotate Jupiter System 3 cartesian vectors into Jupiter-Sun-Orbital coordinates
+function [xJSO, yJSO, zJSO] = JROT_S3CtoJSO(xS3C, yS3C, zS3c, ctimes, AS_CODED)
+% Rotate Jupiter System III cartesian vectors into Jupiter--Sun--Orbital coordinates
     
-    global trueToKK;
-    if ~trueToKK
+    if ~AS_CODED
         ets = ctime2et(ctimes);
         rot = cspice_pxform('IAU_JUPITER', 'JUNO_JSO', ets);
     else
         % Initialize rotation matrices
         rot = zeros(3,3, length(ctimes));
         % First, get xJSO basis vector orientation
-        [stheta, sphi, sphase] = JSun(ctimes);
+        [stheta, sphi, sphase] = JSun(ctimes, AS_CODED);
         rot(1,1,:) = cos(stheta) .* cos(sphi);
         rot(1,2,:) = cos(stheta) .* sin(sphi);
         rot(1,3,:) = sin(stheta);
         % Next, get the zJSO axis from the obliquity
         % Retrieve obliquity angle
-        [~, ~, ~, ~, obliq, ~, ~, ~, ~] = JSunCoeffs;
+        [~, ~, ~, ~, obliq, ~, ~, ~, ~] = JSunCoeffs(AS_CODED);
         rot(3,1,:) = sin(obliq) * cos(sphase);
         rot(3,2,:) = sin(obliq) * sin(sphase);
         rot(3,3,:) = cos(obliq);
@@ -1021,18 +1028,16 @@ function [xJSO, yJSO, zJSO] = JROT_S3CtoJSO(xS3C, yS3C, zS3c, ctimes)
 end
 
 
-function [xJSM, yJSM, zJSM] = JROT_S3CtoJSM(xS3C, yS3C, zS3c, ctimes)
-% Rotate Jupiter System 3 cartesian vectors into Jupiter-Sun-Magnetic coordinates
+function [xJSM, yJSM, zJSM] = JROT_S3CtoJSM(xS3C, yS3C, zS3c, ctimes, AS_CODED)
+% Rotate Jupiter System III cartesian vectors into Jupiter-Sun-Magnetic coordinates
 
-    global trueToKK;
-    if ~trueToKK
-        % MJS note: The juno_v12 frames kernel does not have a definition 
-        % for the JSM frame. I created frame definitions for the dipole
-        % coordinate system (JUNO_JMAG_O4) as described in the following:
-        % https://lasp.colorado.edu/home/mop/files/2015/02/CoOrd_systems12.pdf.
-        % This document incorrectly describes this frame as equivalent to
-        % JSM. I also created a JUNO_JSM frame definition based on the
-        % frames kernels required reading and the JSM description at
+    if ~AS_CODED
+        % MJS note: The juno_v12 frames kernel does not have a definition for the JSM frame. I
+        % created frame definitions for the dipole coordinate system (JUNO_JMAG_O4) as described in
+        % the following: https://lasp.colorado.edu/home/mop/files/2015/02/CoOrd_systems12.pdf.
+        % This document incorrectly describes this frame as equivalent to JSM. I also created a
+        % JUNO_JSM frame definition based on the frames kernels required reading and the JSM
+        % description at
         % https://pds.nasa.gov/ds-view/pds/viewProfile.jsp?dsid=GO-J-POS-6-SC-TRAJ-JUP-COORDS-V1.0
         ets = ctime2et(ctimes);
         rot = cspice_pxform('IAU_JUPITER', 'JUNO_JSM', ets);
@@ -1041,10 +1046,9 @@ function [xJSM, yJSM, zJSM] = JROT_S3CtoJSM(xS3C, yS3C, zS3c, ctimes)
         dipole = JSMdipoleCoeffs();
         rot = zeros(3,3, length(ctimes));
 
-        % Construct rotation matrix with the JSM basis vectors as rows of
-        % the matrix
+        % Construct rotation matrix with the JSM basis vectors as rows of the matrix
         % First, get xJSM basis vector orientation
-        [stheta, sphi, ~] = JSun(ctimes);
+        [stheta, sphi, ~] = JSun(ctimes, AS_CODED);
         rot(1,1,:) = cos(stheta) .* cos(sphi);
         rot(1,2,:) = cos(stheta) .* sin(sphi);
         rot(1,3,:) = sin(stheta);
@@ -1073,11 +1077,10 @@ function [xJSM, yJSM, zJSM] = JROT_S3CtoJSM(xS3C, yS3C, zS3c, ctimes)
 end
 
 
-function [BxS3, ByS3, BzS3] = JROT_JSMtoS3C(BxJSM, ByJSM, BzJSM, ctimes)
-% Rotate Jupiter-solar-magnetic coordinates to System 3 cartesian
+function [BxS3, ByS3, BzS3] = JROT_JSMtoS3C(BxJSM, ByJSM, BzJSM, ctimes, AS_CODED)
+% Rotate Jupiter--Sun--Magnetic coordinates to System III cartesian
 
-    global trueToKK;
-    if ~trueToKK
+    if ~AS_CODED
         ets = ctime2et(ctimes);
         % See description of JUNO_JSM in JROT_S3CtoJSM above
         rot = cspice_pxform('JUNO_JSM', 'IAU_JUPITER', ets);
@@ -1086,11 +1089,10 @@ function [BxS3, ByS3, BzS3] = JROT_JSMtoS3C(BxJSM, ByJSM, BzJSM, ctimes)
         dipole = JSMdipoleCoeffs();
         rot = zeros(3,3, length(ctimes));
 
-        % Construct rotation matrix with the JSM basis vectors as rows of
-        % the matrix, for the S3C -> JSM conversion, then transpose to get
-        % JSM -> S3C conversion.
+        % Construct rotation matrix with the JSM basis vectors as rows of the matrix, for the 
+        % S3C -> JSM conversion, then transpose to get JSM -> S3C conversion.
         % First, get xJSM basis vector orientation
-        [stheta, sphi, ~] = JSun(ctimes);
+        [stheta, sphi, ~] = JSun(ctimes, AS_CODED);
         rot(1,1,:) = cos(stheta) .* cos(sphi);
         rot(1,2,:) = cos(stheta) .* sin(sphi);
         rot(1,3,:) = sin(stheta);
@@ -1124,10 +1126,10 @@ end
 
 
 function [xpJSO, ypJSO, zpJSO] = xyz2pJSO(x, y, z, sphi)
-% Rotate position vectors from cartesian to pseudo-JSO, where z is parallel
-% to the jovian spin axis and so x does not point toward the Sun as in JSO,
-% but the Sun does lie in the xz plane. Equivalent to the Jupiter-despun-Sun
-% frame (JUNO_JSS) in the Juno frames kernel.
+% Rotate position vectors from cartesian to pseudo-JSO, where z is parallel to the jovian spin axis
+% and so x does not point toward the Sun as in JSO, but the Sun does lie in the xz plane.
+% Equivalent to the Jupiter--despun--Sun frame (JUNO_JSS) in the Juno frames kernel.
+
     xpJSO =  x .* cos(sphi) + y .* sin(sphi);
 	ypJSO = -x .* sin(sphi) + y .* cos(sphi);
 	zpJSO =  z;
@@ -1136,6 +1138,7 @@ end
 
 function [x, y, z] = cyl2xyz(rho, phi, zin)
 % Convert position vectors from cylindrical coordinates to cartesian
+
     x = rho .* cos(phi);
     y = rho .* sin(phi);
     z = zin;
@@ -1144,6 +1147,7 @@ end
 
 function [rho, phi, z] = xyz2cyl(x, y, zin)
 % Convert position vectors from cartesian coordinates to cylindrical
+
     rho = sqrt(x.^2 + y.^2);
     phi = atan2(y, x);
     z = zin;
@@ -1152,6 +1156,7 @@ end
 
 function [x, y, z] = sph2xyz(r, theta, phi)
 % Convert position vectors from spherical coordinates to cartesian
+
     x = r .* sin(theta) .* cos(phi);
     y = r .* sin(theta) .* sin(phi);
     z = r .* cos(theta);
@@ -1160,6 +1165,7 @@ end
 
 function [r, theta, phi] = xyz2sph(x, y, z)
 % Convert position vectors from cartesian coordinates to spherical
+
     r = sqrt(x.^2 + y.^2 + z.^2);
     theta = acos(z ./ r);
     phi = atan2(y, x);
@@ -1169,60 +1175,25 @@ end
 %% Magnetic field vector basis conversions
 
 function [Bx, By, Bz] = Bcyl2Bxyz(Brho, Bphi, Bzin, phi)
-% Convert vector components aligned to cylindrical coordinates
-% into vector components aligned to cartesian axes.
-% Source: Arfken, Weber, Harris, Mathematical Methods for Physicists,
-% 7th ed, pg. 197 for the unit vectors.
-    Bx =  cos(phi) .* Brho ...
-        - sin(phi) .* Bphi;
-    By =  sin(phi) .* Brho ...
-        + cos(phi) .* Bphi;
+% Convert vector components aligned to cylindrical coordinates into vector components aligned to
+% cartesian axes.
+% Source: Arfken, Weber, Harris, Mathematical Methods for Physicists, 7th ed, pg. 197 for the unit
+% vectors.
+
+    Bx =  cos(phi) .* Brho - sin(phi) .* Bphi;
+    By =  sin(phi) .* Brho + cos(phi) .* Bphi;
     Bz =  Bzin;
 end
 
 
 function [Brho, Bphi, Bzout] = Bxyz2Bcyl(Bx, By, Bz, phi)
-% Convert vector components aligned to cylindrical coordinates
-% into vector components aligned to cartesian axes.
-% Source: Arfken, Weber, Harris, Mathematical Methods for Physicists,
-% 7th ed, pg. 197 for the unit vectors.
-    Brho  =  cos(phi) .* Bx ...
-           + sin(phi) .* By;
-    Bphi  = -sin(phi) .* Bx ...
-           + cos(phi) .* By;
+% Convert vector components aligned to cylindrical coordinates into vector components aligned to
+% cartesian axes.
+% Source: Arfken, Weber, Harris, Mathematical Methods for Physicists, 7th ed, pg. 197 for the unit
+% vectors.
+    Brho  =  cos(phi) .* Bx + sin(phi) .* By;
+    Bphi  = -sin(phi) .* Bx + cos(phi) .* By;
     Bzout = Bz;
-end
-
-
-function [Bx, By, Bz] = Bsph2Bxyz(Br, Bth, Bphi, theta, phi)
-% Convert vector components aligned to spherical coordinates
-% into vector components aligned to cartesian axes.
-% Source: Arfken, Weber, Harris, Mathematical Methods for Physicists,
-% 7th ed, pg. 199 for the unit vectors.
-    Bx =  sin(theta) .* cos(phi) .* Br ...
-        + cos(theta) .* cos(phi) .* Bth ...
-        - sin(phi) .* Bphi;
-    By =  sin(theta) .* sin(phi) .* Br ...
-        + cos(theta) .* sin(phi) .* Bth ...
-        + cos(phi) .* Bphi;
-    Bz =  cos(theta) .* Br ...
-        - sin(theta) .* Bth;
-end
-
-
-function [Br, Bth, Bphi] = Bxyz2Bsph(Bx, By, Bz, theta, phi)
-% Convert vector components aligned to cartesian axes
-% into vector components aligned to spherical coordinates.
-% Source: Arfken, Weber, Harris, Mathematical Methods for Physicists,
-% 7th ed, pg. 199 for the unit vectors.
-    Br   =  sin(theta) .* cos(phi) .* Bx ...
-          + sin(theta) .* sin(phi) .* By ...
-          + cos(theta) .* Bz;
-    Bth  =  cos(theta) .* cos(phi) .* Bx ...
-          + cos(theta) .* sin(phi) .* By ...
-          - sin(theta) .* Bz;
-    Bphi = -sin(phi) .* Bx ...
-          + cos(phi) .* By;
 end
 
 
@@ -1237,13 +1208,12 @@ end
 %% ctime/etime calculators
 
 function ctimes = ctimer(ets)
-% Converts times from seconds past an epoch near J2000 to seconds past
-% midnight Jan 1, 1966 using Mice. 
-% MJS note: I don't understand why the reference is against 1/1/1966.
-% The JS3(1965) epoch is 1965-01-01 at midnight, see:
-% https://agupubs.onlinelibrary.wiley.com/doi/epdf/10.1029/GL004i002p00065
-% but the ctime column in the provided trajectory files is consistent
-% with a 1966 reference time.
+% Converts times from TDB seconds relative to J2000 to seconds past midnight Jan 1, 1966 using
+% Mice.
+% MJS note: I don't understand why the reference is against 1/1/1966. The JS3(1965) epoch is
+% 1965-01-01 at midnight (see https://doi.org/10.1029/GL004i002p00065), but the ctime columns in
+% the trajectory files provided by K. Khurana for validation are consistent with a 1966 reference
+% time.
     J1965 = cspice_str2et('1966-01-01T00:00:00.000');
     adj = cspice_str2et('2000-01-01T12:00:00.000') + 37.5;
     ctimes = ets - J1965 + adj;
@@ -1251,8 +1221,8 @@ end
 
 
 function ets = ctime2et(ctimes)
-% Converts times from seconds past midnight Jan 1, 1966 to seconds past
-% J2000 epoch using Mice.
+% Converts times from seconds past midnight Jan 1, 1966 to TDB seconds relative to J2000 using
+% Mice.
     J1965 = cspice_str2et('1966-01-01T00:00:00.000');
     adj = cspice_str2et('2000-01-01T12:00:00.000') + 37.5;
     ets = ctimes + J1965 - adj;
@@ -1260,8 +1230,7 @@ end
 
 
 function etime = etimer(ctimes)
-% Calculate etime, an adjusted ctime that appears to be accounting for leap
-% seconds.
+% Calculate etime, an adjusted ctime that appears to be accounting for leap seconds.
 
     Tcor = zeros(size(ctimes));
     Tcor(ctimes >= 189302400.000) = Tcor(ctimes >= 189302400.000) + 10;
@@ -1291,81 +1260,10 @@ function etime = etimer(ctimes)
 end
 
 
-%% Legendre function calculators copied from MagFldJupiter.m
-
-function Pnm = LegendreS(n, m, theta)  % n ( or l) = degree m = order
-% Returns the value of Schmidt-seminormalized Legendre function of degree n and order m given the angle theta
-
-    if (n == 1)
-        if     (m == 0); Pnm = cos(theta);
-        elseif (m == 1); Pnm = sin(theta);
-        else;            Pnm = 0;
-        end
-    elseif (n == 2)
-        if     (m == 0); Pnm = (1/2)*(3*cos(theta).^2 - 1);  % P20
-        elseif (m == 1); Pnm = sqrt(3)*cos(theta).*sin(theta);
-        elseif (m == 2); Pnm = sqrt(3)/2*sin(theta).^2;
-        else;            Pnm = 0;
-        end
-    elseif (n == 3)
-        if     (m == 0); Pnm = (1/2)*(5*cos(theta).^3 - 3*cos(theta)); %
-        elseif (m == 1); Pnm = sqrt(6)/4*(5*cos(theta).^2 - 1).*sin(theta);
-        elseif (m == 2); Pnm = sqrt(15)/2*cos(theta).*sin(theta).^2;
-        elseif (m == 3); Pnm = sqrt(10)/4*sin(theta).^3;
-        else;            Pnm = 0;
-        end
-    elseif (n == 4)
-        if     (m == 0); Pnm = (1/8)*(35*cos(theta).^4 - 30*cos(theta).^2 + 3);
-        elseif (m == 1); Pnm = sqrt(10)/4*(7*cos(theta).^3 - 3*cos(theta)).*sin(theta);
-        elseif (m == 2); Pnm = sqrt(5)/4*(7*cos(theta).^2 - 1).*sin(theta).^2;
-        elseif (m == 3); Pnm = sqrt(70)/4*cos(theta).*sin(theta).^3;
-        elseif (m == 4); Pnm = sqrt(35)/8*sin(theta).^4;
-        else;            Pnm = 0;
-        end
-    else; Pnm = 0;
-    end
-end
-
-
-function dPnm = dLegendreS(n, m, theta)
-% Returns the value of the derivative of the Schmidt-seminormalized Legendre function of degree n and order m given the angle theta
-
-    if (n == 1)
-        if     (m == 0); dPnm = -sin(theta);
-        elseif (m == 1); dPnm = cos(theta);
-        else;            dPnm = 0;
-        end
-    elseif (n == 2)
-        if     (m == 0); dPnm = -3*cos(theta).*sin(theta);
-        elseif (m == 1); dPnm = sqrt(3)*(2*cos(theta).^2 - 1);
-        elseif (m == 2); dPnm = sqrt(3)*cos(theta).*sin(theta);
-        else;            dPnm = 0;
-        end
-    elseif (n == 3)
-        if     (m == 0); dPnm = -(3/2)*(10*cos(theta)/3 - 1).*sin(theta);
-        elseif (m == 1); dPnm = -sqrt(6)/4*(15*sin(theta).^2 - 4).*cos(theta);    
-        elseif (m == 2); dPnm = sqrt(15)/2*(3*cos(theta).^2 - 1).*sin(theta); 
-        elseif (m == 3); dPnm = 3*sqrt(10)/4*cos(theta).*sin(theta).^2;        
-        else;            dPnm = 0;
-        end
-    elseif (n == 4)
-        if     (m == 0); dPnm = -(5/2)*(7*cos(theta).^3 - 3*cos(theta)).*sin(theta);
-        elseif (m == 1); dPnm = sqrt(10)/4*(28*cos(theta).^4 - 27*cos(theta).^2 + 3);
-        elseif (m == 2); dPnm = sqrt(5)*cos(theta).*sin(theta).*(7*cos(theta).^2 - 4);
-        elseif (m == 3); dPnm = sqrt(70)/4*(2*cos(theta).^2 - 1).*sin(theta).^2;  
-        elseif (m == 4); dPnm = sqrt(35)/2*cos(theta).*sin(theta).^3;
-        else;            dPnm = 0;
-        end
-    else; dPnm = 0;
-    end
-end
-
-
 %% Parameter constants
 
-function [yrJup, omegaJ, omegayr, etime1, obliq, tan_ob, ...
-    aa, bb, deltaPhi] = JSunCoeffs
-% Get coefficients for Jupiter-Sun angle calculations
+function [yrJup, omegaJ, omegayr, etime1, obliq, tan_ob, aa, bb, deltaPhi] = JSunCoeffs(AS_CODED)
+% Get coefficients for Jupiter--Sun angle calculations
     
     aa = [0.14347029, ...
           3.1145815, ...
@@ -1383,20 +1281,17 @@ function [yrJup, omegaJ, omegayr, etime1, obliq, tan_ob, ...
            44.55915];
     deltaPhi = 48.23012;
 
-    global trueToKK;
-    if trueToKK
+    if AS_CODED
         yrJup = 11.85652502 * 365.25 * 86400;
         omegaJ = 870.536 / 86400;
         thepi = 3.1415927;
         obliq = 3.123 * thepi/180;
         tan_ob = 0.054560676;
     else
-        % Is there a way to get this from a SPICE PCK?
-        % It seems like using SPICE to perform coordinate transformations is
-        % a much, much more precise way of making these calculations and
-        % doing so consistently.
+        % SPICE can be used to calculate this angle directly. Doing so would provide a much more
+        % precise way of making these calculations consistently.
         yrJup = 4332.589 * 24;
-        % Use SPICE if a PCK is loaded
+        % Use SPICE PCK if loaded
         try
             PMvals = cspice_bodvcd(599, 'PM', 3);
             omegaJ = PMvals(2) / 86400;
@@ -1413,16 +1308,15 @@ function [yrJup, omegaJ, omegayr, etime1, obliq, tan_ob, ...
 end
 
 
-function [g, h] = VIP4coeffs
-% Schmidt semi-normalized spherical harmonic coefficients for VIP4 internal 
-% field model of Jupiter, organized as h_mn, so that each row represents a 
-% single n and each column a single m. See https://doi.org/10.1029/97JA03726.
+function [g, h] = VIP4coeffs(AS_CODED)
+% Schmidt semi-normalized spherical harmonic coefficients for VIP4 internal field model of Jupiter,
+% organized as g_mn or h_mn, so that each row represents a single n and each column a single m. See
+% https://doi.org/10.1029/97JA03726.
 
-    global trueToKK;
-    if trueToKK
-        % This list matches the less-precise table used in Khurana's Jupiter field 
-        % model code, and all but the dipole moments match the table in the 
-        % associated publication (the dipole moments use more precise values).
+    if AS_CODED
+        % This list matches the less-precise table used in K. Khurana's Jupiter field model code,
+        % and all but the dipole moments match the table in the associated publication (the dipole
+        % moments use more precise values).
         %        g0n,      g1n,      g2n,      g3n,     g4n
         g = [4.20543, -0.65920,        0,        0,       0;
             -0.05100, -0.61900,  0.49700,        0,       0;
@@ -1434,7 +1328,7 @@ function [g, h] = VIP4coeffs
                    0, -0.08800,  0.40800, -0.31600,       0;
                    0,  0.07600,  0.40400, -0.16600, 0.03900];
     else
-        % More precise values matching MagFldJupiter
+        % More precise values matching those imported by GetModelCoeffs
         %        g0n,      g1n,      g2n,      g3n,     g4n
         g = [4.20543, -0.65920,        0,        0,       0;
             -0.05118, -0.61904,  0.49690,        0,       0;
@@ -1451,9 +1345,8 @@ end
 
 function dipole = JSMdipoleCoeffs
 % Dipole parameters used for JSM to System III cartesian rotation
-% Includes a 202.000000 degree rotation about z and a 9.600000 degree
-% rotation about y, and so according to the following document is
-% using "outdated" O4 model parameters: 
+% Includes a 202.000000 degree rotation about z and a 9.600000 degree rotation about y, and so
+% according to the following document is using "outdated" O4 model parameters: 
 % https://lasp.colorado.edu/home/mop/files/2015/02/CoOrd_systems12.pdf
 
     dipole = [-0.9141996,   0.36936062,  -0.16676875; ...
@@ -1470,12 +1363,11 @@ end
 
 
 function [period_hr, omegaJ_deghr, X0, phip0, obliq, incl_solar, C, psi2, psi4] ...
-    = CsheetStrucCoeffs
-% Coefficients relating to the current sheet structure used in calculating
-% current sheet location relative to System III equatorial plane
+    = CsheetStrucCoeffs(AS_CODED)
+% Coefficients relating to the current sheet structure used in calculating current sheet location
+% relative to System III equatorial plane
 
-    global trueToKK;
-    if trueToKK
+    if AS_CODED
         period_hr = 9.927953;
         omegaJ_deghr = 36.26125;
     else
@@ -1491,9 +1383,8 @@ function [period_hr, omegaJ_deghr, X0, phip0, obliq, incl_solar, C, psi2, psi4] 
     end
     X0 = -45.0;
     phip0 = 6.12611;
-    % MJS: The following numbers, called "three" and "six" in
-    % Khurana's code, are the obliquity and orbital inclination relative to
-    % the solar spin equator.
+    % MJS: The following numbers, called "three" and "six" in K. Khurana's code, are the obliquity
+    % and orbital inclination relative to the solar spin equator.
     obliq = 0.0558505360;
     incl_solar = 0.11170107;
     C = [0.005973, 5.114e-5, 1.59e-5, 0.313244, -0.366166];
@@ -1513,8 +1404,9 @@ end
 
 
 function [A, B] = MpauseCoeffs
-% Parameter constants for B_mp_perp, which calculates magnetic field
-% components perpendicular to the magnetopause for shielded dipole calcs.
+% Parameter constants for B_mp_perp, which calculates magnetic field components perpendicular to
+% the magnetopause for shielded dipole calcs.
+
     A = [14.8636286417325     , ...
         -20.6733061430101     , ...
         -68.9799158183312     , ...
@@ -1665,12 +1557,13 @@ end
 
 
 function [a, c, p, r] = MtailCoeffs
-% Parameter constants for B_tail_shield, which calculates magnetic field
-% components for a shielded dipole's magnetotail.
+% Parameter constants for B_tail_shield, which calculates magnetic field components for a shielded
+% dipole's magnetotail.
+
     [a, c] = deal(zeros(8, 64));
     [p, r] = deal(zeros(8, 16));
-    % Though each of these variables is set to contain 8 rows, rows 7 and 8
-    % appear to not be set for any variable in Khurana's code.
+    % Though each of these variables is set to contain 8 rows, rows 7 and 8 appear to not be set
+    % for any variable in K. Khurana's code.
     
     % a values
     a(1,:) = [ ...
