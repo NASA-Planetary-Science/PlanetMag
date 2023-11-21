@@ -191,9 +191,31 @@ current sheet model from K. Khurana.</p>
 <h3><a class="reference internal" href="#functions.MpauseFld" title="functions.MpauseFld"><code class="xref mat mat-func docutils literal notranslate"><span class="pre">MpauseFld()</span></code></a><a class="headerlink" href="#mpausefld" title="Permalink to this heading"></a></h3>
 <dl class="mat function">
 <dt class="sig sig-object mat" id="functions.MpauseFld">
-<span class="sig-prename descclassname"><span class="pre">functions.</span></span><span class="sig-name descname"><span class="pre">MpauseFld</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">nSW_pcc</span></em>, <em class="sig-param"><span class="pre">vSW_kms</span></em>, <em class="sig-param"><span class="pre">ets</span></em>, <em class="sig-param"><span class="pre">xyz_km</span></em>, <em class="sig-param"><span class="pre">Mdip_nT</span></em>, <em class="sig-param"><span class="pre">Odip_km</span></em>, <em class="sig-param"><span class="pre">S3coords</span></em>, <em class="sig-param"><span class="pre">parentName</span></em>, <em class="sig-param"><span class="pre">MPmodel</span></em>, <em class="sig-param"><span class="pre">SPHOUT</span></em>, <em class="sig-param"><span class="pre">Nmax</span></em><span class="sig-paren">)</span><a class="headerlink" href="#functions.MpauseFld" title="Permalink to this definition"></a></dt>
-<dd><p>SPHOUT : bool, default=0
-Whether to return vectors aligned to spherical coordinate axes (true) or cartesian (false).</p>
+<span class="sig-prename descclassname"><span class="pre">functions.</span></span><span class="sig-name descname"><span class="pre">MpauseFld</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">nSW_pcc</span></em>, <em class="sig-param"><span class="pre">vSW_kms</span></em>, <em class="sig-param"><span class="pre">ets</span></em>, <em class="sig-param"><span class="pre">xyz_km</span></em>, <em class="sig-param"><span class="pre">Mdip_nT</span></em>, <em class="sig-param"><span class="pre">Odip_km</span></em>, <em class="sig-param"><span class="pre">S3coords</span></em>, <em class="sig-param"><span class="pre">parentName</span></em>, <em class="sig-param"><span class="pre">MPmodel</span></em>, <em class="sig-param"><span class="pre">coeffPath</span></em>, <em class="sig-param"><span class="pre">SPHOUT</span></em>, <em class="sig-param"><span class="pre">Nmax</span></em><span class="sig-paren">)</span><a class="headerlink" href="#functions.MpauseFld" title="Permalink to this definition"></a></dt>
+<dd><p>Brief description.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>inputName</strong> (<span><code class="xref mat mat-obj docutils literal notranslate"><span class="pre">type,</span> <span class="pre">dims</span></code></span>) – Description.</p></li>
+<li><p><strong>xyz_km</strong> (<span><code class="xref mat mat-obj docutils literal notranslate"><span class="pre">double,</span> <span class="pre">3xN</span></code></span>) – Cartesian coordinates of measurement locations in <code class="docutils literal notranslate"><span class="pre">S3coords</span></code> frame in km.</p></li>
+<li><p><strong>Mdip_nT</strong> (<span><code class="xref mat mat-obj docutils literal notranslate"><span class="pre">double,</span> <span class="pre">1x3</span></code></span>) – Dipole magnetic moment in standard cartesian coordinates, as surface-equivalent nT, i.e. this
+value times the planet volume yields the magnetic moment in SI units.</p></li>
+<li><p><strong>Odip_km</strong> (<span><code class="xref mat mat-obj docutils literal notranslate"><span class="pre">double,</span> <span class="pre">1x3</span></code></span>) – Dipole magnetic moment offset in km from planet barycenter in standard cartesian coordinates.</p></li>
+<li><p><strong>MPopt</strong> (<span><code class="xref mat mat-obj docutils literal notranslate"><span class="pre">int</span></code></span>) – Index of magnetopause current magnetic field model. See <code class="xref py py-func docutils literal notranslate"><span class="pre">GetModelOpts()</span></code> for more details and
+available options.</p></li>
+<li><p><strong>SPHOUT</strong> (<span><code class="xref mat mat-obj docutils literal notranslate"><span class="pre">bool,</span> <span class="pre">default=0</span></code></span>) – Whether to return vectors aligned to spherical coordinate axes (true) or cartesian (false).</p></li>
+<li><p><strong>Nmaxin</strong> (<span><code class="xref mat mat-obj docutils literal notranslate"><span class="pre">int,</span> <span class="pre">default=10</span></code></span>) – Maximum degree to which to limit intrinsic field models. Only has an effect if the value passed
+is less than the lesser of the model maximum degree and the maximum implemented in spherical
+harmonic calculations (currently 10).</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>outputName</strong> – Description.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>type, dims</p>
+</dd>
+</dl>
 </dd></dl>
 
 </section>
@@ -250,19 +272,20 @@ theta, phi for spherical.</p>
 <dd><p>Decomposes the input magnetic field vector time series into complex excitation moments using
 <em class="dfn">Independent Component Analysis (ICA)</em>.</p>
 <p>The methodology applied to invert the imput magnetic field vector time series <code class="docutils literal notranslate"><span class="pre">Bvec</span></code> for its
-complex excitation moments (the independent components of ICA) is described in detail in Hyvarinen
-and Oja (2000) <a class="reference external" href="https://doi.org/10.1016/S0893-6080(00)00026-5">https://doi.org/10.1016/S0893-6080(00)00026-5</a>. In this method, the expected signal
-components <span class="math notranslate nohighlight">\(\mathbf{s} = (s_1, \dots, s_p)\)</span> are found from the input measurements
-<span class="math notranslate nohighlight">\(\mathbf{x} = (x_1, \dots, x_n)\)</span> by inverting the estimated mixing matrix <span class="math notranslate nohighlight">\(\mathbf{A}\)</span>
-and multiplying <span class="math notranslate nohighlight">\(\mathbf{A}^{-1}\)</span> by the input time series, where
-<span class="math notranslate nohighlight">\(\mathbf{x} = \mathbf{As}\)</span>. The signal components <span class="math notranslate nohighlight">\(\mathbf{s}_j\)</span> for vector component
-<span class="math notranslate nohighlight">\(j\)</span> in our case are a list of cos and sin waves, representing the real and imaginary parts
-of <span class="math notranslate nohighlight">\(e^{-i\omega_k t}\)</span> respectively, oscillating with the expected frequencies
-<span class="math notranslate nohighlight">\(\mathbf{f} = (f_1, \dots, f_p)\)</span>, evaluated at each ephemeris time in the input time series
-<code class="docutils literal notranslate"><span class="pre">ets</span></code>, and weighted by the excitation moments <span class="math notranslate nohighlight">\(\mathbf{B}_j^e\)</span>. Each unweighted signal
-component comprises a column of <span class="math notranslate nohighlight">\(\mathbf{X}\)</span>. The eigenvectors of <span class="math notranslate nohighlight">\(\mathbf{X}\)</span> are the
-columns of the weight matrix <span class="math notranslate nohighlight">\(\mathbf{W} = (\mathbf{X}^T\mathbf{X})^{-1}\)</span>. We find the
-excitation moments from</p>
+complex excitation moments (the “independent components” of ICA) is described in detail in
+Hyvarinen and Oja (2000) <a class="reference external" href="https://doi.org/10.1016/S0893-6080(00)00026-5">https://doi.org/10.1016/S0893-6080(00)00026-5</a>. In this method, the
+expected signal components <span class="math notranslate nohighlight">\(\mathbf{s} = (s_1, \dots, s_p)\)</span> are found from the input
+measurements <span class="math notranslate nohighlight">\(\mathbf{x} = (x_1, \dots, x_n)\)</span> by inverting the estimated mixing matrix
+<span class="math notranslate nohighlight">\(\mathbf{A}\)</span> and multiplying <span class="math notranslate nohighlight">\(\mathbf{A}^{-1}\)</span> by the input time series, where
+<span class="math notranslate nohighlight">\(\mathbf{x} = \mathbf{As}\)</span>. The signal components <span class="math notranslate nohighlight">\(\mathbf{s}\)</span> in our case are a list
+of cos and sin waves, representing the real and imaginary parts of <span class="math notranslate nohighlight">\(e^{-i\omega_k t}\)</span>
+respectively, oscillating with the expected frequencies <span class="math notranslate nohighlight">\(\mathbf{f} = (f_1, \dots, f_p)\)</span>,
+evaluated at each ephemeris time in the input time series <code class="docutils literal notranslate"><span class="pre">ets</span></code>. Weighting the signal
+components by the excitation moments <span class="math notranslate nohighlight">\(\mathbf{B}_j^e\)</span> reproduces the input signal
+<span class="math notranslate nohighlight">\(\mathbf{B}_j\)</span> when the excitation moments are perfectly resolved. Each signal component
+comprises a column of the signal matrix <span class="math notranslate nohighlight">\(\mathbf{X}\)</span>. The eigenvectors of
+<span class="math notranslate nohighlight">\(\mathbf{X}\)</span> are the columns of the weight matrix
+<span class="math notranslate nohighlight">\(\mathbf{W} = (\mathbf{X}^T\mathbf{X})^{-1}\)</span>. We find the excitation moments from</p>
 <div class="math notranslate nohighlight">
 \[\mathbf{B}_j^e = \mathbf{B}_j\mathbf{XW},\]</div>
 <p>with each element <span class="math notranslate nohighlight">\(B_{jk}^e\)</span> corresponding to a real (cos) or imaginary (sin) wave with
@@ -280,8 +303,8 @@ part of</p>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>moonName</strong> (<span><code class="xref mat mat-obj docutils literal notranslate"><span class="pre">char,</span> <span class="pre">1xC</span></code></span>) – Name of moon for which to evaluate excitation moments.</p></li>
 <li><p><strong>parentName</strong> (<span><code class="xref mat mat-obj docutils literal notranslate"><span class="pre">char,</span> <span class="pre">1xD</span></code></span>) – Name of parent planet for the moon for which to evaluate excitation moments.</p></li>
-<li><p><strong>ets</strong> (<span><code class="xref mat mat-obj docutils literal notranslate"><span class="pre">double,</span> <span class="pre">1xN</span></code></span>) – Ephemeris times associated with input time series magnetic field vectors in TDB seconds relative
-to J2000.</p></li>
+<li><p><strong>ets</strong> (<span><code class="xref mat mat-obj docutils literal notranslate"><span class="pre">double,</span> <span class="pre">1xN</span></code></span>) – Ephemeris times associated with input time series magnetic field vectors in TDB seconds
+relative to J2000.</p></li>
 <li><p><strong>Bvec</strong> (<span><code class="xref mat mat-obj docutils literal notranslate"><span class="pre">double,</span> <span class="pre">3xN</span></code></span>) – Magnetic field vectors at each measurement time.</p></li>
 <li><p><strong>descrip</strong> (<span><code class="xref mat mat-obj docutils literal notranslate"><span class="pre">char,</span> <span class="pre">1xE</span></code></span>) – Text description of the magnetic field model that was evalauted for the input time series.</p></li>
 <li><p><strong>SPHOUT</strong> (<span><code class="xref mat mat-obj docutils literal notranslate"><span class="pre">bool,</span> <span class="pre">default=0</span></code></span>) – Whether to return vectors aligned to spherical coordinate axes (true) or cartesian (false).</p></li>
@@ -301,18 +324,18 @@ Jupiter’s moons.</p></li>
 <li><p><strong>f</strong> (<cite>double, 1xP</cite>) – Frequencies of estimated excitation moments in Hz.</p></li>
 <li><p><strong>BexcVec1i</strong> (<cite>double, 1xP</cite>) – Real part (i for “in-phase”) of excitation moments for
 vector component 1 (x or r) in nT.</p></li>
-<li><p><strong>BexcVec1q</strong> (<cite>double, 1xP</cite>) – Imaginary part (q for “quadrature”) of excitation moments
-for vector component 1 in nT.</p></li>
+<li><p><strong>BexcVec1q</strong> (<cite>double, 1xP</cite>) – Imaginary part (q for “quadrature”) of excitation
+moments for vector component 1 in nT.</p></li>
 <li><p><strong>BexcVec1o</strong> (<cite>double</cite>) – Vector component 1 of uniform background field in nT.</p></li>
 <li><p><strong>BexcVec2i</strong> (<cite>double, 1xP</cite>) – Real part (i for “in-phase”) of excitation moments for
 vector component 2 (y or theta) in nT.</p></li>
-<li><p><strong>BexcVec2q</strong> (<cite>double, 1xP</cite>) – Imaginary part (q for “quadrature”) of excitation moments
-for vector component 2 in nT.</p></li>
+<li><p><strong>BexcVec2q</strong> (<cite>double, 1xP</cite>) – Imaginary part (q for “quadrature”) of excitation
+moments for vector component 2 in nT.</p></li>
 <li><p><strong>BexcVec2o</strong> (<cite>double</cite>) – Vector component 2 of uniform background field in nT.</p></li>
 <li><p><strong>BexcVec3i</strong> (<cite>double, 1xP</cite>) – Real part (i for “in-phase”) of excitation moments for
 vector component 3 (z or phi) in nT.</p></li>
-<li><p><strong>BexcVec3q</strong> (<cite>double, 1xP</cite>) – Imaginary part (q for “quadrature”) of excitation moments
-for vector component 3 in nT.</p></li>
+<li><p><strong>BexcVec3q</strong> (<cite>double, 1xP</cite>) – Imaginary part (q for “quadrature”) of excitation
+moments for vector component 3 in nT.</p></li>
 <li><p><strong>BexcVec3o</strong> (<cite>double</cite>) – Vector component 3 of uniform background field in nT.</p></li>
 <li><p><strong>rmse</strong> (<cite>double</cite>) – Normalized root-mean-squared error calculated from comparing input
 and reproduced time series data.</p></li>
@@ -493,10 +516,10 @@ contents in info.Variables.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>Although this function returns degree-1 complex excitation moments, these moments cannot be used
-for reproducing the input time series for any period except Tinterest_h. This is because the phase
-for each peak in the FFT can be tuned only based on the time step of the input time series—if a
-given oscillation period does not cover a whole number of time steps, the calculated phase of the
-complex peak amplitude in the FFT will drift.</p>
+for reproducing the input time series for any period except Tinterest_h. This is because the
+phase for each peak in the FFT can be tuned only based on the time step of the input time
+series—if a given oscillation period does not cover a whole number of time steps, the
+calculated phase of the complex peak amplitude in the FFT will drift.</p>
 <p>For calculating excitation moments, instead use <code class="xref py py-func docutils literal notranslate"><span class="pre">ICAdecomposition()</span></code>.</p>
 </div>
 <dl class="field-list simple">
@@ -519,7 +542,8 @@ synodic period, as evaluated from values returned by <code class="xref py py-fun
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p><ul class="simple">
-<li><p><strong>Tpeak_h</strong> (<em>double, 1xP</em>) – Oscillation periods in hours associated with peaks in the excitation spectrum greater than 1 nT.</p></li>
+<li><p><strong>Tpeak_h</strong> (<em>double, 1xP</em>) – Oscillation periods in hours associated with peaks in the excitation spectrum greater than
+1 nT.</p></li>
 <li><p><strong>B0vec</strong> (<em>double, 1x3</em>) – Background uniform magnetic field vector from evaluated time series.</p></li>
 <li><p><strong>B1vec</strong> (<em>complex double, 3xP</em>) – Degree-1 complex excitation moments in the selected coordinates cooresponding to each peak in
 <code class="docutils literal notranslate"><span class="pre">Tpeak_h</span></code>.</p></li>
@@ -590,23 +614,141 @@ loaded PCK file. Size depends on the body and which rates are defined.</p></li>
 <dl class="mat function">
 <dt class="sig sig-object mat" id="functions.GetBplotAndLsq">
 <span class="sig-prename descclassname"><span class="pre">functions.</span></span><span class="sig-name descname"><span class="pre">GetBplotAndLsq</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">ets</span></em>, <em class="sig-param"><span class="pre">t_h</span></em>, <em class="sig-param"><span class="pre">r_km</span></em>, <em class="sig-param"><span class="pre">theta</span></em>, <em class="sig-param"><span class="pre">phi</span></em>, <em class="sig-param"><span class="pre">xyz_km</span></em>, <em class="sig-param"><span class="pre">BrSC</span></em>, <em class="sig-param"><span class="pre">BthSC</span></em>, <em class="sig-param"><span class="pre">BphiSC</span></em>, <em class="sig-param"><span class="pre">scName</span></em>, <em class="sig-param"><span class="pre">parentName</span></em>, <em class="sig-param"><span class="pre">S3coords</span></em>, <em class="sig-param"><span class="pre">orbStr</span></em>, <em class="sig-param"><span class="pre">opt</span></em>, <em class="sig-param"><span class="pre">MPopt</span></em>, <em class="sig-param"><span class="pre">SEQUENTIAL</span></em>, <em class="sig-param"><span class="pre">jt_h</span></em><span class="sig-paren">)</span><a class="headerlink" href="#functions.GetBplotAndLsq" title="Permalink to this definition"></a></dt>
-<dd></dd></dl>
+<dd><p>Plots and calculates comparisons between modeled and measured magnetic fields.</p>
+<p>Generates time series data of a specified combination of magnetic field models implemented in
+PlanetMag and compares against spacecraft measurements of the planetary magnetic field.
+Comparisons are plotted and least-squares differences are calculated and printed to the terminal.
+Intended as a final step in model validation.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>ets</strong> (<span><code class="xref mat mat-obj docutils literal notranslate"><span class="pre">double,</span> <span class="pre">1xN</span></code></span>) – Ephemeris times of measurements to compare in TDB seconds relative to J2000.</p></li>
+<li><p><strong>t_h</strong> (<span><code class="xref mat mat-obj docutils literal notranslate"><span class="pre">double,</span> <span class="pre">1xN</span></code></span>) – Ephemeris times of measurements to compare in TDB hours relative to J2000 (<code class="docutils literal notranslate"><span class="pre">ets/3600</span></code>).</p></li>
+<li><p><strong>r_km</strong> (<span><code class="xref mat mat-obj docutils literal notranslate"><span class="pre">double,</span> <span class="pre">1xN</span></code></span>) – Radial distance of measurement locations from planet center of mass in km.</p></li>
+<li><p><strong>theta</strong> (<span><code class="xref mat mat-obj docutils literal notranslate"><span class="pre">double,</span> <span class="pre">1xN</span></code></span>) – Colatitude of measurement locations from planet center of mass in radians.</p></li>
+<li><p><strong>phi</strong> (<span><code class="xref mat mat-obj docutils literal notranslate"><span class="pre">double,</span> <span class="pre">1xN</span></code></span>) – East longitude of measurement locations from planet center of mass in radians.</p></li>
+<li><p><strong>xyz_km</strong> (<span><code class="xref mat mat-obj docutils literal notranslate"><span class="pre">double,</span> <span class="pre">3xN</span></code></span>) – Cartesian coordinates of measurement locations in <code class="docutils literal notranslate"><span class="pre">S3coords</span></code> frame in km.</p></li>
+<li><p><strong>BrSC</strong> (<span><code class="xref mat mat-obj docutils literal notranslate"><span class="pre">double,</span> <span class="pre">1xN</span></code></span>) – Radial component (<span class="math notranslate nohighlight">\(B_r\)</span>) of magnetic field measurements in <code class="docutils literal notranslate"><span class="pre">S3coords</span></code> frame in nT.</p></li>
+<li><p><strong>BthSC</strong> (<span><code class="xref mat mat-obj docutils literal notranslate"><span class="pre">double,</span> <span class="pre">1xN</span></code></span>) – Colatitudinal component (<span class="math notranslate nohighlight">\(B_\theta\)</span>) of magnetic field measurements in <code class="docutils literal notranslate"><span class="pre">S3coords</span></code> frame
+in nT.</p></li>
+<li><p><strong>BphiSC</strong> (<span><code class="xref mat mat-obj docutils literal notranslate"><span class="pre">double,</span> <span class="pre">1xN</span></code></span>) – Azimuthal component (<span class="math notranslate nohighlight">\(B_\phi\)</span>) of magnetic field measurements in <code class="docutils literal notranslate"><span class="pre">S3coords</span></code> frame in
+nT.</p></li>
+<li><p><strong>scName</strong> (<span><code class="xref mat mat-obj docutils literal notranslate"><span class="pre">string,</span> <span class="pre">1xS'</span></code></span>) – Name(s) of spacecraft for measurement comparisons. Accepts a lone string or a list of strings.</p></li>
+<li><p><strong>parentName</strong> (<span><code class="xref mat mat-obj docutils literal notranslate"><span class="pre">char,</span> <span class="pre">1xC</span></code></span>) – Name of parent planet the evaluated model(s) and spacecraft measurements apply to.</p></li>
+<li><p><strong>S3coords</strong> (<span><code class="xref mat mat-obj docutils literal notranslate"><span class="pre">char,</span> <span class="pre">1xD</span></code></span>) – Standard coordinate frame used for evaluation of magnetic fields.</p></li>
+<li><p><strong>orbStr</strong> (<span><code class="xref mat mat-obj docutils literal notranslate"><span class="pre">char,</span> <span class="pre">1xE</span></code></span>) – Description of orbit(s) covered to place in legend labels.</p></li>
+<li><p><strong>opt</strong> (<span><code class="xref mat mat-obj docutils literal notranslate"><span class="pre">int</span></code></span>) – Index of planetary magnetic field model. See <code class="xref py py-func docutils literal notranslate"><span class="pre">GetModelOpts()</span></code> for more details and available
+options.</p></li>
+<li><p><strong>MPopt</strong> (<span><code class="xref mat mat-obj docutils literal notranslate"><span class="pre">int</span></code></span>) – Index of magnetopause current magnetic field model. See <code class="xref py py-func docutils literal notranslate"><span class="pre">GetModelOpts()</span></code> for more details and
+available options.</p></li>
+<li><p><strong>SEQUENTIAL</strong> (<span><code class="xref mat mat-obj docutils literal notranslate"><span class="pre">bool,</span> <span class="pre">default=0</span></code></span>) – Whether to plot points by index or hours relative to a reference time.</p></li>
+<li><p><strong>jt_h</strong> (<span><code class="xref mat mat-obj docutils literal notranslate"><span class="pre">double,</span> <span class="pre">1xM,</span> <span class="pre">default=[]</span></code></span>) – Ephemeris times of Juno measurements in TDB hours relative to J2000 to use in data comparisons.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
 
 </section>
 <section id="getbplotandlsqmoon">
 <h3><a class="reference internal" href="#functions.GetBplotAndLsqMoon" title="functions.GetBplotAndLsqMoon"><code class="xref mat mat-func docutils literal notranslate"><span class="pre">GetBplotAndLsqMoon()</span></code></a><a class="headerlink" href="#getbplotandlsqmoon" title="Permalink to this heading"></a></h3>
 <dl class="mat function">
 <dt class="sig sig-object mat" id="functions.GetBplotAndLsqMoon">
-<span class="sig-prename descclassname"><span class="pre">functions.</span></span><span class="sig-name descname"><span class="pre">GetBplotAndLsqMoon</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">ets</span></em>, <em class="sig-param"><span class="pre">t_h</span></em>, <em class="sig-param"><span class="pre">r_km</span></em>, <em class="sig-param"><span class="pre">theta</span></em>, <em class="sig-param"><span class="pre">phi</span></em>, <em class="sig-param"><span class="pre">xyz_km</span></em>, <em class="sig-param"><span class="pre">r_RM</span></em>, <em class="sig-param"><span class="pre">BxSC</span></em>, <em class="sig-param"><span class="pre">BySC</span></em>, <em class="sig-param"><span class="pre">BzSC</span></em>, <em class="sig-param"><span class="pre">scName</span></em>, <em class="sig-param"><span class="pre">parentName</span></em>, <em class="sig-param"><span class="pre">S3coords</span></em>, <em class="sig-param"><span class="pre">moonName</span></em>, <em class="sig-param"><span class="pre">era</span></em>, <em class="sig-param"><span class="pre">fbStr</span></em>, <em class="sig-param"><span class="pre">opt</span></em>, <em class="sig-param"><span class="pre">MPopt</span></em>, <em class="sig-param"><span class="pre">SEQUENTIAL</span></em>, <em class="sig-param"><span class="pre">jt_h</span></em><span class="sig-paren">)</span><a class="headerlink" href="#functions.GetBplotAndLsqMoon" title="Permalink to this definition"></a></dt>
-<dd></dd></dl>
+<span class="sig-prename descclassname"><span class="pre">functions.</span></span><span class="sig-name descname"><span class="pre">GetBplotAndLsqMoon</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">ets</span></em>, <em class="sig-param"><span class="pre">t_h</span></em>, <em class="sig-param"><span class="pre">r_km</span></em>, <em class="sig-param"><span class="pre">theta</span></em>, <em class="sig-param"><span class="pre">phi</span></em>, <em class="sig-param"><span class="pre">xyz_km</span></em>, <em class="sig-param"><span class="pre">r_RM</span></em>, <em class="sig-param"><span class="pre">BxSC</span></em>, <em class="sig-param"><span class="pre">BySC</span></em>, <em class="sig-param"><span class="pre">BzSC</span></em>, <em class="sig-param"><span class="pre">scName</span></em>, <em class="sig-param"><span class="pre">parentName</span></em>, <em class="sig-param"><span class="pre">S3coords</span></em>, <em class="sig-param"><span class="pre">moonName</span></em>, <em class="sig-param"><span class="pre">era</span></em>, <em class="sig-param"><span class="pre">fbStr</span></em>, <em class="sig-param"><span class="pre">opt</span></em>, <em class="sig-param"><span class="pre">MPopt</span></em>, <em class="sig-param"><span class="pre">SEQUENTIAL</span></em>, <em class="sig-param"><span class="pre">dataDir</span></em>, <em class="sig-param"><span class="pre">jt_h</span></em><span class="sig-paren">)</span><a class="headerlink" href="#functions.GetBplotAndLsqMoon" title="Permalink to this definition"></a></dt>
+<dd><p>Plots and calculates comparisons between modeled and measured magnetic fields in the vicinity of
+a target moon.</p>
+<p>Generates time series data of a specified combination of magnetic field models implemented in
+PlanetMag and compares against spacecraft measurements of the planetary magnetic field.
+Comparisons are plotted and least-squares differences are calculated and printed to the terminal.
+Intended as a final step in model validation; unlike <code class="xref py py-func docutils literal notranslate"><span class="pre">GetBplotAndLsq()</span></code>, this function uses flyby
+data in the vicinity of the target moon and the recorded excitation moments to model the magnetic
+field applied by the parent planet.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Because this function uses excitation moments saved from <code class="xref py py-func docutils literal notranslate"><span class="pre">PlanetMag()</span></code>, that function must be run for
+each of the input settings (<code class="docutils literal notranslate"><span class="pre">moonName</span></code>, <code class="docutils literal notranslate"><span class="pre">opt</span></code>, <code class="docutils literal notranslate"><span class="pre">MPopt</span></code>, and <code class="docutils literal notranslate"><span class="pre">era</span></code>) before this one.</p>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>ets</strong> (<span><code class="xref mat mat-obj docutils literal notranslate"><span class="pre">double,</span> <span class="pre">1xN</span></code></span>) – Ephemeris times of measurements to compare in TDB seconds relative to J2000.</p></li>
+<li><p><strong>t_h</strong> (<span><code class="xref mat mat-obj docutils literal notranslate"><span class="pre">double,</span> <span class="pre">1xN</span></code></span>) – Ephemeris times of measurements to compare in TDB hours relative to J2000 (<code class="docutils literal notranslate"><span class="pre">ets/3600</span></code>).</p></li>
+<li><p><strong>r_km</strong> (<span><code class="xref mat mat-obj docutils literal notranslate"><span class="pre">double,</span> <span class="pre">1xN</span></code></span>) – Radial distance of measurement locations from planet center of mass in km.</p></li>
+<li><p><strong>theta</strong> (<span><code class="xref mat mat-obj docutils literal notranslate"><span class="pre">double,</span> <span class="pre">1xN</span></code></span>) – Colatitude of measurement locations from planet center of mass in radians.</p></li>
+<li><p><strong>phi</strong> (<span><code class="xref mat mat-obj docutils literal notranslate"><span class="pre">double,</span> <span class="pre">1xN</span></code></span>) – East longitude of measurement locations from planet center of mass in radians.</p></li>
+<li><p><strong>xyz_km</strong> (<span><code class="xref mat mat-obj docutils literal notranslate"><span class="pre">double,</span> <span class="pre">3xN</span></code></span>) – Cartesian coordinates of measurement locations in <code class="docutils literal notranslate"><span class="pre">S3coords</span></code> frame in km.</p></li>
+<li><p><strong>r_RM</strong> (<span><code class="xref mat mat-obj docutils literal notranslate"><span class="pre">double,</span> <span class="pre">1xN</span></code></span>) – Radial distance of measurement locations from moon center of mass in moon equatorial radii.</p></li>
+<li><p><strong>BxSC</strong> (<span><code class="xref mat mat-obj docutils literal notranslate"><span class="pre">double,</span> <span class="pre">1xN</span></code></span>) – x component (<span class="math notranslate nohighlight">\(B_x\)</span>) of magnetic field measurements in <code class="docutils literal notranslate"><span class="pre">S3coords</span></code> frame in nT.</p></li>
+<li><p><strong>BySC</strong> (<span><code class="xref mat mat-obj docutils literal notranslate"><span class="pre">double,</span> <span class="pre">1xN</span></code></span>) – y component (<span class="math notranslate nohighlight">\(B_y\)</span>) of magnetic field measurements in <code class="docutils literal notranslate"><span class="pre">S3coords</span></code> frame in nT.</p></li>
+<li><p><strong>BzSC</strong> (<span><code class="xref mat mat-obj docutils literal notranslate"><span class="pre">double,</span> <span class="pre">1xN</span></code></span>) – z component (<span class="math notranslate nohighlight">\(B_z\)</span>) of magnetic field measurements in <code class="docutils literal notranslate"><span class="pre">S3coords</span></code> frame in nT.</p></li>
+<li><p><strong>scName</strong> (<span><code class="xref mat mat-obj docutils literal notranslate"><span class="pre">string,</span> <span class="pre">1xS'</span></code></span>) – Name(s) of spacecraft for measurement comparisons. Accepts a lone string or a list of strings.</p></li>
+<li><p><strong>parentName</strong> (<span><code class="xref mat mat-obj docutils literal notranslate"><span class="pre">char,</span> <span class="pre">1xC</span></code></span>) – Name of parent planet the evaluated model(s) and spacecraft measurements apply to.</p></li>
+<li><p><strong>S3coords</strong> (<span><code class="xref mat mat-obj docutils literal notranslate"><span class="pre">char,</span> <span class="pre">1xD</span></code></span>) – Standard coordinate frame (for the parent planet) used for evaluation of magnetic fields.</p></li>
+<li><p><strong>moonName</strong> (<span><code class="xref mat mat-obj docutils literal notranslate"><span class="pre">char,</span> <span class="pre">1xE</span></code></span>) – Name of target moon the evaluated model(s) and spacecraft measurements apply to.</p></li>
+<li><p><strong>era</strong> (<span><code class="xref mat mat-obj docutils literal notranslate"><span class="pre">char,</span> <span class="pre">1xF</span></code></span>) – Name of spacecraft mission time frame to use for excitation moments. Must be</p></li>
+<li><p><strong>fbStr</strong> (<span><code class="xref mat mat-obj docutils literal notranslate"><span class="pre">char,</span> <span class="pre">1xG</span></code></span>) – Description of flyby(s) covered to place in legend labels.</p></li>
+<li><p><strong>opt</strong> (<span><code class="xref mat mat-obj docutils literal notranslate"><span class="pre">int</span></code></span>) – Index of planetary magnetic field model. See <code class="xref py py-func docutils literal notranslate"><span class="pre">GetModelOpts()</span></code> for more details and available
+options.</p></li>
+<li><p><strong>MPopt</strong> (<span><code class="xref mat mat-obj docutils literal notranslate"><span class="pre">int</span></code></span>) – Index of magnetopause current magnetic field model. See <code class="xref py py-func docutils literal notranslate"><span class="pre">GetModelOpts()</span></code> for more details and
+available options.</p></li>
+<li><p><strong>SEQUENTIAL</strong> (<span><code class="xref mat mat-obj docutils literal notranslate"><span class="pre">bool,</span> <span class="pre">default=0</span></code></span>) – Whether to plot points by index or hours relative to a reference time (closest approach).</p></li>
+<li><p><strong>dataDir</strong> (<span><code class="xref mat mat-obj docutils literal notranslate"><span class="pre">char,</span> <span class="pre">1xH,</span> <span class="pre">default='out'</span></code></span>) – Name of directory where excitation moments are printed to disk.</p></li>
+<li><p><strong>jt_h</strong> (<span><code class="xref mat mat-obj docutils literal notranslate"><span class="pre">double,</span> <span class="pre">1xM,</span> <span class="pre">default=[]</span></code></span>) – Ephemeris times of Juno measurements in TDB hours relative to J2000 to use in data comparisons.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
 
 </section>
 <section id="getbplotandlsqneptune">
 <h3><a class="reference internal" href="#functions.GetBplotAndLsqNeptune" title="functions.GetBplotAndLsqNeptune"><code class="xref mat mat-func docutils literal notranslate"><span class="pre">GetBplotAndLsqNeptune()</span></code></a><a class="headerlink" href="#getbplotandlsqneptune" title="Permalink to this heading"></a></h3>
 <dl class="mat function">
 <dt class="sig sig-object mat" id="functions.GetBplotAndLsqNeptune">
-<span class="sig-prename descclassname"><span class="pre">functions.</span></span><span class="sig-name descname"><span class="pre">GetBplotAndLsqNeptune</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">ets</span></em>, <em class="sig-param"><span class="pre">t_h</span></em>, <em class="sig-param"><span class="pre">r_km</span></em>, <em class="sig-param"><span class="pre">theta</span></em>, <em class="sig-param"><span class="pre">phi</span></em>, <em class="sig-param"><span class="pre">xyz_km</span></em>, <em class="sig-param"><span class="pre">BrSC</span></em>, <em class="sig-param"><span class="pre">BthSC</span></em>, <em class="sig-param"><span class="pre">BphiSC</span></em>, <em class="sig-param"><span class="pre">scName</span></em>, <em class="sig-param"><span class="pre">parentName</span></em>, <em class="sig-param"><span class="pre">S3coords</span></em>, <em class="sig-param"><span class="pre">orbStr</span></em>, <em class="sig-param"><span class="pre">opt</span></em>, <em class="sig-param"><span class="pre">MPopt</span></em>, <em class="sig-param"><span class="pre">SEQUENTIAL</span></em>, <em class="sig-param"><span class="pre">exclude</span></em><span class="sig-paren">)</span><a class="headerlink" href="#functions.GetBplotAndLsqNeptune" title="Permalink to this definition"></a></dt>
-<dd></dd></dl>
+<span class="sig-prename descclassname"><span class="pre">functions.</span></span><span class="sig-name descname"><span class="pre">GetBplotAndLsqNeptune</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">ets</span></em>, <em class="sig-param"><span class="pre">t_h</span></em>, <em class="sig-param"><span class="pre">r_km</span></em>, <em class="sig-param"><span class="pre">theta</span></em>, <em class="sig-param"><span class="pre">phi</span></em>, <em class="sig-param"><span class="pre">xyz_km</span></em>, <em class="sig-param"><span class="pre">BrSC</span></em>, <em class="sig-param"><span class="pre">BthSC</span></em>, <em class="sig-param"><span class="pre">BphiSC</span></em>, <em class="sig-param"><span class="pre">scName</span></em>, <em class="sig-param"><span class="pre">S3coords</span></em>, <em class="sig-param"><span class="pre">orbStr</span></em>, <em class="sig-param"><span class="pre">opt</span></em>, <em class="sig-param"><span class="pre">MPopt</span></em>, <em class="sig-param"><span class="pre">SEQUENTIAL</span></em>, <em class="sig-param"><span class="pre">INC_PDS</span></em>, <em class="sig-param"><span class="pre">INC_O8</span></em>, <em class="sig-param"><span class="pre">INC_PDS_NM3</span></em>, <em class="sig-param"><span class="pre">INC_NM3</span></em><span class="sig-paren">)</span><a class="headerlink" href="#functions.GetBplotAndLsqNeptune" title="Permalink to this definition"></a></dt>
+<dd><p>Plots and calculates comparisons between modeled and measured magnetic fields for Neptune.</p>
+<p>Generates time series data of a specified combination of magnetic field models implemented in
+PlanetMag and compares against spacecraft measurements of the planetary magnetic field.
+Comparisons are plotted and least-squares differences are calculated and printed to the terminal.
+Intended as a final step in model validation; because Voyager 2 trajectories reported in PDS
+files do not perfectly match the trajectories reconstructed from any available SPICE kernels, and
+because the IAU coordinate system for Neptune uses a System II frame (rotating with a stable
+atmospheric feature) instead of a System III frame (rotating with the intrinsic magnetic field),
+this function includes comparisons between evaluation with various relevant coordinate systems.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>ets</strong> (<span><code class="xref mat mat-obj docutils literal notranslate"><span class="pre">double,</span> <span class="pre">1xN</span></code></span>) – Ephemeris times of measurements to compare in TDB seconds relative to J2000.</p></li>
+<li><p><strong>t_h</strong> (<span><code class="xref mat mat-obj docutils literal notranslate"><span class="pre">double,</span> <span class="pre">1xN</span></code></span>) – Ephemeris times of measurements to compare in TDB hours relative to J2000 (<code class="docutils literal notranslate"><span class="pre">ets/3600</span></code>).</p></li>
+<li><p><strong>r_km</strong> (<span><code class="xref mat mat-obj docutils literal notranslate"><span class="pre">double,</span> <span class="pre">1xN</span></code></span>) – Radial distance of measurement locations from planet center of mass in km.</p></li>
+<li><p><strong>theta</strong> (<span><code class="xref mat mat-obj docutils literal notranslate"><span class="pre">double,</span> <span class="pre">1xN</span></code></span>) – Colatitude of measurement locations from planet center of mass in radians.</p></li>
+<li><p><strong>phi</strong> (<span><code class="xref mat mat-obj docutils literal notranslate"><span class="pre">double,</span> <span class="pre">1xN</span></code></span>) – East longitude of measurement locations from planet center of mass in radians.</p></li>
+<li><p><strong>xyz_km</strong> (<span><code class="xref mat mat-obj docutils literal notranslate"><span class="pre">double,</span> <span class="pre">3xN</span></code></span>) – Cartesian coordinates of measurement locations in <code class="docutils literal notranslate"><span class="pre">S3coords</span></code> frame in km.</p></li>
+<li><p><strong>BrSC</strong> (<span><code class="xref mat mat-obj docutils literal notranslate"><span class="pre">double,</span> <span class="pre">1xN</span></code></span>) – Radial component (<span class="math notranslate nohighlight">\(B_r\)</span>) of magnetic field measurements in <code class="docutils literal notranslate"><span class="pre">S3coords</span></code> frame in nT.</p></li>
+<li><p><strong>BthSC</strong> (<span><code class="xref mat mat-obj docutils literal notranslate"><span class="pre">double,</span> <span class="pre">1xN</span></code></span>) – Colatitudinal component (<span class="math notranslate nohighlight">\(B_\theta\)</span>) of magnetic field measurements in <code class="docutils literal notranslate"><span class="pre">S3coords</span></code> frame
+in nT.</p></li>
+<li><p><strong>BphiSC</strong> (<span><code class="xref mat mat-obj docutils literal notranslate"><span class="pre">double,</span> <span class="pre">1xN</span></code></span>) – Azimuthal component (<span class="math notranslate nohighlight">\(B_\phi\)</span>) of magnetic field measurements in <code class="docutils literal notranslate"><span class="pre">S3coords</span></code> frame in
+nT.</p></li>
+<li><p><strong>scName</strong> (<span><code class="xref mat mat-obj docutils literal notranslate"><span class="pre">string,</span> <span class="pre">1xS'</span></code></span>) – Name(s) of spacecraft for measurement comparisons. Accepts a lone string or a list of strings.</p></li>
+<li><p><strong>S3coords</strong> (<span><code class="xref mat mat-obj docutils literal notranslate"><span class="pre">char,</span> <span class="pre">1xD</span></code></span>) – Standard coordinate frame used for evaluation of magnetic fields.</p></li>
+<li><p><strong>orbStr</strong> (<span><code class="xref mat mat-obj docutils literal notranslate"><span class="pre">char,</span> <span class="pre">1xE</span></code></span>) – Description of orbit(s) covered to place in legend labels.</p></li>
+<li><p><strong>opt</strong> (<span><code class="xref mat mat-obj docutils literal notranslate"><span class="pre">int</span></code></span>) – Index of planetary magnetic field model. See <code class="xref py py-func docutils literal notranslate"><span class="pre">GetModelOpts()</span></code> for more details and available
+options.</p></li>
+<li><p><strong>MPopt</strong> (<span><code class="xref mat mat-obj docutils literal notranslate"><span class="pre">int</span></code></span>) – Index of magnetopause current magnetic field model. See <code class="xref py py-func docutils literal notranslate"><span class="pre">GetModelOpts()</span></code> for more details and
+available options.</p></li>
+<li><p><strong>SEQUENTIAL</strong> (<span><code class="xref mat mat-obj docutils literal notranslate"><span class="pre">bool,</span> <span class="pre">default=0</span></code></span>) – Whether to plot points by index or hours relative to a reference time.</p></li>
+<li><p><strong>INC_PDS</strong> (<span><code class="xref mat mat-obj docutils literal notranslate"><span class="pre">bool,</span> <span class="pre">default=1</span></code></span>) – Whether to include the full O8 model, including unresolved coefficients, with PDS trajectory in
+NLS frame in coordinate/frame comparison.</p></li>
+<li><p><strong>INC_O8</strong> (<span><code class="xref mat mat-obj docutils literal notranslate"><span class="pre">bool,</span> <span class="pre">default=1</span></code></span>) – Whether to include the full O8 model, including unresolved coefficients, in the NLS frame as
+implemented in PlanetMag in coordinate/frame comparison.</p></li>
+<li><p><strong>INC_PDS_NM3</strong> (<span><code class="xref mat mat-obj docutils literal notranslate"><span class="pre">bool,</span> <span class="pre">default=1</span></code></span>) – Whether to include O8 model, limited to <code class="docutils literal notranslate"><span class="pre">Nmax=3</span></code>, with PDS trajectory in NLS frame in
+coordinate/frame comparison.</p></li>
+<li><p><strong>INC_NM3</strong> (<span><code class="xref mat mat-obj docutils literal notranslate"><span class="pre">bool,</span> <span class="pre">default=1</span></code></span>) – Whether to include O8 model, limited to <code class="docutils literal notranslate"><span class="pre">Nmax=3</span></code>, in NLS frame as implemented in PlanetMag
+in coordinate/frame comparison. This implementation uses the Neptune spin pole as referenced at
+the J2000 epoch and the System III rotation rate as reported in Ness et al. (1989)
+<a class="reference external" href="https://doi.org/10.1126/science.246.4936.1473">https://doi.org/10.1126/science.246.4936.1473</a>.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
 
 </section>
 <section id="getexcitations">
@@ -626,11 +768,10 @@ oscillation periods are also included, such as those corresponding to the true a
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p><ul class="simple">
-<li><p><strong>f</strong> (<em>double, 1xP’</em>) – Frequencies of excitations in Hz.</p></li>
-<li><p><strong>fSyn</strong> (<em>double</em>) – Frequency of synodic period oscillation in Hz.</p></li>
-</ul>
-</p>
+<dd class="field-even"><p><strong>f</strong> – Frequencies of excitations in Hz.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>double, 1xP’</p>
 </dd>
 </dl>
 </dd></dl>
@@ -666,8 +807,8 @@ generation.” <a class="reference external" href="https://doi.org/10.1186/s4062
 </li>
 <li><dl class="simple">
 <dt><code class="docutils literal notranslate"><span class="pre">Jupiter</span></code></dt><dd><ul>
-<li><p><code class="docutils literal notranslate"><span class="pre">'MagFldJupiterVIP4'</span></code>: “New models of Jupiter’s magnetic field constrained by the Io
-flux tube footprint.” <a class="reference external" href="https://doi.org/10.1029/97JA03726">https://doi.org/10.1029/97JA03726</a>
+<li><p><code class="docutils literal notranslate"><span class="pre">'MagFldJupiterVIP4'</span></code>: “New models of Jupiter’s magnetic field constrained by the
+Io flux tube footprint.” <a class="reference external" href="https://doi.org/10.1029/97JA03726">https://doi.org/10.1029/97JA03726</a>
 (Voyager–Io footprint–Pioneer degree 4 model.)</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">'MagFldJupiterGSFCO4'</span></code>: “The main magnetic field of Jupiter.”
 <a class="reference external" href="https://doi.org/10.1029/JA081i016p02917">https://doi.org/10.1029/JA081i016p02917</a> The PlanetMag implementation is based on the
@@ -683,8 +824,8 @@ the name O6.</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">'MagFldJupiterJRM09'</span></code>: “A New Model of Jupiter’s Magnetic Field From Juno’s First
 Nine Orbits.” <a class="reference external" href="https://doi.org/10.1002/2018GL077312">https://doi.org/10.1002/2018GL077312</a> The Jupiter Reference Model
 after 9 orbits by Juno.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">'MagFldJupiterJRM33'</span></code>: “A New Model of Jupiter’s Magnetic Field at the Completion of
-Juno’s Prime Mission.” <a class="reference external" href="https://doi.org/10.1029/2021JE007138">https://doi.org/10.1029/2021JE007138</a> The Jupiter Reference
+<li><p><code class="docutils literal notranslate"><span class="pre">'MagFldJupiterJRM33'</span></code>: “A New Model of Jupiter’s Magnetic Field at the Completion
+of Juno’s Prime Mission.” <a class="reference external" href="https://doi.org/10.1029/2021JE007138">https://doi.org/10.1029/2021JE007138</a> The Jupiter Reference
 Model after 33 orbits of Jupiter by Juno.</p></li>
 </ul>
 </dd>
@@ -1020,22 +1161,22 @@ positions relative to the parent planet.</p>
 <li><p><strong>moonName</strong> (<span><code class="xref mat mat-obj docutils literal notranslate"><span class="pre">char,</span> <span class="pre">1xC</span></code></span>) – <p>Name of target body. Currently implemented options are:</p>
 <blockquote>
 <div><ul>
-<li><p><code class="docutils literal notranslate"><span class="pre">Moon</span></code></p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">Io</span></code></p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">Europa</span></code></p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">Ganymede</span></code></p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">Callisto</span></code></p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">Mimas</span></code></p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">Enceladus</span></code></p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">Dione</span></code></p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">Rhea</span></code></p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">Titan</span></code></p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">Miranda</span></code></p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">Ariel</span></code></p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">Umbriel</span></code></p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">Titania</span></code></p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">Oberon</span></code></p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">Triton</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">'Moon'</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">'Io'</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">'Europa'</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">'Ganymede'</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">'Callisto'</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">'Mimas'</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">'Enceladus'</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">'Dione'</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">'Rhea'</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">'Titan'</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">'Miranda'</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">'Ariel'</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">'Umbriel'</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">'Titania'</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">'Oberon'</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">'Triton'</span></code></p></li>
 </ul>
 </div></blockquote>
 <p>and their parent planets. The same binary kernels are loaded for any body within a particular
@@ -1046,11 +1187,11 @@ planet.</p>
 Currently implemented options are:</p>
 <blockquote>
 <div><ul>
-<li><p><code class="docutils literal notranslate"><span class="pre">Swarm</span></code></p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">Galileo</span></code></p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">Juno</span></code></p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">Voyager</span> <span class="pre">1</span></code></p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">Voyager</span> <span class="pre">2</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">'Swarm'</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">'Galileo'</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">'Juno'</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">'Voyager</span> <span class="pre">1'</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">'Voyager</span> <span class="pre">2'</span></code></p></li>
 </ul>
 </div></blockquote>
 </p></li>
