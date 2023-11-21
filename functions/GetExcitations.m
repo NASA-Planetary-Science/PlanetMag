@@ -1,4 +1,4 @@
-function [f, fSyn] = GetExcitations(moonName, etMid_day)
+function f = GetExcitations(moonName, etMid_day)
 % Retrieve a list of excitation frequencies to invert.
 %
 % Returned excitation frequencies consist of combinations of precise orbital periods, including
@@ -16,8 +16,6 @@ function [f, fSyn] = GetExcitations(moonName, etMid_day)
 % -------
 % f : double, 1xP'
 %   Frequencies of excitations in Hz.
-% fSyn : double
-%   Frequency of synodic period oscillation in Hz.
 
 % Part of the PlanetMag framework for evaluation and study of planetary magnetic fields.
 % Created by Corey J. Cochrane and Marshall J. Styczinski
@@ -33,12 +31,14 @@ function [f, fSyn] = GetExcitations(moonName, etMid_day)
     fUyr = 1 / 30685.4 / 86400; % https://nssdc.gsfc.nasa.gov/planetary/factsheet/uranusfact.html
     fNyr = 1 / 60189 / 86400; % https://nssdc.gsfc.nasa.gov/planetary/factsheet/neptunefact.html
     % Fetch remaining quantities from PCK file
-    [~, ~, ~, ~, omegaParent_radps, omegaMoon_radps, ~, ~, nutPrecParent, nutPrecMoon] = GetBodyParams(moonName);
+    [~, ~, ~, ~, omegaParent_radps, omegaMoon_radps, ~, ~, nutPrecParent, nutPrecMoon] ...
+        = GetBodyParams(moonName);
     fPar = abs(omegaParent_radps / 2/pi);
     fOrb = abs(omegaMoon_radps / 2/pi);
     Pnut0 = nutPrecParent(1:2:end);
     Pnut1 = nutPrecParent(2:2:end) / 36525;
-    fOrbAdj = abs(omegaMoon_radps / 2/pi + sum(nutPrecMoon .* Pnut1 .* cosd(Pnut0 + Pnut1*etMid_day)) / 360 / 86400);
+    fOrbAdj = abs(omegaMoon_radps / 2/pi + sum(nutPrecMoon .* Pnut1 .* cosd(Pnut0 ...
+        + Pnut1*etMid_day)) / 360 / 86400);
     fSyn = fPar - fOrb;
     fSynAdj = fPar - fOrbAdj;
     

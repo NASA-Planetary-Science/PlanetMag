@@ -34,7 +34,7 @@ function CompareSatModels(LIVE_PLOTS, scNames, SEQUENTIAL)
     parentName = 'Saturn';
     
     fullOrbFormatSpec = ['%23s%12s%1d%9f%9f%9f%9f%9f%7f%7f%8f%8f%8f%10s%[^\n\r]', ...
-                         '%24s%6d%3d%2d%2d%15f%15f%15f%15f%15f%15f%15f%15f%15f%15f%2d%10s%[^\n\r]'];
+        '%24s%6d%3d%2d%2d%15f%15f%15f%15f%15f%15f%15f%15f%15f%15f%2d%10s%[^\n\r]'];
     disp(['Importing PDS files over ' parentName ' flybys.'])
     orbStr = [parentName ' flyby'];
     Rp_km = 60268;
@@ -84,7 +84,8 @@ function CompareSatModels(LIVE_PLOTS, scNames, SEQUENTIAL)
         datFile = fullfile(['MAG/' sc '/vg' num2str(i) '_' parentName '_48s_sph.tab']);
         disp(['Loading ' sc ' MAG data from ' datFile(i) '.'])
         fileID = fopen(datFile,'r');
-        magData = textscan(fileID, fullOrbFormatSpec, inf, 'Delimiter', ',', 'TextType', 'char', 'EndOfLine', '\r\n');
+        magData = textscan(fileID, fullOrbFormatSpec, Inf, 'Delimiter', ',', 'TextType', ...
+            'char', 'EndOfLine', '\r\n');
         fclose(fileID);
     
         t_UTC{i} = magData{1}';
@@ -111,11 +112,12 @@ function CompareSatModels(LIVE_PLOTS, scNames, SEQUENTIAL)
         finiteMax_nT = 8e3;
         RPunit = [' R_' parentName(1)];
         disp(['Excluding all points satisfying at least one of the following:' newline ...
-              'Distance to a major moon < ' num2str(moonProx_RP) RPunit newline ...
-              'Planetocentric distance > ' num2str(PlanetMaxDist_RP) RPunit newline ...
-              'Suspect measurements, |B| > ' num2str(finiteMax_nT) 'nT.'])
+            'Distance to a major moon < ' num2str(moonProx_RP) RPunit newline ...
+            'Planetocentric distance > ' num2str(PlanetMaxDist_RP) RPunit newline ...
+            'Suspect measurements, |B| > ' num2str(finiteMax_nT) 'nT.'])
         % Full limits
-        exclude = find(rMinMoon_km/Rp_km < moonProx_RP | rP_km{i}/Rp_km > PlanetMaxDist_RP | BmagSC{i} > finiteMax_nT);
+        exclude = find(rMinMoon_km/Rp_km < moonProx_RP | rP_km{i}/Rp_km > PlanetMaxDist_RP ...
+            | BmagSC{i} > finiteMax_nT);
         ets{i}(exclude) = [];
         BrSC{i}(exclude) = [];
         BthSC{i}(exclude) = [];
@@ -133,14 +135,15 @@ function CompareSatModels(LIVE_PLOTS, scNames, SEQUENTIAL)
         MPopts = 2:(nMPopts + 1); % Add 1 to force noMP model in addition
         for opt=opts
             for MPopt=MPopts(2:end)
-                GetBplotAndLsq(ets{i}, t_h{i}, r_km, theta, phi, xyz_km, BrSC{i}, BthSC{i}, BphiSC{i}, ...
-                    scNames(i), parentName, spkParent, orbStr, opt, MPopt, SEQUENTIAL);
+                GetBplotAndLsq(ets{i}, t_h{i}, r_km, theta, phi, xyz_km, BrSC{i}, BthSC{i}, ...
+                    BphiSC{i}, scNames(i), parentName, spkParent, orbStr, opt, MPopt, SEQUENTIAL);
             end
         end
     
     
         %% Plot trajectory
-        %t_h = linspace(cspice_str2et('1986-01-23T00:00:00.000'), cspice_str2et('1986-01-27T00:00:00.000'), 5000)/3600;
+        % t_h = linspace(cspice_str2et('1986-01-23T00:00:00.000'), ...
+        %     cspice_str2et('1986-01-27T00:00:00.000'), 5000) / 3600;
         [~, ~, ~, xyzKSO_km, ~] = GetPosSpice(sc, parentName, t_h{i}, 'KSO');
         xyz_Rp = xyzKSO_km / Rp_km;
         x = xyz_Rp(1,:); y = xyz_Rp(2,:); z = xyz_Rp(3,:);

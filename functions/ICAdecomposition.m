@@ -4,19 +4,20 @@ function BD = ICAdecomposition(moonName, parentName, ets, Bvec, descrip, SPHOUT,
 % :dfn:`Independent Component Analysis (ICA)`.
 %
 % The methodology applied to invert the imput magnetic field vector time series ``Bvec`` for its
-% complex excitation moments (the independent components of ICA) is described in detail in Hyvarinen
-% and Oja (2000) https://doi.org/10.1016/S0893-6080(00)00026-5. In this method, the expected signal
-% components :math:`\mathbf{s} = (s_1, \dots, s_p)` are found from the input measurements
-% :math:`\mathbf{x} = (x_1, \dots, x_n)` by inverting the estimated mixing matrix :math:`\mathbf{A}`
-% and multiplying :math:`\mathbf{A}^{-1}` by the input time series, where
-% :math:`\mathbf{x} = \mathbf{As}`. The signal components :math:`\mathbf{s}_j` for vector component
-% :math:`j` in our case are a list of cos and sin waves, representing the real and imaginary parts
-% of :math:`e^{-i\omega_k t}` respectively, oscillating with the expected frequencies
-% :math:`\mathbf{f} = (f_1, \dots, f_p)`, evaluated at each ephemeris time in the input time series
-% ``ets``, and weighted by the excitation moments :math:`\mathbf{B}_j^e`. Each unweighted signal
-% component comprises a column of :math:`\mathbf{X}`. The eigenvectors of :math:`\mathbf{X}` are the
-% columns of the weight matrix :math:`\mathbf{W} = (\mathbf{X}^T\mathbf{X})^{-1}`. We find the
-% excitation moments from
+% complex excitation moments (the "independent components" of ICA) is described in detail in
+% Hyvarinen and Oja (2000) https://doi.org/10.1016/S0893-6080(00)00026-5. In this method, the
+% expected signal components :math:`\mathbf{s} = (s_1, \dots, s_p)` are found from the input
+% measurements :math:`\mathbf{x} = (x_1, \dots, x_n)` by inverting the estimated mixing matrix
+% :math:`\mathbf{A}` and multiplying :math:`\mathbf{A}^{-1}` by the input time series, where
+% :math:`\mathbf{x} = \mathbf{As}`. The signal components :math:`\mathbf{s}` in our case are a list
+% of cos and sin waves, representing the real and imaginary parts of :math:`e^{-i\omega_k t}`
+% respectively, oscillating with the expected frequencies :math:`\mathbf{f} = (f_1, \dots, f_p)`,
+% evaluated at each ephemeris time in the input time series ``ets``. Weighting the signal
+% components by the excitation moments :math:`\mathbf{B}_j^e` reproduces the input signal
+% :math:`\mathbf{B}_j` when the excitation moments are perfectly resolved. Each signal component
+% comprises a column of the signal matrix :math:`\mathbf{X}`. The eigenvectors of
+% :math:`\mathbf{X}` are the columns of the weight matrix 
+% :math:`\mathbf{W} = (\mathbf{X}^T\mathbf{X})^{-1}`. We find the excitation moments from
 %
 % .. math::
 %   \mathbf{B}_j^e = \mathbf{B}_j\mathbf{XW},
@@ -43,8 +44,8 @@ function BD = ICAdecomposition(moonName, parentName, ets, Bvec, descrip, SPHOUT,
 % parentName : char, 1xD
 %   Name of parent planet for the moon for which to evaluate excitation moments.
 % ets : double, 1xN
-%   Ephemeris times associated with input time series magnetic field vectors in TDB seconds relative
-%   to J2000.
+%   Ephemeris times associated with input time series magnetic field vectors in TDB seconds
+%   relative to J2000.
 % Bvec : double, 3xN
 %   Magnetic field vectors at each measurement time.
 % descrip : char, 1xE
@@ -69,18 +70,18 @@ function BD = ICAdecomposition(moonName, parentName, ets, Bvec, descrip, SPHOUT,
 %       - **f** (`double, 1xP`) -- Frequencies of estimated excitation moments in Hz.
 %       - **BexcVec1i** (`double, 1xP`) -- Real part (i for "in-phase") of excitation moments for
 %         vector component 1 (x or r) in nT.
-%       - **BexcVec1q** (`double, 1xP`) -- Imaginary part (q for "quadrature") of excitation moments
-%         for vector component 1 in nT.
+%       - **BexcVec1q** (`double, 1xP`) -- Imaginary part (q for "quadrature") of excitation
+%         moments for vector component 1 in nT.
 %       - **BexcVec1o** (`double`) -- Vector component 1 of uniform background field in nT.
 %       - **BexcVec2i** (`double, 1xP`) -- Real part (i for "in-phase") of excitation moments for
 %         vector component 2 (y or theta) in nT.
-%       - **BexcVec2q** (`double, 1xP`) -- Imaginary part (q for "quadrature") of excitation moments
-%         for vector component 2 in nT.
+%       - **BexcVec2q** (`double, 1xP`) -- Imaginary part (q for "quadrature") of excitation
+%         moments for vector component 2 in nT.
 %       - **BexcVec2o** (`double`) -- Vector component 2 of uniform background field in nT.
 %       - **BexcVec3i** (`double, 1xP`) -- Real part (i for "in-phase") of excitation moments for
 %         vector component 3 (z or phi) in nT.
-%       - **BexcVec3q** (`double, 1xP`) -- Imaginary part (q for "quadrature") of excitation moments
-%         for vector component 3 in nT.
+%       - **BexcVec3q** (`double, 1xP`) -- Imaginary part (q for "quadrature") of excitation
+%         moments for vector component 3 in nT.
 %       - **BexcVec3o** (`double`) -- Vector component 3 of uniform background field in nT.
 %       - **rmse** (`double`) -- Normalized root-mean-squared error calculated from comparing input
 %         and reproduced time series data.
@@ -103,7 +104,7 @@ function BD = ICAdecomposition(moonName, parentName, ets, Bvec, descrip, SPHOUT,
     % ets_ca = 1228738876.0; % For Triton flyby at AOL 50 degrees
     etMid_day = ets_ca / 86400;
 
-    [f, fSyn] = GetExcitations(moonName, etMid_day);
+    f = GetExcitations(moonName, etMid_day);
 
     nFreqs = length(f);
     % Initialize frequency sampling matrix
@@ -161,15 +162,20 @@ function BD = ICAdecomposition(moonName, parentName, ets, Bvec, descrip, SPHOUT,
 
     BD.f = f;
 
+    BexcVec1abs = sqrt(BexcVec1i.^2 + BexcVec1q.^2);
+    BexcVec2abs = sqrt(BexcVec2i.^2 + BexcVec2q.^2);
+    BexcVec3abs = sqrt(BexcVec3i.^2 + BexcVec3q.^2);
+    BexcAbs2 = BexcVec1abs.^2 + BexcVec2abs.^2 + BexcVec3abs.^2;
+    [~, iMax] = max(BexcAbs2);
+    fMax = f(iMax);
+    [~, iMaxComp] = max([BexcVec1abs(iMax), BexcVec2abs(iMax), BexcVec3abs(iMax)]);
+
     disp(' ')
     disp(['R^2 value: ' num2str(BD.Rsquared)])
     disp(' ')
     disp('Driving Field Waves...')
     for i = 1:nFreqs
         disp([num2str(i), '. T = ', num2str(1/f(i)/3600,'%0.2f'), ' hr'])
-        BexcVec1 = sqrt(BexcVec1i(i)^2+BexcVec1q(i)^2);
-        BexcVec2 = sqrt(BexcVec2i(i)^2+BexcVec2q(i)^2);
-        BexcVec3 = sqrt(BexcVec3i(i)^2+BexcVec3q(i)^2);
         % disp(['  2*pi*f*t = ', num2str(2*pi*f(i)*ets_ca*180/pi,'%0.2f'), ' deg'])
         if SPHOUT
             Bv1name = 'Br'; Bv2name = 'Bth'; Bv3name = 'Bphi';
@@ -178,11 +184,13 @@ function BD = ICAdecomposition(moonName, parentName, ets, Bvec, descrip, SPHOUT,
             Bv1name = 'Bx'; Bv2name = 'By'; Bv3name = 'Bz';
             Pv1name = 'Px'; Pv2name = 'Py'; Pv3name = 'Pz';
         end
-        disp(['  ' Bv1name ' = ' num2str(BexcVec1,'%0.2f') ' nT, ' Bv2name ' = ' ...
-            num2str(BexcVec2,'%0.2f') ' nT, ' Bv3name ' = ' num2str(BexcVec3,'%0.2f') ' nT'])
+        disp(['  ' Bv1name ' = ' num2str(BexcVec1abs(i),'%0.2f') ' nT, ' Bv2name ' = ' ...
+            num2str(BexcVec2abs(i),'%0.2f') ' nT, ' Bv3name ' = ' ...
+            num2str(BexcVec3abs(i),'%0.2f') ' nT'])
         disp(['  ' Pv1name ' = ' num2str(atan2(BexcVec1q(i),BexcVec1i(i))*180/pi,'%0.2f') ...
             ' deg, ' Pv2name ' = ' num2str(atan2(BexcVec2q(i),BexcVec2i(i))*180/pi,'%0.2f') ...
-            ' deg, ' Pv3name ' = ' num2str(atan2(BexcVec3q(i),BexcVec3i(i))*180/pi,'%0.2f') ' deg'])
+            ' deg, ' Pv3name ' = ' num2str(atan2(BexcVec3q(i),BexcVec3i(i))*180/pi,'%0.2f') ...
+            ' deg'])
     end
     disp(' ')
 
@@ -212,12 +220,19 @@ function BD = ICAdecomposition(moonName, parentName, ets, Bvec, descrip, SPHOUT,
 
         etsRel_h = (ets-ets(1))/3600;
 
-        if ~strcmp(parentName,'Saturn')
-            cosSyn = X(:, 2*(find(f==fSyn))-1);
-            sinSyn = X(:, 2*(find(f==fSyn)));
-            Bvec1Syn = BexcVec1o + BexcVec1i(f==fSyn)*cosSyn + BexcVec1q(f==fSyn)*sinSyn;
-            Bvec2Syn = BexcVec2o + BexcVec2i(f==fSyn)*cosSyn + BexcVec2q(f==fSyn)*sinSyn;
-            Bvec3Syn = BexcVec3o + BexcVec3i(f==fSyn)*cosSyn + BexcVec3q(f==fSyn)*sinSyn;
+        cosSyn = X(:, 2*(find(f==fMax))-1);
+        sinSyn = X(:, 2*(find(f==fMax)));
+        Bvec1max = BexcVec1o + BexcVec1i(f==fMax)*cosMax + BexcVec1q(f==fMax)*sinMax;
+        Bvec2max = BexcVec2o + BexcVec2i(f==fMax)*cosMax + BexcVec2q(f==fMax)*sinMax;
+        Bvec3max = BexcVec3o + BexcVec3i(f==fMax)*cosMax + BexcVec3q(f==fMax)*sinMax;
+
+        switch(iMaxComp)
+            case 1
+                BvecCompMax = Bvec1max;
+            case 2
+                BvecCompMax = Bvec2max;
+            case 3
+                BvecCompMax = Bvec3max;
         end
 
         figure; hold on; box on; grid on;
@@ -229,15 +244,13 @@ function BD = ICAdecomposition(moonName, parentName, ets, Bvec, descrip, SPHOUT,
         Bvec1out = plot(etsRel_h, Bvec1est, '--k');
         Bvec2out = plot(etsRel_h, Bvec2est, '--k');
         Bvec3out = plot(etsRel_h, Bvec3est, '--k');
-        if ~strcmp(parentName,'Saturn')
-            Bvec1synOnly = plot(etsRel_h, Bvec1Syn, 'm');
-            Bvec2synOnly = plot(etsRel_h, Bvec2Syn, 'm');
-            Bvec3synOnly = plot(etsRel_h, Bvec3Syn, 'm');
-            legend([Bvec1in,Bvec2in,Bvec3in, Bvec1out, Bvec1synOnly], Bv1name, Bv2name, Bv3name, ...
-                'Reproduced', 'Synodic only')
-        else
-            legend([Bvec1in,Bvec2in,Bvec3in, Bvec3out], Bv1name, Bv2name, Bv3name, 'Reproduced')
-        end
+
+        Bvec1maxOnly = plot(etsRel_h, Bvec1max, 'm');
+        Bvec2maxOnly = plot(etsRel_h, Bvec2max, 'm');
+        Bvec3maxOnly = plot(etsRel_h, Bvec3max, 'm');
+        legend([Bvec1in, Bvec2in, Bvec3in, Bvec1out, Bvec1maxOnly], Bv1name, Bv2name, Bv3name, ...
+            'Reproduced', 'Largest only')
+
         xlabel('Time (hr)')
         ylabel('Magnetic Field (nT)')
         set(gca,'fontsize',16)
@@ -249,13 +262,9 @@ function BD = ICAdecomposition(moonName, parentName, ets, Bvec, descrip, SPHOUT,
         Bvec1diffPlot = plot(etsRel_h, Bvec1diff, 'b');
         Bvec2diffPlot = plot(etsRel_h, Bvec2diff, 'r');
         Bvec3diffPlot = plot(etsRel_h, Bvec3diff, 'g');
-        if ~strcmp(parentName,'Saturn')
-            Bvec1syndiffPlot = plot(etsRel_h, Bvec(1,:)-Bvec1Syn', 'm');
-            legend([Bvec1diffPlot,Bvec2diffPlot,Bvec3diffPlot, Bvec1syndiffPlot], Bv1name, ...
-                Bv2name, Bv3name, [Bv1name 'synodic only'])
-        else
-            legend([Bvec1diffPlot,Bvec2diffPlot,Bvec3diffPlot], Bv1name, Bv2name, Bv3name)
-        end
+        BmaxDiffPlot = plot(etsRel_h, Bvec(iMaxComp,:) - BvecCompMax', 'm');
+        legend([Bvec1diffPlot, Bvec2diffPlot, Bvec3diffPlot, BmaxDiffPlot], Bv1name, ...
+            Bv2name, Bv3name, 'Largest only')
         xlabel('Time (hr)')
         ylabel('Magnetic Field Error (nT)')
         set(gca,'fontsize',16)
@@ -275,12 +284,14 @@ function BD = ICAdecomposition(moonName, parentName, ets, Bvec, descrip, SPHOUT,
                     plot(-Bvec(3,:), Bvec(1,:), 'b')
                     xlabel(['-B_\phi ' parentName ' SIII (\approx -B_x ' moonName(1) ...
                         '\phi\Omega, nT)'])
-                    ylabel(['B_r ' parentName ' SIII (\approx -B_y ' moonName(1) '\phi\Omega, nT)'])
+                    ylabel(['B_r ' parentName ' SIII (\approx -B_y ' moonName(1) ...
+                        '\phi\Omega, nT)'])
                 else
                     plot(Bvec(3,:), -Bvec(1,:), 'b')
                     xlabel(['B_\phi ' parentName ' SIII (\approx B_x ' moonName(1) ...
                         '\phi\Omega, nT)'])
-                    ylabel(['-B_r ' parentName ' SIII (\approx B_y ' moonName(1) '\phi\Omega, nT)'])
+                    ylabel(['-B_r ' parentName ' SIII (\approx B_y ' moonName(1) ...
+                        '\phi\Omega, nT)'])
                 end
                 title([moonName ' equatorial plane hodogram, ' descrip])
             end

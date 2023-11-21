@@ -41,13 +41,16 @@ function CompareEarModels(LIVE_PLOTS, scName, xtn, SEQUENTIAL)
     disp(['Importing data files over ' parentName ' orbits.'])
     orbStr = [parentName ' data'];
     files = dir(fullfile('MAG', sc, ['*' xtn]));
-    nTot = 86400*3; % Swarm low-res (LR) decimated data are 1-day files with 1 s cadence, and there are 3 spacecraft
+    % Swarm low-res (LR) decimated data are 1-day files with 1 s cadence, and there are 3
+    % spacecraft
+    nTot = 86400*3;
     [BrSC, BthSC, BphiSC, r_km, theta, phi] = deal(zeros(1, nTot));
     for iFile=1:length(files)
         datFile = files(iFile).name;
         disp(['Loading ' sc ' MAG data from ' datFile '.'])
         fileID = fopen(fullfile('MAG', sc, datFile), 'r');
-        magData = textscan(fileID, fullOrbFormatSpec, inf, 'Delimiter', '', 'TextType', 'char', 'EndOfLine', '\r\n');
+        magData = textscan(fileID, fullOrbFormatSpec, inf, 'Delimiter', '', 'TextType', 'char', ...
+            'EndOfLine', '\r\n');
         fclose(fileID);
     
         iStart = 1 + 86400*(iFile-1);
@@ -94,8 +97,8 @@ function CompareEarModels(LIVE_PLOTS, scName, xtn, SEQUENTIAL)
     MPopts = -1:-1;
     for opt=opts
         for MPopt=MPopts
-            GetBplotAndLsq(ets, t_h, r_km, theta, phi, xyz_km, BrSC, BthSC, BphiSC, ...
-                scName, parentName, spkParent, orbStr, opt, MPopt, SEQUENTIAL);
+            GetBplotAndLsq(ets, t_h, r_km, theta, phi, xyz_km, BrSC, BthSC, BphiSC, scName, ...
+                parentName, spkParent, orbStr, opt, MPopt, SEQUENTIAL);
         end
     end
 

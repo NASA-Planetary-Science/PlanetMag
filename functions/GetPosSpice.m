@@ -1,4 +1,5 @@
-function [r_km, theta_rad, phi_rad, xyz_km, S3coords] = GetPosSpice(moonName, parentName, t_h, S3coords)
+function [r_km, theta_rad, phi_rad, xyz_km, S3coords] = GetPosSpice(moonName, parentName, t_h, ...
+    S3coords)
 % Retrieve locations of a target relative to a parent body at specified ephemeris times.
 %
 % Uses loaded SPICE kernels to determine the position of one body relative to another in a specific

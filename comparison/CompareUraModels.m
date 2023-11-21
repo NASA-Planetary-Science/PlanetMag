@@ -39,7 +39,8 @@ function CompareUraModels(LIVE_PLOTS, scName, SEQUENTIAL)
     orbStr = [parentName ' flyby'];
     disp(['Loading ' sc ' MAG data from ' datFile '.'])
     fileID = fopen(datFile,'r');
-    magData = textscan(fileID, fullOrbFormatSpec, inf, 'Delimiter', ',', 'TextType', 'char', 'EndOfLine', '\r\n');
+    magData = textscan(fileID, fullOrbFormatSpec, inf, 'Delimiter', ',', 'TextType', 'char', ...
+        'EndOfLine', '\r\n');
     fclose(fileID);
     
     t_UTC = magData{1}';
@@ -91,7 +92,8 @@ function CompareUraModels(LIVE_PLOTS, scName, SEQUENTIAL)
         
     
     %% Plot trajectory
-    t_h = linspace(cspice_str2et('1986-01-23T00:00:00.000'), cspice_str2et('1986-01-27T00:00:00.000'), 5000)/3600;
+    t_h = linspace(cspice_str2et('1986-01-23T00:00:00.000'), ...
+        cspice_str2et('1986-01-27T00:00:00.000'), 5000) / 3600;
     [~, ~, ~, xyzUSO_km, ~] = GetPosSpice(sc, parentName, t_h, 'USO');
     xyz_Rp = xyzUSO_km / Rp_km;
     x = xyz_Rp(1,:); y = xyz_Rp(2,:); z = xyz_Rp(3,:);
@@ -105,7 +107,9 @@ function CompareUraModels(LIVE_PLOTS, scName, SEQUENTIAL)
     pbaspect([1 1 1]);
     xlim([-axlim,axlim]);ylim([-axlim,axlim]);zlim([-axlim,axlim]);
     grid on;
-    xlabel('x USO (R_U, toward Sun)');ylabel('y USO (R_U), \approx orbital v');zlabel('z USO (R_U)');
+    xlabel('x USO (R_U, toward Sun)');
+    ylabel('y USO (R_U), \approx orbital v');
+    zlabel('z USO (R_U)');
     set(gca, 'Zdir', 'reverse')
     set(gca, 'Ydir', 'reverse')
     
@@ -132,7 +136,8 @@ function CompareUraModels(LIVE_PLOTS, scName, SEQUENTIAL)
     
     
     %% Plot L shell
-    t_h = linspace(cspice_str2et('1986-01-23T00:00:00.000'), cspice_str2et('1986-01-27T00:00:00.000'), 500)/3600;
+    t_h = linspace(cspice_str2et('1986-01-23T00:00:00.000'), ...
+        cspice_str2et('1986-01-27T00:00:00.000'), 500) / 3600;
     [r_km, theta, ~, ~, ~] = GetPosSpice(sc, parentName, t_h, 'SMU');
     lambda = pi - theta;
     r_Rp = r_km / Rp_km;

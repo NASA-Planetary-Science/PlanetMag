@@ -9,22 +9,22 @@ function parentName = LoadSpice(moonName, sc, spiceDir)
 % moonName : char, 1xC
 %   Name of target body. Currently implemented options are:
 %   
-%       - ``Moon``
-%       - ``Io``
-%       - ``Europa``
-%       - ``Ganymede``
-%       - ``Callisto``
-%       - ``Mimas``
-%       - ``Enceladus``
-%       - ``Dione``
-%       - ``Rhea``
-%       - ``Titan``
-%       - ``Miranda``
-%       - ``Ariel``
-%       - ``Umbriel``
-%       - ``Titania``
-%       - ``Oberon``
-%       - ``Triton``
+%       - ``'Moon'``
+%       - ``'Io'``
+%       - ``'Europa'``
+%       - ``'Ganymede'``
+%       - ``'Callisto'``
+%       - ``'Mimas'``
+%       - ``'Enceladus'``
+%       - ``'Dione'``
+%       - ``'Rhea'``
+%       - ``'Titan'``
+%       - ``'Miranda'``
+%       - ``'Ariel'``
+%       - ``'Umbriel'``
+%       - ``'Titania'``
+%       - ``'Oberon'``
+%       - ``'Triton'``
 %
 %   and their parent planets. The same binary kernels are loaded for any body within a particular
 %   planetary system, as these kernels contain information for all listed satellites and the
@@ -33,11 +33,11 @@ function parentName = LoadSpice(moonName, sc, spiceDir)
 %   Spacecraft name for which trajectories will be loaded from relevant binary SPICE kernels.
 %   Currently implemented options are:
 %
-%       - ``Swarm``
-%       - ``Galileo``
-%       - ``Juno``
-%       - ``Voyager 1``
-%       - ``Voyager 2``
+%       - ``'Swarm'``
+%       - ``'Galileo'``
+%       - ``'Juno'``
+%       - ``'Voyager 1'``
+%       - ``'Voyager 2'``
 %
 % spiceDir : char, 1xE, default='spice'
 %   Directory where SPICE kernel files are located.
@@ -88,7 +88,8 @@ function parentName = LoadSpice(moonName, sc, spiceDir)
             galileoSpicePrime = fullfile(sc, 's980326a.bsp');
             galileoSpiceGEM = fullfile(sc, 's000131a.bsp');
             galileoSpiceGMM = fullfile(sc, 's030916a.bsp');
-            spiceKernelList = { leapseconds planetData galileoSpicePrime galileoSpiceGEM galileoSpiceGMM generic frames };
+            spiceKernelList = { leapseconds planetData galileoSpicePrime galileoSpiceGEM ...
+                galileoSpiceGMM generic frames };
         case 'Juno'
             planetData = 'pck00010.tpc';
             generic = 'jup380s.bsp';

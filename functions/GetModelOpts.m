@@ -108,7 +108,8 @@ function [MagModel, CsheetModel, MPmodel, magModelDescrip, fEnd] = GetModelOpts(
                     magModelDescrip = 'IGRF13';
                     fEnd = 'IGRF13';
                 otherwise
-                    warning(['Magnetic field model option ' num2str(opt) ' not recognized. Defaulting to "None".'])
+                    warning(['Magnetic field model option ' num2str(opt) ...
+                        ' not recognized. Defaulting to "None".'])
                     MagModel = 'None';
                     CsheetModel = 'None';
                     magModelDescrip = 'None';
@@ -144,7 +145,8 @@ function [MagModel, CsheetModel, MPmodel, magModelDescrip, fEnd] = GetModelOpts(
             E1992a0 = 'Engle1992alpha0'; 
             % MPopt 4: Engle (1992) anti-sunward-tilt magnetopause field model
             E1992a180 = 'Engle1992alpha180';
-            % MPopt 5: Engle (1992) magnetopause field model with Bode (1994) time-dependent coefficients
+            % MPopt 5: Engle (1992) magnetopause field model with Bode (1994) time-dependent
+            % coefficients
             B1994 = 'Bode1994';
 
             if opt == 0; opt = 7; end % Set default to JRM33 + C2020
@@ -185,7 +187,8 @@ function [MagModel, CsheetModel, MPmodel, magModelDescrip, fEnd] = GetModelOpts(
                     magModelDescrip = 'JRM33 + C2020';
                     fEnd = 'JRM33C2020';
                 otherwise
-                    warning(['Magnetic field model option ' num2str(opt) ' not recognized. Defaulting to "None".'])
+                    warning(['Magnetic field model option ' num2str(opt) ...
+                        ' not recognized. Defaulting to "None".'])
                     MagModel = 'None';
                     CsheetModel = 'None';
                     magModelDescrip = 'None';
@@ -236,7 +239,8 @@ function [MagModel, CsheetModel, MPmodel, magModelDescrip, fEnd] = GetModelOpts(
                     magModelDescrip = 'Cassini 11 field + sheet';
                     fEnd = 'Cassini11';
                 otherwise
-                    warning(['Magnetic field model option ' num2str(opt) ' not recognized. Defaulting to "None".'])
+                    warning(['Magnetic field model option ' num2str(opt) ...
+                        ' not recognized. Defaulting to "None".'])
                     MagModel = 'None';
                     CsheetModel = 'None';
                     magModelDescrip = 'None';
@@ -275,7 +279,8 @@ function [MagModel, CsheetModel, MPmodel, magModelDescrip, fEnd] = GetModelOpts(
                     magModelDescrip = 'AH5';
                     fEnd = 'AH5';
                 otherwise
-                    warning(['Magnetic field model option ' num2str(opt) ' not recognized. Defaulting to "None".'])
+                    warning(['Magnetic field model option ' num2str(opt) ...
+                        ' not recognized. Defaulting to "None".'])
                     MagModel = 'None';
                     CsheetModel = 'None';
                     magModelDescrip = 'None';
@@ -316,7 +321,8 @@ function [MagModel, CsheetModel, MPmodel, magModelDescrip, fEnd] = GetModelOpts(
                     magModelDescrip = 'O8';
                     fEnd = 'O8';
                 otherwise
-                    warning(['Magnetic field model option ' num2str(opt) ' not recognized. Defaulting to "None".'])
+                    warning(['Magnetic field model option ' num2str(opt) ...
+                        ' not recognized. Defaulting to "None".'])
                     MagModel = 'None';
                     CsheetModel = 'None';
                     magModelDescrip = 'None';

@@ -1,13 +1,79 @@
-function GetBplotAndLsqMoon(ets, t_h, r_km, theta, phi, xyz_km, ...
-        r_RM, BxSC, BySC, BzSC, ...
-        scName, parentName, S3coords, moonName, era, fbStr, opt, MPopt, ...
-        SEQUENTIAL, jt_h)
+function GetBplotAndLsqMoon(ets, t_h, r_km, theta, phi, xyz_km, r_RM, BxSC, BySC, BzSC, scName, ...
+    parentName, S3coords, moonName, era, fbStr, opt, MPopt, SEQUENTIAL, dataDir, jt_h)
+% Plots and calculates comparisons between modeled and measured magnetic fields in the vicinity of
+% a target moon.
+%
+% Generates time series data of a specified combination of magnetic field models implemented in
+% P\lanetMag and compares against spacecraft measurements of the planetary magnetic field.
+% Comparisons are plotted and least-squares differences are calculated and printed to the terminal.
+% Intended as a final step in model validation; unlike GetBplotAndLsq, this function uses flyby
+% data in the vicinity of the target moon and the recorded excitation moments to model the magnetic
+% field applied by the parent planet.
+%
+% Note
+% ----
+% Because this function uses excitation moments saved from PlanetMag, that function must be run for
+% each of the input settings (``moonName``, ``opt``, ``MPopt``, and ``era``) before this one.
+%
+% Parameters
+% ----------
+% ets : double, 1xN
+%   Ephemeris times of measurements to compare in TDB seconds relative to J2000.
+% t_h : double, 1xN
+%   Ephemeris times of measurements to compare in TDB hours relative to J2000 (``ets/3600``).
+% r_km : double, 1xN
+%   Radial distance of measurement locations from planet center of mass in km.
+% theta : double, 1xN
+%   Colatitude of measurement locations from planet center of mass in radians.
+% phi : double, 1xN
+%   East longitude of measurement locations from planet center of mass in radians.
+% xyz_km : double, 3xN
+%   Cartesian coordinates of measurement locations in ``S3coords`` frame in km.
+% r_RM : double, 1xN
+%   Radial distance of measurement locations from moon center of mass in moon equatorial radii.
+% BxSC : double, 1xN
+%   x component (:math:`B_x`) of magnetic field measurements in ``S3coords`` frame in nT.
+% BySC : double, 1xN
+%   y component (:math:`B_y`) of magnetic field measurements in ``S3coords`` frame in nT.
+% BzSC : double, 1xN
+%   z component (:math:`B_z`) of magnetic field measurements in ``S3coords`` frame in nT.
+% scName : string, 1xS'
+%   Name(s) of spacecraft for measurement comparisons. Accepts a lone string or a list of strings.
+% parentName : char, 1xC
+%   Name of parent planet the evaluated model(s) and spacecraft measurements apply to.
+% S3coords : char, 1xD
+%   Standard coordinate frame (for the parent planet) used for evaluation of magnetic fields.
+% moonName : char, 1xE
+%   Name of target moon the evaluated model(s) and spacecraft measurements apply to.
+% era : char, 1xF
+%   Name of spacecraft mission time frame to use for excitation moments. Must be 
+% fbStr : char, 1xG
+%   Description of flyby(s) covered to place in legend labels.
+% opt : int
+%   Index of planetary magnetic field model. See GetModelOpts for more details and available
+%   options.
+% MPopt : int
+%   Index of magnetopause current magnetic field model. See GetModelOpts for more details and
+%   available options.
+% SEQUENTIAL : bool, default=0
+%   Whether to plot points by index or hours relative to a reference time (closest approach).
+% dataDir : char, 1xH, default='out'
+%   Name of directory where excitation moments are printed to disk.
+% jt_h : double, 1xM, default=[]
+%   Ephemeris times of Juno measurements in TDB hours relative to J2000 to use in data comparisons.
+
+% Part of the PlanetMag framework for evaluation and study of planetary magnetic fields.
+% Created by Corey J. Cochrane and Marshall J. Styczinski
+% Maintained by Marshall J. Styczinski
+% Contact: corey.j.cochrane@jpl.nasa.gov
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+    if ~exist('dataDir', 'var'); dataDir = 'out'; end
     if ~exist('jt_h', 'var'); jt_h = []; end
     if isempty(jt_h); JUNOTOO=0; else; JUNOTOO=1; end
     
     [MagModel, CsheetModel, MPmodel, magModelDescrip, fEnd] = GetModelOpts(parentName, opt, MPopt);
     magPhase = 0;
-    outData = 'out/';
     npts = length(ets);
     
     disp(['Evaluating ' magModelDescrip ' for flybys.'])
@@ -15,26 +81,25 @@ function GetBplotAndLsqMoon(ets, t_h, r_km, theta, phi, xyz_km, ...
         [Bvec, Mdip_nT, Odip_km] = KSMagFldJupiter(r_km, theta, phi, ets, 1);
     else
         [Bvec, Mdip_nT, Odip_km] = MagFldParent(parentName, r_km, theta, phi, MagModel, ...
-                                    CsheetModel, magPhase, 1);
+            CsheetModel, magPhase, 1);
     end
     if ~strcmp(MPmodel, 'None')
 
         nSW_pcc = 0.14 * ones(1,npts);
         vSW_kms = 400  * ones(1,npts);
         [mpBvec, OUTSIDE_MP] = MpauseFld(nSW_pcc, vSW_kms, [t_h, jt_h]*3600, xyz_km, ...
-            Mdip_nT, Odip_km, S3coords, parentName, MPmodel, SPHOUT);
+            Mdip_nT, Odip_km, S3coords, parentName, MPmodel, 1);
         Bvec = Bvec + mpBvec;
         Bvec(:,OUTSIDE_MP) = 0;
 
     end
     
-    spkParent = ['IAU_' upper(parentName)];
     spkMoon = ['IAU_' upper(moonName)];
     [BxS3, ByS3, BzS3] = Bsph2Bxyz(Bvec(1,:), Bvec(2,:), Bvec(3,:), theta, phi);
-    [Bx, By, Bz] = RotateVecSpice(BxS3, ByS3, BzS3, ets, spkParent, spkMoon);
+    [Bx, By, Bz] = RotateVecSpice(BxS3, ByS3, BzS3, ets, S3coords, spkMoon);
     
     % Get excitation moments from longer time series with each model
-    excMomentsFile = fullfile([outData 'Be1xyz_' moonName '_' era '_' fEnd '.txt']);
+    excMomentsFile = fullfile(dataDir, ['Be1xyz_' moonName '_' era '_' fEnd '.txt']);
     reloadData = dlmread(excMomentsFile, ',', 1, 0);
 
     Texc_h = reloadData(:,1);
@@ -69,7 +134,7 @@ function GetBplotAndLsqMoon(ets, t_h, r_km, theta, phi, xyz_km, ...
     %% Add Juno data if applicable    
     if JUNOTOO
         % Get excitation moments from longer time series with each model
-        excMomentsFile = fullfile([outData 'Be1xyz_' moonName '_Juno_' fEnd '.txt']);
+        excMomentsFile = fullfile(dataDir, ['Be1xyz_' moonName '_Juno_' fEnd '.txt']);
         reloadData = dlmread(excMomentsFile, ',', 1, 0);
 
         Texc_h = reloadData(:,1);
@@ -173,7 +238,8 @@ function GetBplotAndLsqMoon(ets, t_h, r_km, theta, phi, xyz_km, ...
     if JUNOTOO; jvlines(xJuno, b000ff); end
     xlabel(xDescrip);
     ylabel('Component difference (nT)');
-    legend('\Delta B_x', '\Delta B_y', '\Delta B_z', '\Delta B^e_x', '\Delta B^e_y', '\Delta B^e_z');
+    legend('\Delta B_x', '\Delta B_y', '\Delta B_z', '\Delta B^e_x', '\Delta B^e_y', ...
+        '\Delta B^e_z');
 
     RMmin = 2;
     iFar = find(r_RM > RMmin);
@@ -183,7 +249,7 @@ function GetBplotAndLsqMoon(ets, t_h, r_km, theta, phi, xyz_km, ...
     BzLsq = BzD(iFar).^2;
     chi2 = sum([BxLsq, ByLsq, BzLsq], 'all') / 3 / nptsFar;
     disp(['Across flybys, beyond ' num2str(RMmin) ...
-          ' R_' moonName(1) ', for this model chi^2 = ' sprintf('%.2f', chi2) '.'])
+        ' R_' moonName(1) ', for this model chi^2 = ' sprintf('%.2f', chi2) '.'])
     BxExcLsq = BxDexc(iFar).^2;
     ByExcLsq = ByDexc(iFar).^2;
     BzExcLsq = BzDexc(iFar).^2;

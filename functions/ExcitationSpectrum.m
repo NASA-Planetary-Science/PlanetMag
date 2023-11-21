@@ -5,10 +5,10 @@ function [Tpeak_h, B0vec, B1vec] = ExcitationSpectrum(moonName, nOsc, rate, Tint
 % Note
 % ----
 % Although this function returns degree-1 complex excitation moments, these moments cannot be used
-% for reproducing the input time series for any period except Tinterest_h. This is because the phase
-% for each peak in the FFT can be tuned only based on the time step of the input time series---if a
-% given oscillation period does not cover a whole number of time steps, the calculated phase of the
-% complex peak amplitude in the FFT will drift.
+% for reproducing the input time series for any period except Tinterest_h. This is because the
+% phase for each peak in the FFT can be tuned only based on the time step of the input time
+% series---if a given oscillation period does not cover a whole number of time steps, the
+% calculated phase of the complex peak amplitude in the FFT will drift.
 %
 % For calculating excitation moments, instead use ICAdecomposition.
 %
@@ -42,7 +42,8 @@ function [Tpeak_h, B0vec, B1vec] = ExcitationSpectrum(moonName, nOsc, rate, Tint
 % Returns
 % -------
 % Tpeak_h : double, 1xP
-%   Oscillation periods in hours associated with peaks in the excitation spectrum greater than 1 nT.
+%   Oscillation periods in hours associated with peaks in the excitation spectrum greater than
+%   1 nT.
 % B0vec : double, 1x3
 %   Background uniform magnetic field vector from evaluated time series.
 % B1vec : complex double, 3xP

@@ -1,5 +1,5 @@
 function CompareJupModels(LIVE_PLOTS, scName, moonName, orbNum, moonProx_RP, PlanetMinDist_RP, ...
-    PlanetMaxDist_RP, SEQUENTIAL, FULLORBITS, FLYBYS, JUNOTOO)
+    PlanetMaxDist_RP, dataDir, SEQUENTIAL, FULLORBITS, FLYBYS, JUNOTOO)
 % Compare magnetic field measurements from spacecraft near Jupiter against each implemented
 % magnetic field model.
 %
@@ -40,6 +40,8 @@ function CompareJupModels(LIVE_PLOTS, scName, moonName, orbNum, moonProx_RP, Pla
 % PlanetMaxDist_RP : double, default=20
 %   Maximum distance away from parent planet beyond which measurements will be ignored, in units of
 %   the parent planet's radius.
+% dataDir : char, 1xD, default='out'
+%   Name of directory where excitation moments are printed to disk.
 % SEQUENTIAL : bool, default=1
 %   Whether to plot points by index or hours relative to a reference time (J2000).
 % FULLORBITS : bool, default=1
@@ -66,6 +68,7 @@ function CompareJupModels(LIVE_PLOTS, scName, moonName, orbNum, moonProx_RP, Pla
     if ~exist('moonProx_RP', 'var'); moonProx_RP = 0.1; end
     if ~exist('PlanetMinDist_RP', 'var'); PlanetMinDist_RP = 10; end
     if ~exist('PlanetMaxDist_RP', 'var'); PlanetMaxDist_RP = 20; end
+    if ~exist('dataDir', 'var'); dataDir = 'out'; end
     if ~exist('SEQUENTIAL', 'var'); SEQUENTIAL = 1; end
     if ~exist('FULLORBITS', 'var'); FULLORBITS = 1; end
     if ~exist('FLYBYS', 'var'); FLYBYS = 0; end
@@ -120,9 +123,11 @@ function CompareJupModels(LIVE_PLOTS, scName, moonName, orbNum, moonProx_RP, Pla
             if orbNum ~= -1
                 disp(['Loading ' char(scName) ' MAG data for orbit ' num2str(orbList(i)) '.'])
             end
-            datFile = fullfile(['MAG/' char(scName) '/Jupiter/ORB' sprintf('%02d', orbList(i)) '_SYS3.TAB']);
+            datFile = fullfile(['MAG/' char(scName) '/Jupiter/ORB' sprintf('%02d', orbList(i)) ...
+                '_SYS3.TAB']);
             fileID = fopen(datFile,'r');
-            magData = textscan(fileID, fullOrbFormatSpec, inf, 'Delimiter', '', 'TextType', 'char', 'EndOfLine', '\r\n');
+            magData = textscan(fileID, fullOrbFormatSpec, inf, 'Delimiter', '', 'TextType', ...
+                'char', 'EndOfLine', '\r\n');
             fclose(fileID);
     
             t_UTC = [t_UTC, magData{1}'];
@@ -150,7 +155,8 @@ function CompareJupModels(LIVE_PLOTS, scName, moonName, orbNum, moonProx_RP, Pla
               'Planetocentric distance > ' num2str(PlanetMaxDist_RP) RPunit newline ...
               'Suspect measurements, |B| > ' num2str(finiteMax_nT) 'nT.'])
         % Full limits
-        exclude = find(rMinMoon_km/R_P < moonProx_RP | rJup_km/R_P < PlanetMinDist_RP | rJup_km/R_P > PlanetMaxDist_RP | BmagSC > finiteMax_nT);
+        exclude = find(rMinMoon_km/R_P < moonProx_RP | rJup_km/R_P < PlanetMinDist_RP ...
+            | rJup_km/R_P > PlanetMaxDist_RP | BmagSC > finiteMax_nT);
         % No parent planet distance limits (full magnetosphere)
         %exclude = find(rMinMoon_km/R_P < moonProx_RP | BmagSC > finiteMax_nT);
         ets(exclude) = [];
@@ -174,11 +180,14 @@ function CompareJupModels(LIVE_PLOTS, scName, moonName, orbNum, moonProx_RP, Pla
         flybyFormatSpec = '%23s%10f%10f%10f%10f%7f%7f%7f%f%[^\n\r]';
         for i=1:length(fbList)
             if orbNum ~= -1
-                disp(['Loading ' char(scName) ' MAG data for flyby ' moonName(1) num2str(orbList(i)) '.'])
+                disp(['Loading ' char(scName) ' MAG data for flyby ' moonName(1) ...
+                    num2str(orbList(i)) '.'])
             end
-            datFile = fullfile(['MAG/' char(scName) '/' moonName '/ORB' sprintf('%02d_', fbList(i)) fbCode '_SYS3.TAB']);
+            datFile = fullfile(['MAG/' char(scName) '/' moonName '/ORB' sprintf('%02d_', ...
+                fbList(i)) fbCode '_SYS3.TAB']);
             fileID = fopen(datFile,'r');
-            magData = textscan(fileID, flybyFormatSpec, inf, 'Delimiter', '', 'TextType', 'char', 'EndOfLine', '\r\n');
+            magData = textscan(fileID, flybyFormatSpec, Inf, 'Delimiter', '', 'TextType', ...
+                'char', 'EndOfLine', '\r\n');
             fclose(fileID);
     
             fbt_UTC = [fbt_UTC, magData{1}'];
@@ -204,7 +213,8 @@ function CompareJupModels(LIVE_PLOTS, scName, moonName, orbNum, moonProx_RP, Pla
         disp(['Loading FGM data for Juno ' moonName ' flyby on orbit ' num2str(fbjNum) '.'])
         junoFlybyFormatSpec = '%23s%f%f%f%f%f%f%f%[^\n\r]';
         fileID = fopen(datFile,'r');
-        magData = textscan(fileID, junoFlybyFormatSpec, inf, 'Delimiter', '', 'TextType', 'char', 'EndOfLine', '\r\n');
+        magData = textscan(fileID, junoFlybyFormatSpec, Inf, 'Delimiter', '', 'TextType', ...
+            'char', 'EndOfLine', '\r\n');
         
         jt_UTC = magData{1}';
         jBx = magData{2}';
@@ -240,13 +250,12 @@ function CompareJupModels(LIVE_PLOTS, scName, moonName, orbNum, moonProx_RP, Pla
     for opt=opts
         for MPopt=MPopts
             if FULLORBITS
-                GetBplotAndLsq(ets, t_h, r_km, theta, phi, xyz_km, BrSC, BthSC, BphiSC, ...
-                    scName, parentName, spkParent, orbStr, opt, MPopt, SEQUENTIAL);
+                GetBplotAndLsq(ets, t_h, r_km, theta, phi, xyz_km, BrSC, BthSC, BphiSC, scName, ...
+                    parentName, spkParent, orbStr, opt, MPopt, SEQUENTIAL);
             else
-                GetBplotAndLsqMoon(fbets, fbt_h, fbr_km, fbtheta, fbphi, fbxyz_km, ...
-                    r_RM, BxSC, BySC, BzSC, ...
-                    scName, parentName, spkParent, moonName, char(scName), fbStr, opt, MPopt, ...
-                    SEQUENTIAL, jt_h);
+                GetBplotAndLsqMoon(fbets, fbt_h, fbr_km, fbtheta, fbphi, fbxyz_km, r_RM, BxSC, ...
+                    BySC, BzSC, scName, parentName, spkParent, moonName, char(scName), fbStr, ...
+                    opt, MPopt, SEQUENTIAL, dataDir, jt_h);
             end
         end
     end

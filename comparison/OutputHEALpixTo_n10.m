@@ -8,8 +8,8 @@ function OutputHEALpixTo_n10(hpDir, hpFname, outDir, outFbase)
 % Parameters
 % ----------
 % hpDir : char, 1xC, default=fullfile('~', 'MoonMag', 'outData')
-%   Directory containing a file with pixel locations on a HEALpix grid where function outputs are to
-%   be compared.
+%   Directory containing a file with pixel locations on a HEALpix grid where function outputs are
+%   to be compared.
 % hpFname : char, 1xD, default='healpix_locs.txt'
 %   File name where HEALpix locations are stored.
 % outDir : char, 1xE, default='out'

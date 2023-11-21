@@ -1,11 +1,67 @@
-function GetBplotAndLsq(ets, t_h, r_km, theta, phi, xyz_km, BrSC, BthSC, BphiSC, ...
-        scName, parentName, S3coords, orbStr, opt, MPopt, SEQUENTIAL, jt_h)
+function GetBplotAndLsq(ets, t_h, r_km, theta, phi, xyz_km, BrSC, BthSC, BphiSC, scName, ...
+    parentName, S3coords, orbStr, opt, MPopt, SEQUENTIAL, jt_h)
+% Plots and calculates comparisons between modeled and measured magnetic fields.
+%
+% Generates time series data of a specified combination of magnetic field models implemented in
+% P\lanetMag and compares against spacecraft measurements of the planetary magnetic field.
+% Comparisons are plotted and least-squares differences are calculated and printed to the terminal.
+% Intended as a final step in model validation.
+%
+% Parameters
+% ----------
+% ets : double, 1xN
+%   Ephemeris times of measurements to compare in TDB seconds relative to J2000.
+% t_h : double, 1xN
+%   Ephemeris times of measurements to compare in TDB hours relative to J2000 (``ets/3600``).
+% r_km : double, 1xN
+%   Radial distance of measurement locations from planet center of mass in km.
+% theta : double, 1xN
+%   Colatitude of measurement locations from planet center of mass in radians.
+% phi : double, 1xN
+%   East longitude of measurement locations from planet center of mass in radians.
+% xyz_km : double, 3xN
+%   Cartesian coordinates of measurement locations in ``S3coords`` frame in km.
+% BrSC : double, 1xN
+%   Radial component (:math:`B_r`) of magnetic field measurements in ``S3coords`` frame in nT.
+% BthSC : double, 1xN
+%   Colatitudinal component (:math:`B_\theta`) of magnetic field measurements in ``S3coords`` frame
+%   in nT.
+% BphiSC : double, 1xN
+%   Azimuthal component (:math:`B_\phi`) of magnetic field measurements in ``S3coords`` frame in
+%   nT.
+% scName : string, 1xS'
+%   Name(s) of spacecraft for measurement comparisons. Accepts a lone string or a list of strings.
+% parentName : char, 1xC
+%   Name of parent planet the evaluated model(s) and spacecraft measurements apply to.
+% S3coords : char, 1xD
+%   Standard coordinate frame used for evaluation of magnetic fields.
+% orbStr : char, 1xE
+%   Description of orbit(s) covered to place in legend labels.
+% opt : int
+%   Index of planetary magnetic field model. See GetModelOpts for more details and available
+%   options.
+% MPopt : int
+%   Index of magnetopause current magnetic field model. See GetModelOpts for more details and
+%   available options.
+% SEQUENTIAL : bool, default=0
+%   Whether to plot points by index or hours relative to a reference time.
+% jt_h : double, 1xM, default=[]
+%   Ephemeris times of Juno measurements in TDB hours relative to J2000 to use in data comparisons.
+
+% Part of the PlanetMag framework for evaluation and study of planetary magnetic fields.
+% Created by Corey J. Cochrane and Marshall J. Styczinski
+% Maintained by Marshall J. Styczinski
+% Contact: corey.j.cochrane@jpl.nasa.gov
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    
+    if ~exist('SEQUENTIAL', 'var'); SEQUENTIAL = 0; end
+    if ~exist('jt_h', 'var'); jt_h = []; end
+
     npts = length(t_h);
     if length(scName) > 1
         scName = strjoin(scName, '+');
     end
     
-    if ~exist('jt_h', 'var'); jt_h = []; end
     if isempty(jt_h); JUNOTOO=0; else; JUNOTOO=1; end
     
     [MagModel, CsheetModel, MPmodel, magModelDescrip, ~] = GetModelOpts(parentName, opt, MPopt);
@@ -17,7 +73,7 @@ function GetBplotAndLsq(ets, t_h, r_km, theta, phi, xyz_km, BrSC, BthSC, BphiSC,
         [Bvec, Mdip_nT, Odip_km] = KSMagFldJupiter(r_km, theta, phi, ets, 1);
     else
         [Bvec, Mdip_nT, Odip_km] = MagFldParent(parentName, r_km, theta, phi, MagModel, ...
-                                    CsheetModel, magPhase, 1, Nmax);
+            CsheetModel, magPhase, 1, Nmax);
     end
     if ~strcmp(MPmodel, 'None')
 

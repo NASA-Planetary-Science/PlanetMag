@@ -39,7 +39,8 @@ function CompareNepModels(LIVE_PLOTS, scName, SEQUENTIAL)
     orbStr = [parentName ' flyby'];
     disp(['Loading ' sc ' MAG data from ' datFile '.'])
     fileID = fopen(datFile,'r');
-    magData = textscan(fileID, fullOrbFormatSpec, inf, 'Delimiter', '', 'TextType', 'char', 'EndOfLine', '\r\n');
+    magData = textscan(fileID, fullOrbFormatSpec, inf, 'Delimiter', '', 'TextType', 'char', ...
+        'EndOfLine', '\r\n');
     fclose(fileID);
     
     t_UTC = magData{1}';
@@ -117,7 +118,7 @@ function CompareNepModels(LIVE_PLOTS, scName, SEQUENTIAL)
     for opt=opts
         for MPopt=MPopts
             GetBplotAndLsqNeptune(ets, t_h, r_km, theta, phi, xyz_km, BrSC, BthSC, BphiSC, ...
-                scName, parentName, spkParent, orbStr, opt, MPopt, SEQUENTIAL, exclude);
+                scName, spkParent, orbStr, opt, MPopt, SEQUENTIAL, 1, 1, 1, 1);
         end
     end
     
@@ -149,7 +150,8 @@ function CompareNepModels(LIVE_PLOTS, scName, SEQUENTIAL)
     thCA = deg2rad(12.45913);
     phiCA = deg2rad(-167.7);
     CA = [rCA*sin(thCA)*cos(phiCA), rCA*sin(thCA)*sin(phiCA), rCA*cos(thCA)];
-    CAlineSC = plot3([0,CA(1)], [0,CA(2)], [0,CA(3)], 'Color', 'k', 'LineWidth', 2); CAnameSC = "CA";
+    CAlineSC = plot3([0,CA(1)], [0,CA(2)], [0,CA(3)], 'Color', 'k', 'LineWidth', 2);
+    CAnameSC = "CA";
     scatter3(CA(1), CA(1), CA(1), 15, 'k')
     
     [~, ~, ~, xyz_km, ~] = GetPosSpice(sc, parentName, t_h, 'NLS');
@@ -165,14 +167,16 @@ function CompareNepModels(LIVE_PLOTS, scName, SEQUENTIAL)
     
     [~, ~, ~, CAN, ~] = GetPosSpice(sc, parentName, tNLS_h, 'NLS');
     CAN = CAN / Rp_km;
-    CAline = plot3([0,CAN(1)], [0,CAN(2)], [0,CAN(3)], 'Color', 'y', 'LineWidth', 2); CAname = "CA (NLS)";
+    CAline = plot3([0,CAN(1)], [0,CAN(2)], [0,CAN(3)], 'Color', 'y', 'LineWidth', 2);
+    CAname = "CA (NLS)";
     scatter3(CAN(1), CAN(1), CAN(1), 15, 'y')
     
     [~, ~, ~, xyz_km, ~] = GetPosSpice(sc, parentName, t_h, 'NLS_RADEC');
     [x, y, z] = GetDespun(xyz_km/Rp_km, despin);
-    scTraj{4} = plot3(x,y,z, 'LineWidth', 1.5, 'Color', 'm'); name{4} = "SPICE in NLS as defined in O8";
+    scTraj{3} = plot3(x,y,z, 'LineWidth', 1.5, 'Color', 'm');
+    name{3} = "SPICE in NLS as defined in O8";
     
-    legend([scTraj{1} scTraj{2} scTraj{4}], [name{1}, name{2}, name{4}])
+    legend([scTraj{1} scTraj{2} scTraj{3}], [name{1}, name{2}, name{3}])
     
     function [x, y, z] = GetDespun(xyz_Rp, despin)
         r_Rp = sqrt(xyz_Rp(1,:).^2 + xyz_Rp(2,:).^2 + xyz_Rp(3,:).^2);

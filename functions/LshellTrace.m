@@ -69,8 +69,9 @@ function L = LshellTrace(parentName, opt, MPopt, DO_MPAUSE, sc, t_h, Nmaxin)
             if r_km < Rp_km
                 break
             end
-            [nextB, nextBmag] = GetB(r_km, theta, phi, xyzLine_km, ets(i), Nmax, NmaxExt, Rp_km, ...
-                MagModel, CsheetModel, MPmodel, magModelDescrip, parentName, S3coords, g, h);
+            [nextB, nextBmag] = GetB(r_km, theta, phi, xyzLine_km, ets(i), Nmax, NmaxExt, ...
+                Rp_km, MagModel, CsheetModel, MPmodel, magModelDescrip, parentName, S3coords, ...
+                g, h);
             if nextBmag == 0
                 if xyzLine_km == xyz0_km(:,i); break; end
                 forward = -1;
