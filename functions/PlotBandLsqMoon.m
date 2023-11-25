@@ -1,13 +1,14 @@
-function GetBplotAndLsqMoon(ets, t_h, r_km, theta, phi, xyz_km, r_RM, BxSC, BySC, BzSC, scName, ...
-    parentName, S3coords, moonName, era, fbStr, opt, MPopt, SEQUENTIAL, dataDir, coeffPath, jt_h)
+function PlotBandLsqMoon(ets, t_h, r_km, theta, phi, xyz_km, r_RM, BxSC, BySC, BzSC, scName, ...
+    parentName, S3coords, moonName, era, fbStr, opt, MPopt, SEQUENTIAL, dataDir, figDir, ...
+    figXtn, LIVE_PLOTS, coeffPath, jt_h)
 % Plots and calculates comparisons between modeled and measured magnetic fields in the vicinity of
 % a target moon.
 %
 % Generates time series data of a specified combination of magnetic field models implemented in
 % P\lanetMag and compares against spacecraft measurements of the planetary magnetic field.
 % Comparisons are plotted and least-squares differences are calculated and printed to the terminal.
-% Intended as a final step in model validation; unlike GetBplotAndLsq, this function uses flyby
-% data in the vicinity of the target moon and the recorded excitation moments to model the magnetic
+% Intended as a final step in model validation; unlike PlotBandLsq, this function uses flyby data
+% in the vicinity of the target moon and the recorded excitation moments to model the magnetic
 % field applied by the parent planet.
 %
 % Note
@@ -59,7 +60,13 @@ function GetBplotAndLsqMoon(ets, t_h, r_km, theta, phi, xyz_km, r_RM, BxSC, BySC
 %   Whether to plot points by index or hours relative to a reference time (closest approach).
 % dataDir : char, 1xH, default='out'
 %   Name of directory where excitation moments are printed to disk.
-% coeffPath : char, 1xE, default='modelCoeffs'
+% figDir : char, 1xI, default='figures'
+%   Directory to use for output figures.
+% figXtn : char, 1xF, default='pdf'
+%   Extension to use for figures, which determines the file type.
+% LIVE_PLOTS : bool, default=0
+%   Whether to load interactive figure windows for plots (true) or print them to disk (false).
+% coeffPath : char, 1xJ, default='modelCoeffs'
 %   Directory containing model coefficients files.
 % jt_h : double, 1xM, default=[]
 %   Ephemeris times of Juno measurements in TDB hours relative to J2000 to use in data comparisons.
@@ -72,8 +79,17 @@ function GetBplotAndLsqMoon(ets, t_h, r_km, theta, phi, xyz_km, r_RM, BxSC, BySC
 
     if ~exist('dataDir', 'var'); dataDir = 'out'; end
     if ~exist('coeffpath', 'var'); coeffPath = 'modelCoeffs'; end
+    if ~exist('figDir', 'var'); figDir = 'figures'; end
+    if ~exist('figXtn', 'var'); figXtn = 'pdf'; end
+    if ~exist('LIVE_PLOTS', 'var'); LIVE_PLOTS = 0; end
     if ~exist('jt_h', 'var'); jt_h = []; end
     if isempty(jt_h); JUNOTOO=0; else; JUNOTOO=1; end
+
+    if LIVE_PLOTS
+        figVis = 'on';
+    else
+        figVis = 'off';
+    end
     
     [MagModel, CsheetModel, MPmodel, magModelDescrip, fEnd] = GetModelOpts(parentName, opt, MPopt);
     magPhase = 0;
@@ -195,7 +211,7 @@ function GetBplotAndLsqMoon(ets, t_h, r_km, theta, phi, xyz_km, r_RM, BxSC, BySC
         scName = strjoin(scName, '+');
     end
     b000ff = '#B000FF';
-    figure; hold on;
+    fig = figure('Visible', figVis); hold on;
     set(gcf,'Name', ['Bx, ' fbStr ', ' magModelDescrip]);
     plot(xx, Bx);
     plot(xx, BxSC);
@@ -204,7 +220,13 @@ function GetBplotAndLsqMoon(ets, t_h, r_km, theta, phi, xyz_km, r_RM, BxSC, BySC
     xlabel(xDescrip);
     ylabel('Vector component (nT)');
     legend(magModelDescrip, strcat(scName, ' MAG'), excStr);
-    figure; hold on;
+    if ~LIVE_PLOTS
+        outFig = fullfile(figDir, [moonName 'BxFlybyComparison' magModelDescrip '.' figXtn]);
+        saveas(fig, outFig)
+        disp(['Figure saved to ' outFig '.'])
+    end
+
+    fig = figure('Visible', figVis); hold on;
     set(gcf,'Name', ['By, ' fbStr ', ' magModelDescrip]);
     plot(xx, By);
     plot(xx, BySC);
@@ -213,7 +235,13 @@ function GetBplotAndLsqMoon(ets, t_h, r_km, theta, phi, xyz_km, r_RM, BxSC, BySC
     xlabel(xDescrip);
     ylabel('Vector component (nT)');
     legend(magModelDescrip, strcat(scName, ' MAG'), excStr);
-    figure; hold on;
+    if ~LIVE_PLOTS
+        outFig = fullfile(figDir, [moonName 'ByFlybyComparison' magModelDescrip '.' figXtn]);
+        saveas(fig, outFig)
+        disp(['Figure saved to ' outFig '.'])
+    end
+
+    fig = figure('Visible', figVis); hold on;
     set(gcf,'Name', ['Bz, ' fbStr ', ' magModelDescrip]);
     plot(xx, Bz);
     plot(xx, BzSC);
@@ -222,6 +250,11 @@ function GetBplotAndLsqMoon(ets, t_h, r_km, theta, phi, xyz_km, r_RM, BxSC, BySC
     xlabel(xDescrip);
     ylabel('Vector component (nT)');
     legend(magModelDescrip, strcat(scName, ' MAG'), excStr);
+    if ~LIVE_PLOTS
+        outFig = fullfile(figDir, [moonName 'BzFlybyComparison' magModelDescrip '.' figXtn]);
+        saveas(fig, outFig)
+        disp(['Figure saved to ' outFig '.'])
+    end
 
     BxD = Bx - BxSC;
     ByD = By - BySC;
@@ -230,7 +263,7 @@ function GetBplotAndLsqMoon(ets, t_h, r_km, theta, phi, xyz_km, r_RM, BxSC, BySC
     ByDexc = ByExc - BySC;
     BzDexc = BzExc - BzSC;
 
-    figure; hold on;
+    fig = figure('Visible', figVis); hold on;
     set(gcf,'Name', ['IAU vector comp diffs, ' fbStr ', ' magModelDescrip ' - MAG']);
     plot(xx, BxD);
     plot(xx, ByD);
@@ -243,6 +276,11 @@ function GetBplotAndLsqMoon(ets, t_h, r_km, theta, phi, xyz_km, r_RM, BxSC, BySC
     ylabel('Component difference (nT)');
     legend('\Delta B_x', '\Delta B_y', '\Delta B_z', '\Delta B^e_x', '\Delta B^e_y', ...
         '\Delta B^e_z');
+    if ~LIVE_PLOTS
+        outFig = fullfile(figDir, [moonName 'DeltaBflyby' magModelDescrip '.' figXtn]);
+        saveas(fig, outFig)
+        disp(['Figure saved to ' outFig '.'])
+    end
 
     RMmin = 2;
     iFar = find(r_RM > RMmin);

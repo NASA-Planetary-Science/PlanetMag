@@ -1,5 +1,5 @@
-function BD = ICAdecomposition(moonName, parentName, ets, Bvec, descrip, SPHOUT, ...
-    PLOT_DIAGNOSTIC, COMPARE_SEUFERT, LIVE_PLOTS)
+function BD = ICAdecomposition(moonName, parentName, ets, Bvec, magModelDescrip, SPHOUT, ...
+    PLOT_DIAGNOSTIC, COMPARE_SEUFERT, LIVE_PLOTS, figDir, figXtn)
 % Decomposes the input magnetic field vector time series into complex excitation moments using
 % :dfn:`Independent Component Analysis (ICA)`.
 %
@@ -48,7 +48,7 @@ function BD = ICAdecomposition(moonName, parentName, ets, Bvec, descrip, SPHOUT,
 %   relative to J2000.
 % Bvec : double, 3xN
 %   Magnetic field vectors at each measurement time.
-% descrip : char, 1xE
+% magModelDescrip : char, 1xE
 %   Text description of the magnetic field model that was evalauted for the input time series.
 % SPHOUT : bool, default=0
 %   Whether to return vectors aligned to spherical coordinate axes (true) or cartesian (false).
@@ -61,6 +61,10 @@ function BD = ICAdecomposition(moonName, parentName, ets, Bvec, descrip, SPHOUT,
 %   Jupiter's moons.
 % LIVE_PLOTS : bool, default=0
 %   Whether to load interactive figure windows for plots (true) or print them to disk (false).
+% figDir : char, 1xF, default='figures'
+%   Whether to load interactive figure windows for plots (true) or print them to disk (false).
+% figXtn : char, 1xG, default='pdf'
+%   Extension to use for figures, which determines the file type.
 %
 % Returns
 % -------
@@ -97,6 +101,13 @@ function BD = ICAdecomposition(moonName, parentName, ets, Bvec, descrip, SPHOUT,
     if ~exist('PLOT_DIAGNOSTIC', 'var'); PLOT_DIAGNOSTIC = 1; end
     if ~exist('COMPARE_SEUFERT', 'var'); COMPARE_SEUFERT = 0; end
     if ~exist('LIVE_PLOTS', 'var'); LIVE_PLOTS = 0; end
+    if ~exist('figDir', 'var'); figDir = 'figures'; end
+
+    if LIVE_PLOTS
+        figVis = 'on';
+    else
+        figVis = 'off';
+    end
 
     ets=ets(:); % Ensures ets is a row vector
     npts = length(ets);
@@ -200,24 +211,6 @@ function BD = ICAdecomposition(moonName, parentName, ets, Bvec, descrip, SPHOUT,
 
     if PLOT_DIAGNOSTIC
 
-    %     figure
-    %     hold on; grid on; box on;
-    %     for i=1:MagFreqs
-    %         plot([1/f(i)/3600,1/f(i)/3600],[1e-8,abs(Bdxi(i))],'b','linewidth',2)
-    %         plot([1/f(i)/3600,1/f(i)/3600],[1e-8,abs(Bdxq(i))],'r','linewidth',2)
-    %     end
-    %     ylabel('Magnetic Field (nT)'); xlabel('Period (hr)');
-    %     set(gca,'fontsize',12); set(gca, 'YScale', 'log'); set(gca, 'XScale', 'log');
-    %
-    %     figure
-    %     hold on; grid on; box on;
-    %     for i=1:MagFreqs
-    %         plot([1/f(i)/3600,1/f(i)/3600],[1e-8,abs(Bdyi(i))],'b','linewidth',2)
-    %         plot([1/f(i)/3600,1/f(i)/3600],[1e-8,abs(Bdyq(i))],'r','linewidth',2)
-    %     end
-    %     ylabel('Magnetic Field (nT)'); xlabel('Period (hr)');
-    %     set(gca,'fontsize',12); set(gca, 'YScale', 'log'); set(gca, 'XScale', 'log');
-
         etsRel_h = (ets-ets(1))/3600;
 
         cosSyn = X(:, 2*(find(f==fMax))-1);
@@ -235,9 +228,10 @@ function BD = ICAdecomposition(moonName, parentName, ets, Bvec, descrip, SPHOUT,
                 BvecCompMax = Bvec3max;
         end
 
-        figure; hold on; box on; grid on;
-        set(gcf,'Name', [descrip ' model vs. reconstruction, first 200h']);
-        title([moonName ' ' descrip ' model vs. reconstruction, first 200h'])
+        fig = figure('Visible', figVis);
+        hold on; box on; grid on;
+        set(gcf,'Name', [magModelDescrip ' model vs. reconstruction, first 200h']);
+        title([moonName ' ' magModelDescrip ' model vs. reconstruction, first 200h'])
         Bvec1in = plot(etsRel_h, Bvec(1,:), 'b');
         Bvec2in = plot(etsRel_h, Bvec(2,:), 'r');
         Bvec3in = plot(etsRel_h, Bvec(3,:), 'g');
@@ -255,10 +249,16 @@ function BD = ICAdecomposition(moonName, parentName, ets, Bvec, descrip, SPHOUT,
         ylabel('Magnetic Field (nT)')
         set(gca,'fontsize',16)
         xlim([0 200])
+        if ~LIVE_PLOTS
+            outFig = fullfile(figDir, [moonName 'BVecReconVs' magModelDescrip '.' figXtn]);
+            saveas(fig, outFig)
+            disp(['Figure saved to ' outFig '.'])
+        end
 
-        figure; hold on; box on; grid on;
-        set(gcf,'Name', [descrip ' model vs. reconstruction diff, first 200h']);
-        title([moonName ' ' descrip ' model vs. reconstruction diff, first 200h'])
+        fig = figure('Visible', figVis);
+        hold on; box on; grid on;
+        set(gcf,'Name', [magModelDescrip ' model vs. reconstruction diff, first 200h']);
+        title([moonName ' ' magModelDescrip ' model vs. reconstruction diff, first 200h'])
         Bvec1diffPlot = plot(etsRel_h, Bvec1diff, 'b');
         Bvec2diffPlot = plot(etsRel_h, Bvec2diff, 'r');
         Bvec3diffPlot = plot(etsRel_h, Bvec3diff, 'g');
@@ -269,16 +269,21 @@ function BD = ICAdecomposition(moonName, parentName, ets, Bvec, descrip, SPHOUT,
         ylabel('Magnetic Field Error (nT)')
         set(gca,'fontsize',16)
         xlim([0 200])
+        if ~LIVE_PLOTS
+            outFig = fullfile(figDir, [moonName 'DeltaBreconVs' magModelDescrip '.' figXtn]);
+            saveas(fig, outFig)
+            disp(['Figure saved to ' outFig '.'])
+        end
 
-        figure; box on;
-        set(gcf,'Name', [moonName ' ' descrip ' hodogram']);
+        fig = figure('Visible', figVis); box on;
+        set(gcf,'Name', [moonName ' ' magModelDescrip ' hodogram']);
         if SPHOUT
             if strcmp(parentName,'Saturn')
                 plot(-Bvec(1,:), -Bvec(2,:), 'b')
                 xlabel(['-B_r ' parentName ' SIII (\approx B_y ' moonName(1) '\phi\Omega, nT)'])
                 ylabel(['-B_\theta ' parentName ' SIII (\approx B_z ' moonName(1) ...
                     '\phi\Omega, nT)'])
-                title([moonName ' spin-parent plane hodogram, ' descrip])
+                title([moonName ' spin-parent plane hodogram, ' magModelDescrip])
             else
                 if COMPARE_SEUFERT
                     plot(-Bvec(3,:), Bvec(1,:), 'b')
@@ -293,25 +298,30 @@ function BD = ICAdecomposition(moonName, parentName, ets, Bvec, descrip, SPHOUT,
                     ylabel(['-B_r ' parentName ' SIII (\approx B_y ' moonName(1) ...
                         '\phi\Omega, nT)'])
                 end
-                title([moonName ' equatorial plane hodogram, ' descrip])
+                title([moonName ' equatorial plane hodogram, ' magModelDescrip])
             end
         else
             if strcmp(parentName,'Saturn')
                 plot(Bvec(1,:), Bvec(3,:), 'b')
                 xlabel(['B_x IAU (\approx B_y ' moonName(1) '\phi\Omega, nT)'])
                 ylabel(['B_z IAU (\approx B_z ' moonName(1) '\phi\Omega, nT)'])
-                title([moonName ' spin-parent plane hodogram, ' descrip])
+                title([moonName ' spin-parent plane hodogram, ' magModelDescrip])
             else
                 plot(Bvec(2,:), Bvec(1,:), 'b')
                 ylabel(['B_x IAU (\approx B_y ' moonName(1) '\phi\Omega, nT)'])
                 xlabel(['B_y IAU (\approx -B_x ' moonName(1) '\phi\Omega, nT)'])
-                title([moonName ' equatorial plane hodogram, ' descrip])
+                title([moonName ' equatorial plane hodogram, ' magModelDescrip])
             end
         end
         ylim([-max(abs(ylim())), max(abs(ylim()))])
         xlim(ylim())
         grid on;
         set(gca,'fontsize',16)
+        if ~LIVE_PLOTS
+            outFig = fullfile(figDir, [moonName 'Hodogram' magModelDescrip '.' figXtn]);
+            saveas(fig, outFig)
+            disp(['Figure saved to ' outFig '.'])
+        end
     end
 
 end

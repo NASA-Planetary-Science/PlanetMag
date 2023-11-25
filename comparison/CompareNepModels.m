@@ -1,4 +1,4 @@
-function CompareNepModels(LIVE_PLOTS, scName, SEQUENTIAL)
+function CompareNepModels(LIVE_PLOTS, scName, SEQUENTIAL, coeffPath, figDir, figXtn)
 % Compare magnetic field measurements from spacecraft near Neptune against each implemented
 % magnetic field model.
 %
@@ -18,6 +18,12 @@ function CompareNepModels(LIVE_PLOTS, scName, SEQUENTIAL)
 % SEQUENTIAL : bool, default=0
 %   Whether to plot points by index or hours relative to a reference time (typically closest
 %   approach).
+% coeffPath : char, 1xC, default='modelCoeffs'
+%   Directory containing model coefficients files.
+% figDir : char, 1xD, default='figures'
+%   Directory to use for output figures.
+% figXtn : char, 1xE, default='pdf'
+%   Extension to use for figures, which determines the file type.
 
 % Part of the PlanetMag framework for evaluation and study of planetary magnetic fields.
 % Created by Corey J. Cochrane and Marshall J. Styczinski
@@ -28,6 +34,8 @@ function CompareNepModels(LIVE_PLOTS, scName, SEQUENTIAL)
     if ~exist('LIVE_PLOTS', 'var'); LIVE_PLOTS = 0; end
     if ~exist('scName', 'var'); scName = "Voyager 2"; end
     if ~exist('SEQUENTIAL', 'var'); SEQUENTIAL = 0; end
+    if ~exist('figDir', 'var'); figDir = 'figures'; end
+    if ~exist('figXtn', 'var'); figXtn = 'pdf'; end
 
     cspice_kclear;
     parentName = 'Neptune';
@@ -93,7 +101,8 @@ function CompareNepModels(LIVE_PLOTS, scName, SEQUENTIAL)
         x = r .* sin(th) .* cos(ph);
         y = r .* sin(th) .* sin(ph);
         z = r .* cos(th);
-        figure; hold on
+
+        fig = figure('Visible', figVis); hold on
         dx = x - xyz_km(1,:);
         dy = y - xyz_km(2,:);
         dz = z - xyz_km(3,:);
@@ -106,9 +115,14 @@ function CompareNepModels(LIVE_PLOTS, scName, SEQUENTIAL)
         ylabel('Coordinate diff (km)');
         title('Location difference in NLS frame, PDS - SPICE');
         legend()
+        if ~LIVE_PLOTS
+            outFig = fullfile(figDir, ['Voyager2NeptuneFlybyPDSvsSPICE.' figXtn]);
+            saveas(fig, outFig)
+            disp(['Figure saved to ' outFig '.'])
+        end
+
         r_km = r; theta = th; phi = ph; xyz_km = [x; y; z];
     end
-    
     
     %% Plot and calculate products
     nOpts = 1; nMPopts = 0;
@@ -117,14 +131,14 @@ function CompareNepModels(LIVE_PLOTS, scName, SEQUENTIAL)
     MPopts = -1:-1;
     for opt=opts
         for MPopt=MPopts
-            GetBplotAndLsqNeptune(ets, t_h, r_km, theta, phi, xyz_km, BrSC, BthSC, BphiSC, ...
-                scName, spkParent, orbStr, opt, MPopt, SEQUENTIAL, 1, 1, 1, 1);
+            PlotBandLsqNeptune(ets, t_h, r_km, theta, phi, xyz_km, BrSC, BthSC, BphiSC, ...
+                scName, spkParent, orbStr, opt, MPopt, SEQUENTIAL, coeffPath, figDir, figXtn, ...
+                LIVE_PLOTS, 1, 1, 1, 1);
         end
     end
     
-    
     %% Plot trajectory
-    figure(1000); clf(); hold on;
+    fig = figure(1000, 'Visible', figVis); clf(); hold on;
     set(gcf,'Name', 'Trajectories');
     the = linspace(0,pi,19); ph = linspace(0,2*pi,37);
     [the2D, ph2D] = meshgrid(the,ph);
@@ -177,5 +191,10 @@ function CompareNepModels(LIVE_PLOTS, scName, SEQUENTIAL)
     name{3} = "SPICE in NLS as defined in O8";
     
     legend([scTraj{1} scTraj{2} scTraj{3}], [name{1}, name{2}, name{3}])
-
+    
+    if ~LIVE_PLOTS
+        outFig = fullfile(figDir, ['Voyager2NeptuneFlybyTrajectories.' figXtn]);
+        saveas(fig, outFig)
+        disp(['Figure saved to ' outFig '.'])
+    end
 end

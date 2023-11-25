@@ -1,5 +1,6 @@
-function GetBplotAndLsq(ets, t_h, r_km, theta, phi, xyz_km, BrSC, BthSC, BphiSC, scName, ...
-    parentName, S3coords, orbStr, opt, MPopt, SEQUENTIAL, coeffPath, jt_h)
+function PlotBandLsq(ets, t_h, r_km, theta, phi, xyz_km, BrSC, BthSC, BphiSC, scName, ...
+    parentName, S3coords, orbStr, opt, MPopt, SEQUENTIAL, coeffPath, figDir, figXtn, ...
+    LIVE_PLOTS, jt_h)
 % Plots and calculates comparisons between modeled and measured magnetic fields.
 %
 % Generates time series data of a specified combination of magnetic field models implemented in
@@ -47,6 +48,12 @@ function GetBplotAndLsq(ets, t_h, r_km, theta, phi, xyz_km, BrSC, BthSC, BphiSC,
 %   Whether to plot points by index or hours relative to a reference time.
 % coeffPath : char, 1xE, default='modelCoeffs'
 %   Directory containing model coefficients files.
+% figDir : char, 1xG, default='figures'
+%   Directory to use for output figures.
+% figXtn : char, 1xH, default='pdf'
+%   Extension to use for figures, which determines the file type.
+% LIVE_PLOTS : bool, default=0
+%   Whether to load interactive figure windows for plots (true) or print them to disk (false).
 % jt_h : double, 1xM, default=[]
 %   Ephemeris times of Juno measurements in TDB hours relative to J2000 to use in data comparisons.
 
@@ -58,7 +65,16 @@ function GetBplotAndLsq(ets, t_h, r_km, theta, phi, xyz_km, BrSC, BthSC, BphiSC,
     
     if ~exist('SEQUENTIAL', 'var'); SEQUENTIAL = 0; end
     if ~exist('coeffpath', 'var'); coeffPath = 'modelCoeffs'; end
+    if ~exist('figDir', 'var'); figDir = 'figures'; end
+    if ~exist('figXtn', 'var'); figXtn = 'pdf'; end
+    if ~exist('LIVE_PLOTS', 'var'); LIVE_PLOTS = 0; end
     if ~exist('jt_h', 'var'); jt_h = []; end
+
+    if LIVE_PLOTS
+        figVis = 'on';
+    else
+        figVis = 'off';
+    end
 
     npts = length(t_h);
     if length(scName) > 1
@@ -112,7 +128,7 @@ function GetBplotAndLsq(ets, t_h, r_km, theta, phi, xyz_km, BrSC, BthSC, BphiSC,
         xx = t_h;
         xDescrip = 'Time past J2000 (h)';
     end
-    figure; hold on;
+    fig = figure('Visible', figVis); hold on;
     set(gcf,'Name', [char(scName) 'Br, ' orbStr ', ' magModelDescrip]);
     plot(xx, Br, 'DisplayName', defName);
     plot(xx, BrSC, 'DisplayName', scDataName);
@@ -120,7 +136,14 @@ function GetBplotAndLsq(ets, t_h, r_km, theta, phi, xyz_km, BrSC, BthSC, BphiSC,
     ylabel('Vector component (nT)');
     title(commonTitle);
     legend();
-    figure; hold on;
+    if ~LIVE_PLOTS
+        outFig = fullfile(figDir, [char(scName) parentName 'BrComparison' magModelDescrip '.' ...
+            figXtn]);
+        saveas(fig, outFig)
+        disp(['Figure saved to ' outFig '.'])
+    end
+
+    fig = figure('Visible', figVis); hold on;
     set(gcf,'Name', [char(scName) 'Bth, ' orbStr ', ' magModelDescrip]);
     plot(xx, Bth, 'DisplayName', defName);
     plot(xx, BthSC, 'DisplayName', scDataName);
@@ -128,7 +151,14 @@ function GetBplotAndLsq(ets, t_h, r_km, theta, phi, xyz_km, BrSC, BthSC, BphiSC,
     ylabel('Vector component (nT)');
     title(commonTitle);
     legend();
-    figure; hold on;
+    if ~LIVE_PLOTS
+        outFig = fullfile(figDir, [char(scName) parentName 'BthComparison' magModelDescrip '.' ...
+            figXtn]);
+        saveas(fig, outFig)
+        disp(['Figure saved to ' outFig '.'])
+    end
+
+    fig = figure('Visible', figVis); hold on;
     set(gcf,'Name', [char(scName) 'Bphi, ' orbStr ', ' magModelDescrip]);
     plot(xx, Bphi, 'DisplayName', defName);
     plot(xx, BphiSC, 'DisplayName', scDataName);
@@ -136,12 +166,18 @@ function GetBplotAndLsq(ets, t_h, r_km, theta, phi, xyz_km, BrSC, BthSC, BphiSC,
     ylabel('Vector component (nT)');
     title(commonTitle);
     legend();
+    if ~LIVE_PLOTS
+        outFig = fullfile(figDir, [char(scName) parentName 'BphiComparison' magModelDescrip '.' ...
+            figXtn]);
+        saveas(fig, outFig)
+        disp(['Figure saved to ' outFig '.'])
+    end
 
     BrD = Br - BrSC;
     BthD = Bth - BthSC;
     BphiD = Bphi - BphiSC;
 
-    figure; hold on;
+    fig = figure('Visible', figVis); hold on;
     set(gcf,'Name', ['Vector comp diffs, ' orbStr ', ' magModelDescrip ' - ' char(scName) ' MAG']);
     plot(xx, BrD);
     plot(xx, BthD);
@@ -149,6 +185,12 @@ function GetBplotAndLsq(ets, t_h, r_km, theta, phi, xyz_km, BrSC, BthSC, BphiSC,
     xlabel(xDescrip);
     ylabel('Component difference (nT)');
     legend('\Delta B_r', '\Delta B_\theta', '\Delta B_\phi');
+    if ~LIVE_PLOTS
+        outFig = fullfile(figDir, [char(scName) parentName 'DeltaBComparison' magModelDescrip ...
+            '.' figXtn]);
+        saveas(fig, outFig)
+        disp(['Figure saved to ' outFig '.'])
+    end
 
     BrLsq = BrD.^2;
     BthLsq = BthD.^2;

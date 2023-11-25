@@ -1,6 +1,6 @@
 function [T_h, B0vec, B1vec1, B1vec2, B1vec3, outFname, header] = PlanetMag(moonName, era, ...
-    coordType, CALC_NEW, ALL_MODELS, DO_FFT, DO_MPAUSE, LIVE_PLOTS, specificModel, ...
-    specificMPmodel, outData, coeffPath, fPatternFT, nptsApprox, magPhase_deg)
+    coordType, CALC_NEW, ALL_MODELS, DO_FFT, DO_MPAUSE, LIVE_PLOTS, nptsApprox, specificModel, ...
+    specificMPmodel, outData, figDir, coeffPath, fPatternFT, fPatternTseries, figXtn, magPhase_deg)
 % Evaluates planetary magnetic field for a time series at the specified moon location and inverts
 % for the complex amplitudes of oscillation in that moon's frame.
 %
@@ -37,6 +37,10 @@ function [T_h, B0vec, B1vec1, B1vec2, B1vec3, outFname, header] = PlanetMag(moon
 %   Whether to include a magnetopause screening current model.
 % LIVE_PLOTS : bool, default=0
 %   Whether to load interactive figure windows for plots (true) or print them to disk (false).
+% nptsApprox : int, default=12*365.25*3*24
+%   Desired number of points to use in time series for inversion. A whole number of the period of 
+%   interest (typically synodic period, as it is the strongest oscillation) will ultimately be 
+%   selected, which is why this number is approximate.
 % specificModel : int, default=0
 %   Index number for the magnetospheric model to run. Options depend on the body, and setting to
 %   0 selects the default model. See GetModelOpts for a description of the options.
@@ -45,14 +49,16 @@ function [T_h, B0vec, B1vec1, B1vec2, B1vec3, outFname, header] = PlanetMag(moon
 %   model See MpauseFld for a description of the options.
 % outData : char, 1xF, default='out'
 %   Directory to use for output of complex spectrum amplitudes.
-% coeffPath : char, 1xE, default='modelCoeffs'
+% figDir : char, 1xG, default='figures'
+%   Directory to use for output figures.
+% coeffPath : char, 1xH, default='modelCoeffs'
 %   Directory containing model coefficients files.
-% fPatternFT : char, 1xG, default='FTdata'
+% fPatternFT : char, 1xI, default='FTdata'
 %   Pattern for file names of FFT spectrum data saved to disk.
-% nptsApprox : int, default=12*365.25*3*24
-%   Desired number of points to use in time series for inversion. A whole number of the period of 
-%   interest (typically synodic period, as it is the strongest oscillation) will ultimately be 
-%   selected, which is why this number is approximate.
+% fPatternTseries : char, 1xJ, default='TseriesData'
+%   Pattern for file names of time series data saved to disk.
+% figXtn : char, 1xK, default='pdf'
+%   Extension to use for figures, which determines the file type.
 % magPhase_deg : double, default=0
 %   Arbitrary offset in degrees by which to rotate the magnetospheric field evaluation.
 %
@@ -86,12 +92,15 @@ function [T_h, B0vec, B1vec1, B1vec2, B1vec3, outFname, header] = PlanetMag(moon
     if ~exist('DO_FFT', 'var'); DO_FFT = 0; end
     if ~exist('DO_MPAUSE', 'var'); DO_MPAUSE = 0; end
     if ~exist('LIVE_PLOTS', 'var'); LIVE_PLOTS = 0; end
+    if ~exist('nptsApprox', 'var'); nptsApprox = 12*365.25*3*24; end
     if ~exist('specificModel', 'var'); specificModel = 0; end
     if ~exist('specificMPmodel', 'var'); specificMPmodel = 0; end
     if ~exist('outData', 'var'); outData = 'out'; end
+    if ~exist('figDir', 'var'); figDir = 'figures'; end
     if ~exist('coeffpath', 'var'); coeffPath = 'modelCoeffs'; end
     if ~exist('fPatternFT', 'var'); fPatternFT = 'FTdata'; end
-    if ~exist('nptsApprox', 'var'); nptsApprox = 12*365.25*3*24; end
+    if ~exist('fPatternTseries', 'var'); fPatternTseries = 'TseriesData'; end
+    if ~exist('figXtn', 'var'); figXtn = 'pdf'; end
     if ~exist('magPhase_deg', 'var'); magPhase_deg = 0; end
     
     parentName = LoadSpice(moonName);
@@ -210,7 +219,7 @@ function [T_h, B0vec, B1vec1, B1vec2, B1vec3, outFname, header] = PlanetMag(moon
                     [Bvec, Mdip_nT, Odip_km] = MagFldParent(parentName, rM_km, thetaM, phiM, ...
                         MagModel, CsheetModel, magPhase_deg, SPHOUT);
                 end
-                if DO_MPAUSE
+                if DO_MPAUSE && ~strcmp(MPmodel, 'None')
     
                     nSW_pcc = 4 / a_AU^2 * ones(1,npts);
                     vSW_kms = 400  * ones(1,npts);
@@ -247,7 +256,7 @@ function [T_h, B0vec, B1vec1, B1vec2, B1vec3, outFname, header] = PlanetMag(moon
             end
     
             BD = ICAdecomposition(moonName, parentName, t_h*3600, BvecMoon, magModelDescrip, ...
-                SPHOUT, 1, 1, LIVE_PLOTS);
+                SPHOUT, 1, 1, LIVE_PLOTS, figDir, figXtn);
     
             T_h = 1 ./ BD.f / 3600;
             npeaks = length(T_h);
@@ -286,9 +295,9 @@ function [T_h, B0vec, B1vec1, B1vec2, B1vec3, outFname, header] = PlanetMag(moon
                     nOsc = floor(approxDur_h / Tinterest_h);
                 end
                 [TfinalFFT_h, B0vecFFT, B1vecFFT] = ExcitationSpectrum(moonName, nOsc, rate, ...
-                    Tinterest_h, outData, fPatternFT, fPatternTseries, magPhase_deg, 0, SPHOUT, ...
-                    DO_MPAUSE);
-                PlotSpectrum(moonName, LIVE_PLOTS, outData, fPatternFT);
+                    Tinterest_h, coordType, outData, fPatternFT, fPatternTseries, ...
+                    magPhase_deg, 0, SPHOUT, DO_MPAUSE);
+                PlotSpectrum(moonName, LIVE_PLOTS, outData, figDir, fPatternFT, figXtn);
             end
     
             npts = length(t_h);
@@ -311,8 +320,8 @@ function [T_h, B0vec, B1vec1, B1vec2, B1vec3, outFname, header] = PlanetMag(moon
                 Bvec2Reprod(i,:) = real(B1vec2(i) * exp(-1i * omega_ph(i) * t_h));
                 Bvec3Reprod(i,:) = real(B1vec3(i) * exp(-1i * omega_ph(i) * t_h));
                 indB = find(BeModes == sortBeModes(i));
-                BeStrings(i) = sprintf('|B| amp: %.4e   f_Hz: %.4e   T_h: %.18f', BeModes(indB), ...
-                    1/3600/T_h(indB), T_h(indB));
+                BeStrings(i) = sprintf('|B| amp: %.4e   f_Hz: %.4e   T_h: %.18f', ...
+                    BeModes(indB), 1/3600/T_h(indB), T_h(indB));
             end
             disp(BeStrings);
     
@@ -325,27 +334,44 @@ function [T_h, B0vec, B1vec1, B1vec2, B1vec3, outFname, header] = PlanetMag(moon
                 Bv1lbl = 'B_x'; Bv2lbl = 'B_y'; Bv3lbl = 'B_z';
             end
     
-            figure; hold on;
-            set(gcf,'Name', ['Bvec1 full time, ' magModelDescrip]);
-            plot(t_h, BvecMoon(1,:));
-            plot(t_h, Bvec1Tot);
-            xlabel('Time (hr)');
-            ylabel([Bv1lbl ' (nT)']);
-            legend([Bv1lbl ' model'], [Bv1lbl ' exc']);
-            figure; hold on;
+            xx = t_h;
+            yy = [BvecMoon(1,:); Bvec1Tot];
+            windowName = ['Bvec1 full time, ' magModelDescrip];
+            legendStrings = [string([Bv1lbl ' model']), string([Bv1lbl ' exc'])];
+            titleInfo = [Bv1lbl ' reproduced vs. ' magModelDescrip];
+            xInfo = 'Time (hr)';
+            yInfo = [Bv1lbl ' (nT)'];
+            fName = [moonName 'Bv1_fullRepro' magModelDescrip era coordType];
+            PlotGeneric(xx, yy, legendStrings, windowName, titleInfo, xInfo, yInfo, figDir, ...
+                fName, figXtn, LIVE_PLOTS)
+
+            fig = figure('Visible', figVis); hold on;
             set(gcf,'Name', ['Bvec2 full time, ' magModelDescrip]);
             plot(t_h, BvecMoon(2,:));
             plot(t_h, Bvec2Tot);
             xlabel('Time (hr)');
             ylabel([Bv2lbl ' (nT)']);
             legend([Bv2lbl ' model'], [Bv2lbl ' exc']);
-            figure; hold on;
+            if ~LIVE_PLOTS
+                outFig = fullfile(figDir, [moonName 'Bv2_fullRepro' magModelDescrip era ...
+                    coordType '.' figXtn]);
+                saveas(fig, outFig)
+                disp(['Figure saved to ' outFig '.'])
+            end
+
+            fig = figure('Visible', figVis); hold on;
             set(gcf,'Name', ['Bvec3 full time, ' magModelDescrip]);
             plot(t_h, BvecMoon(3,:));
             plot(t_h, Bvec3Tot);
             xlabel('Time (hr)');
             ylabel([Bv3lbl ' (nT)']);
             legend([Bv3lbl ' model'], [Bv3lbl ' exc']);
+            if ~LIVE_PLOTS
+                outFig = fullfile(figDir, [moonName 'Bv3_fullRepro' magModelDescrip era ...
+                    coordType '.' figXtn]);
+                saveas(fig, outFig)
+                disp(['Figure saved to ' outFig '.'])
+            end
     
             Bvec1D = BvecMoon(1,:) - Bvec1Tot;
             Bvec2D = BvecMoon(2,:) - Bvec2Tot;
@@ -368,7 +394,7 @@ function [T_h, B0vec, B1vec1, B1vec2, B1vec3, outFname, header] = PlanetMag(moon
             Bvec2D1f = 2*Bvec2D1(iTmax:end);
             Bvec3D1f = 2*Bvec3D1(iTmax:end);
     
-            figure; hold on;
+            fig = figure('Visible', figVis); hold on;
             set(gcf,'Name', ['Residual FFT for ' era ' era, ' magModelDescrip]);
             plot(Tfinal_h, abs(Bvec1D1f));
             plot(Tfinal_h, abs(Bvec2D1f));
@@ -380,6 +406,12 @@ function [T_h, B0vec, B1vec1, B1vec2, B1vec3, outFname, header] = PlanetMag(moon
             xlabel('Period (hr)');
             ylabel('FT\{B_i - B_{i,exc}\} (nT)');
             xlim([1 Tmax]);
+            if ~LIVE_PLOTS
+                outFig = fullfile(figDir, [moonName 'ResidualFFT' magModelDescrip era coordType ...
+                    '.' figXtn]);
+                saveas(fig, outFig)
+                disp(['Figure saved to ' outFig '.'])
+            end
     
             Bdiff = sqrt(abs(Bvec1D1f).^2 + abs(Bvec2D1f).^2 + abs(Bvec3D1f).^2);
             maxBdiff = sort(Bdiff, 'descend');
@@ -399,8 +431,8 @@ function [T_h, B0vec, B1vec1, B1vec2, B1vec3, outFname, header] = PlanetMag(moon
                     'Beth_Re(nT),Beth_Im(nT),Bephi_Re(nT),Bephi_Im(nT)'];
             else
                 BeType = 'Be1xyz_';
-                header = ['period(hr),B0x(nT),B0y(nT),B0z(nT),Bex_Re(nT),Bex_Im(nT),Bey_Re(nT),' ...
-                    'Bey_Im(nT),Bez_Re(nT),Bez_Im(nT)'];
+                header = ['period(hr),B0x(nT),B0y(nT),B0z(nT),Bex_Re(nT),Bex_Im(nT),' ...
+                    'Bey_Re(nT),Bey_Im(nT),Bez_Re(nT),Bez_Im(nT)'];
             end
             outFname = fullfile(outData, [BeType moonName '_' era '_' fEnd '.txt']);
             spectrumData = [T_h' B0vec1' B0vec2' B0vec3' real(B1vec1)' imag(B1vec1)' ...

@@ -1,10 +1,13 @@
-function PMtest(LIVE_PLOTS)
+function PMtest(LIVE_PLOTS, nptsApprox)
 % Test script to run each focus feature of P\lanetMag to check for errors.
 %
 % Parameters
 % ----------
 % LIVE_PLOTS : bool, default=0
 %   Whether to load interactive figure windows for plots (true) or print them to disk (false).
+% nptsApprox : int, default=30000
+%   Default number of points to use in PlanetMag. This default is much less than that in PlanetMag
+%   because this function is primarily intended only for smoke testing.
 %
 % Note
 % ----
@@ -18,6 +21,7 @@ function PMtest(LIVE_PLOTS)
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
     if ~exist('LIVE_PLOTS', 'var'); LIVE_PLOTS = 0; end
+    if ~exist('nptsApprox', 'var'); nptsApprox = 30000; end
 
     % Clear any loaded SPICE kernels
     cspice_kclear;
@@ -30,32 +34,33 @@ function PMtest(LIVE_PLOTS)
     end
     
     % Earth models
-    PlanetMag('Moon', 'Swarm', 'IAU', 1, 1, 1, 1, LIVE_PLOTS);
+    PlanetMag('Moon', 'Swarm', 'IAU', 1, 1, 1, 1, LIVE_PLOTS, nptsApprox);
 
     % Jupiter models
     for scName=["Galileo", "Juno"]
         for mName=["Io", "Europa", "Ganymede", "Callisto"]
             moonName = char(mName);
-            PlanetMag(moonName, char(scName), 'IAU', 1, 1, 0, 1, LIVE_PLOTS);
+            PlanetMag(moonName, char(scName), 'IAU', 1, 1, 0, 1, LIVE_PLOTS, nptsApprox);
         end
     end
-    PlanetMag('Europa', 'Galileo', 'IAU', 1, 1, 1, 1, LIVE_PLOTS);
-    PlanetMag('Europa', 'Galileo', 'SPRH', 1, 1, 1, 1, LIVE_PLOTS);
+    % Test FFT evaluation/plotting with Europa
+    PlanetMag('Europa', 'Galileo', 'IAU', 1, 1, 1, 1, LIVE_PLOTS, nptsApprox);
+    PlanetMag('Europa', 'Galileo', 'SPRH', 1, 1, 1, 1, LIVE_PLOTS, nptsApprox);
 
     % Saturn models
     for mName=["Mimas", "Enceladus", "Dione", "Rhea", "Titan"]
         moonName = char(mName);
-        PlanetMag(moonName, 'Voyager', 'IAU', 1, 1, 0, 1, LIVE_PLOTS);
+        PlanetMag(moonName, 'Voyager', 'IAU', 1, 1, 0, 1, LIVE_PLOTS, nptsApprox);
     end
 
     % Uranus models
     for mName=["Miranda", "Ariel", "Umbriel", "Titania", "Oberon"]
         moonName = char(mName);
-        PlanetMag(moonName, 'Voyager', 'IAU', 1, 1, 0, 1, LIVE_PLOTS);
+        PlanetMag(moonName, 'Voyager', 'IAU', 1, 1, 0, 1, LIVE_PLOTS, nptsApprox);
     end
 
     % Neptune models
-    PlanetMag('Triton', 'Voyager', 'IAU', 1, 1, 0, 1, LIVE_PLOTS);
+    PlanetMag('Triton', 'Voyager', 'IAU', 1, 1, 0, 1, LIVE_PLOTS, nptsApprox);
 
     % Spacecraft data comparison
     CompareEarModels(LIVE_PLOTS);

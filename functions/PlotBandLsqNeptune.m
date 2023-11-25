@@ -1,5 +1,6 @@
-function GetBplotAndLsqNeptune(ets, t_h, r_km, theta, phi, xyz_km, BrSC, BthSC, BphiSC, scName, ...
-    S3coords, orbStr, opt, MPopt, SEQUENTIAL, coeffPath, INC_PDS, INC_O8, INC_PDS_NM3, INC_NM3)
+function PlotBandLsqNeptune(ets, t_h, r_km, theta, phi, xyz_km, BrSC, BthSC, BphiSC, scName, ...
+    S3coords, orbStr, opt, MPopt, SEQUENTIAL, coeffPath, figDir, figXtn, LIVE_PLOTS, INC_PDS, ...
+    INC_O8, INC_PDS_NM3, INC_NM3)
 % Plots and calculates comparisons between modeled and measured magnetic fields for Neptune.
 %
 % Generates time series data of a specified combination of magnetic field models implemented in
@@ -49,6 +50,12 @@ function GetBplotAndLsqNeptune(ets, t_h, r_km, theta, phi, xyz_km, BrSC, BthSC, 
 %   Whether to plot points by index or hours relative to a reference time.
 % coeffPath : char, 1xE, default='modelCoeffs'
 %   Directory containing model coefficients files.
+% figDir : char, 1xG, default='figures'
+%   Directory to use for output figures.
+% figXtn : char, 1xH, default='pdf'
+%   Extension to use for figures, which determines the file type.
+% LIVE_PLOTS : bool, default=0
+%   Whether to load interactive figure windows for plots (true) or print them to disk (false).
 % INC_PDS : bool, default=1
 %   Whether to include the full O8 model, including unresolved coefficients, with PDS trajectory in
 %   NLS frame in coordinate/frame comparison.
@@ -72,10 +79,19 @@ function GetBplotAndLsqNeptune(ets, t_h, r_km, theta, phi, xyz_km, BrSC, BthSC, 
 
     if ~exist('SEQUENTIAL', 'var'); SEQUENTIAL = 0; end
     if ~exist('coeffpath', 'var'); coeffPath = 'modelCoeffs'; end
+    if ~exist('figDir', 'var'); figDir = 'figures'; end
+    if ~exist('figXtn', 'var'); figXtn = 'pdf'; end
+    if ~exist('LIVE_PLOTS', 'var'); LIVE_PLOTS = 0; end
     if ~exist('INC_PDS', 'var'); INC_PDS = 1; end
     if ~exist('INC_O8', 'var'); INC_O8 = 1; end
     if ~exist('INC_PDS_NM3', 'var'); INC_PDS_NM3 = 1; end
     if ~exist('INC_NM3', 'var'); INC_NM3 = 1; end
+
+    if LIVE_PLOTS
+        figVis = 'on';
+    else
+        figVis = 'off';
+    end
 
     parentName = 'Neptune';
     defName = 'O8, NLS relative to J2000 pole (NLS)';
@@ -161,7 +177,7 @@ function GetBplotAndLsqNeptune(ets, t_h, r_km, theta, phi, xyz_km, BrSC, BthSC, 
         xDescrip = 'Time relative to CA (h)';
     end
     
-    figure; hold on;
+    fig = figure('Visible', figVis); hold on;
     set(gcf,'Name', ['Br, ' orbStr ', ' magModelDescrip]);
     plot(xx, Br, 'DisplayName', defName);
     if INC_PDS; plot(xx, BrPDS, 'DisplayName', PDSname); end
@@ -174,8 +190,14 @@ function GetBplotAndLsqNeptune(ets, t_h, r_km, theta, phi, xyz_km, BrSC, BthSC, 
     title(commonTitle);
     xlim([-1.5,1.5])
     legend();
+    if ~LIVE_PLOTS
+        outFig = fullfile(figDir, [char(scName) parentName 'BrComparison' magModelDescrip '.' ...
+            figXtn]);
+        saveas(fig, outFig)
+        disp(['Figure saved to ' outFig '.'])
+    end
 
-    figure; hold on;
+    fig = figure('Visible', figVis); hold on;
     set(gcf,'Name', ['Bth, ' orbStr ', ' magModelDescrip]);
     plot(xx, Bth, 'DisplayName', defName);
     if INC_PDS; plot(xx, BthPDS, 'DisplayName', PDSname); end
@@ -188,8 +210,14 @@ function GetBplotAndLsqNeptune(ets, t_h, r_km, theta, phi, xyz_km, BrSC, BthSC, 
     title(commonTitle);
     xlim([-1.5,1.5])
     legend();
+    if ~LIVE_PLOTS
+        outFig = fullfile(figDir, [char(scName) parentName 'BthComparison' magModelDescrip '.' ...
+            figXtn]);
+        saveas(fig, outFig)
+        disp(['Figure saved to ' outFig '.'])
+    end
 
-    figure; hold on;
+    fig = figure('Visible', figVis); hold on;
     set(gcf,'Name', ['Bphi, ' orbStr ', ' magModelDescrip]);
     plot(xx, Bphi, 'DisplayName', defName);
     if INC_PDS; plot(xx, BphiPDS, 'DisplayName', PDSname); end
@@ -202,6 +230,12 @@ function GetBplotAndLsqNeptune(ets, t_h, r_km, theta, phi, xyz_km, BrSC, BthSC, 
     title(commonTitle);
     xlim([-1.5,1.5])
     legend();
+    if ~LIVE_PLOTS
+        outFig = fullfile(figDir, [char(scName) parentName 'BphiComparison' magModelDescrip '.' ...
+            figXtn]);
+        saveas(fig, outFig)
+        disp(['Figure saved to ' outFig '.'])
+    end
     
     % Evaluate magnitudes
     Bmag = sqrt(Br.^2 + Bth.^2 + Bphi.^2);
@@ -212,7 +246,7 @@ function GetBplotAndLsqNeptune(ets, t_h, r_km, theta, phi, xyz_km, BrSC, BthSC, 
     if INC_O8;  BmagO8 = sqrt(BrO8.^2 + BthO8.^2 + BphiO8.^2); end
     
     % Plot with same axes as past comparisons
-    figure; hold on;
+    fig = figure('Visible', figVis); hold on;
     set(gcf,'Name', ['Bmag, ' orbStr ', ' magModelDescrip]);
     plot(xx, Bmag, 'DisplayName', defName);
     if INC_PDS; plot(xx, BmagPDS, 'DisplayName', PDSname); end
@@ -228,9 +262,15 @@ function GetBplotAndLsqNeptune(ets, t_h, r_km, theta, phi, xyz_km, BrSC, BthSC, 
     grid on;
     xlim([-1.5,1.5])
     ylim([1e2,1e5])
+    if ~LIVE_PLOTS
+        outFig = fullfile(figDir, [char(scName) parentName 'BmagComparison' magModelDescrip '.' ...
+            figXtn]);
+        saveas(fig, outFig)
+        disp(['Figure saved to ' outFig '.'])
+    end
     
     % Plot with same axes as Connerney et al. (1991)
-    figure; hold on;
+    fig = figure('Visible', figVis); hold on;
     set(gcf,'Name', ['Bmag (C1991), ' orbStr ', ' magModelDescrip]);
     plot(xx, Bmag, 'DisplayName', defName);
     if INC_PDS; plot(xx, BmagPDS, 'DisplayName', PDSname); end
@@ -250,13 +290,19 @@ function GetBplotAndLsqNeptune(ets, t_h, r_km, theta, phi, xyz_km, BrSC, BthSC, 
     grid on;
     xlim([-1+delt 1+delt])
     ylim([1e2,1e5])
+    if ~LIVE_PLOTS
+        outFig = fullfile(figDir, [char(scName) parentName 'BmagC1991Comparison' ...
+            magModelDescrip '.' figXtn]);
+        saveas(fig, outFig)
+        disp(['Figure saved to ' outFig '.'])
+    end
 
     BrD = Br - BrSC;
     BthD = Bth - BthSC;
     BphiD = Bphi - BphiSC;
     BmagD = Bmag - BmagSC;
 
-    figure; hold on;
+    fig = figure('Visible', figVis); hold on;
     set(gcf,'Name', ['Vector comp diffs, ' orbStr ', ' magModelDescrip ' - MAG, ' defName]);
     plot(xx, BrD);
     plot(xx, BthD);
@@ -267,6 +313,12 @@ function GetBplotAndLsqNeptune(ets, t_h, r_km, theta, phi, xyz_km, BrSC, BthSC, 
     xlim([-1,1])
     title('Neptune field model comparison for Nmax=8, NLS relative to J2000 pole - Voyager 2 MAG')
     legend('\Delta B_r', '\Delta B_\theta', '\Delta B_\phi', '\Delta |B|')
+    if ~LIVE_PLOTS
+        outFig = fullfile(figDir, [char(scName) parentName 'DeltaBComparison' magModelDescrip ...
+            '.' figXtn]);
+        saveas(fig, outFig)
+        disp(['Figure saved to ' outFig '.'])
+    end
     
     BrLsq = BrD.^2;
     BthLsq = BthD.^2;
@@ -281,7 +333,7 @@ function GetBplotAndLsqNeptune(ets, t_h, r_km, theta, phi, xyz_km, BrSC, BthSC, 
         BphiD = BphiPDS - BphiSC;
         BmagD = BmagPDS - BmagSC;
 
-        figure; hold on;
+        fig = figure('Visible', figVis); hold on;
         set(gcf,'Name', ['Vector comp diffs, ' orbStr ', ' magModelDescrip ', PDS trajec - MAG']);
         plot(xx, BrD);
         plot(xx, BthD);
@@ -292,6 +344,12 @@ function GetBplotAndLsqNeptune(ets, t_h, r_km, theta, phi, xyz_km, BrSC, BthSC, 
         xlim([-1,1])
         title('Neptune field model comparison, PDS trajec - MAG')
         legend('\Delta B_r', '\Delta B_\theta', '\Delta B_\phi', '\Delta |B|')
+        if ~LIVE_PLOTS
+            outFig = fullfile(figDir, [char(scName) parentName 'DeltaBComparisonPDS' magModelDescrip '.' ...
+                figXtn]);
+            saveas(fig, outFig)
+            disp(['Figure saved to ' outFig '.'])
+        end
         
         BrLsq = BrD.^2;
         BthLsq = BthD.^2;
@@ -307,7 +365,7 @@ function GetBplotAndLsqNeptune(ets, t_h, r_km, theta, phi, xyz_km, BrSC, BthSC, 
         BphiD = BphiO8 - BphiSC;
         BmagD = BmagO8 - BmagSC;
 
-        figure; hold on;
+        fig = figure('Visible', figVis); hold on;
         set(gcf,'Name', ['Vector comp diffs, ' orbStr ', ' magModelDescrip ' - MAG, ' O8name]);
         plot(xx, BrD);
         plot(xx, BthD);
@@ -318,6 +376,12 @@ function GetBplotAndLsqNeptune(ets, t_h, r_km, theta, phi, xyz_km, BrSC, BthSC, 
         xlim([-1,1])
         title('Neptune field model comparison, NLS exactly as defined with O8 model');
         legend('\Delta B_r', '\Delta B_\theta', '\Delta B_\phi', '\Delta |B|');
+        if ~LIVE_PLOTS
+            outFig = fullfile(figDir, [char(scName) parentName 'DeltaBComparisonO8' ...
+                magModelDescrip '.' figXtn]);
+            saveas(fig, outFig)
+            disp(['Figure saved to ' outFig '.'])
+        end
         
         BrLsq = BrD.^2;
         BthLsq = BthD.^2;

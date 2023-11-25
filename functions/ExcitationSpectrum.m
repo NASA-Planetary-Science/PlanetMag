@@ -1,5 +1,6 @@
 function [Tpeak_h, B0vec, B1vec] = ExcitationSpectrum(moonName, nOsc, rate, Tinterest_h, ...
-    outData, coeffPath, fPatternFT, fPatternTseries, magPhase, DO_EPO, SPHOUT, DO_MPAUSE)
+    coordType, outData, coeffPath, fPatternFT, fPatternTseries, magPhase, DO_EPO, SPHOUT, ...
+    DO_MPAUSE)
 % Calculate a Fast Fourier Transform (FFT) spectrum of magnetic oscillations for a given moon.
 %
 % Note

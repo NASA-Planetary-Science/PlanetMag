@@ -1,4 +1,4 @@
-function CompareSatModels(LIVE_PLOTS, scNames, SEQUENTIAL)
+function CompareSatModels(LIVE_PLOTS, scNames, SEQUENTIAL, coeffPath, figDir, figXtn)
 % Compare magnetic field measurements from spacecraft near Saturn against each implemented magnetic
 % field model.
 %
@@ -19,6 +19,12 @@ function CompareSatModels(LIVE_PLOTS, scNames, SEQUENTIAL)
 % SEQUENTIAL : bool, default=0
 %   Whether to plot points by index or hours relative to a reference time (typically closest
 %   approach).
+% coeffPath : char, 1xC, default='modelCoeffs'
+%   Directory containing model coefficients files.
+% figDir : char, 1xD, default='figures'
+%   Directory to use for output figures.
+% figXtn : char, 1xE, default='pdf'
+%   Extension to use for figures, which determines the file type.
 
 % Part of the PlanetMag framework for evaluation and study of planetary magnetic fields.
 % Created by Corey J. Cochrane and Marshall J. Styczinski
@@ -29,6 +35,8 @@ function CompareSatModels(LIVE_PLOTS, scNames, SEQUENTIAL)
     if ~exist('LIVE_PLOTS', 'var'); LIVE_PLOTS = 0; end
     if ~exist('scNames', 'var'); scNames = ["Voyager 1", "Voyager 2"]; end
     if ~exist('SEQUENTIAL', 'var'); SEQUENTIAL = 0; end
+    if ~exist('figDir', 'var'); figDir = 'figures'; end
+    if ~exist('figXtn', 'var'); figXtn = 'pdf'; end
     
     cspice_kclear;
     parentName = 'Saturn';
@@ -45,7 +53,7 @@ function CompareSatModels(LIVE_PLOTS, scNames, SEQUENTIAL)
     etS = cspice_str2et(etStime);
     tCA_h = [-167724.2239, -160856.5842];
     
-    figure(1000); clf(); hold on;
+    fig = figure(1000, 'Visible', figVis); clf(); hold on;
     set(gcf,'Name', 'Trajectories');
     the = linspace(0,pi,50); ph = linspace(0,2*pi,100);
     [the2D, ph2D] = meshgrid(the,ph);
@@ -128,18 +136,17 @@ function CompareSatModels(LIVE_PLOTS, scNames, SEQUENTIAL)
         disp(['Getting ' sc ' positions for ' num2str(npts) ' pts.'])
         [r_km, theta, phi, xyz_km, spkParent] = GetPosSpice(sc, parentName, t_h{i});
     
-    
         %% Plot and calculate products
         nOpts = 2; nMPopts = 2;
         opts = 0:0;
         MPopts = 2:(nMPopts + 1); % Add 1 to force noMP model in addition
         for opt=opts
             for MPopt=MPopts(2:end)
-                GetBplotAndLsq(ets{i}, t_h{i}, r_km, theta, phi, xyz_km, BrSC{i}, BthSC{i}, ...
-                    BphiSC{i}, scNames(i), parentName, spkParent, orbStr, opt, MPopt, SEQUENTIAL);
+                PlotBandLsq(ets{i}, t_h{i}, r_km, theta, phi, xyz_km, BrSC{i}, BthSC{i}, ...
+                    BphiSC{i}, scNames(i), parentName, spkParent, orbStr, opt, MPopt, ...
+                    SEQUENTIAL, coeffPath, figDir, figXtn, LIVE_PLOTS);
             end
         end
-    
     
         %% Plot trajectory
         % t_h = linspace(cspice_str2et('1986-01-23T00:00:00.000'), ...
@@ -147,10 +154,15 @@ function CompareSatModels(LIVE_PLOTS, scNames, SEQUENTIAL)
         [~, ~, ~, xyzKSO_km, ~] = GetPosSpice(sc, parentName, t_h{i}, 'KSO');
         xyz_Rp = xyzKSO_km / Rp_km;
         x = xyz_Rp(1,:); y = xyz_Rp(2,:); z = xyz_Rp(3,:);
-        figure(1000); hold on;
+        fig = figure(1000, 'Visible', figVis); hold on;
         scTraj{i} = plot3(x,y,z, 'LineWidth', 1.5, 'DisplayName', sc);
         
     end
     legend([scTraj{1} scTraj{2}], scNames)
 
+    if ~LIVE_PLOTS
+        outFig = fullfile(figDir, [parentName 'Trajectories.' figXtn]);
+        saveas(fig, outFig)
+        disp(['Figure saved to ' outFig '.'])
+    end
 end

@@ -1,4 +1,4 @@
-function CompareEarModels(LIVE_PLOTS, scName, xtn, SEQUENTIAL)
+function CompareEarModels(LIVE_PLOTS, scName, xtn, SEQUENTIAL, coeffPath, figDir, figXtn)
 % Compare magnetic field measurements from spacecraft near Earth against each implemented magnetic
 % field model.
 %
@@ -17,10 +17,16 @@ function CompareEarModels(LIVE_PLOTS, scName, xtn, SEQUENTIAL)
 %   directory must exist with this name in the ``MAG`` directory within the top-level P\lanetMag
 %   directory. This directory will be searched for data files with the ``xtn`` extension, and each
 %   of these files will be loaded.
-% xtn : char, 1xD, default='.tab'
+% xtn : char, 1xC, default='.tab'
 %   File extension for data files found in ``fullfile('MAG', sc)``, beginning with ``'.'``.
 % SEQUENTIAL : bool
 %   Whether to plot points by index or hours relative to a reference time.
+% coeffPath : char, 1xD, default='modelCoeffs'
+%   Directory containing model coefficients files.
+% figDir : char, 1xE, default='figures'
+%   Directory to use for output figures.
+% figXtn : char, 1xF, default='pdf'
+%   Extension to use for figures, which determines the file type.
 
 % Part of the PlanetMag framework for evaluation and study of planetary magnetic fields.
 % Created by Corey J. Cochrane and Marshall J. Styczinski
@@ -32,6 +38,8 @@ function CompareEarModels(LIVE_PLOTS, scName, xtn, SEQUENTIAL)
     if ~exist('scName', 'var'); scName = "Swarm"; end
     if ~exist('xtn', 'var'); xtn = '.tab'; end
     if ~exist('SEQUENTIAL', 'var'); SEQUENTIAL = 1; end
+    if ~exist('figDir', 'var'); figDir = 'figures'; end
+    if ~exist('figXtn', 'var'); figXtn = 'pdf'; end
     
     parentName = 'Earth';
     sc = char(scName);
@@ -83,13 +91,19 @@ function CompareEarModels(LIVE_PLOTS, scName, xtn, SEQUENTIAL)
         xDescrip = 'Time relative to NY 2020 (h)';
     end
     lat_deg = 90 - rad2deg(theta);
-    figure; hold on;
+
+    fig = figure('Visible', figVis); hold on;
     set(gcf,'Name', [char(scName) ' latitudes']);
     plot(xx, lat_deg, 'DisplayName', 'latitude');
     xlabel(xDescrip);
     ylabel('Latitude (degrees)');
     title('Swarm ABC latitudes on 2020-01-01');
     legend();
+    if ~LIVE_PLOTS
+        outFig = fullfile(figDir, ['SwarmABClatitudes.' figXtn]);
+        saveas(fig, outFig)
+        disp(['Figure saved to ' outFig '.'])
+    end
     
     %% Plot and calculate products
     nOpts = 1; nMPopts = 0;
@@ -97,8 +111,9 @@ function CompareEarModels(LIVE_PLOTS, scName, xtn, SEQUENTIAL)
     MPopts = -1:-1;
     for opt=opts
         for MPopt=MPopts
-            GetBplotAndLsq(ets, t_h, r_km, theta, phi, xyz_km, BrSC, BthSC, BphiSC, scName, ...
-                parentName, spkParent, orbStr, opt, MPopt, SEQUENTIAL);
+            PlotBandLsq(ets, t_h, r_km, theta, phi, xyz_km, BrSC, BthSC, BphiSC, scName, ...
+                parentName, spkParent, orbStr, opt, MPopt, SEQUENTIAL, coeffPath, figDir, ...
+                figXtn, LIVE_PLOTS);
         end
     end
 

@@ -1,4 +1,4 @@
-function CompareUraModels(LIVE_PLOTS, scName, SEQUENTIAL)
+function CompareUraModels(LIVE_PLOTS, scName, SEQUENTIAL, coeffPath, figDir, figXtn)
 % Compare magnetic field measurements from spacecraft near Uranus against each implemented magnetic
 % field model.
 %
@@ -18,6 +18,12 @@ function CompareUraModels(LIVE_PLOTS, scName, SEQUENTIAL)
 % SEQUENTIAL : bool, default=0
 %   Whether to plot points by index or hours relative to a reference time (typically closest
 %   approach).
+% coeffPath : char, 1xC, default='modelCoeffs'
+%   Directory containing model coefficients files.
+% figDir : char, 1xD, default='figures'
+%   Directory to use for output figures.
+% figXtn : char, 1xE, default='pdf'
+%   Extension to use for figures, which determines the file type.
 
 % Part of the PlanetMag framework for evaluation and study of planetary magnetic fields.
 % Created by Corey J. Cochrane and Marshall J. Styczinski
@@ -28,6 +34,8 @@ function CompareUraModels(LIVE_PLOTS, scName, SEQUENTIAL)
     if ~exist('LIVE_PLOTS', 'var'); LIVE_PLOTS = 0; end
     if ~exist('scName', 'var'); scName = "Voyager 2"; end
     if ~exist('SEQUENTIAL', 'var'); SEQUENTIAL = 0; end
+    if ~exist('figDir', 'var'); figDir = 'figures'; end
+    if ~exist('figXtn', 'var'); figXtn = 'pdf'; end
     
     cspice_kclear;
     parentName = 'Uranus';
@@ -85,8 +93,9 @@ function CompareUraModels(LIVE_PLOTS, scName, SEQUENTIAL)
     MPopts = 1:(nMPopts + 1); % Add 1 to force noMP model in addition
     for opt=opts
         for MPopt=MPopts(2:end)
-            GetBplotAndLsq(ets, t_h, r_km, theta, phi, xyz_km, BrSC, BthSC, BphiSC, ...
-                scName, parentName, spkParent, orbStr, opt, MPopt, SEQUENTIAL);
+            PlotBandLsq(ets, t_h, r_km, theta, phi, xyz_km, BrSC, BthSC, BphiSC, ...
+                scName, parentName, spkParent, orbStr, opt, MPopt, SEQUENTIAL, coeffPath, ...
+                figDir, figXtn, LIVE_PLOTS);
         end
     end
         
@@ -145,20 +154,30 @@ function CompareUraModels(LIVE_PLOTS, scName, SEQUENTIAL)
     upperLim = 40000;
     DO_MPAUSE = 0;
     
-    figure (100); clf(); hold on;
+    fig = figure(100, 'Visible', figVis); clf(); hold on;
     plot(t_h + 122154.0036, L, 'DisplayName', 'L shell', 'LineWidth', 2)
     xlabel('Time relative to Uranus CA (h)');
     ylabel('L shell');
     ylim([0 upperLim])
     set(gca, 'YScale', 'log')
     title('Uranus L shell during Voyager 2 flyby');
+    if ~LIVE_PLOTS
+        outFig = fullfile(figDir, ['Voyager2UranusLshellVst.' figXtn]);
+        saveas(fig, outFig)
+        disp(['Figure saved to ' outFig '.'])
+    end
     
-    figure (101); clf(); hold on;
+    fig = figure(101, 'Visible', figVis); clf(); hold on;
     plot(r_Rp, L, 'DisplayName', 'L shell', 'LineWidth', 2)
     xlabel('r (R_U)');
     ylabel('L shell');
     ylim([0 upperLim])
     set(gca, 'YScale', 'log')
     title('Uranus L shell during Voyager 2 flyby vs. radial distance');
-
+    
+    if ~LIVE_PLOTS
+        outFig = fullfile(figDir, ['Voyager2UranusLshellVsR.' figXtn]);
+        saveas(fig, outFig)
+        disp(['Figure saved to ' outFig '.'])
+    end
 end

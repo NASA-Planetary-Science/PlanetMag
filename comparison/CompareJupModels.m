@@ -1,5 +1,5 @@
 function CompareJupModels(LIVE_PLOTS, scName, moonName, orbNum, moonProx_RP, PlanetMinDist_RP, ...
-    PlanetMaxDist_RP, dataDir, SEQUENTIAL, FULLORBITS, FLYBYS, JUNOTOO)
+    PlanetMaxDist_RP, dataDir, figDir, figXtn, SEQUENTIAL, coeffPath, FULLORBITS, FLYBYS, JUNOTOO)
 % Compare magnetic field measurements from spacecraft near Jupiter against each implemented
 % magnetic field model.
 %
@@ -42,8 +42,14 @@ function CompareJupModels(LIVE_PLOTS, scName, moonName, orbNum, moonProx_RP, Pla
 %   the parent planet's radius.
 % dataDir : char, 1xD, default='out'
 %   Name of directory where excitation moments are printed to disk.
+% figDir : char, 1xE, default='figures'
+%   Directory to use for output figures.
+% figXtn : char, 1xF, default='pdf'
+%   Extension to use for figures, which determines the file type.
 % SEQUENTIAL : bool, default=1
 %   Whether to plot points by index or hours relative to a reference time (J2000).
+% coeffPath : char, 1xG, default='modelCoeffs'
+%   Directory containing model coefficients files.
 % FULLORBITS : bool, default=1
 %   Whether to evalate goodness of fit from full-orbit data in System III coordinates beyond some
 %   threshold distance ``rMinMoon_RP``. Independent of ``FLYBYS``.
@@ -69,6 +75,8 @@ function CompareJupModels(LIVE_PLOTS, scName, moonName, orbNum, moonProx_RP, Pla
     if ~exist('PlanetMinDist_RP', 'var'); PlanetMinDist_RP = 10; end
     if ~exist('PlanetMaxDist_RP', 'var'); PlanetMaxDist_RP = 20; end
     if ~exist('dataDir', 'var'); dataDir = 'out'; end
+    if ~exist('figDir', 'var'); figDir = 'figures'; end
+    if ~exist('figXtn', 'var'); figXtn = 'pdf'; end
     if ~exist('SEQUENTIAL', 'var'); SEQUENTIAL = 1; end
     if ~exist('FULLORBITS', 'var'); FULLORBITS = 1; end
     if ~exist('FLYBYS', 'var'); FLYBYS = 0; end
@@ -250,12 +258,13 @@ function CompareJupModels(LIVE_PLOTS, scName, moonName, orbNum, moonProx_RP, Pla
     for opt=opts
         for MPopt=MPopts
             if FULLORBITS
-                GetBplotAndLsq(ets, t_h, r_km, theta, phi, xyz_km, BrSC, BthSC, BphiSC, scName, ...
-                    parentName, spkParent, orbStr, opt, MPopt, SEQUENTIAL);
+                PlotBandLsq(ets, t_h, r_km, theta, phi, xyz_km, BrSC, BthSC, BphiSC, scName, ...
+                    parentName, spkParent, orbStr, opt, MPopt, SEQUENTIAL, coeffPath, figDir, ...
+                    figXtn, LIVE_PLOTS);
             else
-                GetBplotAndLsqMoon(fbets, fbt_h, fbr_km, fbtheta, fbphi, fbxyz_km, r_RM, BxSC, ...
+                PlotBandLsqMoon(fbets, fbt_h, fbr_km, fbtheta, fbphi, fbxyz_km, r_RM, BxSC, ...
                     BySC, BzSC, scName, parentName, spkParent, moonName, char(scName), fbStr, ...
-                    opt, MPopt, SEQUENTIAL, dataDir, jt_h);
+                    opt, MPopt, SEQUENTIAL, dataDir, figDir, figXtn, LIVE_PLOTS, jt_h);
             end
         end
     end
