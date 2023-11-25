@@ -107,7 +107,7 @@ function [Bvec, Bmag] = GetB(r_km, theta, phi, xyz_km, ets, Nmax, NmaxExt, Rp_km
     magPhase = 0;
     
     if strcmp(magModelDescrip, 'KS2005')
-        [Bvec, ~, ~] = KSMagFldJupiter(r_km, theta, phi, ets, 1);
+        [Bvec, ~, ~] = MagFldJupiterKS2005(r_km, theta, phi, ets, 1);
     else
         Bvec = MagFldParentSingle(g, h, r_km, theta, phi, Rp_km, MagModel, ...
                        CsheetModel, magPhase, Nmax, NmaxExt);

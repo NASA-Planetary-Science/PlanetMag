@@ -1,25 +1,53 @@
-function [BrVIP4, BthVIP4, BphiVIP4] = VIP4noDipole(r, theta, phi, gVIP4, hVIP4)
-% Get magnetic field vectors in System III spherical coordinates for the
-% non-dipole multipole moments of the VIP4 model. We omit the dipole
-% moments because we have already accounted for them in evaluating the
-% shielded dipole magnetosphere model.
+function [BrVIP4, BthVIP4, BphiVIP4] = KS_VIP4noDipole(r_Rp, theta, phi, gVIP4, hVIP4, AS_CODED)
+% Calculate magnetic field vectors at evaluation points for the VIP4 model, sans the dipole moment.
+%
+% Get magnetic field vectors in System III spherical coordinates for the non-dipole multipole
+% moments of the VIP4 model. We omit the dipole moments because we have already accounted for them
+% in evaluating the shielded dipole magnetosphere model.
+%
+% Parameters
+% ----------
+% r_Rp : double, 1xN
+%   Distance from Jupiter center of mass for evaluation points in terms of planet radius.
+% theta : double, 1xN
+%   Colatitude of evaluation points in System III coordinates in radians.
+% phi : double, 1xN
+%   East longitude of evaluation points in System III coordinates in radians.
+% gVIP4 : double, 4x5
+%   Schmidt semi-normalized g Gauss coefficient of VIP4 model in gauss.
+% hVIP4 : double, 4x5
+%   Schmidt semi-normalized h Gauss coefficient of VIP4 model in gauss.
+% AS_CODED : bool, default=0
+%   Whether to match the original Fortran code (true) or with increased precision and corrected
+%   parameters (false). See MagFldJupiterKS2005 for more details.
+%
+% Returns
+% -------
+% BrVIP4, BthVIP4, BphiVIP4 : double, 1xN
+%   Evalauted magnetic field vector components in System III spherical coordinates.
 
-    global trueToKK;
-    if ~trueToKK
-        % Convert distances to Rj_VIP4 to fit with that model
-        conv = 71492/71323; r = r * conv;
-        Rp_m = 1.0;
+% Part of the PlanetMag framework for evaluation and study of planetary magnetic fields.
+% Created by Corey J. Cochrane and Marshall J. Styczinski
+% Maintained by Marshall J. Styczinski
+% Contact: corey.j.cochrane@jpl.nasa.gov
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-        % Copied from MagFldJupiter.m
-        dVr = 0; dVtheta = 0; dVphi = 0; %radius, colatitude, longitude components
-        for n = 2:3  % degree, spherical harmonic index, n = 1 (dipole), n = 2 (quadrupole), n = 3 (octopole)
-            for m = 0:n    % order
-                A = Rp_m*(Rp_m./r).^(n+1);
-                dA = -(n+1)*(Rp_m./r).^(n+2);
+    if ~AS_CODED
+        % Convert distances to RJ_VIP4 = 71323 to fit with the model coefficients
+        r_Rp = r_Rp * 71492 / 71323;
+
+        % Copied from MagFldParent.m
+        dVr = 0; dVtheta = 0; dVphi = 0;
+        for n = 2:3
+            for m = 0:n
+                A = (1./r_Rp).^(n+1);
+                dA = -(n+1)*(1./r_Rp).^(n+2);
                 P = LegendreS(n,m,theta);
-                dP = (1./r).*dLegendreS(n,m,theta);
-                Q = gVIP4(n,m+1)*cos(m*phi) + hVIP4(n,m+1)*sin(m*phi);  % m index of g and h are offset by 1 because MATLAB cannot index 0
-                dQ = (1./(r.*sin(theta))) .* (-m*gVIP4(n,m+1)*sin(m*phi) + m*hVIP4(n,m+1)*cos(m*phi));
+                dP = (1./r_Rp).*dLegendreS(n,m,theta);
+                % m index of g and h are offset by 1 because Matlab cannot index 0
+                Q = gVIP4(n,m+1)*cos(m*phi) + hVIP4(n,m+1)*sin(m*phi);
+                dQ = (1./(r_Rp.*sin(theta))) .* (-m*gVIP4(n,m+1)*sin(m*phi) ...
+                    + m*hVIP4(n,m+1)*cos(m*phi));
 
                 dVr = dVr + dA .* P .* Q;
                 dVtheta = dVtheta + A .* dP .* Q;
@@ -32,9 +60,10 @@ function [BrVIP4, BthVIP4, BphiVIP4] = VIP4noDipole(r, theta, phi, gVIP4, hVIP4)
         BphiVIP4 = -dVphi;
 
     else
-        % There are definitely simpler ways to perform these calculations,
-        % but in the interest of trying to best match Khurana's code, we
-        % keep the same overall organization here.
+        % There are definitely simpler ways to perform these calculations, but in the interest of
+        % trying to best match K. Khurana's code, we keep the same overall organization here.
+        % MJS note: I tried and was unable to refactor this block of code, which is why the
+        % alternate block above uses the spherical harmonic calculation from MagFldParent.
 
         rec = ones(1,91);
         for N=1:13
@@ -76,9 +105,9 @@ function [BrVIP4, BthVIP4, BphiVIP4] = VIP4noDipole(r, theta, phi, gVIP4, hVIP4)
             end
         end
 
-        PP = 1 ./ r;
+        PP = 1 ./ r_Rp;
         P = PP;
-        [A, B] = deal(zeros(5, length(r)));
+        [A, B] = deal(zeros(5, length(r_Rp)));
         for N=1:5
             P = P .* PP;
             A(N,:) = P;
@@ -91,13 +120,13 @@ function [BrVIP4, BthVIP4, BphiVIP4] = VIP4noDipole(r, theta, phi, gVIP4, hVIP4)
         sin_th = sin(theta);
 
         % Initialize working variables
-        P = ones(size(r));
-        [D, BBR, BBT, BBF] = deal(zeros(size(r)));
+        P = ones(size(r_Rp));
+        [D, BBR, BBT, BBF] = deal(zeros(size(r_Rp)));
 
         for M=1:5
             if M == 1
-                X = zeros(size(r));
-                Y = ones(size(r));
+                X = zeros(size(r_Rp));
+                Y = ones(size(r_Rp));
             else
                 MM = M - 1;
                 W = X;
@@ -107,7 +136,7 @@ function [BrVIP4, BthVIP4, BphiVIP4] = VIP4noDipole(r, theta, phi, gVIP4, hVIP4)
 
             Q = P;
             Z = D;
-            [BI, P2, D2] = deal(zeros(size(r)));
+            [BI, P2, D2] = deal(zeros(size(r_Rp)));
 
             for N=M:5
                 MN = N*(N-1)/2 + M;

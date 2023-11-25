@@ -1,4 +1,5 @@
-function [g, h, G, H, PlanetEqRadius, Nmax, NmaxExt] = GetGaussCoeffs(planet, InternalFieldModel)
+function [g, h, G, H, PlanetEqRadius, Nmax, NmaxExt] = GetGaussCoeffs(planet, ...
+    InternalFieldModel, coeffPath, nHeadLines)
 % Read spherical harmonic coefficients from formatted ASCII files on disk.
 %
 % Spherical harmonic components for each model are returned in gauss, as are the maximum degree
@@ -59,6 +60,11 @@ function [g, h, G, H, PlanetEqRadius, Nmax, NmaxExt] = GetGaussCoeffs(planet, In
 %             https://doi.org/10.1016/0273-1177(92)90394-D Named similarly to the Jupiter GSFC
 %             models, the Neptune O8 model is a degree-8 expansion that retains only up to the
 %             octupole moment.
+% coeffPath : char, 1xE, default='modelCoeffs'
+%   Directory where coefficients files are located.
+% nHeadLines : int, default=2
+%   Number of header lines in model coefficient files. This is typically ``2``: One for a
+%   description of the file contents and one for column headers.
 %
 % Returns
 % -------
@@ -87,8 +93,9 @@ function [g, h, G, H, PlanetEqRadius, Nmax, NmaxExt] = GetGaussCoeffs(planet, In
 % Contact: corey.j.cochrane@jpl.nasa.gov
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-    coeffPath = './modelCoeffs/';
-    nHeadLines = 2;
+    if ~exist('coeffPath', 'var'); coeffPath = 'modelCoeffs'; end
+    if ~exist('nHeadLines', 'var'); nHeadLines = 2; end
+
     G = 0; 
     H = 0;
     NmaxExt = 0;
@@ -101,12 +108,12 @@ function [g, h, G, H, PlanetEqRadius, Nmax, NmaxExt] = GetGaussCoeffs(planet, In
                     % Interior field parameters (Schmidt semi-normalized coefficients) in Gauss
                     % referenced to ITRF08 coordinates, 1RE = 6,371.2 km
 
-                    Nmax = 13; % order
+                    Nmax = 13; % Order
                     PlanetEqRadius = 6371.2; % km, as reported in the publication
 
-                    g = dlmread(fullfile([coeffPath 'coeffsEarthIGRF13g.csv']), ',', ...
+                    g = dlmread(fullfile(coeffPath, 'coeffsEarthIGRF13g.csv'), ',', ...
                         nHeadLines, 0);
-                    h = dlmread(fullfile([coeffPath 'coeffsEarthIGRF13h.csv']), ',', ...
+                    h = dlmread(fullfile(coeffPath, 'coeffsEarthIGRF13h.csv'), ',', ...
                         nHeadLines, 0);
 
                 otherwise
@@ -121,14 +128,14 @@ function [g, h, G, H, PlanetEqRadius, Nmax, NmaxExt] = GetGaussCoeffs(planet, In
                     % Interior field parameters (Schmidt semi-normalized coefficients) in Gauss
                     % referenced to JSIII (1965) coordinates, 1RJ = 71,323 km
 
-                    Nmax = 4; % order
+                    Nmax = 4; % Order
                     PlanetEqRadius = 71323; % km, as reported in the publication.
                     % Note that the text of Connerney et al. (1998) includes a conflicting
                     % definition of RJ = 71,398 km.
 
-                    g = dlmread(fullfile([coeffPath 'coeffsJupiterVIP4g.csv']), ',', ...
+                    g = dlmread(fullfile(coeffPath, 'coeffsJupiterVIP4g.csv'), ',', ...
                         nHeadLines, 0);
-                    h = dlmread(fullfile([coeffPath 'coeffsJupiterVIP4h.csv']), ',', ...
+                    h = dlmread(fullfile(coeffPath, 'coeffsJupiterVIP4h.csv'), ',', ...
                         nHeadLines, 0);
 
                 case 'MagFldJupiterGSFCO4'
@@ -140,11 +147,11 @@ function [g, h, G, H, PlanetEqRadius, Nmax, NmaxExt] = GetGaussCoeffs(planet, In
                     % reported in Connerney (1992) along with the O6 model:
                     % https://core.ac.uk/download/pdf/83644007.pdf
 
-                    Nmax = 3; % order
+                    Nmax = 3; % Order
                     PlanetEqRadius = 71372; % km, as reported in the publication
 
-                    g = dlmread(fullfile([coeffPath 'coeffsJupiterO4g.csv']), ',', nHeadLines, 0);
-                    h = dlmread(fullfile([coeffPath 'coeffsJupiterO4h.csv']), ',', nHeadLines, 0);
+                    g = dlmread(fullfile(coeffPath, 'coeffsJupiterO4g.csv'), ',', nHeadLines, 0);
+                    h = dlmread(fullfile(coeffPath, 'coeffsJupiterO4h.csv'), ',', nHeadLines, 0);
 
                 case 'MagFldJupiterGSFCO6'
                     % From Russell and Dougherty (2010) Jupiter GSFC O6 magnetic field model:
@@ -154,11 +161,11 @@ function [g, h, G, H, PlanetEqRadius, Nmax, NmaxExt] = GetGaussCoeffs(planet, In
                     % Originally reported in Connerney (1992):
                     % https://core.ac.uk/download/pdf/83644007.pdf
 
-                    Nmax = 3; % order
+                    Nmax = 3; % Order
                     PlanetEqRadius = 71372; % km, as reported in the publication
 
-                    g = dlmread(fullfile([coeffPath 'coeffsJupiterO6g.csv']), ',', nHeadLines, 0);
-                    h = dlmread(fullfile([coeffPath 'coeffsJupiterO6h.csv']), ',', nHeadLines, 0);
+                    g = dlmread(fullfile(coeffPath, 'coeffsJupiterO6g.csv'), ',', nHeadLines, 0);
+                    h = dlmread(fullfile(coeffPath, 'coeffsJupiterO6h.csv'), ',', nHeadLines, 0);
 
                 case 'MagFldJupiterJRM09'
                     % Connerney et al. (2018), A New Model of Jupiter's Magnetic Field From Juno's
@@ -168,12 +175,12 @@ function [g, h, G, H, PlanetEqRadius, Nmax, NmaxExt] = GetGaussCoeffs(planet, In
                     % r<7Rj 12/19/2017. lists the degree/order of the expansion (10) 
                     % and identifying information
 
-                    Nmax = 10; % order
+                    Nmax = 10; % Order
                     PlanetEqRadius = 71492; % km, as reported in the publication
 
-                    g = dlmread(fullfile([coeffPath 'coeffsJupiterJRM09g.csv']), ',', ...
+                    g = dlmread(fullfile(coeffPath, 'coeffsJupiterJRM09g.csv'), ',', ...
                         nHeadLines, 0);
-                    h = dlmread(fullfile([coeffPath 'coeffsJupiterJRM09h.csv']), ',', ...
+                    h = dlmread(fullfile(coeffPath, 'coeffsJupiterJRM09h.csv'), ',', ...
                         nHeadLines, 0);
 
                 case 'MagFldJupiterJRM33'
@@ -187,12 +194,12 @@ function [g, h, G, H, PlanetEqRadius, Nmax, NmaxExt] = GetGaussCoeffs(planet, In
                     % Delta phi_d = 0.23 deg) are slight."
                     % R = 71,492. rcore=0.8, r=[2.,2.5], I30 E1, 620ev, Jun 28, 2021
 
-                    Nmax = 10; % order
+                    Nmax = 10; % Order
                     PlanetEqRadius = 71492; % km, as reported in the publication
 
-                    g = dlmread(fullfile([coeffPath 'coeffsJupiterJRM33g.csv']), ',', ...
+                    g = dlmread(fullfile(coeffPath, 'coeffsJupiterJRM33g.csv'), ',', ...
                         nHeadLines, 0);
-                    h = dlmread(fullfile([coeffPath 'coeffsJupiterJRM33h.csv']), ',', ...
+                    h = dlmread(fullfile(coeffPath, 'coeffsJupiterJRM33h.csv'), ',', ...
                         nHeadLines, 0);
 
                 otherwise
@@ -206,17 +213,17 @@ function [g, h, G, H, PlanetEqRadius, Nmax, NmaxExt] = GetGaussCoeffs(planet, In
                     % Interior field parameters (Schmidt semi-normalized coefficients) in Gauss
                     % referenced to SIII coordinates, 1RS = 60,268 km
 
-                    Nmax = 3; % order
+                    Nmax = 3; % Order
                     PlanetEqRadius = 60268; % km, as reported in the publication
 
-                    g = dlmread(fullfile([coeffPath 'coeffsSaturnBurton2010g.csv']), ',', ...
+                    g = dlmread(fullfile(coeffPath, 'coeffsSaturnBurton2010g.csv'), ',', ...
                         nHeadLines, 0);
                     h = zeros(Nmax,Nmax+1);
 
                     NmaxExt = 1;
-                    G = dlmread(fullfile([coeffPath 'coeffsSaturnBurton2010Gext.csv']), ',', ...
+                    G = dlmread(fullfile(coeffPath, 'coeffsSaturnBurton2010Gext.csv'), ',', ...
                         nHeadLines, 0);
-                    H = dlmread(fullfile([coeffPath 'coeffsSaturnBurton2010Hext.csv']), ',', ...
+                    H = dlmread(fullfile(coeffPath, 'coeffsSaturnBurton2010Hext.csv'), ',', ...
                         nHeadLines, 0);
 
                 case 'MagFldSaturnCassini11'
@@ -225,10 +232,10 @@ function [g, h, G, H, PlanetEqRadius, Nmax, NmaxExt] = GetGaussCoeffs(planet, In
                     % Interior field parameters (Schmidt semi-normalized coefficients) in Gauss
                     % referenced to SIII coordinates, 1RS = 60,268 km
 
-                    Nmax = 12; % maximum resolved order is 11
+                    Nmax = 12; % Maximum resolved order is 11
                     PlanetEqRadius = 60268; % km, as reported in the publication
 
-                    g = dlmread(fullfile([coeffPath 'coeffsSaturnCassini11g.csv']), ',', ...
+                    g = dlmread(fullfile(coeffPath, 'coeffsSaturnCassini11g.csv'), ',', ...
                         nHeadLines, 0);
                     h = zeros(Nmax,Nmax+1);
 
@@ -243,16 +250,16 @@ function [g, h, G, H, PlanetEqRadius, Nmax, NmaxExt] = GetGaussCoeffs(planet, In
                     % Q3: Quadrupole model with some unresolved coefficients reported
                     % up to n = 3 for Uranus, from Voyager 2 data.
 
-                    Nmax = 3; % maximum resolved order is 2
+                    Nmax = 3; % Maximum resolved order is 2
                     PlanetEqRadius = 25600; % km, as reported in the publication
 
-                    g = dlmread(fullfile([coeffPath 'coeffsUranusQ3g.csv']), ',', nHeadLines, 0);
-                    h = dlmread(fullfile([coeffPath 'coeffsUranusQ3h.csv']), ',', nHeadLines, 0);
+                    g = dlmread(fullfile(coeffPath, 'coeffsUranusQ3g.csv'), ',', nHeadLines, 0);
+                    h = dlmread(fullfile(coeffPath, 'coeffsUranusQ3h.csv'), ',', nHeadLines, 0);
 
                     NmaxExt = 1;
-                    G = dlmread(fullfile([coeffPath 'coeffsUranusQ3Gext.csv']), ',', ...
+                    G = dlmread(fullfile(coeffPath, 'coeffsUranusQ3Gext.csv'), ',', ...
                         nHeadLines, 0);
-                    H = dlmread(fullfile([coeffPath 'coeffsUranusQ3Hext.csv']), ',', ...
+                    H = dlmread(fullfile(coeffPath, 'coeffsUranusQ3Hext.csv'), ',', ...
                         nHeadLines, 0);
 
                 case 'MagFldUranusAH5'
@@ -260,12 +267,12 @@ function [g, h, G, H, PlanetEqRadius, Nmax, NmaxExt] = GetGaussCoeffs(planet, In
                     % AH5: Aurora hexadecapole L=5 model with unresolved coefficients reported
                     % up to n = 4 for Uranus, from Voyager 2 data.
 
-                    Nmax = 4; % maximum resolved order is 3
+                    Nmax = 4; % Maximum resolved order is 3
                     PlanetEqRadius = 25559; % km, as reported in the publication
 
-                    g = dlmread(fullfile([coeffPath 'coeffsUranusAH5g.csv']), ',', nHeadLines, ...
+                    g = dlmread(fullfile(coeffPath, 'coeffsUranusAH5g.csv'), ',', nHeadLines, ...
                         0);
-                    h = dlmread(fullfile([coeffPath 'coeffsUranusAH5h.csv']), ',', nHeadLines, ...
+                    h = dlmread(fullfile(coeffPath, 'coeffsUranusAH5h.csv'), ',', nHeadLines, ...
                         0);
 
                 otherwise
@@ -280,12 +287,12 @@ function [g, h, G, H, PlanetEqRadius, Nmax, NmaxExt] = GetGaussCoeffs(planet, In
                     % O8: Octupole model with (mostly unresolved) coefficients reported
                     % up to n = 8 for Neptune, from Voyager 2 data.
 
-                    Nmax = 8; % maximum resolved order is 3
+                    Nmax = 8; % Maximum resolved order is 3
                     PlanetEqRadius = 24765; % km, as reported in the publication
 
-                    g = dlmread(fullfile([coeffPath 'coeffsNeptuneO8g.csv']), ',', nHeadLines, ...
+                    g = dlmread(fullfile(coeffPath, 'coeffsNeptuneO8g.csv'), ',', nHeadLines, ...
                         0);
-                    h = dlmread(fullfile([coeffPath 'coeffsNeptuneO8h.csv']), ',', nHeadLines, ...
+                    h = dlmread(fullfile(coeffPath, 'coeffsNeptuneO8h.csv'), ',', nHeadLines, ...
                         0);
 
                 otherwise
@@ -300,7 +307,7 @@ function [g, h, G, H, PlanetEqRadius, Nmax, NmaxExt] = GetGaussCoeffs(planet, In
             Nmax = 10;
             PlanetEqRadius = 1;
             [g, h] = deal(zeros(Nmax, Nmax+1));
-            pureHarm = dlmread(fullfile([coeffPath 'coeffsPureHarmonic.csv']), ',', nHeadLines, 0);
+            pureHarm = dlmread(fullfile(coeffPath, 'coeffsPureHarmonic.csv'), ',', nHeadLines, 0);
             n = pureHarm(1);
             m = pureHarm(2);
             g(n,m+1) = pureHarm(3);

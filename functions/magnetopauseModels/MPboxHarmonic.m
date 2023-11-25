@@ -7,8 +7,8 @@ function [Bx, By, Bz] = MPboxHarmonic(xyzPSM_Rp, Psi, a, b, c, d, pqrs)
 % Parameters
 % ----------
 % xyzPSM_Rp : double, 3xN
-%   Cartesian coordinates of measurement locations in planet--solar--magnetospheric frame in units
-%   of planetary radii.
+%   Cartesian coordinates of measurement locations in planet--Sun--magnetic frame in units of
+%   planetary radii.
 % Psi : double, 1xN
 %   Dipole angle relative to perpendicular to pointing into the solar wind in radians, i.e.
 %   ``Psi = 0`` is perpendicular to the solar wind direction, ``Psi = pi/2`` is directed into the
@@ -23,7 +23,7 @@ function [Bx, By, Bz] = MPboxHarmonic(xyzPSM_Rp, Psi, a, b, c, d, pqrs)
 % Returns
 % -------
 % Bx, By, Bz : double, 1xN
-%   Magnetic field contribution from magnetopause surface currents in planet--solar--magnetospheric
+%   Magnetic field contribution in nT from magnetopause surface currents in planet--Sun--magnetic
 %   coordinates.
 
 % Part of the PlanetMag framework for evaluation and study of planetary magnetic fields.

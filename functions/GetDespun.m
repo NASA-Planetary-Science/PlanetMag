@@ -1,5 +1,5 @@
 function [x, y, z] = GetDespun(xyz_Rp, despin)
-% Rotate Cartesian coordinates through some angle.
+% Rotate cartesian coordinates through some angle.
 %
 % Intended to "de-spin" a rotating coordinate system for convenience in plotting, e.g. in the case
 % of a trajectory around a rotating planet that is evaluated in planetocentric coordinates.
@@ -15,7 +15,7 @@ function [x, y, z] = GetDespun(xyz_Rp, despin)
 % Returns
 % -------
 % x, y, z : double, 1xN
-%   Rotated Cartesian position vectors in planetary radii.
+%   Rotated cartesian position vectors in planetary radii.
 
 % Part of the PlanetMag framework for evaluation and study of planetary magnetic fields.
 % Created by Corey J. Cochrane and Marshall J. Styczinski

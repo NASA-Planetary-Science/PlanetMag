@@ -18,7 +18,7 @@ function rMP_km = GetMPsurfS1997(Rss_km, xi, thDSZ)
 % Returns
 % -------
 % rMP_km : double, 1xN
-%   Distance from body center of mass to magnetopause surface for each colatitude ``thDSZ``.
+%   Distance from body center of mass to magnetopause surface for each evaluation point.
 
 % Part of the PlanetMag framework for evaluation and study of planetary magnetic fields.
 % Created by Corey J. Cochrane and Marshall J. Styczinski

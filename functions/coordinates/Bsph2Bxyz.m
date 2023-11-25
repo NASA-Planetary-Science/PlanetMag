@@ -13,7 +13,7 @@ function [Bx, By, Bz] = Bsph2Bxyz(Br, Bth, Bphi, theta, phi)
 % Bth : double, 1xN
 %   Colatitudinal (:math:`\hat{\theta}`) component of vectors to be converted.
 % Bphi : double, 1xN
-%   Longitudinal (:math:`\hat{\phi}`) component of vectors to be converted.
+%   Azimuthal (:math:`\hat{\phi}`) component of vectors to be converted.
 % theta : double, 1xN
 %   Colatitude for each location associated with each (Br, Bth, Bphi) vector in radians.
 % phi : double, 1xN

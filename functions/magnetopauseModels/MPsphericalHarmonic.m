@@ -7,13 +7,13 @@ function [Br, Bth, Bphi] = MPsphericalHarmonic(r_Rss, thMP, phiMP, Gnm, Nmax)
 %   Radial distance from planet center of mass in units of the sub-solar magnetopause standoff
 %   distance.
 % thMP : double, 1xN
-%   Colatitude in solar--magnetospheric coordinates. The :math:`\hat{z}` axis of this coordinate
-%   system is derived from :math:`\hat{x}\times\hat{y}`, where :math:`\hat{x}` the along the
-%   planet--Sun direction and :math:`\hat{y}` is along :math:`\mathbf{m}\times\hat{x}`, with
+%   Colatitude in planet--Sun--magnetic coordinates in radians. The :math:`\hat{z}` axis of this
+%   coordinate system is derived from :math:`\hat{x}\times\hat{y}`, where :math:`\hat{x}` is along
+%   the planet--Sun direction and :math:`\hat{y}` is along :math:`\mathbf{m}\times\hat{x}`, with
 %   :math:`\mathbf{m}` the instantaneous magnetic dipole moment vector for the body.
 % phiMP : double, 1xN
-%   Azimuthal angle in solar-magnetospheric coordinates, i.e. the angle between the planet--Sun
-%   direction and the position vector's projection into the dipole equatorial plane.
+%   Azimuthal angle in planet--Sun--magnetic coordinates in radians, i.e. the angle between the
+%   planet--Sun direction and the position vector's projection into the dipole equatorial plane.
 % Gnm : double, (Nmax)x(Nmax+1)
 %   Coefficients for external spherical harmonics in nT at body center.
 % Nmax : int
@@ -23,7 +23,8 @@ function [Br, Bth, Bphi] = MPsphericalHarmonic(r_Rss, thMP, phiMP, Gnm, Nmax)
 % Returns
 % -------
 % Br, Bth, Bphi : double, 1xN
-%   External-source magnetic field vector components ailgned to spherical coordinates.
+%   External-source magnetic field vector components aligned to spherical axes in the System III
+%   frame in nT.
 
 % Part of the PlanetMag framework for evaluation and study of planetary magnetic fields.
 % Created by Corey J. Cochrane and Marshall J. Styczinski

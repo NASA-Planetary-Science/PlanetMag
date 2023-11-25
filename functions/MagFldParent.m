@@ -50,10 +50,10 @@ function [Bvec_nT, Mdip_nT, Odip_km] = MagFldParent(planet, r_km, theta, phi, ..
 %   is true) at evaluation points in nT. Output rows are x, y, z respectively for cartesian or r,
 %   theta, phi for spherical.
 % Mdip_nT : double, 1x3
-%   Dipole magnetic moment in standard cartesian coordinates, as surface-equivalent nT, i.e. this
-%   value times the planet volume yields the magnetic moment in SI units.
+%   Dipole magnetic moment in coordinates matching Bvec_nT, as surface-equivalent nT, i.e. this
+%   vector times the planet volume yields the magnetic moment in SI units.
 % Odip_km : double, 1x3
-%   Dipole magnetic moment offset in km from planet barycenter in standard cartesian coordinates.
+%   Dipole magnetic moment offset in km from planet barycenter in coordinates matching Bvec_nT.
 
 % Part of the PlanetMag framework for evaluation and study of planetary magnetic fields.
 % Created by Corey J. Cochrane and Marshall J. Styczinski

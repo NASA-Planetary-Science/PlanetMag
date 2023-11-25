@@ -112,7 +112,7 @@ function [Tpeak_h, B0vec, B1vec] = ExcitationSpectrum(moonName, nOsc, rate, Tint
     
     disp(['Evaluating ' magModelDescrip ' field model for T = ' num2str(Tinterest_h) ' h.'])
     if contains(magModelDescrip, 'KS2005')
-        [Bvec, Mdip_nT, Odip_km] = KSMagFldJupiter(rM_km, thetaM, phiM, t_h*3600, SPHOUT);
+        [Bvec, Mdip_nT, Odip_km] = MagFldJupiterKS2005(rM_km, thetaM, phiM, t_h*3600, SPHOUT);
     else
         [Bvec, Mdip_nT, Odip_km] = MagFldParent(parentName, rM_km, thetaM, phiM, MagModel, ...
             CsheetModel, magPhase, SPHOUT);

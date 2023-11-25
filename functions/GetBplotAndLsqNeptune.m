@@ -95,7 +95,7 @@ function GetBplotAndLsqNeptune(ets, t_h, r_km, theta, phi, xyz_km, BrSC, BthSC, 
     Nmax = 8;
     disp(['Evaluating ' magModelDescrip ' field model with Nmax = ' num2str(Nmax) '.'])
     if strcmp(magModelDescrip, 'KS2005')
-        [Bvec, Mdip_nT, Odip_km] = KSMagFldJupiter(r_km, theta, phi, ets, 1);
+        [Bvec, Mdip_nT, Odip_km] = MagFldJupiterKS2005(r_km, theta, phi, ets, 1);
     else
         [Bvec, Mdip_nT, Odip_km] = MagFldParent(parentName, r_km, theta, phi, MagModel, ...
             CsheetModel, magPhase, 1, Nmax);
