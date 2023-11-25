@@ -34,8 +34,8 @@ function [BxS3, ByS3, BzS3] = KS_BJSMtoBS3C(BxJSM, ByJSM, BzJSM, ctimes, AS_CODE
 
     if ~AS_CODED
         ets = KS_ctime2et(ctimes);
-        % See description of JUNO_JSM in KS_S3CtoJSM
-        rot = cspice_pxform('JUNO_JSM', 'IAU_JUPITER', ets);
+        % See description of JSM in KS_S3CtoJSM
+        rot = cspice_pxform('JSM', 'IAU_JUPITER', ets);
     else
         % Retrieve dipole orientation and initialize rotation matrices
         dipole = KS_coeffsJSMdipole();

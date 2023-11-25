@@ -136,8 +136,8 @@ function [Bvec, Mdip, Odip] = MagFldJupiterKS2005(r_km, theta, phi, ets, SPHOUT,
     yS3 = rho .* sin(phi);
     zS3 = r .* cos(theta);
     
-    % Convert Jupiter System III cartesian to Jupiter-Solar-Orbital coordinates
-    [xJSO, yJSO, zJSO] = KS_S3CtoJSO(xS3, yS3, zS3, ctimesJROT_S3CtoJSO, AS_CODED);
+    % Convert Jupiter System III cartesian to Jupiter--Sun--Orbital coordinates
+    [xJSO, yJSO, zJSO] = KS_S3CtoJSO(xS3, yS3, zS3, ctimes, AS_CODED);
     % Get local solar time
     localTime_rads = atan2(yJSO, xJSO);
     
@@ -188,7 +188,7 @@ function [Bvec, Mdip, Odip] = MagFldJupiterKS2005(r_km, theta, phi, ets, SPHOUT,
 	Tzz = (dxpdx .* dypdy - dxpdy .* dypdx);
     
     % Get distance from System III equatorial plane to current sheet
-    zNS3 = KS_csheetStruc(rho, phi, xJSO, yJSO, localTime_rads, stheta, AS_CODED);
+    zNS3 = KS_CsheetStruc(rho, phi, xJSO, yJSO, localTime_rads, stheta, AS_CODED);
     % Get mapped coordinates in current sheet frame
     [rmap, pmap, zmap] = xyz2cyl(xp, yp, zS3 - zNS3);
     

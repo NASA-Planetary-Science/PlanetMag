@@ -222,9 +222,9 @@ function BD = ICAdecomposition(moonName, parentName, ets, Bvec, descrip, SPHOUT,
 
         cosSyn = X(:, 2*(find(f==fMax))-1);
         sinSyn = X(:, 2*(find(f==fMax)));
-        Bvec1max = BexcVec1o + BexcVec1i(f==fMax)*cosMax + BexcVec1q(f==fMax)*sinMax;
-        Bvec2max = BexcVec2o + BexcVec2i(f==fMax)*cosMax + BexcVec2q(f==fMax)*sinMax;
-        Bvec3max = BexcVec3o + BexcVec3i(f==fMax)*cosMax + BexcVec3q(f==fMax)*sinMax;
+        Bvec1max = BexcVec1o + BexcVec1i(f==fMax)*cosSyn + BexcVec1q(f==fMax)*sinSyn;
+        Bvec2max = BexcVec2o + BexcVec2i(f==fMax)*cosSyn + BexcVec2q(f==fMax)*sinSyn;
+        Bvec3max = BexcVec3o + BexcVec3i(f==fMax)*cosSyn + BexcVec3q(f==fMax)*sinSyn;
 
         switch(iMaxComp)
             case 1

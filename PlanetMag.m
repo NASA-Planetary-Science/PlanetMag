@@ -204,8 +204,8 @@ function [T_h, B0vec, B1vec1, B1vec2, B1vec3, outFname, header] = PlanetMag(moon
             if CALC_NEW
                 disp(['Evaluating ' magModelDescrip ' field model.'])
                 if contains(magModelDescrip, 'KS2005')
-                    [Bvec, Mdip_nT, Odip_km] = KSMagFldJupiter(rM_km, thetaM, phiM, t_h*3600, ...
-                        SPHOUT);
+                    [Bvec, Mdip_nT, Odip_km] = MagFldJupiterKS2005(rM_km, thetaM, phiM, ...
+                        t_h*3600, SPHOUT);
                 else
                     [Bvec, Mdip_nT, Odip_km] = MagFldParent(parentName, rM_km, thetaM, phiM, ...
                         MagModel, CsheetModel, magPhase_deg, SPHOUT);
@@ -251,16 +251,16 @@ function [T_h, B0vec, B1vec1, B1vec2, B1vec3, outFname, header] = PlanetMag(moon
     
             T_h = 1 ./ BD.f / 3600;
             npeaks = length(T_h);
-            B0vec1 = BD.Bdvec1o * ones(1,npeaks);
-            B0vec2 = BD.Bdvec2o * ones(1,npeaks);
-            B0vec3 = BD.Bdvec3o * ones(1,npeaks);
-            B0vec = [BD.Bdvec1o, BD.Bdvec2o, BD.Bdvec3o];
-            B1vec1_Re = BD.Bdvec1i;
-            B1vec1_Im = BD.Bdvec1q;
-            B1vec2_Re = BD.Bdvec2i;
-            B1vec2_Im = BD.Bdvec2q;
-            B1vec3_Re = BD.Bdvec3i;
-            B1vec3_Im = BD.Bdvec3q;
+            B0vec1 = BD.BexcVec1o * ones(1,npeaks);
+            B0vec2 = BD.BexcVec2o * ones(1,npeaks);
+            B0vec3 = BD.BexcVec3o * ones(1,npeaks);
+            B0vec = [BD.BexcVec1o, BD.BexcVec2o, BD.BexcVec3o];
+            B1vec1_Re = BD.BexcVec1i;
+            B1vec1_Im = BD.BexcVec1q;
+            B1vec2_Re = BD.BexcVec2i;
+            B1vec2_Im = BD.BexcVec2q;
+            B1vec3_Re = BD.BexcVec3i;
+            B1vec3_Im = BD.BexcVec3q;
     
             Tmax = 500;
     
@@ -402,7 +402,7 @@ function [T_h, B0vec, B1vec1, B1vec2, B1vec3, outFname, header] = PlanetMag(moon
                 header = ['period(hr),B0x(nT),B0y(nT),B0z(nT),Bex_Re(nT),Bex_Im(nT),Bey_Re(nT),' ...
                     'Bey_Im(nT),Bez_Re(nT),Bez_Im(nT)'];
             end
-            outFname = fullfile([outData BeType moonName '_' era '_' fEnd '.txt']);
+            outFname = fullfile(outData, [BeType moonName '_' era '_' fEnd '.txt']);
             spectrumData = [T_h' B0vec1' B0vec2' B0vec3' real(B1vec1)' imag(B1vec1)' ...
                 real(B1vec2)' imag(B1vec2)' real(B1vec3)' imag(B1vec3)'];
             dlmwrite(outFname, header, 'delimiter','');

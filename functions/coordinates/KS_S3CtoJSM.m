@@ -36,8 +36,9 @@ function [xJSM, yJSM, zJSM] = KS_S3CtoJSM(xS3C, yS3C, zS3c, ctimes, AS_CODED)
         % JUNO_JSM frame definition based on the frames kernels required reading and the JSM
         % description at
         % https://pds.nasa.gov/ds-view/pds/viewProfile.jsp?dsid=GO-J-POS-6-SC-TRAJ-JUP-COORDS-V1.0
+        % The above was later updated to simply 'JSM' in the project custom frame kernel.
         ets = KS_ctime2et(ctimes);
-        rot = cspice_pxform('IAU_JUPITER', 'JUNO_JSM', ets);
+        rot = cspice_pxform('IAU_JUPITER', 'JSM', ets);
     else
         % Retrieve dipole orientation and initialize rotation matrices
         dipole = KS_coeffsJSMdipole();

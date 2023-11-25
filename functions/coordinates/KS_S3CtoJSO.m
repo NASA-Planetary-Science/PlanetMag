@@ -33,7 +33,7 @@ function [xJSO, yJSO, zJSO] = KS_S3CtoJSO(xS3C, yS3C, zS3c, ctimes, AS_CODED)
     
     if ~AS_CODED
         ets = KS_ctime2et(ctimes);
-        rot = cspice_pxform('IAU_JUPITER', 'JUNO_JSO', ets);
+        rot = cspice_pxform('IAU_JUPITER', 'JSO', ets);
     else
         % Initialize rotation matrices
         rot = zeros(3,3, length(ctimes));
