@@ -86,12 +86,11 @@ function PlotBandLsqNeptune(ets, t_h, r_km, theta, phi, xyz_km, BrSC, BthSC, Bph
     if ~exist('INC_O8', 'var'); INC_O8 = 1; end
     if ~exist('INC_PDS_NM3', 'var'); INC_PDS_NM3 = 1; end
     if ~exist('INC_NM3', 'var'); INC_NM3 = 1; end
-
-    if LIVE_PLOTS
-        figVis = 'on';
-    else
-        figVis = 'off';
-    end
+    % The following are defined in SetPlotDefaults. Do NOT reset them anywhere else.
+    global nmTxt
+    global bnmTxt
+    global mathTxt
+    global bmathTxt
 
     parentName = 'Neptune';
     defName = 'O8, NLS relative to J2000 pole (NLS)';
@@ -171,71 +170,55 @@ function PlotBandLsqNeptune(ets, t_h, r_km, theta, phi, xyz_km, BrSC, BthSC, Bph
     commonTitle = ['Neptune field model comparison, Nmax=' num2str(Nmax)];
     if SEQUENTIAL
         xx = 1:npts;
-        xDescrip = 'Measurement index';
+        xInfo = 'Measurement index';
     else
         xx = t_h + 90752.0566;
-        xDescrip = 'Time relative to CA (h)';
+        xInfo = 'Time relative to CA (h)';
     end
     
-    fig = figure('Visible', figVis); hold on;
-    set(gcf,'Name', ['Br, ' orbStr ', ' magModelDescrip]);
-    plot(xx, Br, 'DisplayName', defName);
-    if INC_PDS; plot(xx, BrPDS, 'DisplayName', PDSname); end
-    if INC_NM3; plot(xx, BrNM3, 'DisplayName', NM3name); end
-    if INC_PDS_NM3; plot(xx, BrPDS_NM3, 'DisplayName', PDS_NM3name); end
-    if INC_O8;  plot(xx, BrO8, 'DisplayName', O8name); end
-    plot(xx, BrSC, 'DisplayName', 'Voyager 2 MAG');
-    xlabel(xDescrip);
-    ylabel('Vector component (nT)');
-    title(commonTitle);
-    xlim([-1.5,1.5])
-    legend();
-    if ~LIVE_PLOTS
-        outFig = fullfile(figDir, [char(scName) parentName 'BrComparison' magModelDescrip '.' ...
-            figXtn]);
-        saveas(fig, outFig)
-        disp(['Figure saved to ' outFig '.'])
-    end
+    figNumBase = 3000 + 100*opt + 10*MPopt;
+    fNadd = 1;
+    windowName = ['Br, ' orbStr ', ' magModelDescrip];
+    yy = Br;
+    legendStrings = string(defName);
+    if INC_PDS; yy = [yy; BrPDS]; legendStrings = [legendStrings, PDSname]; end
+    if INC_NM3; yy = [yy; BrNM3]; legendStrings = [legendStrings, NM3name]; end
+    if INC_PDS_NM3; yy = [yy; BrPDS_NM3]; legendStrings = [legendStrings, PDS_NM3name]; end
+    if INC_O8; yy = [yy; BrO8]; legendStrings = [legendStrings, O8name]; end
+    yy = [yy; BrSC]; legendStrings = [legendStrings, "Voyager 2 MAG"];
+    yInfo = 'Vector component (nT)';
+    titleInfo = commonTitle;
+    xlims = [-1.5, 1.5];
+    fName = [char(scName) parentName 'BrComparison' magModelDescrip];
+    fig = PlotGeneric(xx, yy, legendStrings, windowName, titleInfo, xInfo, yInfo, fName, ...
+        figDir, figXtn, LIVE_PLOTS, figNumBase + fNadd, 'linear', 'linear', xlims);
+    close(fig);
 
-    fig = figure('Visible', figVis); hold on;
-    set(gcf,'Name', ['Bth, ' orbStr ', ' magModelDescrip]);
-    plot(xx, Bth, 'DisplayName', defName);
-    if INC_PDS; plot(xx, BthPDS, 'DisplayName', PDSname); end
-    if INC_NM3; plot(xx, BthNM3, 'DisplayName', NM3name); end
-    if INC_PDS_NM3; plot(xx, BthPDS_NM3, 'DisplayName', PDS_NM3name); end
-    if INC_O8;  plot(xx, BthO8, 'DisplayName', O8name); end
-    plot(xx, BthSC, 'DisplayName', 'Voyager 2 MAG');
-    xlabel(xDescrip);
-    ylabel('Vector component (nT)');
-    title(commonTitle);
-    xlim([-1.5,1.5])
-    legend();
-    if ~LIVE_PLOTS
-        outFig = fullfile(figDir, [char(scName) parentName 'BthComparison' magModelDescrip '.' ...
-            figXtn]);
-        saveas(fig, outFig)
-        disp(['Figure saved to ' outFig '.'])
-    end
+    fNadd = fNadd + 1;
+    windowName = ['Bth, ' orbStr ', ' magModelDescrip];
+    yy = Bth;
+    if INC_PDS; yy = [yy; BthPDS]; end
+    if INC_NM3; yy = [yy; BthNM3]; end
+    if INC_PDS_NM3; yy = [yy; BthPDS_NM3]; end
+    if INC_O8; yy = [yy; BthO8]; end
+    yy = [yy; BthSC];
+    fName = [char(scName) parentName 'BthComparison' magModelDescrip];
+    fig = PlotGeneric(xx, yy, legendStrings, windowName, titleInfo, xInfo, yInfo, fName, ...
+        figDir, figXtn, LIVE_PLOTS, figNumBase + fNadd, 'linear', 'linear', xlims);
+    close(fig);
 
-    fig = figure('Visible', figVis); hold on;
-    set(gcf,'Name', ['Bphi, ' orbStr ', ' magModelDescrip]);
-    plot(xx, Bphi, 'DisplayName', defName);
-    if INC_PDS; plot(xx, BphiPDS, 'DisplayName', PDSname); end
-    if INC_PDS_NM3; plot(xx, BphiPDS_NM3, 'DisplayName', PDS_NM3name); end
-    if INC_NM3; plot(xx, BphiNM3, 'DisplayName', NM3name); end
-    if INC_O8;  plot(xx, BphiO8, 'DisplayName', O8name); end
-    plot(xx, BphiSC, 'DisplayName', 'Voyager 2 MAG');
-    xlabel(xDescrip);
-    ylabel('Vector component (nT)');
-    title(commonTitle);
-    xlim([-1.5,1.5])
-    legend();
-    if ~LIVE_PLOTS
-        outFig = fullfile(figDir, [char(scName) parentName 'BphiComparison' magModelDescrip '.' ...
-            figXtn]);
-        saveas(fig, outFig)
-        disp(['Figure saved to ' outFig '.'])
-    end
+    fNadd = fNadd + 1;
+    windowName = ['Bphi, ' orbStr ', ' magModelDescrip];
+    yy = Bphi;
+    if INC_PDS; yy = [yy; BphiPDS]; end
+    if INC_NM3; yy = [yy; BphiNM3]; end
+    if INC_PDS_NM3; yy = [yy; BphiPDS_NM3]; end
+    if INC_O8; yy = [yy; BphiO8]; end
+    yy = [yy; BphiSC];
+    fName = [char(scName) parentName 'BphiComparison' magModelDescrip];
+    fig = PlotGeneric(xx, yy, legendStrings, windowName, titleInfo, xInfo, yInfo, fName, ...
+        figDir, figXtn, LIVE_PLOTS, figNumBase + fNadd, 'linear', 'linear', xlims);
+    close(fig);
     
     % Evaluate magnitudes
     Bmag = sqrt(Br.^2 + Bth.^2 + Bphi.^2);
@@ -246,79 +229,56 @@ function PlotBandLsqNeptune(ets, t_h, r_km, theta, phi, xyz_km, BrSC, BthSC, Bph
     if INC_O8;  BmagO8 = sqrt(BrO8.^2 + BthO8.^2 + BphiO8.^2); end
     
     % Plot with same axes as past comparisons
-    fig = figure('Visible', figVis); hold on;
-    set(gcf,'Name', ['Bmag, ' orbStr ', ' magModelDescrip]);
-    plot(xx, Bmag, 'DisplayName', defName);
-    if INC_PDS; plot(xx, BmagPDS, 'DisplayName', PDSname); end
-    if INC_PDS_NM3; plot(xx, BmagPDS_NM3, 'DisplayName', PDS_NM3name); end
-    if INC_NM3; plot(xx, BmagNM3, 'DisplayName', NM3name); end
-    if INC_O8;  plot(xx, BmagO8, 'DisplayName', O8name); end
-    plot(xx, BmagSC, 'DisplayName', 'Voyager 2 MAG');
-    set(gca, 'YScale', 'log');
-    xlabel(xDescrip);
-    ylabel('Vector component (nT)');
-    title(commonTitle);
-    legend();
-    grid on;
-    xlim([-1.5,1.5])
-    ylim([1e2,1e5])
-    if ~LIVE_PLOTS
-        outFig = fullfile(figDir, [char(scName) parentName 'BmagComparison' magModelDescrip '.' ...
-            figXtn]);
-        saveas(fig, outFig)
-        disp(['Figure saved to ' outFig '.'])
-    end
+    fNadd = fNadd + 1;
+    windowName = ['Bmag, ' orbStr ', ' magModelDescrip];
+    yy = Bmag;
+    if INC_PDS; yy = [yy; BmagPDS]; end
+    if INC_NM3; yy = [yy; BmagNM3]; end
+    if INC_PDS_NM3; yy = [yy; BmagPDS_NM3]; end
+    if INC_O8; yy = [yy; BmagO8]; end
+    yy = [yy; BmagSC];
+    yInfo = 'Magnetic field magnitude (nT)';
+    ylims = [1e2, 1e5];
+    fName = [char(scName) parentName 'BmagComparison' magModelDescrip];
+    fig = PlotGeneric(xx, yy, legendStrings, windowName, titleInfo, xInfo, yInfo, fName, ...
+        figDir, figXtn, LIVE_PLOTS, figNumBase + fNadd, 'linear', 'log', xlims, ylims);
+    close(fig);
     
     % Plot with same axes as Connerney et al. (1991)
-    fig = figure('Visible', figVis); hold on;
-    set(gcf,'Name', ['Bmag (C1991), ' orbStr ', ' magModelDescrip]);
-    plot(xx, Bmag, 'DisplayName', defName);
-    if INC_PDS; plot(xx, BmagPDS, 'DisplayName', PDSname); end
-    if INC_PDS_NM3; plot(xx, BmagPDS_NM3, 'DisplayName', PDS_NM3name); end
-    if INC_NM3; plot(xx, BmagNM3, 'DisplayName', NM3name); end
-    if INC_O8;  plot(xx, BmagO8, 'DisplayName', O8name); end
-    plot(xx, BmagSC, 'DisplayName', 'Voyager 2 MAG');
-    set(gca, 'YScale', 'log');
-    xlabel('Time of day 1989 Aug 25');
+    fNadd = fNadd + 1;
+    windowName = ['Bmag (C1991), ' orbStr ', ' magModelDescrip];
+    xInfo = 'Time of day 1989 Aug 25';
     delt = 1 - (55*60+40.076)/3600;
-    xticks([(-6:-1)/6 + delt, 0, (0:6)/6 + delt])
-    xticklabels({'03:00','03:10','03:20','03:30','03:40','03:50','CA','04:00','04:10','04:20', ...
-        '04:30','04:40','04:50','05:00'})
-    ylabel('Vector component (nT)');
-    title('Field magnitude comparisons, axes as in C1991');
-    legend();
+    ticksx = [(-6:-1)/6 + delt, 0, (0:6)/6 + delt];
+    ticklabelsx = {'03:00','03:10','03:20','03:30','03:40','03:50','CA','04:00','04:10', ...
+        '04:20','04:30','04:40','04:50','05:00'};
+    titleInfo = 'Field magnitude comparisons, axes as in C1991';
     grid on;
-    xlim([-1+delt 1+delt])
-    ylim([1e2,1e5])
-    if ~LIVE_PLOTS
-        outFig = fullfile(figDir, [char(scName) parentName 'BmagC1991Comparison' ...
-            magModelDescrip '.' figXtn]);
-        saveas(fig, outFig)
-        disp(['Figure saved to ' outFig '.'])
-    end
+    xlims = [-1+delt, 1+delt];
+    fName = [char(scName) parentName 'BmagC1991Comparison' magModelDescrip];
+    fig = PlotGeneric(xx, yy, legendStrings, windowName, titleInfo, xInfo, yInfo, fName, ...
+        figDir, figXtn, LIVE_PLOTS, figNumBase + fNadd, 'linear', 'log', xlims, ylims, {}, 0, ...
+        0, {}, ticksx, ticklabelsx);
+    close(fig);
 
     BrD = Br - BrSC;
     BthD = Bth - BthSC;
     BphiD = Bphi - BphiSC;
     BmagD = Bmag - BmagSC;
 
-    fig = figure('Visible', figVis); hold on;
-    set(gcf,'Name', ['Vector comp diffs, ' orbStr ', ' magModelDescrip ' - MAG, ' defName]);
-    plot(xx, BrD);
-    plot(xx, BthD);
-    plot(xx, BphiD);
-    plot(xx, BmagD);
-    xlabel(xDescrip);
-    ylabel('Component difference (nT)');
-    xlim([-1,1])
-    title('Neptune field model comparison for Nmax=8, NLS relative to J2000 pole - Voyager 2 MAG')
-    legend('\Delta B_r', '\Delta B_\theta', '\Delta B_\phi', '\Delta |B|')
-    if ~LIVE_PLOTS
-        outFig = fullfile(figDir, [char(scName) parentName 'DeltaBComparison' magModelDescrip ...
-            '.' figXtn]);
-        saveas(fig, outFig)
-        disp(['Figure saved to ' outFig '.'])
-    end
+    fNadd = fNadd + 1;
+    windowName = ['Vector comp diffs, ' orbStr ', ' magModelDescrip ' - MAG, ' defName];
+    yy = [BrD; BthD; BphiD; BmagD];
+    yInfo = 'Component difference (nT)';
+    xlims = [-1, 1];
+    titleInfo = ['Neptune field model comparison for Nmax=8, NLS relative to J2000 pole - ' ...
+        'Voyager 2 MAG'];
+    legendStrings = [string([mathTxt '\Delta B_r']), string([mathTxt '\Delta B_\theta']), ...
+        string([mathTxt '\Delta B_\phi']), string([mathTxt '\Delta |B|'])];
+    fName = [char(scName) parentName 'DeltaBComparison' magModelDescrip];
+    fig = PlotGeneric(xx, yy, legendStrings, windowName, titleInfo, xInfo, yInfo, fName, ...
+        figDir, figXtn, LIVE_PLOTS, figNumBase + fNadd, 'linear', 'linear', xlims);
+    close(fig);
     
     BrLsq = BrD.^2;
     BthLsq = BthD.^2;
@@ -333,23 +293,15 @@ function PlotBandLsqNeptune(ets, t_h, r_km, theta, phi, xyz_km, BrSC, BthSC, Bph
         BphiD = BphiPDS - BphiSC;
         BmagD = BmagPDS - BmagSC;
 
-        fig = figure('Visible', figVis); hold on;
-        set(gcf,'Name', ['Vector comp diffs, ' orbStr ', ' magModelDescrip ', PDS trajec - MAG']);
-        plot(xx, BrD);
-        plot(xx, BthD);
-        plot(xx, BphiD);
-        plot(xx, BmagD);
-        xlabel(xDescrip);
-        ylabel('Component difference (nT)');
-        xlim([-1,1])
-        title('Neptune field model comparison, PDS trajec - MAG')
-        legend('\Delta B_r', '\Delta B_\theta', '\Delta B_\phi', '\Delta |B|')
-        if ~LIVE_PLOTS
-            outFig = fullfile(figDir, [char(scName) parentName 'DeltaBComparisonPDS' magModelDescrip '.' ...
-                figXtn]);
-            saveas(fig, outFig)
-            disp(['Figure saved to ' outFig '.'])
-        end
+        fNadd = fNadd + 1;
+        windowName = ['Vector comp diffs, ' orbStr ', ' magModelDescrip ', PDS trajec - MAG, ' ...
+            defName];
+        yy = [BrD; BthD; BphiD; BmagD];
+        titleInfo = 'Neptune field model comparison, PDS trajec - MAG';
+        fName = [char(scName) parentName 'DeltaBComparisonPDS' magModelDescrip];
+        fig = PlotGeneric(xx, yy, legendStrings, windowName, titleInfo, xInfo, yInfo, fName, ...
+            figDir, figXtn, LIVE_PLOTS, figNumBase + fNadd, 'linear', 'linear', xlims);
+        close(fig);
         
         BrLsq = BrD.^2;
         BthLsq = BthD.^2;
@@ -365,23 +317,14 @@ function PlotBandLsqNeptune(ets, t_h, r_km, theta, phi, xyz_km, BrSC, BthSC, Bph
         BphiD = BphiO8 - BphiSC;
         BmagD = BmagO8 - BmagSC;
 
-        fig = figure('Visible', figVis); hold on;
-        set(gcf,'Name', ['Vector comp diffs, ' orbStr ', ' magModelDescrip ' - MAG, ' O8name]);
-        plot(xx, BrD);
-        plot(xx, BthD);
-        plot(xx, BphiD);
-        plot(xx, BmagD);
-        xlabel(xDescrip);
-        ylabel('Component difference (nT)');
-        xlim([-1,1])
-        title('Neptune field model comparison, NLS exactly as defined with O8 model');
-        legend('\Delta B_r', '\Delta B_\theta', '\Delta B_\phi', '\Delta |B|');
-        if ~LIVE_PLOTS
-            outFig = fullfile(figDir, [char(scName) parentName 'DeltaBComparisonO8' ...
-                magModelDescrip '.' figXtn]);
-            saveas(fig, outFig)
-            disp(['Figure saved to ' outFig '.'])
-        end
+        fNadd = fNadd + 1;
+        windowName = ['Vector comp diffs, ' orbStr ', ' magModelDescrip ' - MAG, ' O8name];
+        yy = [BrD; BthD; BphiD; BmagD];
+        titleInfo = 'Neptune field model comparison, NLS exactly as defined with O8 model';
+        fName = [char(scName) parentName 'DeltaBComparisonO8' magModelDescrip];
+        fig = PlotGeneric(xx, yy, legendStrings, windowName, titleInfo, xInfo, yInfo, fName, ...
+            figDir, figXtn, LIVE_PLOTS, figNumBase + fNadd, 'linear', 'linear', xlims);
+        close(fig);
         
         BrLsq = BrD.^2;
         BthLsq = BthD.^2;

@@ -34,12 +34,19 @@ function CompareNepModels(LIVE_PLOTS, scName, SEQUENTIAL, coeffPath, figDir, fig
     if ~exist('LIVE_PLOTS', 'var'); LIVE_PLOTS = 0; end
     if ~exist('scName', 'var'); scName = "Voyager 2"; end
     if ~exist('SEQUENTIAL', 'var'); SEQUENTIAL = 0; end
+    if ~exist('coeffPath', 'var'); coeffPath = 'modelCoeffs'; end
     if ~exist('figDir', 'var'); figDir = 'figures'; end
     if ~exist('figXtn', 'var'); figXtn = 'pdf'; end
 
     cspice_kclear;
     parentName = 'Neptune';
     sc = char(scName);
+    SetPlotDefaults();
+    % The following are defined in SetPlotDefaults. Do NOT reset them anywhere else.
+    global nmTxt
+    global bnmTxt
+    global mathTxt
+    global bmathTxt
     
     fullOrbFormatSpec = '%23s%10f%8f%8f%10f%10f%10f%[^\n\r]';
     disp(['Importing PDS files over ' parentName ' flybys.'])
@@ -84,11 +91,11 @@ function CompareNepModels(LIVE_PLOTS, scName, SEQUENTIAL, coeffPath, figDir, fig
     npts = length(ets);
     t_h = ets / 3600;
     disp(['Getting ' sc ' positions for ' num2str(npts) ' pts.'])
-    [r_km, theta, phi, xyz_km, spkParent] = GetPosSpice(sc, parentName, t_h);
+    [~, ~, ~, xyz_km, spkParent] = GetPosSpice(sc, parentName, t_h);
     
     tCA_h = -90752.0566;
     tRel_h = t_h - tCA_h;
-    Descrip = 'Time relative to CA (h)';
+    xInfo = 'Time relative to CA (h)';
     
     COMPARE_PDS = 1;
     if COMPARE_PDS
@@ -102,24 +109,22 @@ function CompareNepModels(LIVE_PLOTS, scName, SEQUENTIAL, coeffPath, figDir, fig
         y = r .* sin(th) .* sin(ph);
         z = r .* cos(th);
 
-        fig = figure('Visible', figVis); hold on
         dx = x - xyz_km(1,:);
         dy = y - xyz_km(2,:);
         dz = z - xyz_km(3,:);
         dr = sqrt(dx.^2 + dy.^2 + dz.^2);
-        plot(tRel_h, dx, 'DisplayName', '\Delta x')
-        plot(tRel_h, dy, 'DisplayName', '\Delta y')
-        plot(tRel_h, dz, 'DisplayName', '\Delta z')
-        plot(tRel_h, dr, 'DisplayName', '\Delta r')
-        xlabel(Descrip);
-        ylabel('Coordinate diff (km)');
-        title('Location difference in NLS frame, PDS - SPICE');
-        legend()
-        if ~LIVE_PLOTS
-            outFig = fullfile(figDir, ['Voyager2NeptuneFlybyPDSvsSPICE.' figXtn]);
-            saveas(fig, outFig)
-            disp(['Figure saved to ' outFig '.'])
-        end
+        xx = tRel_h;
+        yy = [dx; dy; dz; dr];
+        yInfo = 'Coordinate diff (km)';
+        legendStrings = [string([mathTxt '\Delta x']), string([mathTxt '\Delta y']), ...
+            string([mathTxt '\Delta z']), string([mathTxt '\Delta r'])];
+        titleInfo = 'Location difference in NLS frame, PDS - SPICE';
+        windowName = 'PDS - SPICE in NLS frame';
+        fName = 'Voyager2NeptuneFlybyPDSvsSPICE';
+        trajDiffNum = 4001;
+        fig = PlotGeneric(xx, yy, legendStrings, windowName, titleInfo, xInfo, yInfo, fName, ...
+            figDir, figXtn, LIVE_PLOTS, trajDiffNum);
+        close(fig);
 
         r_km = r; theta = th; phi = ph; xyz_km = [x; y; z];
     end
@@ -131,15 +136,25 @@ function CompareNepModels(LIVE_PLOTS, scName, SEQUENTIAL, coeffPath, figDir, fig
     MPopts = -1:-1;
     for opt=opts
         for MPopt=MPopts
-            PlotBandLsqNeptune(ets, t_h, r_km, theta, phi, xyz_km, BrSC, BthSC, BphiSC, ...
-                scName, spkParent, orbStr, opt, MPopt, SEQUENTIAL, coeffPath, figDir, figXtn, ...
+            PlotBandLsqNeptune(ets, t_h, r_km, theta, phi, xyz_km, BrSC, BthSC, BphiSC, scName, ...
+                spkParent, orbStr, opt, MPopt, SEQUENTIAL, coeffPath, figDir, figXtn, ...
                 LIVE_PLOTS, 1, 1, 1, 1);
         end
     end
     
     %% Plot trajectory
-    fig = figure(1000, 'Visible', figVis); clf(); hold on;
-    set(gcf,'Name', 'Trajectories');
+    windowName = 'Voyager 2 Neptune trajectories';
+    trajFnum = 9001;
+    if LIVE_PLOTS
+        fig = figure(trajFnum);
+        set(gcf, 'Visible', 'on', 'Name', windowName);
+    else
+        fig = figure('Visible', 'off', 'Name', windowName);
+    end
+    clf(); hold on;
+    [interpreter, font] = SetPlotDefaults();
+    ApplyPlotDefaults(fig, interpreter, font);
+
     the = linspace(0,pi,19); ph = linspace(0,2*pi,37);
     [the2D, ph2D] = meshgrid(the,ph);
     xp = sin(the2D) .* cos(ph2D); yp = sin(the2D) .* sin(ph2D); zp = cos(the2D);
@@ -148,7 +163,7 @@ function CompareNepModels(LIVE_PLOTS, scName, SEQUENTIAL, coeffPath, figDir, fig
     scatter3(1.25, 0, 0, 15, 'r')
     axlim = 1.5;
     pbaspect([1 1 1]);
-    xlim([-axlim,axlim]);ylim([-axlim,axlim]);zlim([-axlim,axlim]);
+    xlim([-axlim,axlim]); ylim([-axlim,axlim]); zlim([-axlim,axlim]);
     grid on;
     xlabel('Despun NLS x (R_S)');ylabel('Despun NLS y (R_S)');zlabel('Despun NLS z (R_S)');
     title('Voyager 2 Neptune trajectory in despun NLS')
@@ -194,7 +209,10 @@ function CompareNepModels(LIVE_PLOTS, scName, SEQUENTIAL, coeffPath, figDir, fig
     
     if ~LIVE_PLOTS
         outFig = fullfile(figDir, ['Voyager2NeptuneFlybyTrajectories.' figXtn]);
+        fig.Units = fig.PaperUnits;
+        fig.PaperSize = fig.Position(3:4);
         saveas(fig, outFig)
         disp(['Figure saved to ' outFig '.'])
     end
+
 end

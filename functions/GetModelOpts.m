@@ -166,6 +166,7 @@ function [MagModel, CsheetModel, MPmodel, magModelDescrip, fEnd] = GetModelOpts(
                     CsheetModel = K2005sheet;
                     magModelDescrip = 'KS2005';
                     fEnd = 'KS2005';
+                    MPopt = -1; % Prevent evalaution of an MP model because KS2005 already has one
                 case 4
                     MagModel = JRM09;
                     CsheetModel = C2020sheet;

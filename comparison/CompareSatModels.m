@@ -40,6 +40,12 @@ function CompareSatModels(LIVE_PLOTS, scNames, SEQUENTIAL, coeffPath, figDir, fi
     
     cspice_kclear;
     parentName = 'Saturn';
+    SetPlotDefaults();
+    % The following are defined in SetPlotDefaults. Do NOT reset them anywhere else.
+    global nmTxt
+    global bnmTxt
+    global mathTxt
+    global bmathTxt
     
     fullOrbFormatSpec = ['%23s%12s%1d%9f%9f%9f%9f%9f%7f%7f%8f%8f%8f%10s%[^\n\r]', ...
         '%24s%6d%3d%2d%2d%15f%15f%15f%15f%15f%15f%15f%15f%15f%15f%2d%10s%[^\n\r]'];
@@ -53,7 +59,19 @@ function CompareSatModels(LIVE_PLOTS, scNames, SEQUENTIAL, coeffPath, figDir, fi
     etS = cspice_str2et(etStime);
     tCA_h = [-167724.2239, -160856.5842];
     
-    fig = figure(1000, 'Visible', figVis); clf(); hold on;
+    %% Plot trajectories
+    windowName = 'Spacecraft Saturn trajectories';
+    trajFnum = 9001;
+    if LIVE_PLOTS
+        fig = figure(trajFnum);
+        set(gcf, 'Visible', 'on', 'Name', windowName);
+    else
+        fig = figure('Visible', 'off', 'Name', windowName);
+    end
+    clf(); hold on;
+    [interpreter, font] = SetPlotDefaults();
+    ApplyPlotDefaults(fig, interpreter, font);
+
     set(gcf,'Name', 'Trajectories');
     the = linspace(0,pi,50); ph = linspace(0,2*pi,100);
     [the2D, ph2D] = meshgrid(the,ph);
@@ -61,7 +79,7 @@ function CompareSatModels(LIVE_PLOTS, scNames, SEQUENTIAL, coeffPath, figDir, fi
     surf(xp,yp,zp, 'FaceColor', '#EDB120');
     axlim = 30;
     pbaspect([1 1 1]);
-    xlim([-axlim,axlim]);ylim([-axlim,axlim]);zlim([-axlim,axlim]);
+    xlim([-axlim, axlim]); ylim([-axlim, axlim]); zlim([-axlim, axlim]);
     grid on;
     xlabel('x KSO (R_S, toward Sun)');
     ylabel('y KSO (R_S), \approx orbital v');
@@ -154,7 +172,7 @@ function CompareSatModels(LIVE_PLOTS, scNames, SEQUENTIAL, coeffPath, figDir, fi
         [~, ~, ~, xyzKSO_km, ~] = GetPosSpice(sc, parentName, t_h{i}, 'KSO');
         xyz_Rp = xyzKSO_km / Rp_km;
         x = xyz_Rp(1,:); y = xyz_Rp(2,:); z = xyz_Rp(3,:);
-        fig = figure(1000, 'Visible', figVis); hold on;
+        figure(trajFnum);
         scTraj{i} = plot3(x,y,z, 'LineWidth', 1.5, 'DisplayName', sc);
         
     end
@@ -162,6 +180,8 @@ function CompareSatModels(LIVE_PLOTS, scNames, SEQUENTIAL, coeffPath, figDir, fi
 
     if ~LIVE_PLOTS
         outFig = fullfile(figDir, [parentName 'Trajectories.' figXtn]);
+        fig.Units = fig.PaperUnits;
+        fig.PaperSize = fig.Position(3:4);
         saveas(fig, outFig)
         disp(['Figure saved to ' outFig '.'])
     end

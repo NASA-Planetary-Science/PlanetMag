@@ -104,6 +104,12 @@ function [T_h, B0vec, B1vec1, B1vec2, B1vec3, outFname, header] = PlanetMag(moon
     if ~exist('magPhase_deg', 'var'); magPhase_deg = 0; end
     
     parentName = LoadSpice(moonName);
+    SetPlotDefaults();
+    % The following are defined in SetPlotDefaults. Do NOT reset them anywhere else.
+    global nmTxt
+    global bnmTxt
+    global mathTxt
+    global bmathTxt
     
     switch coordType
         case 'IAU'
@@ -219,7 +225,7 @@ function [T_h, B0vec, B1vec1, B1vec2, B1vec3, outFname, header] = PlanetMag(moon
                     [Bvec, Mdip_nT, Odip_km] = MagFldParent(parentName, rM_km, thetaM, phiM, ...
                         MagModel, CsheetModel, magPhase_deg, SPHOUT);
                 end
-                if DO_MPAUSE && ~strcmp(MPmodel, 'None')
+                if DO_MPAUSE && ~(strcmp(MPmodel, 'None') || contains(magModelDescrip, 'KS2005'))
     
                     nSW_pcc = 4 / a_AU^2 * ones(1,npts);
                     vSW_kms = 400  * ones(1,npts);
@@ -297,7 +303,8 @@ function [T_h, B0vec, B1vec1, B1vec2, B1vec3, outFname, header] = PlanetMag(moon
                 [TfinalFFT_h, B0vecFFT, B1vecFFT] = ExcitationSpectrum(moonName, nOsc, rate, ...
                     Tinterest_h, coordType, outData, fPatternFT, fPatternTseries, ...
                     magPhase_deg, 0, SPHOUT, DO_MPAUSE);
-                PlotSpectrum(moonName, LIVE_PLOTS, outData, figDir, fPatternFT, figXtn);
+                figNum = 200 + 10*specificModel + 1*specificMPmodel;
+                PlotSpectrum(moonName, LIVE_PLOTS, figNum, outData, figDir, fPatternFT, figXtn);
             end
     
             npts = length(t_h);
@@ -333,45 +340,45 @@ function [T_h, B0vec, B1vec1, B1vec2, B1vec3, outFname, header] = PlanetMag(moon
             else
                 Bv1lbl = 'B_x'; Bv2lbl = 'B_y'; Bv3lbl = 'B_z';
             end
+            figNumBase = 1000 + 100*specificModel + 10*specificMPmodel;
     
+            % Plot vector component 1 reproduction vs input time series
             xx = t_h;
             yy = [BvecMoon(1,:); Bvec1Tot];
             windowName = ['Bvec1 full time, ' magModelDescrip];
-            legendStrings = [string([Bv1lbl ' model']), string([Bv1lbl ' exc'])];
-            titleInfo = [Bv1lbl ' reproduced vs. ' magModelDescrip];
-            xInfo = 'Time (hr)';
-            yInfo = [Bv1lbl ' (nT)'];
+            legendStrings = [string([mathTxt Bv1lbl nmTxt ' model']), string([mathTxt Bv1lbl ...
+                nmTxt ' exc'])];
+            titleInfo = [mathTxt Bv1lbl bnmTxt ' reproduced vs. ' magModelDescrip];
+            xInfo = [nmTxt 'Time (hr)'];
+            yInfo = [mathTxt Bv1lbl nmTxt ' (nT)'];
             fName = [moonName 'Bv1_fullRepro' magModelDescrip era coordType];
-            PlotGeneric(xx, yy, legendStrings, windowName, titleInfo, xInfo, yInfo, figDir, ...
-                fName, figXtn, LIVE_PLOTS)
+            fig = PlotGeneric(xx, yy, legendStrings, windowName, titleInfo, xInfo, yInfo, ...
+                fName, figDir, figXtn, LIVE_PLOTS, figNumBase + 1);
+            close(fig);
 
-            fig = figure('Visible', figVis); hold on;
-            set(gcf,'Name', ['Bvec2 full time, ' magModelDescrip]);
-            plot(t_h, BvecMoon(2,:));
-            plot(t_h, Bvec2Tot);
-            xlabel('Time (hr)');
-            ylabel([Bv2lbl ' (nT)']);
-            legend([Bv2lbl ' model'], [Bv2lbl ' exc']);
-            if ~LIVE_PLOTS
-                outFig = fullfile(figDir, [moonName 'Bv2_fullRepro' magModelDescrip era ...
-                    coordType '.' figXtn]);
-                saveas(fig, outFig)
-                disp(['Figure saved to ' outFig '.'])
-            end
+            % Plot vector component 2 reproduction vs input time series
+            yy = [BvecMoon(2,:); Bvec2Tot];
+            windowName = ['Bvec2 full time, ' magModelDescrip];
+            legendStrings = [string([mathTxt Bv2lbl nmTxt ' model']), string([mathTxt Bv2lbl ...
+                nmTxt ' exc'])];
+            titleInfo = [mathTxt Bv2lbl bnmTxt ' reproduced vs. ' magModelDescrip];
+            yInfo = [mathTxt Bv2lbl nmTxt ' (nT)'];
+            fName = [moonName 'Bv2_fullRepro' magModelDescrip era coordType];
+            fig = PlotGeneric(xx, yy, legendStrings, windowName, titleInfo, xInfo, yInfo, ...
+                fName, figDir, figXtn, LIVE_PLOTS, figNumBase + 2);
+            close(fig);
 
-            fig = figure('Visible', figVis); hold on;
-            set(gcf,'Name', ['Bvec3 full time, ' magModelDescrip]);
-            plot(t_h, BvecMoon(3,:));
-            plot(t_h, Bvec3Tot);
-            xlabel('Time (hr)');
-            ylabel([Bv3lbl ' (nT)']);
-            legend([Bv3lbl ' model'], [Bv3lbl ' exc']);
-            if ~LIVE_PLOTS
-                outFig = fullfile(figDir, [moonName 'Bv3_fullRepro' magModelDescrip era ...
-                    coordType '.' figXtn]);
-                saveas(fig, outFig)
-                disp(['Figure saved to ' outFig '.'])
-            end
+            % Plot vector component 3 reproduction vs input time series
+            yy = [BvecMoon(3,:); Bvec3Tot];
+            windowName = ['Bvec3 full time, ' magModelDescrip];
+            legendStrings = [string([mathTxt Bv3lbl nmTxt ' model']), string([mathTxt Bv3lbl ...
+                nmTxt ' exc'])];
+            titleInfo = [mathTxt Bv3lbl bnmTxt ' reproduced vs. ' magModelDescrip];
+            yInfo = [mathTxt Bv3lbl nmTxt ' (nT)'];
+            fName = [moonName 'Bv3_fullRepro' magModelDescrip era coordType];
+            fig = PlotGeneric(xx, yy, legendStrings, windowName, titleInfo, xInfo, yInfo, ...
+                fName, figDir, figXtn, LIVE_PLOTS, figNumBase + 3);
+            close(fig);
     
             Bvec1D = BvecMoon(1,:) - Bvec1Tot;
             Bvec2D = BvecMoon(2,:) - Bvec2Tot;
@@ -394,25 +401,22 @@ function [T_h, B0vec, B1vec1, B1vec2, B1vec3, outFname, header] = PlanetMag(moon
             Bvec2D1f = 2*Bvec2D1(iTmax:end);
             Bvec3D1f = 2*Bvec3D1(iTmax:end);
     
-            fig = figure('Visible', figVis); hold on;
-            set(gcf,'Name', ['Residual FFT for ' era ' era, ' magModelDescrip]);
-            plot(Tfinal_h, abs(Bvec1D1f));
-            plot(Tfinal_h, abs(Bvec2D1f));
-            plot(Tfinal_h, abs(Bvec3D1f));
-            legend(['\Delta ' Bv1lbl], ['\Delta ' Bv2lbl], ['\Delta ' Bv3lbl]);
+            % Plot residual FFT spectrum
+            xx = Tfinal_h;
+            yy = [abs(Bvec1D1f); abs(Bvec2D1f); abs(Bvec3D1f)];
+            windowName = ['Residual FFT for ' era ' era, ' magModelDescrip];
+            legendStrings = [string([mathTxt '\Delta ' Bv1lbl]), string([mathTxt '\Delta ' ...
+                Bv2lbl]), string([mathTxt '\Delta ' Bv3lbl])];
+            xlims = [1 Tmax];
+            xInfo = [nmTxt 'Period (hr)'];
+            yInfo = [nmTxt 'FT' mathTxt '\{B_i - B_{i,\rm{exc}}\}' nmTxt ' (nT)'];
+            fName = [moonName 'ResidualFFT' magModelDescrip era coordType];
+            figNum = figNumBase / 10;
+            fig = PlotGeneric(xx, yy, legendStrings, windowName, titleInfo, xInfo, yInfo, ...
+                fName, figDir, figXtn, LIVE_PLOTS, figNum, 'log', 'log', xlims);
+            close(fig);
     
-            set(gca,'xscale','log');
-            set(gca,'yscale','log');
-            xlabel('Period (hr)');
-            ylabel('FT\{B_i - B_{i,exc}\} (nT)');
-            xlim([1 Tmax]);
-            if ~LIVE_PLOTS
-                outFig = fullfile(figDir, [moonName 'ResidualFFT' magModelDescrip era coordType ...
-                    '.' figXtn]);
-                saveas(fig, outFig)
-                disp(['Figure saved to ' outFig '.'])
-            end
-    
+            % Locate main frequencies of differences in the reproduced time series
             Bdiff = sqrt(abs(Bvec1D1f).^2 + abs(Bvec2D1f).^2 + abs(Bvec3D1f).^2);
             maxBdiff = sort(Bdiff, 'descend');
             nGreatest = 10;

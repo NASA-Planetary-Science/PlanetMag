@@ -84,12 +84,6 @@ function PlotBandLsqMoon(ets, t_h, r_km, theta, phi, xyz_km, r_RM, BxSC, BySC, B
     if ~exist('LIVE_PLOTS', 'var'); LIVE_PLOTS = 0; end
     if ~exist('jt_h', 'var'); jt_h = []; end
     if isempty(jt_h); JUNOTOO=0; else; JUNOTOO=1; end
-
-    if LIVE_PLOTS
-        figVis = 'on';
-    else
-        figVis = 'off';
-    end
     
     [MagModel, CsheetModel, MPmodel, magModelDescrip, fEnd] = GetModelOpts(parentName, opt, MPopt);
     magPhase = 0;
@@ -102,7 +96,7 @@ function PlotBandLsqMoon(ets, t_h, r_km, theta, phi, xyz_km, r_RM, BxSC, BySC, B
         [Bvec, Mdip_nT, Odip_km] = MagFldParent(parentName, r_km, theta, phi, MagModel, ...
             CsheetModel, magPhase, 1);
     end
-    if ~strcmp(MPmodel, 'None')
+    if ~(strcmp(MPmodel, 'None') || contains(magModelDescrip, 'KS2005'))
 
         nSW_pcc = 0.14 * ones(1,npts);
         vSW_kms = 400  * ones(1,npts);
@@ -195,66 +189,53 @@ function PlotBandLsqMoon(ets, t_h, r_km, theta, phi, xyz_km, r_RM, BxSC, BySC, B
     
     %%
     
-    excStr = 'Excitation moments';
-    
+    excStr = "Excitation moments";
+    commonTitle = [parentName ' model comparison vs ' char(scName) ' data'];
     npts = length(t_h);
     if SEQUENTIAL
         xx = 1:npts;
-        xDescrip = 'Measurement index';
+        xInfo = 'Measurement index';
     else
         xx = t_h;
-        xDescrip = 'Time past J2000 (h)';
+        xInfo = 'Time past J2000 (h)';
     end
     if JUNOTOO; xJuno = [xx(npts_noJuno+1), xx(npts)]; end
     
+    figNumBase = 3000 + 100*opt + 10*MPopt;
+    windowName = ['Bx, ' fbStr ', ' magModelDescrip];
+    yy = [Bx; BxSC; BxExc];
+    yInfo = 'Vector component (nT)';
+    titleInfo = commonTitle;
     if length(scName) > 1
         scName = strjoin(scName, '+');
     end
-    b000ff = '#B000FF';
-    fig = figure('Visible', figVis); hold on;
-    set(gcf,'Name', ['Bx, ' fbStr ', ' magModelDescrip]);
-    plot(xx, Bx);
-    plot(xx, BxSC);
-    plot(xx, BxExc);
-    if JUNOTOO; vlines(xJuno, b000ff); end
-    xlabel(xDescrip);
-    ylabel('Vector component (nT)');
-    legend(magModelDescrip, strcat(scName, ' MAG'), excStr);
-    if ~LIVE_PLOTS
-        outFig = fullfile(figDir, [moonName 'BxFlybyComparison' magModelDescrip '.' figXtn]);
-        saveas(fig, outFig)
-        disp(['Figure saved to ' outFig '.'])
+    legendStrings = [string(magModelDescrip), strcat(scName, ' MAG'), excStr];
+    if JUNOTOO
+        vlinexCols = {xJuno, '#B000FF'};
+    else
+        vlinexCols = {};
     end
+    fName = [moonName 'BxFlybyComparison' magModelDescrip];
+    fig = PlotGeneric(xx, yy, legendStrings, windowName, titleInfo, xInfo, yInfo, fName, ...
+        figDir, figXtn, LIVE_PLOTS, figNumBase + 1, 'linear', 'linear', 'auto', 'auto', {}, 0, ...
+        0, vlinexCols);
+    close(fig);
 
-    fig = figure('Visible', figVis); hold on;
-    set(gcf,'Name', ['By, ' fbStr ', ' magModelDescrip]);
-    plot(xx, By);
-    plot(xx, BySC);
-    plot(xx, ByExc);
-    if JUNOTOO; vlines(xJuno, b000ff); end
-    xlabel(xDescrip);
-    ylabel('Vector component (nT)');
-    legend(magModelDescrip, strcat(scName, ' MAG'), excStr);
-    if ~LIVE_PLOTS
-        outFig = fullfile(figDir, [moonName 'ByFlybyComparison' magModelDescrip '.' figXtn]);
-        saveas(fig, outFig)
-        disp(['Figure saved to ' outFig '.'])
-    end
+    windowName = ['By, ' fbStr ', ' magModelDescrip];
+    yy = [By; BySC; ByExc];
+    fName = [moonName 'ByFlybyComparison' magModelDescrip];
+    fig = PlotGeneric(xx, yy, legendStrings, windowName, titleInfo, xInfo, yInfo, fName, ...
+        figDir, figXtn, LIVE_PLOTS, figNumBase + 2, 'linear', 'linear', 'auto', 'auto', {}, 0, ...
+        0, vlinexCols);
+    close(fig);
 
-    fig = figure('Visible', figVis); hold on;
-    set(gcf,'Name', ['Bz, ' fbStr ', ' magModelDescrip]);
-    plot(xx, Bz);
-    plot(xx, BzSC);
-    plot(xx, BzExc);
-    if JUNOTOO; vlines(xJuno, b000ff); end
-    xlabel(xDescrip);
-    ylabel('Vector component (nT)');
-    legend(magModelDescrip, strcat(scName, ' MAG'), excStr);
-    if ~LIVE_PLOTS
-        outFig = fullfile(figDir, [moonName 'BzFlybyComparison' magModelDescrip '.' figXtn]);
-        saveas(fig, outFig)
-        disp(['Figure saved to ' outFig '.'])
-    end
+    windowName = ['Bz, ' fbStr ', ' magModelDescrip];
+    yy = [Bz; BzSC; BzExc];
+    fName = [moonName 'BzFlybyComparison' magModelDescrip];
+    fig = PlotGeneric(xx, yy, legendStrings, windowName, titleInfo, xInfo, yInfo, fName, ...
+        figDir, figXtn, LIVE_PLOTS, figNumBase + 3, 'linear', 'linear', 'auto', 'auto', {}, 0, ...
+        0, vlinexCols);
+    close(fig);
 
     BxD = Bx - BxSC;
     ByD = By - BySC;
@@ -263,24 +244,17 @@ function PlotBandLsqMoon(ets, t_h, r_km, theta, phi, xyz_km, r_RM, BxSC, BySC, B
     ByDexc = ByExc - BySC;
     BzDexc = BzExc - BzSC;
 
-    fig = figure('Visible', figVis); hold on;
-    set(gcf,'Name', ['IAU vector comp diffs, ' fbStr ', ' magModelDescrip ' - MAG']);
-    plot(xx, BxD);
-    plot(xx, ByD);
-    plot(xx, BzD);
-    plot(xx, BxDexc);
-    plot(xx, ByDexc);
-    plot(xx, BzDexc);
-    if JUNOTOO; vlines(xJuno, b000ff); end
-    xlabel(xDescrip);
-    ylabel('Component difference (nT)');
-    legend('\Delta B_x', '\Delta B_y', '\Delta B_z', '\Delta B^e_x', '\Delta B^e_y', ...
-        '\Delta B^e_z');
-    if ~LIVE_PLOTS
-        outFig = fullfile(figDir, [moonName 'DeltaBflyby' magModelDescrip '.' figXtn]);
-        saveas(fig, outFig)
-        disp(['Figure saved to ' outFig '.'])
-    end
+    windowName = ['IAU vector comp diffs, ' fbStr ', ' magModelDescrip ' - MAG'];
+    yy = [BxD; ByD; BzD; BxDexc; ByDexc; BzDexc];
+    yInfo = 'Component difference (nT)';
+    legendStrings = [string([mathTxt '\Delta B_x']), string([mathTxt '\Delta B_y']), ...
+        string([mathTxt '\Delta B_z']), string([mathTxt '\Delta B^e_x']), string([mathTxt ...
+        '\Delta B^e_y']), string([mathTxt '\Delta B^e_z'])];
+    fName = [moonName 'DeltaBflyby' magModelDescrip];
+    fig = PlotGeneric(xx, yy, legendStrings, windowName, titleInfo, xInfo, yInfo, fName, ...
+        figDir, figXtn, LIVE_PLOTS, figNumBase + 4, 'linear', 'linear', 'auto', 'auto', {}, 0, ...
+        0, vlinexCols);
+    close(fig);
 
     RMmin = 2;
     iFar = find(r_RM > RMmin);

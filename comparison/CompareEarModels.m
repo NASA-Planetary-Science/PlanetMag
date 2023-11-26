@@ -43,6 +43,7 @@ function CompareEarModels(LIVE_PLOTS, scName, xtn, SEQUENTIAL, coeffPath, figDir
     
     parentName = 'Earth';
     sc = char(scName);
+    SetPlotDefaults();
     
     cspice_kclear;
     fullOrbFormatSpec = '%23s%20f%20f%20f%20f%20f%20f%[^\n\r]';
@@ -85,25 +86,23 @@ function CompareEarModels(LIVE_PLOTS, scName, xtn, SEQUENTIAL, coeffPath, figDir
     % Plot latitude to identify correlations with field model deviations
     if SEQUENTIAL
         xx = 1:nTot;
-        xDescrip = 'Measurement index';
+        xInfo = 'Measurement index';
     else
         xx = t_h - 175308.0192178;
-        xDescrip = 'Time relative to NY 2020 (h)';
+        xInfo = 'Time relative to NY 2020 (h)';
     end
     lat_deg = 90 - rad2deg(theta);
 
-    fig = figure('Visible', figVis); hold on;
-    set(gcf,'Name', [char(scName) ' latitudes']);
-    plot(xx, lat_deg, 'DisplayName', 'latitude');
-    xlabel(xDescrip);
-    ylabel('Latitude (degrees)');
-    title('Swarm ABC latitudes on 2020-01-01');
-    legend();
-    if ~LIVE_PLOTS
-        outFig = fullfile(figDir, ['SwarmABClatitudes.' figXtn]);
-        saveas(fig, outFig)
-        disp(['Figure saved to ' outFig '.'])
-    end
+    windowName = [char(scName) ' latitudes'];
+    yy = lat_deg;
+    yInfo = 'Latitude (degrees)';
+    titleInfo = 'Swarm ABC latitudes on 2020-01-01';
+    legendStrings = "latitude";
+    fName = 'SwarmABClatitudes';
+    trajFnum = 9001;
+    fig = PlotGeneric(xx, yy, legendStrings, windowName, titleInfo, xInfo, yInfo, fName, ...
+        figDir, figXtn, LIVE_PLOTS, trajFnum);
+    close(fig);
     
     %% Plot and calculate products
     nOpts = 1; nMPopts = 0;

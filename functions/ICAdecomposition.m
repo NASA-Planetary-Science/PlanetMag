@@ -102,12 +102,11 @@ function BD = ICAdecomposition(moonName, parentName, ets, Bvec, magModelDescrip,
     if ~exist('COMPARE_SEUFERT', 'var'); COMPARE_SEUFERT = 0; end
     if ~exist('LIVE_PLOTS', 'var'); LIVE_PLOTS = 0; end
     if ~exist('figDir', 'var'); figDir = 'figures'; end
-
-    if LIVE_PLOTS
-        figVis = 'on';
-    else
-        figVis = 'off';
-    end
+    % The following are defined in SetPlotDefaults. Do NOT reset them anywhere else.
+    global nmTxt
+    global bnmTxt
+    global mathTxt
+    global bmathTxt
 
     ets=ets(:); % Ensures ets is a row vector
     npts = length(ets);
@@ -191,9 +190,11 @@ function BD = ICAdecomposition(moonName, parentName, ets, Bvec, magModelDescrip,
         if SPHOUT
             Bv1name = 'Br'; Bv2name = 'Bth'; Bv3name = 'Bphi';
             Pv1name = 'Pr'; Pv2name = 'Pth'; Pv3name = 'Pphi';
+            Bv1lbl = 'B_r'; Bv2lbl = 'B_\theta'; Bv3lbl = 'B_\phi';
         else
             Bv1name = 'Bx'; Bv2name = 'By'; Bv3name = 'Bz';
             Pv1name = 'Px'; Pv2name = 'Py'; Pv3name = 'Pz';
+            Bv1lbl = 'B_x'; Bv2lbl = 'B_y'; Bv3lbl = 'B_z';
         end
         disp(['  ' Bv1name ' = ' num2str(BexcVec1abs(i),'%0.2f') ' nT, ' Bv2name ' = ' ...
             num2str(BexcVec2abs(i),'%0.2f') ' nT, ' Bv3name ' = ' ...
@@ -228,100 +229,96 @@ function BD = ICAdecomposition(moonName, parentName, ets, Bvec, magModelDescrip,
                 BvecCompMax = Bvec3max;
         end
 
-        fig = figure('Visible', figVis);
-        hold on; box on; grid on;
-        set(gcf,'Name', [magModelDescrip ' model vs. reconstruction, first 200h']);
-        title([moonName ' ' magModelDescrip ' model vs. reconstruction, first 200h'])
-        Bvec1in = plot(etsRel_h, Bvec(1,:), 'b');
-        Bvec2in = plot(etsRel_h, Bvec(2,:), 'r');
-        Bvec3in = plot(etsRel_h, Bvec(3,:), 'g');
-        Bvec1out = plot(etsRel_h, Bvec1est, '--k');
-        Bvec2out = plot(etsRel_h, Bvec2est, '--k');
-        Bvec3out = plot(etsRel_h, Bvec3est, '--k');
+        figNumBase = 10;
+        windowName = [magModelDescrip ' model vs. reconstruction, first 200h'];
+        titleInfo = [bnmTxt moonName ' ' magModelDescrip ' model vs. reconstruction, first 200h'];
+        xx = etsRel_h;
+        yy = [Bvec(1,:); Bvec(2,:); Bvec(3,:); Bvec1est'; Bvec2est'; Bvec3est'; Bvec1max'; ...
+            Bvec2max'; Bvec3max'];
+        cfmt = {'b', 'r', 'g', '--k', '--k', '--k', 'c', 'm', 'y'};
+        legendStrings = [string(Bv1lbl), string(Bv2lbl), string(Bv3lbl), "Reproduced", ...
+            "Largest only"];
+        xInfo = 'Time (hr)';
+        yInfo = 'Magnetic Field (nT)';
+        xlims = [0 200];
+        fName = [moonName 'BVecReconVs' magModelDescrip];
+        fig = PlotGeneric(xx, yy, legendStrings, windowName, titleInfo, xInfo, yInfo, fName, ...
+            figDir, figXtn, LIVE_PLOTS, figNumBase + 1, 'linear', 'linear', xlims, 'auto', ...
+            cfmt, 1, 1);
+        close(fig);
 
-        Bvec1maxOnly = plot(etsRel_h, Bvec1max, 'm');
-        Bvec2maxOnly = plot(etsRel_h, Bvec2max, 'm');
-        Bvec3maxOnly = plot(etsRel_h, Bvec3max, 'm');
-        legend([Bvec1in, Bvec2in, Bvec3in, Bvec1out, Bvec1maxOnly], Bv1name, Bv2name, Bv3name, ...
-            'Reproduced', 'Largest only')
+        windowName = [magModelDescrip ' model vs. reconstruction diff, first 200h'];
+        titleInfo = [bnmTxt moonName ' ' magModelDescrip ' model vs. reconstruction diff, ' ...
+            'first 200h'];
+        yy = [Bvec1diff; Bvec2diff; Bvec3diff; Bvec(iMaxComp,:) - BvecCompMax'];
+        cfmt = {'b', 'r', 'g', 'm'};
+        legendStrings = [string(Bv1lbl), string(Bv2lbl), string(Bv3lbl), "Largest only"];
+        yInfo = 'Magnetic Field Error (nT)';
+        fName = [moonName 'DeltaBreconVs' magModelDescrip];
+        fig = PlotGeneric(xx, yy, legendStrings, windowName, titleInfo, xInfo, yInfo, fName, ...
+            figDir, figXtn, LIVE_PLOTS, figNumBase + 2, 'linear', 'linear', xlims, 'auto', ...
+            cfmt, 1, 1);
+        close(fig);
 
-        xlabel('Time (hr)')
-        ylabel('Magnetic Field (nT)')
-        set(gca,'fontsize',16)
-        xlim([0 200])
-        if ~LIVE_PLOTS
-            outFig = fullfile(figDir, [moonName 'BVecReconVs' magModelDescrip '.' figXtn]);
-            saveas(fig, outFig)
-            disp(['Figure saved to ' outFig '.'])
-        end
-
-        fig = figure('Visible', figVis);
-        hold on; box on; grid on;
-        set(gcf,'Name', [magModelDescrip ' model vs. reconstruction diff, first 200h']);
-        title([moonName ' ' magModelDescrip ' model vs. reconstruction diff, first 200h'])
-        Bvec1diffPlot = plot(etsRel_h, Bvec1diff, 'b');
-        Bvec2diffPlot = plot(etsRel_h, Bvec2diff, 'r');
-        Bvec3diffPlot = plot(etsRel_h, Bvec3diff, 'g');
-        BmaxDiffPlot = plot(etsRel_h, Bvec(iMaxComp,:) - BvecCompMax', 'm');
-        legend([Bvec1diffPlot, Bvec2diffPlot, Bvec3diffPlot, BmaxDiffPlot], Bv1name, ...
-            Bv2name, Bv3name, 'Largest only')
-        xlabel('Time (hr)')
-        ylabel('Magnetic Field Error (nT)')
-        set(gca,'fontsize',16)
-        xlim([0 200])
-        if ~LIVE_PLOTS
-            outFig = fullfile(figDir, [moonName 'DeltaBreconVs' magModelDescrip '.' figXtn]);
-            saveas(fig, outFig)
-            disp(['Figure saved to ' outFig '.'])
-        end
-
-        fig = figure('Visible', figVis); box on;
-        set(gcf,'Name', [moonName ' ' magModelDescrip ' hodogram']);
+        windowName = [moonName ' ' magModelDescrip ' hodogram'];
         if SPHOUT
             if strcmp(parentName,'Saturn')
-                plot(-Bvec(1,:), -Bvec(2,:), 'b')
-                xlabel(['-B_r ' parentName ' SIII (\approx B_y ' moonName(1) '\phi\Omega, nT)'])
-                ylabel(['-B_\theta ' parentName ' SIII (\approx B_z ' moonName(1) ...
-                    '\phi\Omega, nT)'])
-                title([moonName ' spin-parent plane hodogram, ' magModelDescrip])
+                xx = -Bvec(1,:);
+                yy = -Bvec(2,:);
+                BcompMax = max(abs(Bvec(1:2,:)), [], 'all');
+                xInfo = [mathTxt '-B_r ' nmTxt parentName ' SIII (' mathTxt '\approx B_y ' ...
+                    nmTxt moonName(1) mathTxt '\phi\Omega' nmTxt ', nT)'];
+                yInfo = [mathTxt '-B_\theta ' nmTxt parentName ' SIII (' mathTxt '\approx B_z ' ...
+                    nmTxt moonName(1) mathTxt '\phi\Omega' nmTxt ', nT)'];
+                titleInfo = [bnmTxt moonName ' spin-parent plane hodogram, ' magModelDescrip];
             else
                 if COMPARE_SEUFERT
-                    plot(-Bvec(3,:), Bvec(1,:), 'b')
-                    xlabel(['-B_\phi ' parentName ' SIII (\approx -B_x ' moonName(1) ...
-                        '\phi\Omega, nT)'])
-                    ylabel(['B_r ' parentName ' SIII (\approx -B_y ' moonName(1) ...
-                        '\phi\Omega, nT)'])
+                    xx = -Bvec(3,:);
+                    yy =  Bvec(1,:);
+                    xInfo = [mathTxt '-B_\phi ' nmTxt parentName ' SIII (' mathTxt ...
+                        '\approx -B_x ' nmTxt moonName(1) mathTxt '\phi\Omega' nmTxt ', nT)'];
+                    yInfo = [mathTxt 'B_r ' nmTxt parentName ' SIII (' mathTxt ...
+                        '\approx -B_y ' nmTxt moonName(1) mathTxt '\phi\Omega' nmTxt ', nT)'];
                 else
-                    plot(Bvec(3,:), -Bvec(1,:), 'b')
-                    xlabel(['B_\phi ' parentName ' SIII (\approx B_x ' moonName(1) ...
-                        '\phi\Omega, nT)'])
-                    ylabel(['-B_r ' parentName ' SIII (\approx B_y ' moonName(1) ...
-                        '\phi\Omega, nT)'])
+                    xx =  Bvec(3,:);
+                    yy = -Bvec(1,:);
+                    xInfo = [mathTxt 'B_\phi ' nmTxt parentName ' SIII (' mathTxt ...
+                        '\approx B_x ' nmTxt moonName(1) mathTxt '\phi\Omega' nmTxt ', nT)'];
+                    yInfo = [mathTxt '-B_r ' nmTxt parentName ' SIII (' mathTxt ...
+                        '\approx B_y ' nmTxt moonName(1) mathTxt '\phi\Omega' nmTxt ', nT)'];
                 end
-                title([moonName ' equatorial plane hodogram, ' magModelDescrip])
+                BcompMax = max(abs([Bvec(1,:), Bvec(3,:)]));
+                titleInfo = [moonName ' equatorial plane hodogram, ' magModelDescrip];
             end
         else
             if strcmp(parentName,'Saturn')
-                plot(Bvec(1,:), Bvec(3,:), 'b')
-                xlabel(['B_x IAU (\approx B_y ' moonName(1) '\phi\Omega, nT)'])
-                ylabel(['B_z IAU (\approx B_z ' moonName(1) '\phi\Omega, nT)'])
-                title([moonName ' spin-parent plane hodogram, ' magModelDescrip])
+                xx = Bvec(1,:);
+                yy = Bvec(3,:);
+                BcompMax = max(abs([Bvec(1,:), Bvec(3,:)]));
+                xInfo = [mathTxt 'B_x ' nmTxt 'IAU (' mathTxt '\approx B_y ' nmTxt moonName(1) ...
+                    mathTxt '\phi\Omega' nmTxt ', nT)'];
+                yInfo = [mathTxt 'B_z ' nmTxt 'IAU (' mathTxt '\approx B_z ' nmTxt moonName(1) ...
+                    mathTxt '\phi\Omega' nmTxt ', nT)'];
+                titleInfo = [moonName ' spin-parent plane hodogram, ' magModelDescrip];
             else
-                plot(Bvec(2,:), Bvec(1,:), 'b')
-                ylabel(['B_x IAU (\approx B_y ' moonName(1) '\phi\Omega, nT)'])
-                xlabel(['B_y IAU (\approx -B_x ' moonName(1) '\phi\Omega, nT)'])
-                title([moonName ' equatorial plane hodogram, ' magModelDescrip])
+                xx = Bvec(2,:);
+                yy = Bvec(1,:);
+                BcompMax = max(abs(Bvec(1:2,:)), [], 'all');
+                xInfo = [mathTxt 'B_x ' nmTxt 'IAU (' mathTxt '\approx B_y ' nmTxt moonName(1) ...
+                    mathTxt '\phi\Omega' nmTxt ', nT)'];
+                yInfo = [mathTxt 'B_y ' nmTxt 'IAU (' mathTxt '\approx -B_x ' nmTxt moonName(1) ...
+                    mathTxt '\phi\Omega' nmTxt ', nT)'];
+                titleInfo = [moonName ' equatorial plane hodogram, ' magModelDescrip];
             end
         end
-        ylim([-max(abs(ylim())), max(abs(ylim()))])
-        xlim(ylim())
-        grid on;
-        set(gca,'fontsize',16)
-        if ~LIVE_PLOTS
-            outFig = fullfile(figDir, [moonName 'Hodogram' magModelDescrip '.' figXtn]);
-            saveas(fig, outFig)
-            disp(['Figure saved to ' outFig '.'])
-        end
+        ylims = [-BcompMax, BcompMax] * 1.05;
+        xlims = ylims;
+        cfmt = {'b'};
+
+        fName = [moonName 'Hodogram' magModelDescrip];
+        fig = PlotGeneric(xx, yy, [], windowName, titleInfo, xInfo, yInfo, fName, figDir, ...
+            figXtn, LIVE_PLOTS, figNumBase + 3, 'linear', 'linear', xlims, ylims, cfmt, 1, 1);
+        close(fig);
     end
 
 end

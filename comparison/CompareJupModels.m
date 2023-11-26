@@ -84,6 +84,7 @@ function CompareJupModels(LIVE_PLOTS, scName, moonName, orbNum, moonProx_RP, Pla
 
     cspice_kclear;
     parentName = 'Jupiter';
+    SetPlotDefaults();
     
     LoadSpice(moonName, char(scName));
     if strcmp(scName, "Galileo")

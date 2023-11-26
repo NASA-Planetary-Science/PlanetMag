@@ -40,6 +40,7 @@ function CompareUraModels(LIVE_PLOTS, scName, SEQUENTIAL, coeffPath, figDir, fig
     cspice_kclear;
     parentName = 'Uranus';
     sc = char(scName);
+    SetPlotDefaults();
     
     fullOrbFormatSpec = '%24s%5d%2d%2d%1d%8f%8f%8f%8f%8f%8f%8f%8f%8f%8f%3d%8s%[^\n\r]';
     disp(['Importing PDS files over ' parentName ' flybys.'])
@@ -142,8 +143,7 @@ function CompareUraModels(LIVE_PLOTS, scName, SEQUENTIAL, coeffPath, figDir, fig
     zMP = rMP .* sin(thDSZ) .* cos(ph2D);
     MPsurf = [xMP; yMP; zMP];
     surf(xMP, yMP, zMP, 'FaceColor', 'b')
-    
-    
+        
     %% Plot L shell
     t_h = linspace(cspice_str2et('1986-01-23T00:00:00.000'), ...
         cspice_str2et('1986-01-27T00:00:00.000'), 500) / 3600;
@@ -152,32 +152,24 @@ function CompareUraModels(LIVE_PLOTS, scName, SEQUENTIAL, coeffPath, figDir, fig
     r_Rp = r_km / Rp_km;
     L = r_Rp ./ cos(lambda).^2;
     upperLim = 40000;
-    DO_MPAUSE = 0;
     
-    fig = figure(100, 'Visible', figVis); clf(); hold on;
-    plot(t_h + 122154.0036, L, 'DisplayName', 'L shell', 'LineWidth', 2)
-    xlabel('Time relative to Uranus CA (h)');
-    ylabel('L shell');
-    ylim([0 upperLim])
-    set(gca, 'YScale', 'log')
-    title('Uranus L shell during Voyager 2 flyby');
-    if ~LIVE_PLOTS
-        outFig = fullfile(figDir, ['Voyager2UranusLshellVst.' figXtn]);
-        saveas(fig, outFig)
-        disp(['Figure saved to ' outFig '.'])
-    end
+    xx = t_h + 122154.0036;
+    yy = L;
+    legendStrings = "L shell";
+    xInfo = 'Time relative to Uranus CA (h)';
+    yInfo = 'L shell';
+    ylims = [0 upperLim];
+    titleInfo = 'Uranus L shell during Voyager 2 flyby';
+    fName = 'Voyager2UranusLshellVst';
+    fig = PlotGeneric(xx, yy, legendStrings, windowName, titleInfo, xInfo, yInfo, fName, ...
+        figDir, figXtn, LIVE_PLOTS, 50, 'linear', 'log', 'auto', ylims);
+    close(fig);
     
-    fig = figure(101, 'Visible', figVis); clf(); hold on;
-    plot(r_Rp, L, 'DisplayName', 'L shell', 'LineWidth', 2)
-    xlabel('r (R_U)');
-    ylabel('L shell');
-    ylim([0 upperLim])
-    set(gca, 'YScale', 'log')
-    title('Uranus L shell during Voyager 2 flyby vs. radial distance');
-    
-    if ~LIVE_PLOTS
-        outFig = fullfile(figDir, ['Voyager2UranusLshellVsR.' figXtn]);
-        saveas(fig, outFig)
-        disp(['Figure saved to ' outFig '.'])
-    end
+    xx = r_Rp;
+    xInfo = 'r (R_U)';
+    titleInfo = 'Uranus L shell during Voyager 2 flyby vs. radial distance';
+    fName = 'Voyager2UranusLshellVsR';
+    fig = PlotGeneric(xx, yy, legendStrings, windowName, titleInfo, xInfo, yInfo, fName, ...
+        figDir, figXtn, LIVE_PLOTS, 51, 'linear', 'log', 'auto', ylims);
+    close(fig);
 end

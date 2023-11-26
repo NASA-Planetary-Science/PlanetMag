@@ -70,12 +70,6 @@ function PlotBandLsq(ets, t_h, r_km, theta, phi, xyz_km, BrSC, BthSC, BphiSC, sc
     if ~exist('LIVE_PLOTS', 'var'); LIVE_PLOTS = 0; end
     if ~exist('jt_h', 'var'); jt_h = []; end
 
-    if LIVE_PLOTS
-        figVis = 'on';
-    else
-        figVis = 'off';
-    end
-
     npts = length(t_h);
     if length(scName) > 1
         scName = strjoin(scName, '+');
@@ -88,13 +82,13 @@ function PlotBandLsq(ets, t_h, r_km, theta, phi, xyz_km, BrSC, BthSC, BphiSC, sc
 
     Nmax = 10;
     disp(['Evaluating ' magModelDescrip ' field model with Nmax = ' num2str(Nmax) '.'])
-    if any(strcmp(strtrim(strsplit(magModelDescrip, '+')), 'KS2005'))
+    if contains(magModelDescrip, 'KS2005')
         [Bvec, Mdip_nT, Odip_km] = MagFldJupiterKS2005(r_km, theta, phi, ets, 1);
     else
         [Bvec, Mdip_nT, Odip_km] = MagFldParent(parentName, r_km, theta, phi, MagModel, ...
             CsheetModel, magPhase, 1, Nmax);
     end
-    if ~strcmp(MPmodel, 'None')
+    if ~(strcmp(MPmodel, 'None') || contains(magModelDescrip, 'KS2005'))
 
         nSW_pcc = 0.14 * ones(1,npts);
         vSW_kms = 400  * ones(1,npts);
@@ -109,88 +103,63 @@ function PlotBandLsq(ets, t_h, r_km, theta, phi, xyz_km, BrSC, BthSC, BphiSC, sc
     Bth = Bvec(2,:);
     Bphi = Bvec(3,:);
     
-    defName = magModelDescrip;
     scDataName = [char(scName) ' MAG'];
     commonTitle = [parentName ' model comparison vs ' char(scName) ' data'];
     if SEQUENTIAL
         xx = 1:npts;
-        xDescrip = 'Measurement index';
+        xInfo = 'Measurement index';
     elseif strcmp(parentName, 'Earth')
         xx = t_h - 175308.0192178;
-        xDescrip = 'Time relative to NY 2020 (h)';
+        xInfo = 'Time relative to NY 2020 (h)';
     elseif strcmp(parentName, 'Uranus')
         xx = t_h + 122154.0036;
-        xDescrip = 'Time relative to CA (h)';
+        xInfo = 'Time relative to CA (h)';
     elseif strcmp(parentName, 'Neptune')
         xx = t_h + 90752.0566;
-        xDescrip = 'Time relative to CA (h)';
+        xInfo = 'Time relative to CA (h)';
     else
         xx = t_h;
-        xDescrip = 'Time past J2000 (h)';
-    end
-    fig = figure('Visible', figVis); hold on;
-    set(gcf,'Name', [char(scName) 'Br, ' orbStr ', ' magModelDescrip]);
-    plot(xx, Br, 'DisplayName', defName);
-    plot(xx, BrSC, 'DisplayName', scDataName);
-    xlabel(xDescrip);
-    ylabel('Vector component (nT)');
-    title(commonTitle);
-    legend();
-    if ~LIVE_PLOTS
-        outFig = fullfile(figDir, [char(scName) parentName 'BrComparison' magModelDescrip '.' ...
-            figXtn]);
-        saveas(fig, outFig)
-        disp(['Figure saved to ' outFig '.'])
+        xInfo = 'Time past J2000 (h)';
     end
 
-    fig = figure('Visible', figVis); hold on;
-    set(gcf,'Name', [char(scName) 'Bth, ' orbStr ', ' magModelDescrip]);
-    plot(xx, Bth, 'DisplayName', defName);
-    plot(xx, BthSC, 'DisplayName', scDataName);
-    xlabel(xDescrip);
-    ylabel('Vector component (nT)');
-    title(commonTitle);
-    legend();
-    if ~LIVE_PLOTS
-        outFig = fullfile(figDir, [char(scName) parentName 'BthComparison' magModelDescrip '.' ...
-            figXtn]);
-        saveas(fig, outFig)
-        disp(['Figure saved to ' outFig '.'])
-    end
+    figNumBase = 3000 + 100*opt + 10*MPopt;
+    windowName = [char(scName) 'Br, ' orbStr ', ' magModelDescrip];
+    yy = [Br; BrSC];
+    yInfo = 'Vector component (nT)';
+    legendStrings = [string(magModelDescrip), string(scDataName)];
+    titleInfo = commonTitle;
+    fName = [char(scName) parentName 'BrComparison' magModelDescrip];
+    fig = PlotGeneric(xx, yy, legendStrings, windowName, titleInfo, xInfo, yInfo, fName, ...
+        figDir, figXtn, LIVE_PLOTS, figNumBase + 1);
+    close(fig);
 
-    fig = figure('Visible', figVis); hold on;
-    set(gcf,'Name', [char(scName) 'Bphi, ' orbStr ', ' magModelDescrip]);
-    plot(xx, Bphi, 'DisplayName', defName);
-    plot(xx, BphiSC, 'DisplayName', scDataName);
-    xlabel(xDescrip);
-    ylabel('Vector component (nT)');
-    title(commonTitle);
-    legend();
-    if ~LIVE_PLOTS
-        outFig = fullfile(figDir, [char(scName) parentName 'BphiComparison' magModelDescrip '.' ...
-            figXtn]);
-        saveas(fig, outFig)
-        disp(['Figure saved to ' outFig '.'])
-    end
+    windowName = [char(scName) 'Bth, ' orbStr ', ' magModelDescrip];
+    yy = [Bth; BthSC];
+    fName = [char(scName) parentName 'BthComparison' magModelDescrip];
+    fig = PlotGeneric(xx, yy, legendStrings, windowName, titleInfo, xInfo, yInfo, fName, ...
+        figDir, figXtn, LIVE_PLOTS, figNumBase + 2);
+    close(fig);
+
+    windowName = [char(scName) 'Bphi, ' orbStr ', ' magModelDescrip];
+    yy = [Bphi; BphiSC];
+    fName = [char(scName) parentName 'BphiComparison' magModelDescrip];
+    fig = PlotGeneric(xx, yy, legendStrings, windowName, titleInfo, xInfo, yInfo, fName, ...
+        figDir, figXtn, LIVE_PLOTS, figNumBase + 3);
+    close(fig);
 
     BrD = Br - BrSC;
     BthD = Bth - BthSC;
     BphiD = Bphi - BphiSC;
 
-    fig = figure('Visible', figVis); hold on;
-    set(gcf,'Name', ['Vector comp diffs, ' orbStr ', ' magModelDescrip ' - ' char(scName) ' MAG']);
-    plot(xx, BrD);
-    plot(xx, BthD);
-    plot(xx, BphiD);
-    xlabel(xDescrip);
-    ylabel('Component difference (nT)');
-    legend('\Delta B_r', '\Delta B_\theta', '\Delta B_\phi');
-    if ~LIVE_PLOTS
-        outFig = fullfile(figDir, [char(scName) parentName 'DeltaBComparison' magModelDescrip ...
-            '.' figXtn]);
-        saveas(fig, outFig)
-        disp(['Figure saved to ' outFig '.'])
-    end
+    windowName = ['Vector comp diffs, ' orbStr ', ' magModelDescrip ' - ' char(scName) ' MAG'];
+    yy = [BrD; BthD; BphiD];
+    yInfo = 'Component difference (nT)';
+    legendStrings = [string([ mathTxt '\Delta B_r']), string([mathTxt '\Delta B_\theta']), ...
+        string([mathTxt '\Delta B_\phi'])];
+    fName = [char(scName) parentName 'DeltaBComparison' magModelDescrip];
+    fig = PlotGeneric(xx, yy, legendStrings, windowName, titleInfo, xInfo, yInfo, fName, ...
+        figDir, figXtn, LIVE_PLOTS, figNumBase + 4);
+    close(fig);
 
     BrLsq = BrD.^2;
     BthLsq = BthD.^2;

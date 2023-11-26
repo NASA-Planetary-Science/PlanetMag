@@ -1,4 +1,4 @@
-function PlotSpectrum(moonName, LIVE_PLOTS, dataDir, figDir, fPattern, figXtn)
+function PlotSpectrum(moonName, LIVE_PLOTS, figNumber, dataDir, figDir, fPattern, figXtn)
 % Plot a pre-saved spectrum of magnetic oscillations as derived from an FFT.
 %
 % Parameters
@@ -7,6 +7,9 @@ function PlotSpectrum(moonName, LIVE_PLOTS, dataDir, figDir, fPattern, figXtn)
 %   Name of the moon for which to plot a spectrum. An FFT data file must be present.
 % LIVE_PLOTS : bool, default=0
 %   Whether to load interactive figure windows for plots (true) or print them to disk (false).
+% figNumber : int, default=0
+%   Figure number to use for assigning/reusing figure windows. If ``0`` is passed, the default (no
+%   assigned number, use increment) is used.
 % dataDir : char, 1xD, default='out'
 %   Directory where data files are saved.
 % figDir : char, 1xE, default='figures'
@@ -27,31 +30,31 @@ function PlotSpectrum(moonName, LIVE_PLOTS, dataDir, figDir, fPattern, figXtn)
     if ~exist('figDir', 'var'); figDir = 'figures'; end
     if ~exist('fPattern', 'var'); fPattern = 'FTdata'; end
     if ~exist('figXtn', 'var'); figXtn = 'pdf'; end
-
-    if LIVE_PLOTS
-        figVis = 'on';
-    else
-        figVis = 'off';
-    end
+    % The following are defined in SetPlotDefaults. Do NOT reset them anywhere else.
+    global nmTxt
+    global bnmTxt
+    global mathTxt
+    global bmathTxt
 
     load(fullfile(dataDir, [moonName fPattern]), 'B1vec1', 'B1vec2', 'B1vec3', 'B1mag', 'T_h', ...
          'f_Hz', 'coordType', 'SPHOUT', 'magModelDescrip', 'Tmax', 'Tinterest_h');
     LoadSpice(moonName);
     [~, ~, ~, ~, ~, ~, Tparent_s, Torb_s, ~, ~] = GetBodyParams(moonName);
     
-    fig = figure('Visible', figVis);
+    windowName = ['FFT ' magModelDescrip];
+    if LIVE_PLOTS
+        if ~figNumber
+            fig = figure('Visible', 'on', 'Name', windowName);
+        else
+            fig = figure(figNumber);
+            set(gcf, 'Visible', 'on', 'Name', windowName);
+        end
+    else
+        fig = figure('Visible', 'off', 'Name', windowName);
+    end
     hold on;
-    interpreter = 'tex';
-    font = 'STIX Two Math';
-    set(0,'defaulttextinterpreter',interpreter);  
-    set(0,'defaultAxesTickLabelInterpreter',interpreter);  
-    set(0,'defaultLegendInterpreter',interpreter);
-    set(0,'defaultTextFontName',font);
-    set(0,'defaultAxesFontName',font);
-    set(0,'defaultLegendFontName',font);
-    nm   = '\rm{}';
-    bnm  = '\rm\bf\fontname{STIX Two Text}';
-    math  = '\it{}';
+    [interpreter, font] = SetPlotDefaults();
+    ApplyPlotDefaults(fig, interpreter, font);
     
     plot(T_h, abs(B1vec1), 'Color', 'b');
     plot(T_h, abs(B1vec2), 'Color', 'k');
@@ -63,23 +66,22 @@ function PlotSpectrum(moonName, LIVE_PLOTS, dataDir, figDir, fPattern, figXtn)
     set(gca,'xscale','log');
     set(gca,'yscale','log');
     xlim([2 Tmax]);
-    %vline(Tsyn_h,'r');
-    %vline(Torb_h,'r');
-    %vline(Tinterest_h,'r');
     xlabel('Period (h)');
     ylabel('Amplitude (nT)');
     set(gcf,'Name', [moonName ' FFT excitation spectrum, ' magModelDescrip]);
-    title([bnm moonName ' magnetic excitation spectrum, ' magModelDescrip ', ' coordType ...
-          ' coordinates'], 'fontsize', 16);
+    title([bnmTxt moonName ' magnetic excitation spectrum, ' magModelDescrip ', ' coordType ...
+          ' coordinates']);
     if SPHOUT
         Bv1lbl = 'B_r'; Bv2lbl = 'B_\theta'; Bv3lbl = 'B_\phi';
     else
         Bv1lbl = 'B_x'; Bv2lbl = 'B_y'; Bv3lbl = 'B_z';
     end
-    legend({[math Bv1lbl], [math Bv2lbl], [math Bv3lbl], ['|' bnm 'B' nm '|']}, 'Location', ...
-           'Southeast', 'Interpreter', 'tex');
+    legend({[mathTxt Bv1lbl], [mathTxt Bv2lbl], [mathTxt Bv3lbl], ['|' bnmTxt 'B' nmTxt '|']}, ...
+        'Location', 'Southeast', 'Interpreter', 'tex');
     if ~LIVE_PLOTS
         outFig = fullfile(figDir, [moonName 'FFT_' magModelDescrip coordType '.' figXtn]);
+        fig.Units = fig.PaperUnits;
+        fig.PaperSize = fig.Position(3:4);
         saveas(fig, outFig)
         disp(['FFT figure saved to ' outFig '.'])
     end
