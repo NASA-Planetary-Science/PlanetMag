@@ -93,7 +93,7 @@ function parentName = LoadSpice(moonName, sc, spiceDir)
         case 'Juno'
             planetData = 'pck00010.tpc';
             generic = 'jup380s.bsp';
-            junoGanyFlyby = fullfile(sc, 'juno_rec_210513_210630_210707.bsp');
+            junoGanyFlyby = fullfile(sc, 'juno_rec_orbit.bsp');
             spiceKernelList = { leapseconds planetData generic junoGanyFlyby frames };
         case 'Voyager 1'
             planetData = 'pck00010.tpc';
