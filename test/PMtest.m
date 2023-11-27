@@ -27,10 +27,15 @@ function PMtest(LIVE_PLOTS, nptsApprox)
     cspice_kclear;
 
     % Remove output files to make sure we generate everything we need within this script
-    outData = dir(fullfile('out/*.txt'));
-    nFiles = length(outData);
+    outDataTxt = dir(fullfile('out/*.txt'));
+    nFiles = length(outDataTxt);
     for i=1:nFiles
-        delete(fullfile('out', outData(i).name))
+        delete(fullfile('out', outDataTxt(i).name))
+    end
+    outDataMat = dir(fullfile('out/*.mat'));
+    nFiles = length(outDataMat);
+    for i=1:nFiles
+        delete(fullfile('out', outDataMat(i).name))
     end
     
     % Earth models

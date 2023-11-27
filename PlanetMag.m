@@ -156,6 +156,12 @@ function [T_h, B0vec, B1vec1, B1vec2, B1vec3, outFname, header] = PlanetMag(moon
                 tEnd_yr = 2035.0;
             case 'Voyager'
                 switch parentName
+                    case 'Jupiter'
+                        tStart_yr = 1979.0;
+                        tEnd_yr = 1980.0;
+                    case 'Saturn'
+                        tStart_yr = 1980.5;
+                        tEnd_yr = 1982.0;
                     case 'Uranus'
                         tStart_yr = 1985.75;
                         tEnd_yr = 1986.25;
@@ -219,8 +225,12 @@ function [T_h, B0vec, B1vec1, B1vec2, B1vec3, outFname, header] = PlanetMag(moon
             if CALC_NEW
                 disp(['Evaluating ' magModelDescrip ' field model.'])
                 if contains(magModelDescrip, 'KS2005')
-                    [Bvec, Mdip_nT, Odip_km] = MagFldJupiterKS2005(rM_km, thetaM, phiM, ...
-                        t_h*3600, SPHOUT);
+                    if MPopt == MPopts(1)
+                        [Bvec, Mdip_nT, Odip_km] = MagFldJupiterKS2005(rM_km, thetaM, phiM, ...
+                            t_h*3600, SPHOUT);
+                    else
+                        continue
+                    end
                 else
                     [Bvec, Mdip_nT, Odip_km] = MagFldParent(parentName, rM_km, thetaM, phiM, ...
                         MagModel, CsheetModel, magPhase_deg, SPHOUT);
@@ -287,8 +297,8 @@ function [T_h, B0vec, B1vec1, B1vec2, B1vec3, outFname, header] = PlanetMag(moon
                     Tmoon_h = Tmoon_s / 3600;
                     Tsyn_h = 1/(1/Tparent_h - 1/Tmoon_h);
     
-                    if strcmp(parentName,'Saturn')
-                        if strcmp(moonName,'Enceladus')
+                    if strcmp(parentName, 'Saturn')
+                        if strcmp(moonName, 'Enceladus')
                             Tinterest_h = 32.927200612354675;
                         else
                             Tinterest_h = Tmoon_h;
@@ -301,7 +311,7 @@ function [T_h, B0vec, B1vec1, B1vec2, B1vec3, outFname, header] = PlanetMag(moon
                     nOsc = floor(approxDur_h / Tinterest_h);
                 end
                 [TfinalFFT_h, B0vecFFT, B1vecFFT] = ExcitationSpectrum(moonName, nOsc, rate, ...
-                    Tinterest_h, coordType, outData, fPatternFT, fPatternTseries, ...
+                    Tinterest_h, coordType, outData, coeffPath, fPatternFT, fPatternTseries, ...
                     magPhase_deg, 0, SPHOUT, DO_MPAUSE);
                 figNum = 200 + 10*specificModel + 1*specificMPmodel;
                 PlotSpectrum(moonName, LIVE_PLOTS, figNum, outData, figDir, fPatternFT, figXtn);
@@ -410,6 +420,7 @@ function [T_h, B0vec, B1vec1, B1vec2, B1vec3, outFname, header] = PlanetMag(moon
             xlims = [1 Tmax];
             xInfo = [nmTxt 'Period (hr)'];
             yInfo = [nmTxt 'FT' mathTxt '\{B_i - B_{i,\rm{exc}}\}' nmTxt ' (nT)'];
+            titleInfo = [bnmTxt 'Residual FFT for ' magModelDescrip ' reproduction'];
             fName = [moonName 'ResidualFFT' magModelDescrip era coordType];
             figNum = figNumBase / 10;
             fig = PlotGeneric(xx, yy, legendStrings, windowName, titleInfo, xInfo, yInfo, ...

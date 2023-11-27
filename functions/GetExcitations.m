@@ -234,6 +234,15 @@ function f = GetExcitations(moonName, etMid_day)
                     fOrbAdj - fSyr, ...
                     fOrbAdj - 2*fSyr];
 
+        case 'Rhea'
+            f = fOrb;
+            
+            f = [f, ...
+                    fPar - fSyr, ... % Solar oscillation periods due to 
+                    fPar - 2*fSyr, ... % magnetopause current fields
+                    fOrbAdj - fSyr, ...
+                    fOrbAdj - 2*fSyr];
+
         case 'Titan'
             f = fOrb;
             

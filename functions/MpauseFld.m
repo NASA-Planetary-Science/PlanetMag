@@ -325,6 +325,10 @@ function [mpBvecOut, OUTSIDE_MP] = MpauseFld(nSW_pcc, vSW_kms, ets, xyz_km, Mdip
 
         % Default subsolar point radii
         switch(parentName)
+            case 'Earth'
+                % Nothing implemented for Earth.
+                OUTSIDE_MP = mpBvecOut ~= 0;
+
             case 'Jupiter'
                 Rss_Rp = 60;
                 Rp_km = 71492;

@@ -34,6 +34,7 @@ function CompareUraModels(LIVE_PLOTS, scName, SEQUENTIAL, coeffPath, figDir, fig
     if ~exist('LIVE_PLOTS', 'var'); LIVE_PLOTS = 0; end
     if ~exist('scName', 'var'); scName = "Voyager 2"; end
     if ~exist('SEQUENTIAL', 'var'); SEQUENTIAL = 0; end
+    if ~exist('coeffPath', 'var'); coeffPath = 'modelCoeffs'; end
     if ~exist('figDir', 'var'); figDir = 'figures'; end
     if ~exist('figXtn', 'var'); figXtn = 'pdf'; end
     
@@ -107,7 +108,19 @@ function CompareUraModels(LIVE_PLOTS, scName, SEQUENTIAL, coeffPath, figDir, fig
     [~, ~, ~, xyzUSO_km, ~] = GetPosSpice(sc, parentName, t_h, 'USO');
     xyz_Rp = xyzUSO_km / Rp_km;
     x = xyz_Rp(1,:); y = xyz_Rp(2,:); z = xyz_Rp(3,:);
+
+    windowName = 'Spacecraft Uranus trajectories';
+    trajFnum = 9001;
+    if LIVE_PLOTS
+        fig = figure(trajFnum);
+        set(gcf, 'Visible', 'on', 'Name', windowName);
+    else
+        fig = figure('Visible', 'off', 'Name', windowName);
+    end
     clf(); hold on;
+    [interpreter, font] = SetPlotDefaults();
+    ApplyPlotDefaults(fig, interpreter, font);
+
     plot3(x,y,z, 'LineWidth', 1.5);
     the = linspace(0,pi,50); ph = linspace(0,2*pi,100);
     [the2D, ph2D] = meshgrid(the,ph);
@@ -117,6 +130,7 @@ function CompareUraModels(LIVE_PLOTS, scName, SEQUENTIAL, coeffPath, figDir, fig
     pbaspect([1 1 1]);
     xlim([-axlim,axlim]);ylim([-axlim,axlim]);zlim([-axlim,axlim]);
     grid on;
+    title([parentName ' flyby trajectories']);
     xlabel('x USO (R_U, toward Sun)');
     ylabel('y USO (R_U), \approx orbital v');
     zlabel('z USO (R_U)');
@@ -143,6 +157,13 @@ function CompareUraModels(LIVE_PLOTS, scName, SEQUENTIAL, coeffPath, figDir, fig
     zMP = rMP .* sin(thDSZ) .* cos(ph2D);
     MPsurf = [xMP; yMP; zMP];
     surf(xMP, yMP, zMP, 'FaceColor', 'b')
+    if ~LIVE_PLOTS
+        outFig = fullfile(figDir, [parentName 'Trajectories.' figXtn]);
+        fig.Units = fig.PaperUnits;
+        fig.PaperSize = fig.Position(3:4);
+        saveas(fig, outFig)
+        disp(['Figure saved to ' outFig '.'])
+    end
         
     %% Plot L shell
     t_h = linspace(cspice_str2et('1986-01-23T00:00:00.000'), ...
@@ -155,6 +176,7 @@ function CompareUraModels(LIVE_PLOTS, scName, SEQUENTIAL, coeffPath, figDir, fig
     
     xx = t_h + 122154.0036;
     yy = L;
+    windowName = [parentName ' L shell vs. t'];
     legendStrings = "L shell";
     xInfo = 'Time relative to Uranus CA (h)';
     yInfo = 'L shell';
@@ -165,6 +187,7 @@ function CompareUraModels(LIVE_PLOTS, scName, SEQUENTIAL, coeffPath, figDir, fig
         figDir, figXtn, LIVE_PLOTS, 50, 'linear', 'log', 'auto', ylims);
     close(fig);
     
+    windowName = [parentName ' L shell vs. r'];
     xx = r_Rp;
     xInfo = 'r (R_U)';
     titleInfo = 'Uranus L shell during Voyager 2 flyby vs. radial distance';

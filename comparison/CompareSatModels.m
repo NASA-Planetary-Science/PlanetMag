@@ -35,6 +35,7 @@ function CompareSatModels(LIVE_PLOTS, scNames, SEQUENTIAL, coeffPath, figDir, fi
     if ~exist('LIVE_PLOTS', 'var'); LIVE_PLOTS = 0; end
     if ~exist('scNames', 'var'); scNames = ["Voyager 1", "Voyager 2"]; end
     if ~exist('SEQUENTIAL', 'var'); SEQUENTIAL = 0; end
+    if ~exist('coeffPath', 'var'); coeffPath = 'modelCoeffs'; end
     if ~exist('figDir', 'var'); figDir = 'figures'; end
     if ~exist('figXtn', 'var'); figXtn = 'pdf'; end
     
@@ -72,7 +73,6 @@ function CompareSatModels(LIVE_PLOTS, scNames, SEQUENTIAL, coeffPath, figDir, fi
     [interpreter, font] = SetPlotDefaults();
     ApplyPlotDefaults(fig, interpreter, font);
 
-    set(gcf,'Name', 'Trajectories');
     the = linspace(0,pi,50); ph = linspace(0,2*pi,100);
     [the2D, ph2D] = meshgrid(the,ph);
     xp = sin(the2D) .* cos(ph2D); yp = sin(the2D) .* sin(ph2D); zp = cos(the2D);
@@ -81,6 +81,7 @@ function CompareSatModels(LIVE_PLOTS, scNames, SEQUENTIAL, coeffPath, figDir, fi
     pbaspect([1 1 1]);
     xlim([-axlim, axlim]); ylim([-axlim, axlim]); zlim([-axlim, axlim]);
     grid on;
+    title([parentName ' flyby trajectories']);
     xlabel('x KSO (R_S, toward Sun)');
     ylabel('y KSO (R_S), \approx orbital v');
     zlabel('z KSO (R_S)');
@@ -172,7 +173,7 @@ function CompareSatModels(LIVE_PLOTS, scNames, SEQUENTIAL, coeffPath, figDir, fi
         [~, ~, ~, xyzKSO_km, ~] = GetPosSpice(sc, parentName, t_h{i}, 'KSO');
         xyz_Rp = xyzKSO_km / Rp_km;
         x = xyz_Rp(1,:); y = xyz_Rp(2,:); z = xyz_Rp(3,:);
-        figure(trajFnum);
+        figure(trajFnum); hold on;
         scTraj{i} = plot3(x,y,z, 'LineWidth', 1.5, 'DisplayName', sc);
         
     end

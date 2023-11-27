@@ -78,6 +78,7 @@ function CompareJupModels(LIVE_PLOTS, scName, moonName, orbNum, moonProx_RP, Pla
     if ~exist('figDir', 'var'); figDir = 'figures'; end
     if ~exist('figXtn', 'var'); figXtn = 'pdf'; end
     if ~exist('SEQUENTIAL', 'var'); SEQUENTIAL = 1; end
+    if ~exist('coeffPath', 'var'); coeffPath = 'modelCoeffs'; end
     if ~exist('FULLORBITS', 'var'); FULLORBITS = 1; end
     if ~exist('FLYBYS', 'var'); FLYBYS = 0; end
     if ~exist('JUNOTOO', 'var'); JUNOTOO = 1; end
@@ -258,14 +259,19 @@ function CompareJupModels(LIVE_PLOTS, scName, moonName, orbNum, moonProx_RP, Pla
     MPopts = 1:(nMPopts + 1); % Add 1 to force noMP model in addition
     for opt=opts
         for MPopt=MPopts
-            if FULLORBITS
-                PlotBandLsq(ets, t_h, r_km, theta, phi, xyz_km, BrSC, BthSC, BphiSC, scName, ...
-                    parentName, spkParent, orbStr, opt, MPopt, SEQUENTIAL, coeffPath, figDir, ...
-                    figXtn, LIVE_PLOTS);
+            if opt == 3 && MPopt ~= MPopts(1)
+                % Avoid re-running KS2005 model more than once -- it already includes an MP model.
+                continue
             else
-                PlotBandLsqMoon(fbets, fbt_h, fbr_km, fbtheta, fbphi, fbxyz_km, r_RM, BxSC, ...
-                    BySC, BzSC, scName, parentName, spkParent, moonName, char(scName), fbStr, ...
-                    opt, MPopt, SEQUENTIAL, dataDir, figDir, figXtn, LIVE_PLOTS, jt_h);
+                if FULLORBITS
+                    PlotBandLsq(ets, t_h, r_km, theta, phi, xyz_km, BrSC, BthSC, BphiSC, scName, ...
+                        parentName, spkParent, orbStr, opt, MPopt, SEQUENTIAL, coeffPath, figDir, ...
+                        figXtn, LIVE_PLOTS);
+                else
+                    PlotBandLsqMoon(fbets, fbt_h, fbr_km, fbtheta, fbphi, fbxyz_km, r_RM, BxSC, ...
+                        BySC, BzSC, scName, parentName, spkParent, moonName, char(scName), fbStr, ...
+                        opt, MPopt, SEQUENTIAL, dataDir, figDir, figXtn, LIVE_PLOTS, jt_h);
+                end
             end
         end
     end

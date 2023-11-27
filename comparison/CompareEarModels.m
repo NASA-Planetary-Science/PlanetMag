@@ -38,6 +38,7 @@ function CompareEarModels(LIVE_PLOTS, scName, xtn, SEQUENTIAL, coeffPath, figDir
     if ~exist('scName', 'var'); scName = "Swarm"; end
     if ~exist('xtn', 'var'); xtn = '.tab'; end
     if ~exist('SEQUENTIAL', 'var'); SEQUENTIAL = 1; end
+    if ~exist('coeffPath', 'var'); coeffPath = 'modelCoeffs'; end
     if ~exist('figDir', 'var'); figDir = 'figures'; end
     if ~exist('figXtn', 'var'); figXtn = 'pdf'; end
     

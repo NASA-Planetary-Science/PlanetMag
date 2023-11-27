@@ -243,21 +243,6 @@ Additional supporting functions
 
 .. mat:autofunction:: GetBodyParams
 
-:mat:func:`GetBplotAndLsq`
-++++++++++++++++++++++++++
-
-.. mat:autofunction:: GetBplotAndLsq
-
-:mat:func:`GetBplotAndLsqMoon`
-++++++++++++++++++++++++++++++
-
-.. mat:autofunction:: GetBplotAndLsqMoon
-
-:mat:func:`GetBplotAndLsqNeptune`
-+++++++++++++++++++++++++++++++++
-
-.. mat:autofunction:: GetBplotAndLsqNeptune
-
 :mat:func:`GetDespun`
 +++++++++++++++++++++
 
@@ -297,16 +282,6 @@ Additional supporting functions
 +++++++++++++++++++++++
 
 .. mat:autofunction:: LshellTrace
-
-:mat:func:`PlotSpectrum`
-++++++++++++++++++++++++
-
-.. mat:autofunction:: PlotSpectrum
-
-:mat:func:`vlines`
-++++++++++++++++++
-
-.. mat:autofunction:: vlines
 
 
 Model coefficient functions
@@ -410,3 +385,45 @@ Magnetopause functions
 +++++++++++++++++++++++++++++++
 
 .. mat:autofunction:: MPsphericalHarmonic
+
+
+Figure plotting functions
+-------------------------
+
+.. mat:module:: functions.plotting
+   :noindex:
+
+:mat:func:`ApplyPlotDefaults`
++++++++++++++++++++++++++++++
+
+.. mat:autofunction:: ApplyPlotDefaults
+
+:mat:func:`PlotBandLsq`
++++++++++++++++++++++++
+
+.. mat:autofunction:: PlotBandLsq
+
+:mat:func:`PlotBandLsqMoon`
++++++++++++++++++++++++++++
+
+.. mat:autofunction:: PlotBandLsqMoon
+
+:mat:func:`PlotBandLsqNeptune`
+++++++++++++++++++++++++++++++
+
+.. mat:autofunction:: PlotBandLsqNeptune
+
+:mat:func:`PlotSpectrum`
+++++++++++++++++++++++++
+
+.. mat:autofunction:: PlotSpectrum
+
+:mat:func:`SetPlotDefaults`
++++++++++++++++++++++++++++
+
+.. mat:autofunction:: SetPlotDefaults
+
+:mat:func:`vlines`
+++++++++++++++++++
+
+.. mat:autofunction:: vlines
