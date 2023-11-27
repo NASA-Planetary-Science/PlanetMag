@@ -208,11 +208,12 @@ function CompareNepModels(LIVE_PLOTS, scName, SEQUENTIAL, coeffPath, figDir, fig
     legend([scTraj{1} scTraj{2} scTraj{3}], [name{1}, name{2}, name{3}])
     
     if ~LIVE_PLOTS
-        outFig = fullfile(figDir, ['Voyager2NeptuneFlybyTrajectories.' figXtn]);
+        outFig = fullfile(figDir, ['NeptuneFlybyTrajectories.' figXtn]);
         fig.Units = fig.PaperUnits;
         fig.PaperSize = fig.Position(3:4);
         saveas(fig, outFig)
         disp(['Figure saved to ' outFig '.'])
     end
+    close(fig)
 
 end

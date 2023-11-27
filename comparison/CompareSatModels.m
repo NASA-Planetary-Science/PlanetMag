@@ -173,7 +173,14 @@ function CompareSatModels(LIVE_PLOTS, scNames, SEQUENTIAL, coeffPath, figDir, fi
         [~, ~, ~, xyzKSO_km, ~] = GetPosSpice(sc, parentName, t_h{i}, 'KSO');
         xyz_Rp = xyzKSO_km / Rp_km;
         x = xyz_Rp(1,:); y = xyz_Rp(2,:); z = xyz_Rp(3,:);
-        figure(trajFnum); hold on;
+        % Re-focus existing trajectory plot
+        if LIVE_PLOTS
+            fig = figure(trajFnum);
+            set(gcf, 'Visible', 'on', 'Name', windowName);
+        else
+            fig = figure('Visible', 'off', 'Name', windowName);
+        end
+        hold on;
         scTraj{i} = plot3(x,y,z, 'LineWidth', 1.5, 'DisplayName', sc);
         
     end
@@ -186,4 +193,5 @@ function CompareSatModels(LIVE_PLOTS, scNames, SEQUENTIAL, coeffPath, figDir, fi
         saveas(fig, outFig)
         disp(['Figure saved to ' outFig '.'])
     end
+    close(fig)
 end

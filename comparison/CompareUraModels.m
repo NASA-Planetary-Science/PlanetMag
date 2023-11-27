@@ -164,6 +164,7 @@ function CompareUraModels(LIVE_PLOTS, scName, SEQUENTIAL, coeffPath, figDir, fig
         saveas(fig, outFig)
         disp(['Figure saved to ' outFig '.'])
     end
+    close(fig)
         
     %% Plot L shell
     t_h = linspace(cspice_str2et('1986-01-23T00:00:00.000'), ...
