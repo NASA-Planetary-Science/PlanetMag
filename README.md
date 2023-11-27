@@ -23,9 +23,31 @@ To fully install PlanetMag and access all features:
 1. Download or clone Matlab repo
 1. Download mice and place it in the right spot
 1. Download the following SPICE kernels to the ``spice`` directory:
-    1. kernel 1
-    1. kernel 2
-1. Download spacecraft magnetic data for comparison to ``MAG`` directory
+   1. ``de430.bsp`` --- from <https://naif.jpl.nasa.gov/pub/naif/generic_kernels/spk/planets/>
+   1. ``jup365.bsp`` --- from <https://naif.jpl.nasa.gov/pub/naif/generic_kernels/spk/satellites/>
+   1. ``sat441.bsp`` --- from <https://naif.jpl.nasa.gov/pub/naif/generic_kernels/spk/satellites/>
+   1. ``ura111.bsp`` --- from <https://naif.jpl.nasa.gov/pub/naif/generic_kernels/spk/satellites/>
+   1. ``nep097.bsp`` --- from <https://naif.jpl.nasa.gov/pub/naif/generic_kernels/spk/satellites/>
+   1. ``earth_latest_high_prec.bpc`` --- from <https://naif.jpl.nasa.gov/pub/naif/generic_kernels/pck/>
+   1. For Galileo, all in the ``spice/Galileo`` directory and all from <https://naif.jpl.nasa.gov/pub/naif/GLL/kernels/spk/>:
+         1. ``s980326a.bsp``
+         1. ``s000131a.bsp``
+         1. ``s030916a.bsp``
+   1. For Juno, all from <https://naif.jpl.nasa.gov/pub/naif/JUNO/kernels/spk/>:
+         1. In the ``spice`` directory:
+            1.  ``jup380s.bsp``
+         1. In the ``spice/Juno`` directory:
+            1.  ``juno_rec_orbit.bsp``
+   1. For Voyager 1, all in the ``spice/Voyager 1`` directory and all from <https://naif.jpl.nasa.gov/pub/naif/VOYAGER/kernels/spk/>:
+         1. ``vgr1_jup230.bsp``
+         1. ``vgr1_sat337.bsp``
+         1. ``s030916a.bsp``
+   1. For Voyager 2, all in the ``spice/Voyager 2`` directory and all from <https://naif.jpl.nasa.gov/pub/naif/VOYAGER/kernels/spk/>:
+         1. ``vgr2_jup230.bsp``
+         1. ``vgr2_sat337.bsp``
+         1. ``vgr2.ura111.bsp``
+         1. ``vgr2_nep097.bsp``
+1. Download spacecraft magnetic data for comparison to the ``MAG`` directory
 
 ## Running the software
 1. Run `PlanetMag.m` from the directory it is in to test for full functionality and a demonstration of evaluation of excitation moments (amplitude and phase of oscillations) applied to Europa by Jupiter.
