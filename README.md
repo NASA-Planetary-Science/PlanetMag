@@ -21,7 +21,7 @@ Some mission data (especially from ESA) uses Common Data Format (.cdf) files. Re
 
 To fully install PlanetMag and access all features:
 1. Download or clone Matlab repo
-1. Download mice and place it in the right spot
+1. Download Mice and place it in the right spot
 1. Download the following SPICE kernels to the ``spice`` directory:
    1. ``de430.bsp`` --- from <https://naif.jpl.nasa.gov/pub/naif/generic_kernels/spk/planets/>
    1. ``jup365.bsp`` --- from <https://naif.jpl.nasa.gov/pub/naif/generic_kernels/spk/satellites/>
