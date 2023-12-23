@@ -54,7 +54,7 @@ function BD = ICAdecomposition(moonName, parentName, ets, Bvec, magModelDescrip,
 %   Whether to return vectors aligned to spherical coordinate axes (true) or cartesian (false).
 % PLOT_DIAGNOSTIC : bool, default=1
 %   Whether to plot comparisons between the input and reproduced time series.
-% COMPARE_SEUFERT : bool, default=0
+% COMPARE_SEUFERT : bool, default=1
 %   Whether to plot coordinate directions aligned to the axes presented in Seufert et al. (2011)
 %   https://doi.org/10.1016/j.icarus.2011.03.017. Only has an effect when ``SPHOUT`` is true,
 %   because Seufert et al. used spherical coordinates for evaluating the excitation spectra of
@@ -99,7 +99,7 @@ function BD = ICAdecomposition(moonName, parentName, ets, Bvec, magModelDescrip,
 
     if ~exist('SPHOUT', 'var'); SPHOUT = 0; end
     if ~exist('PLOT_DIAGNOSTIC', 'var'); PLOT_DIAGNOSTIC = 1; end
-    if ~exist('COMPARE_SEUFERT', 'var'); COMPARE_SEUFERT = 0; end
+    if ~exist('COMPARE_SEUFERT', 'var'); COMPARE_SEUFERT = 1; end
     if ~exist('LIVE_PLOTS', 'var'); LIVE_PLOTS = 0; end
     if ~exist('figDir', 'var'); figDir = 'figures'; end
     % The following are defined in SetPlotDefaults. Do NOT reset them anywhere else.
@@ -304,9 +304,9 @@ function BD = ICAdecomposition(moonName, parentName, ets, Bvec, magModelDescrip,
                 xx = Bvec(2,:);
                 yy = Bvec(1,:);
                 BcompMax = max(abs(Bvec(1:2,:)), [], 'all');
-                xInfo = [mathTxt 'B_x ' nmTxt 'IAU (' mathTxt '\approx B_y ' nmTxt moonName(1) ...
+                xInfo = [mathTxt 'B_y ' nmTxt 'IAU (' mathTxt '\approx -B_x ' nmTxt moonName(1) ...
                     mathTxt '\phi\Omega' nmTxt ', nT)'];
-                yInfo = [mathTxt 'B_y ' nmTxt 'IAU (' mathTxt '\approx -B_x ' nmTxt moonName(1) ...
+                yInfo = [mathTxt 'B_x ' nmTxt 'IAU (' mathTxt '\approx B_y ' nmTxt moonName(1) ...
                     mathTxt '\phi\Omega' nmTxt ', nT)'];
                 titleInfo = [moonName ' equatorial plane hodogram, ' magModelDescrip];
             end
