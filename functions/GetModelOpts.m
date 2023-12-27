@@ -46,7 +46,7 @@ function [MagModel, CsheetModel, MPmodel, magModelDescrip, fEnd] = GetModelOpts(
 %       - ``Uranus``:
 %           - ``1``: Q3 model with degree-1 external field from Connerney et al. (1987)
 %             https://doi.org/10.1029/JA092iA13p15329
-%           - ``2`` (or ``0``): AH5 model from Herbet (2009) https://doi.org/10.1029/2009JA014394
+%           - ``2`` (or ``0``): AH5 model from Herbert (2009) https://doi.org/10.1029/2009JA014394
 %       - ``Neptune``:
 %           - ``1`` (or ``0``): O8 model from Connerney et al. (1992)
 %             https://doi.org/10.1016/0273-1177(92)90394-D
