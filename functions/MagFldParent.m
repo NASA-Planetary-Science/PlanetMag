@@ -8,11 +8,14 @@ function [Bvec_nT, Mdip_nT, Odip_km] = MagFldParent(planet, r_km, theta, phi, ..
 % The standard reference frames used for each body, except as noted below, are IAU_BODY. The only
 % exceptions to this rule are:
 %
-% * Uranus uses the US3 frame: System III coordinates with +z along the spin pole, opposite the
-%   direction of IAU_URANUS.
+% * Uranus uses the ULS frame: System III coordinates with +z along the spin pole, opposite the
+%   direction of IAU_URANUS, and with longitudes defined arbitrarily based on the Voyager 2 flyby.
 % * Neptune uses the NLS frame: The Neptune Longitude System derived from magnetic data.
-%   IAU_NEPTUNE is a System II coordinate system that rotates with a stable atmospheric feature
-%   at a different rate than the magnetic rotation rate inferred from Voyager 2 data.
+%   IAU_NEPTUNE is an outdated implementation of the IAU frame definition (as of the 2009 report).
+%   The 2015 report redefined the IAU frame to be a System II frame, rotating at a different rate
+%   than that inferred from magnetic measurements. The IAU_NEPTUNE frame rotates at the rate
+%   inferred from magnetic measurements, but is oriented differently. See :doc:`coordinates` for
+%   more information.
 %
 % All standard frames rotate with the body (planet or moon).
 % 
