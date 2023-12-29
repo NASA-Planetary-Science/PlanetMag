@@ -69,7 +69,7 @@ function [MagModel, CsheetModel, MPmodel, magModelDescrip, fEnd] = GetModelOpts(
 %             coefficients https://apps.dtic.mil/sti/citations/ADA284857
 %       - ``Saturn``: No magnetopause current magnetic field model is implemented.
 %       - ``Uranus``:
-%           - ``1``: Q3mp model from Herbet (2009) https://doi.org/10.1029/2009JA014394
+%           - ``1``: Q3mp model from Herbert (2009) https://doi.org/10.1029/2009JA014394
 %           - ``2`` (or ``0``): Arridge and Eggington (2021) box harmonic model
 %             https://doi.org/10.1016/j.icarus.2021.114562
 %       - ``Neptune``:
