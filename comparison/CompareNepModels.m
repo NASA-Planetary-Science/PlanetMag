@@ -122,9 +122,8 @@ function CompareNepModels(LIVE_PLOTS, scName, SEQUENTIAL, coeffPath, figDir, fig
         windowName = 'PDS - SPICE in NLS frame';
         fName = 'Voyager2NeptuneFlybyPDSvsSPICE';
         trajDiffNum = 4001;
-        fig = PlotGeneric(xx, yy, legendStrings, windowName, titleInfo, xInfo, yInfo, fName, ...
+        PlotGeneric(xx, yy, legendStrings, windowName, titleInfo, xInfo, yInfo, fName, ...
             figDir, figXtn, LIVE_PLOTS, trajDiffNum);
-        close(fig);
 
         r_km = r; theta = th; phi = ph; xyz_km = [x; y; z];
     end
@@ -206,14 +205,11 @@ function CompareNepModels(LIVE_PLOTS, scName, SEQUENTIAL, coeffPath, figDir, fig
     name{3} = "SPICE in NLS as defined in O8";
     
     legend([scTraj{1} scTraj{2} scTraj{3}], [name{1}, name{2}, name{3}])
-    
-    if ~LIVE_PLOTS
-        outFig = fullfile(figDir, ['NeptuneFlybyTrajectories.' figXtn]);
-        fig.Units = fig.PaperUnits;
-        fig.PaperSize = fig.Position(3:4);
-        saveas(fig, outFig)
-        disp(['Figure saved to ' outFig '.'])
-    end
-    close(fig)
+    outFig = fullfile(figDir, ['NeptuneFlybyTrajectories.' figXtn]);
+    fig.Units = fig.PaperUnits;
+    fig.PaperSize = fig.Position(3:4);
+    saveas(fig, outFig)
+    disp(['Figure saved to ' outFig '.'])
+    if ~LIVE_PLOTS; close(fig); end
 
 end

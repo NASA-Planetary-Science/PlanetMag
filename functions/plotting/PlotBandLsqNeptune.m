@@ -190,9 +190,8 @@ function PlotBandLsqNeptune(ets, t_h, r_km, theta, phi, xyz_km, BrSC, BthSC, Bph
     titleInfo = commonTitle;
     xlims = [-1.5, 1.5];
     fName = [char(scName) parentName 'BrComparison' magModelDescrip];
-    fig = PlotGeneric(xx, yy, legendStrings, windowName, titleInfo, xInfo, yInfo, fName, ...
+    PlotGeneric(xx, yy, legendStrings, windowName, titleInfo, xInfo, yInfo, fName, ...
         figDir, figXtn, LIVE_PLOTS, figNumBase + fNadd, 'linear', 'linear', xlims);
-    close(fig);
 
     fNadd = fNadd + 1;
     windowName = ['Bth, ' orbStr ', ' magModelDescrip];
@@ -203,9 +202,8 @@ function PlotBandLsqNeptune(ets, t_h, r_km, theta, phi, xyz_km, BrSC, BthSC, Bph
     if INC_O8; yy = [yy; BthO8]; end
     yy = [yy; BthSC];
     fName = [char(scName) parentName 'BthComparison' magModelDescrip];
-    fig = PlotGeneric(xx, yy, legendStrings, windowName, titleInfo, xInfo, yInfo, fName, ...
+    PlotGeneric(xx, yy, legendStrings, windowName, titleInfo, xInfo, yInfo, fName, ...
         figDir, figXtn, LIVE_PLOTS, figNumBase + fNadd, 'linear', 'linear', xlims);
-    close(fig);
 
     fNadd = fNadd + 1;
     windowName = ['Bphi, ' orbStr ', ' magModelDescrip];
@@ -216,9 +214,8 @@ function PlotBandLsqNeptune(ets, t_h, r_km, theta, phi, xyz_km, BrSC, BthSC, Bph
     if INC_O8; yy = [yy; BphiO8]; end
     yy = [yy; BphiSC];
     fName = [char(scName) parentName 'BphiComparison' magModelDescrip];
-    fig = PlotGeneric(xx, yy, legendStrings, windowName, titleInfo, xInfo, yInfo, fName, ...
+    PlotGeneric(xx, yy, legendStrings, windowName, titleInfo, xInfo, yInfo, fName, ...
         figDir, figXtn, LIVE_PLOTS, figNumBase + fNadd, 'linear', 'linear', xlims);
-    close(fig);
     
     % Evaluate magnitudes
     Bmag = sqrt(Br.^2 + Bth.^2 + Bphi.^2);
@@ -240,9 +237,8 @@ function PlotBandLsqNeptune(ets, t_h, r_km, theta, phi, xyz_km, BrSC, BthSC, Bph
     yInfo = 'Magnetic field magnitude (nT)';
     ylims = [1e2, 1e5];
     fName = [char(scName) parentName 'BmagComparison' magModelDescrip];
-    fig = PlotGeneric(xx, yy, legendStrings, windowName, titleInfo, xInfo, yInfo, fName, ...
+    PlotGeneric(xx, yy, legendStrings, windowName, titleInfo, xInfo, yInfo, fName, ...
         figDir, figXtn, LIVE_PLOTS, figNumBase + fNadd, 'linear', 'log', xlims, ylims);
-    close(fig);
     
     % Plot with same axes as Connerney et al. (1991)
     fNadd = fNadd + 1;
@@ -256,10 +252,9 @@ function PlotBandLsqNeptune(ets, t_h, r_km, theta, phi, xyz_km, BrSC, BthSC, Bph
     grid on;
     xlims = [-1+delt, 1+delt];
     fName = [char(scName) parentName 'BmagC1991Comparison' magModelDescrip];
-    fig = PlotGeneric(xx, yy, legendStrings, windowName, titleInfo, xInfo, yInfo, fName, ...
+    PlotGeneric(xx, yy, legendStrings, windowName, titleInfo, xInfo, yInfo, fName, ...
         figDir, figXtn, LIVE_PLOTS, figNumBase + fNadd, 'linear', 'log', xlims, ylims, {}, 0, ...
         0, {}, ticksx, ticklabelsx);
-    close(fig);
 
     BrD = Br - BrSC;
     BthD = Bth - BthSC;
@@ -276,9 +271,8 @@ function PlotBandLsqNeptune(ets, t_h, r_km, theta, phi, xyz_km, BrSC, BthSC, Bph
     legendStrings = [string([mathTxt '\Delta B_r']), string([mathTxt '\Delta B_\theta']), ...
         string([mathTxt '\Delta B_\phi']), string([mathTxt '\Delta |B|'])];
     fName = [char(scName) parentName 'DeltaBComparison' magModelDescrip];
-    fig = PlotGeneric(xx, yy, legendStrings, windowName, titleInfo, xInfo, yInfo, fName, ...
+    PlotGeneric(xx, yy, legendStrings, windowName, titleInfo, xInfo, yInfo, fName, ...
         figDir, figXtn, LIVE_PLOTS, figNumBase + fNadd, 'linear', 'linear', xlims);
-    close(fig);
     
     BrLsq = BrD.^2;
     BthLsq = BthD.^2;
@@ -299,9 +293,8 @@ function PlotBandLsqNeptune(ets, t_h, r_km, theta, phi, xyz_km, BrSC, BthSC, Bph
         yy = [BrD; BthD; BphiD; BmagD];
         titleInfo = 'Neptune field model comparison, PDS trajec - MAG';
         fName = [char(scName) parentName 'DeltaBComparisonPDS' magModelDescrip];
-        fig = PlotGeneric(xx, yy, legendStrings, windowName, titleInfo, xInfo, yInfo, fName, ...
+        PlotGeneric(xx, yy, legendStrings, windowName, titleInfo, xInfo, yInfo, fName, ...
             figDir, figXtn, LIVE_PLOTS, figNumBase + fNadd, 'linear', 'linear', xlims);
-        close(fig);
         
         BrLsq = BrD.^2;
         BthLsq = BthD.^2;
@@ -322,9 +315,8 @@ function PlotBandLsqNeptune(ets, t_h, r_km, theta, phi, xyz_km, BrSC, BthSC, Bph
         yy = [BrD; BthD; BphiD; BmagD];
         titleInfo = 'Neptune field model comparison, NLS exactly as defined with O8 model';
         fName = [char(scName) parentName 'DeltaBComparisonO8' magModelDescrip];
-        fig = PlotGeneric(xx, yy, legendStrings, windowName, titleInfo, xInfo, yInfo, fName, ...
+        PlotGeneric(xx, yy, legendStrings, windowName, titleInfo, xInfo, yInfo, fName, ...
             figDir, figXtn, LIVE_PLOTS, figNumBase + fNadd, 'linear', 'linear', xlims);
-        close(fig);
         
         BrLsq = BrD.^2;
         BthLsq = BthD.^2;

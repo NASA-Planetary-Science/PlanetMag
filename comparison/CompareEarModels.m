@@ -101,9 +101,8 @@ function CompareEarModels(LIVE_PLOTS, scName, xtn, SEQUENTIAL, coeffPath, figDir
     legendStrings = "latitude";
     fName = 'SwarmABClatitudes';
     trajFnum = 9001;
-    fig = PlotGeneric(xx, yy, legendStrings, windowName, titleInfo, xInfo, yInfo, fName, ...
+    PlotGeneric(xx, yy, legendStrings, windowName, titleInfo, xInfo, yInfo, fName, ...
         figDir, figXtn, LIVE_PLOTS, trajFnum);
-    close(fig);
     
     %% Plot and calculate products
     nOpts = 1; nMPopts = 0;

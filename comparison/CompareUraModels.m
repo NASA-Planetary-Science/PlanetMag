@@ -145,8 +145,8 @@ function CompareUraModels(LIVE_PLOTS, scName, SEQUENTIAL, coeffPath, figDir, fig
     plot3([0,poleUSO(1)], [0,poleUSO(2)], [0,poleUSO(3)], 'Color', 'r', 'LineWidth', 2)
     scatter3(poleUSO(1), poleUSO(2), poleUSO(3), 15, 'r')
     
-    xi = 0.72;
-    Rss = 19;
+    xi = 0.72; % Values from Arridge and Eggington (2021) based on MHD modeling of 
+    Rss = 19; % Toth et al. (2004): https://doi.org/10.1029/2004JA010406
     thDSZ = linspace(0,pi,101);
     thDSZ = thDSZ(1:end-1);
     phMP = linspace(0,2*pi,100);
@@ -157,14 +157,12 @@ function CompareUraModels(LIVE_PLOTS, scName, SEQUENTIAL, coeffPath, figDir, fig
     zMP = rMP .* sin(thDSZ) .* cos(ph2D);
     MPsurf = [xMP; yMP; zMP];
     surf(xMP, yMP, zMP, 'FaceColor', 'b')
-    if ~LIVE_PLOTS
-        outFig = fullfile(figDir, [parentName 'Trajectories.' figXtn]);
-        fig.Units = fig.PaperUnits;
-        fig.PaperSize = fig.Position(3:4);
-        saveas(fig, outFig)
-        disp(['Figure saved to ' outFig '.'])
-    end
-    close(fig)
+    outFig = fullfile(figDir, [parentName 'Trajectories.' figXtn]);
+    fig.Units = fig.PaperUnits;
+    fig.PaperSize = fig.Position(3:4);
+    saveas(fig, outFig)
+    disp(['Figure saved to ' outFig '.'])
+    if ~LIVE_PLOTS; close(fig); end
         
     %% Plot L shell
     t_h = linspace(cspice_str2et('1986-01-23T00:00:00.000'), ...
@@ -184,16 +182,14 @@ function CompareUraModels(LIVE_PLOTS, scName, SEQUENTIAL, coeffPath, figDir, fig
     ylims = [0 upperLim];
     titleInfo = 'Uranus L shell during Voyager 2 flyby';
     fName = 'Voyager2UranusLshellVst';
-    fig = PlotGeneric(xx, yy, legendStrings, windowName, titleInfo, xInfo, yInfo, fName, ...
+    PlotGeneric(xx, yy, legendStrings, windowName, titleInfo, xInfo, yInfo, fName, ...
         figDir, figXtn, LIVE_PLOTS, 50, 'linear', 'log', 'auto', ylims);
-    close(fig);
     
     windowName = [parentName ' L shell vs. r'];
     xx = r_Rp;
     xInfo = 'r (R_U)';
     titleInfo = 'Uranus L shell during Voyager 2 flyby vs. radial distance';
     fName = 'Voyager2UranusLshellVsR';
-    fig = PlotGeneric(xx, yy, legendStrings, windowName, titleInfo, xInfo, yInfo, fName, ...
+    PlotGeneric(xx, yy, legendStrings, windowName, titleInfo, xInfo, yInfo, fName, ...
         figDir, figXtn, LIVE_PLOTS, 51, 'linear', 'log', 'auto', ylims);
-    close(fig);
 end

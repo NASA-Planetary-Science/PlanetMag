@@ -134,23 +134,20 @@ function PlotBandLsq(ets, t_h, r_km, theta, phi, xyz_km, BrSC, BthSC, BphiSC, sc
     legendStrings = [string(magModelDescrip), string(scDataName)];
     titleInfo = commonTitle;
     fName = [char(scName) parentName 'BrComparison' magModelDescrip];
-    fig = PlotGeneric(xx, yy, legendStrings, windowName, titleInfo, xInfo, yInfo, fName, ...
+    PlotGeneric(xx, yy, legendStrings, windowName, titleInfo, xInfo, yInfo, fName, ...
         figDir, figXtn, LIVE_PLOTS, figNumBase + 1);
-    close(fig);
 
     windowName = [char(scName) 'Bth, ' orbStr ', ' magModelDescrip];
     yy = [Bth; BthSC];
     fName = [char(scName) parentName 'BthComparison' magModelDescrip];
-    fig = PlotGeneric(xx, yy, legendStrings, windowName, titleInfo, xInfo, yInfo, fName, ...
+    PlotGeneric(xx, yy, legendStrings, windowName, titleInfo, xInfo, yInfo, fName, ...
         figDir, figXtn, LIVE_PLOTS, figNumBase + 2);
-    close(fig);
 
     windowName = [char(scName) 'Bphi, ' orbStr ', ' magModelDescrip];
     yy = [Bphi; BphiSC];
     fName = [char(scName) parentName 'BphiComparison' magModelDescrip];
-    fig = PlotGeneric(xx, yy, legendStrings, windowName, titleInfo, xInfo, yInfo, fName, ...
+    PlotGeneric(xx, yy, legendStrings, windowName, titleInfo, xInfo, yInfo, fName, ...
         figDir, figXtn, LIVE_PLOTS, figNumBase + 3);
-    close(fig);
 
     BrD = Br - BrSC;
     BthD = Bth - BthSC;
@@ -162,9 +159,8 @@ function PlotBandLsq(ets, t_h, r_km, theta, phi, xyz_km, BrSC, BthSC, BphiSC, sc
     legendStrings = [string([ mathTxt '\Delta B_r']), string([mathTxt '\Delta B_\theta']), ...
         string([mathTxt '\Delta B_\phi'])];
     fName = [char(scName) parentName 'DeltaBComparison' magModelDescrip];
-    fig = PlotGeneric(xx, yy, legendStrings, windowName, titleInfo, xInfo, yInfo, fName, ...
+    PlotGeneric(xx, yy, legendStrings, windowName, titleInfo, xInfo, yInfo, fName, ...
         figDir, figXtn, LIVE_PLOTS, figNumBase + 4);
-    close(fig);
 
     BrLsq = BrD.^2;
     BthLsq = BthD.^2;

@@ -362,9 +362,8 @@ function [T_h, B0vec, B1vec1, B1vec2, B1vec3, outFname, header] = PlanetMag(moon
             xInfo = [nmTxt 'Time (hr)'];
             yInfo = [mathTxt Bv1lbl nmTxt ' (nT)'];
             fName = [moonName 'Bv1_fullRepro' magModelDescrip era coordType];
-            fig = PlotGeneric(xx, yy, legendStrings, windowName, titleInfo, xInfo, yInfo, ...
+            PlotGeneric(xx, yy, legendStrings, windowName, titleInfo, xInfo, yInfo, ...
                 fName, figDir, figXtn, LIVE_PLOTS, figNumBase + 1);
-            close(fig);
 
             % Plot vector component 2 reproduction vs input time series
             yy = [BvecMoon(2,:); Bvec2Tot];
@@ -374,9 +373,8 @@ function [T_h, B0vec, B1vec1, B1vec2, B1vec3, outFname, header] = PlanetMag(moon
             titleInfo = [mathTxt Bv2lbl bnmTxt ' reproduced vs. ' magModelDescrip];
             yInfo = [mathTxt Bv2lbl nmTxt ' (nT)'];
             fName = [moonName 'Bv2_fullRepro' magModelDescrip era coordType];
-            fig = PlotGeneric(xx, yy, legendStrings, windowName, titleInfo, xInfo, yInfo, ...
+            PlotGeneric(xx, yy, legendStrings, windowName, titleInfo, xInfo, yInfo, ...
                 fName, figDir, figXtn, LIVE_PLOTS, figNumBase + 2);
-            close(fig);
 
             % Plot vector component 3 reproduction vs input time series
             yy = [BvecMoon(3,:); Bvec3Tot];
@@ -386,9 +384,8 @@ function [T_h, B0vec, B1vec1, B1vec2, B1vec3, outFname, header] = PlanetMag(moon
             titleInfo = [mathTxt Bv3lbl bnmTxt ' reproduced vs. ' magModelDescrip];
             yInfo = [mathTxt Bv3lbl nmTxt ' (nT)'];
             fName = [moonName 'Bv3_fullRepro' magModelDescrip era coordType];
-            fig = PlotGeneric(xx, yy, legendStrings, windowName, titleInfo, xInfo, yInfo, ...
+            PlotGeneric(xx, yy, legendStrings, windowName, titleInfo, xInfo, yInfo, ...
                 fName, figDir, figXtn, LIVE_PLOTS, figNumBase + 3);
-            close(fig);
     
             Bvec1D = BvecMoon(1,:) - Bvec1Tot;
             Bvec2D = BvecMoon(2,:) - Bvec2Tot;
@@ -423,9 +420,8 @@ function [T_h, B0vec, B1vec1, B1vec2, B1vec3, outFname, header] = PlanetMag(moon
             titleInfo = [bnmTxt 'Residual FFT for ' magModelDescrip ' reproduction'];
             fName = [moonName 'ResidualFFT' magModelDescrip era coordType];
             figNum = figNumBase / 10;
-            fig = PlotGeneric(xx, yy, legendStrings, windowName, titleInfo, xInfo, yInfo, ...
+            PlotGeneric(xx, yy, legendStrings, windowName, titleInfo, xInfo, yInfo, ...
                 fName, figDir, figXtn, LIVE_PLOTS, figNum, 'log', 'log', xlims);
-            close(fig);
     
             % Locate main frequencies of differences in the reproduced time series
             Bdiff = sqrt(abs(Bvec1D1f).^2 + abs(Bvec2D1f).^2 + abs(Bvec3D1f).^2);

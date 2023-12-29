@@ -242,10 +242,9 @@ function BD = ICAdecomposition(moonName, parentName, ets, Bvec, magModelDescrip,
         yInfo = 'Magnetic Field (nT)';
         xlims = [0 200];
         fName = [moonName 'BVecReconVs' magModelDescrip];
-        fig = PlotGeneric(xx, yy, legendStrings, windowName, titleInfo, xInfo, yInfo, fName, ...
+        PlotGeneric(xx, yy, legendStrings, windowName, titleInfo, xInfo, yInfo, fName, ...
             figDir, figXtn, LIVE_PLOTS, figNumBase + 1, 'linear', 'linear', xlims, 'auto', ...
             cfmt, 1, 1);
-        close(fig);
 
         windowName = [magModelDescrip ' model vs. reconstruction diff, first 200h'];
         titleInfo = [bnmTxt moonName ' ' magModelDescrip ' model vs. reconstruction diff, ' ...
@@ -255,10 +254,9 @@ function BD = ICAdecomposition(moonName, parentName, ets, Bvec, magModelDescrip,
         legendStrings = [string(Bv1lbl), string(Bv2lbl), string(Bv3lbl), "Largest only"];
         yInfo = 'Magnetic Field Error (nT)';
         fName = [moonName 'DeltaBreconVs' magModelDescrip];
-        fig = PlotGeneric(xx, yy, legendStrings, windowName, titleInfo, xInfo, yInfo, fName, ...
+        PlotGeneric(xx, yy, legendStrings, windowName, titleInfo, xInfo, yInfo, fName, ...
             figDir, figXtn, LIVE_PLOTS, figNumBase + 2, 'linear', 'linear', xlims, 'auto', ...
             cfmt, 1, 1);
-        close(fig);
 
         windowName = [moonName ' ' magModelDescrip ' hodogram'];
         if SPHOUT
@@ -316,9 +314,8 @@ function BD = ICAdecomposition(moonName, parentName, ets, Bvec, magModelDescrip,
         cfmt = {'b'};
 
         fName = [moonName 'Hodogram' magModelDescrip];
-        fig = PlotGeneric(xx, yy, [], windowName, titleInfo, xInfo, yInfo, fName, figDir, ...
+        PlotGeneric(xx, yy, [], windowName, titleInfo, xInfo, yInfo, fName, figDir, ...
             figXtn, LIVE_PLOTS, figNumBase + 3, 'linear', 'linear', xlims, ylims, cfmt, 1, 1);
-        close(fig);
     end
 
 end

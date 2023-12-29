@@ -37,7 +37,7 @@ function CompareSatModels(LIVE_PLOTS, scName, SEQUENTIAL, coeffPath, figDir, fig
 % Contact: corey.j.cochrane@jpl.nasa.gov
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-    if ~exist('LIVE_PLOTS', 'var'); LIVE_PLOTS = 1; end
+    if ~exist('LIVE_PLOTS', 'var'); LIVE_PLOTS = 0; end
     if ~exist('scName', 'var'); scName = "Cassini"; end
     if ~exist('SEQUENTIAL', 'var'); SEQUENTIAL = 0; end
     if ~exist('coeffPath', 'var'); coeffPath = 'modelCoeffs'; end

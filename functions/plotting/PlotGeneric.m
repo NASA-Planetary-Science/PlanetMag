@@ -143,12 +143,11 @@ function fig = PlotGeneric(xx, yy, legendStrings, windowName, titleInfo, xInfo, 
     set(gca, 'yscale', yAxisScale);
     if ~isempty(legendStrings); legend(legendStrings); end
 
-    if ~LIVE_PLOTS
-        outFig = fullfile(figDir, [fName '.' figXtn]);
-        % Crop page size for pdf outputs
-        fig.Units = fig.PaperUnits;
-        fig.PaperSize = fig.Position(3:4);
-        saveas(fig, outFig)
-        disp(['Figure saved to ' outFig '.'])
-    end
+    outFig = fullfile(figDir, [fName '.' figXtn]);
+    % Crop page size for pdf outputs
+    fig.Units = fig.PaperUnits;
+    fig.PaperSize = fig.Position(3:4);
+    saveas(fig, outFig)
+    disp(['Figure saved to ' outFig '.'])
+    if ~LIVE_PLOTS; close(fig); end
 end
