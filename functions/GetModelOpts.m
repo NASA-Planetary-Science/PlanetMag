@@ -343,7 +343,12 @@ function [MagModel, CsheetModel, MPmodel, magModelDescrip, fEnd] = GetModelOpts(
     end
     
     if ~strcmp(magModelDescrip, 'None')
-        magModelDescrip = [magModelDescrip ' + ' MPend];
+        if ~strcmp(MPend, 'noMP')
+            MPendP = [' + ' MPend];
+        else
+            MPendP = '';
+        end
+        magModelDescrip = [magModelDescrip MPendP];
         fEnd = [fEnd MPend];
     end
 end
