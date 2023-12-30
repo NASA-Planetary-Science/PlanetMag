@@ -1,5 +1,5 @@
 function BD = ICAdecomposition(moonName, parentName, ets, Bvec, magModelDescrip, SPHOUT, ...
-    PLOT_DIAGNOSTIC, COMPARE_SEUFERT, LIVE_PLOTS, figDir, figXtn)
+    PLOT_DIAGNOSTIC, COMPARE_SEUFERT, COMPARE_PHIO, LIVE_PLOTS, figDir, figXtn)
 % Decomposes the input magnetic field vector time series into complex excitation moments using
 % :dfn:`Independent Component Analysis (ICA)`.
 %
@@ -59,6 +59,9 @@ function BD = ICAdecomposition(moonName, parentName, ets, Bvec, magModelDescrip,
 %   https://doi.org/10.1016/j.icarus.2011.03.017. Only has an effect when ``SPHOUT`` is true,
 %   because Seufert et al. used spherical coordinates for evaluating the excitation spectra of
 %   Jupiter's moons.
+% COMPARE_PHIO : bool, default=1
+%   Whether to plot components in the same orientation as PhiO axes, as in past work, and label the
+%   axes with the comparisons (true), or just plot IAU frame axes without comparisons (false).
 % LIVE_PLOTS : bool, default=0
 %   Whether to load interactive figure windows for plots (true) or print them to disk (false).
 % figDir : char, 1xF, default='figures'
@@ -100,8 +103,10 @@ function BD = ICAdecomposition(moonName, parentName, ets, Bvec, magModelDescrip,
     if ~exist('SPHOUT', 'var'); SPHOUT = 0; end
     if ~exist('PLOT_DIAGNOSTIC', 'var'); PLOT_DIAGNOSTIC = 1; end
     if ~exist('COMPARE_SEUFERT', 'var'); COMPARE_SEUFERT = 1; end
+    if ~exist('COMPARE_PHIO', 'var'); COMPARE_PHIO = 1; end
     if ~exist('LIVE_PLOTS', 'var'); LIVE_PLOTS = 0; end
     if ~exist('figDir', 'var'); figDir = 'figures'; end
+    if ~exist('figXtn', 'var'); figXtn = 'pdf'; end
     % The following are defined in SetPlotDefaults. Do NOT reset them anywhere else.
     global nmTxt
     global bnmTxt
@@ -258,64 +263,11 @@ function BD = ICAdecomposition(moonName, parentName, ets, Bvec, magModelDescrip,
             figDir, figXtn, LIVE_PLOTS, figNumBase + 2, 'linear', 'linear', xlims, 'auto', ...
             cfmt, 1, 1);
 
-        windowName = [moonName ' ' magModelDescrip ' hodogram'];
-        if SPHOUT
-            if strcmp(parentName,'Saturn')
-                xx = -Bvec(1,:);
-                yy = -Bvec(2,:);
-                BcompMax = max(abs(Bvec(1:2,:)), [], 'all');
-                xInfo = [mathTxt '-B_r ' nmTxt parentName ' SIII (' mathTxt '\approx B_y ' ...
-                    nmTxt moonName(1) mathTxt '\phi\Omega' nmTxt ', nT)'];
-                yInfo = [mathTxt '-B_\theta ' nmTxt parentName ' SIII (' mathTxt '\approx B_z ' ...
-                    nmTxt moonName(1) mathTxt '\phi\Omega' nmTxt ', nT)'];
-                titleInfo = [bnmTxt moonName ' spin-parent plane hodogram, ' magModelDescrip];
-            else
-                if COMPARE_SEUFERT
-                    xx = -Bvec(3,:);
-                    yy =  Bvec(1,:);
-                    xInfo = [mathTxt '-B_\phi ' nmTxt parentName ' SIII (' mathTxt ...
-                        '\approx -B_x ' nmTxt moonName(1) mathTxt '\phi\Omega' nmTxt ', nT)'];
-                    yInfo = [mathTxt 'B_r ' nmTxt parentName ' SIII (' mathTxt ...
-                        '\approx -B_y ' nmTxt moonName(1) mathTxt '\phi\Omega' nmTxt ', nT)'];
-                else
-                    xx =  Bvec(3,:);
-                    yy = -Bvec(1,:);
-                    xInfo = [mathTxt 'B_\phi ' nmTxt parentName ' SIII (' mathTxt ...
-                        '\approx B_x ' nmTxt moonName(1) mathTxt '\phi\Omega' nmTxt ', nT)'];
-                    yInfo = [mathTxt '-B_r ' nmTxt parentName ' SIII (' mathTxt ...
-                        '\approx B_y ' nmTxt moonName(1) mathTxt '\phi\Omega' nmTxt ', nT)'];
-                end
-                BcompMax = max(abs([Bvec(1,:), Bvec(3,:)]));
-                titleInfo = [moonName ' equatorial plane hodogram, ' magModelDescrip];
-            end
-        else
-            if strcmp(parentName,'Saturn')
-                xx = Bvec(1,:);
-                yy = Bvec(3,:);
-                BcompMax = max(abs([Bvec(1,:), Bvec(3,:)]));
-                xInfo = [mathTxt 'B_x ' nmTxt 'IAU (' mathTxt '\approx B_y ' nmTxt moonName(1) ...
-                    mathTxt '\phi\Omega' nmTxt ', nT)'];
-                yInfo = [mathTxt 'B_z ' nmTxt 'IAU (' mathTxt '\approx B_z ' nmTxt moonName(1) ...
-                    mathTxt '\phi\Omega' nmTxt ', nT)'];
-                titleInfo = [moonName ' spin-parent plane hodogram, ' magModelDescrip];
-            else
-                xx = Bvec(2,:);
-                yy = Bvec(1,:);
-                BcompMax = max(abs(Bvec(1:2,:)), [], 'all');
-                xInfo = [mathTxt 'B_y ' nmTxt 'IAU (' mathTxt '\approx -B_x ' nmTxt moonName(1) ...
-                    mathTxt '\phi\Omega' nmTxt ', nT)'];
-                yInfo = [mathTxt 'B_x ' nmTxt 'IAU (' mathTxt '\approx B_y ' nmTxt moonName(1) ...
-                    mathTxt '\phi\Omega' nmTxt ', nT)'];
-                titleInfo = [moonName ' equatorial plane hodogram, ' magModelDescrip];
-            end
-        end
-        ylims = [-BcompMax, BcompMax] * 1.05;
-        xlims = ylims;
-        cfmt = {'b'};
-
-        fName = [moonName 'Hodogram' magModelDescrip];
-        PlotGeneric(xx, yy, [], windowName, titleInfo, xInfo, yInfo, fName, figDir, ...
-            figXtn, LIVE_PLOTS, figNumBase + 3, 'linear', 'linear', xlims, ylims, cfmt, 1, 1);
+        %% Hodograms
+        [xx, yy, windowName, titleInfo, xInfo, yInfo, fName, xlims, ylims] = HodogramSingle( ...
+            moonName, parentName, magModelDescrip, Bvec, SPHOUT, COMPARE_SEUFERT, COMPARE_PHIO);
+        PlotGeneric(xx, yy, [], windowName, titleInfo, xInfo, yInfo, fName, figDir, figXtn, ...
+            LIVE_PLOTS, figNumBase + 3, 'linear', 'linear', xlims, ylims, {'b'}, 1, 1);
     end
 
 end

@@ -272,7 +272,7 @@ function [T_h, B0vec, B1vec1, B1vec2, B1vec3, outFname, header] = PlanetMag(moon
             end
     
             BD = ICAdecomposition(moonName, parentName, t_h*3600, BvecMoon, magModelDescrip, ...
-                SPHOUT, 1, 1, LIVE_PLOTS, figDir, figXtn);
+                SPHOUT, 1, 1, 1, LIVE_PLOTS, figDir, figXtn);
     
             T_h = 1 ./ BD.f / 3600;
             npeaks = length(T_h);

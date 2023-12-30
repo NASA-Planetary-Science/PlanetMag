@@ -130,7 +130,7 @@ function PlotBandLsq(ets, t_h, r_km, theta, phi, xyz_km, BrSC, BthSC, BphiSC, sc
     figNumBase = 3000 + 100*opt + 10*MPopt;
     windowName = [char(scName) 'Br, ' orbStr ', ' magModelDescrip];
     yy = [Br; BrSC];
-    yInfo = 'Vector component (nT)';
+    yInfo = [mathTxt 'B_r' nmTxt ' component (nT)'];
     legendStrings = [string(magModelDescrip), string(scDataName)];
     titleInfo = commonTitle;
     fName = [char(scName) parentName 'BrComparison' magModelDescrip];
@@ -139,12 +139,14 @@ function PlotBandLsq(ets, t_h, r_km, theta, phi, xyz_km, BrSC, BthSC, BphiSC, sc
 
     windowName = [char(scName) 'Bth, ' orbStr ', ' magModelDescrip];
     yy = [Bth; BthSC];
+    yInfo = [mathTxt 'B_\theta' nmTxt ' component (nT)'];
     fName = [char(scName) parentName 'BthComparison' magModelDescrip];
     PlotGeneric(xx, yy, legendStrings, windowName, titleInfo, xInfo, yInfo, fName, ...
         figDir, figXtn, LIVE_PLOTS, figNumBase + 2);
 
     windowName = [char(scName) 'Bphi, ' orbStr ', ' magModelDescrip];
     yy = [Bphi; BphiSC];
+    yInfo = [mathTxt 'B_\phi' nmTxt ' component (nT)'];
     fName = [char(scName) parentName 'BphiComparison' magModelDescrip];
     PlotGeneric(xx, yy, legendStrings, windowName, titleInfo, xInfo, yInfo, fName, ...
         figDir, figXtn, LIVE_PLOTS, figNumBase + 3);

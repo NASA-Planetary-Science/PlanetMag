@@ -108,7 +108,7 @@ function fig = PlotGeneric(xx, yy, legendStrings, windowName, titleInfo, xInfo, 
     nPlots = yySize(1);
     DO_COLORS = length(cfmt) == nPlots;
     if length(cfmt) > 1 && ~DO_COLORS
-        warning(['Only ' num2str(length(cfmt)) ' colors for ' num2str(nPlots) ' were passed' ...
+        warning(['Only ' num2str(length(cfmt)) ' colors for ' num2str(nPlots) ' were passed ' ...
             'to PlotGeneric.'])
     end
 
@@ -141,7 +141,7 @@ function fig = PlotGeneric(xx, yy, legendStrings, windowName, titleInfo, xInfo, 
     end
     set(gca, 'xscale', xAxisScale);
     set(gca, 'yscale', yAxisScale);
-    if ~isempty(legendStrings); legend(legendStrings); end
+    if ~isempty(legendStrings); legend(legendStrings, 'Location', 'Best'); end
 
     outFig = fullfile(figDir, [fName '.' figXtn]);
     % Crop page size for pdf outputs

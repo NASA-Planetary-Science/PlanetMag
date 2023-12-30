@@ -53,8 +53,8 @@ function [MagModel, CsheetModel, MPmodel, magModelDescrip, fEnd] = GetModelOpts(
 %
 % MPopt : int
 %   Index number for magnetopause current magnetic field model. 0 selects the default option. If
-%   any value is passed that does not correspond to a valid model index, no magnetopause current
-%   magnetic field will be modeled. Currently implemented model options are:
+%   any value is passed that does not correspond to a valid model index (i.e. -1), no magnetopause
+%   current magnetic field will be modeled. Currently implemented model options are:
 %
 %       - ``Earth``: No magnetopause current magnetic field model is implemented.
 %       - ``Jupiter``:

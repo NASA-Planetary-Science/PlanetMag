@@ -1,5 +1,5 @@
-function CompareSatModels(LIVE_PLOTS, scName, SEQUENTIAL, coeffPath, figDir, figXtn, ...
-    magDataMat, LOAD_PDS_ASCII)
+function CompareSatModels(LIVE_PLOTS, LOAD_PDS_ASCII, yearRange, scName, SEQUENTIAL, coeffPath, ...
+    figDir, figXtn, magDataMat)
 % Compare magnetic field measurements from spacecraft near Saturn against each implemented magnetic
 % field model.
 %
@@ -11,8 +11,13 @@ function CompareSatModels(LIVE_PLOTS, scName, SEQUENTIAL, coeffPath, figDir, fig
 % ----------
 % LIVE_PLOTS : bool, default=0
 %   Whether to load interactive figure windows for plots (true) or print them to disk (false).
-% scNames : string, 1xS, default=["Voyager 1", "Voyager 2"]
-%   Spacecraft names for which magnetic field data will be compared against implemented models. A
+% LOAD_PDS_ASCII : bool, default=0
+%   Whether to load in .TAB files downloaded from PDS (true) or use pre-converted and compressed
+%   .mat summery of just the important bits (false).
+% yearRange : int, 1xG, default=4:17
+%   Years over which to compare Cassini data. Default includes all measurements.
+% scName : string, 1xS, default=["Cassini"]
+%   Spacecraft name for which magnetic field data will be compared against implemented models. A
 %   directory must exist with each name in the ``MAG`` directory within the top-level P\lanetMag
 %   directory. These directories will be searched for data files with the ``.tab`` extension, and
 %   each of these files will be loaded.
@@ -27,9 +32,6 @@ function CompareSatModels(LIVE_PLOTS, scName, SEQUENTIAL, coeffPath, figDir, fig
 %   Extension to use for figures, which determines the file type.
 % magDataMat : char, 1xF, default='MAG/scName/ALL_FGM_KRTP_1M'
 %   File path to use for save/reload of PDS data in .mat file.
-% LOAD_PDS_ASCII : bool, default=0
-%   Whether to load in .TAB files downloaded from PDS (true) or use pre-converted and compressed
-%   .mat summery of just the important bits (false).
 
 % Part of the PlanetMag framework for evaluation and study of planetary magnetic fields.
 % Created by Corey J. Cochrane and Marshall J. Styczinski
@@ -38,6 +40,8 @@ function CompareSatModels(LIVE_PLOTS, scName, SEQUENTIAL, coeffPath, figDir, fig
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
     if ~exist('LIVE_PLOTS', 'var'); LIVE_PLOTS = 0; end
+    if ~exist('LOAD_PDS_ASCII', 'var'); LOAD_PDS_ASCII = 0; end
+    if ~exist('yearRange', 'var'); yearRange = 4:17; end
     if ~exist('scName', 'var'); scName = "Cassini"; end
     if ~exist('SEQUENTIAL', 'var'); SEQUENTIAL = 0; end
     if ~exist('coeffPath', 'var'); coeffPath = 'modelCoeffs'; end
@@ -45,7 +49,6 @@ function CompareSatModels(LIVE_PLOTS, scName, SEQUENTIAL, coeffPath, figDir, fig
     if ~exist('figXtn', 'var'); figXtn = 'pdf'; end
     sc = char(scName);
     if ~exist('magDataMat', 'var'); magDataMat = fullfile('MAG', sc, 'ALL_FGM_KRTP_1M'); end
-    if ~exist('LOAD_PDS_ASCII', 'var'); LOAD_PDS_ASCII = 0; end
     
     cspice_kclear;
     parentName = 'Saturn';
@@ -65,7 +68,7 @@ function CompareSatModels(LIVE_PLOTS, scName, SEQUENTIAL, coeffPath, figDir, fig
         magFormatSpec = '%19s%11f%11f%11f%11f%8f%7f%7f%5f%3d%[^\n\r]';
         disp(['Importing PDS measurements over ' parentName ' orbits.'])
         [t_UTC, BrSC, BthSC, BphiSC] = deal([]);
-        for i=4:17
+        for i=yearRange
             datFile = fullfile('MAG', sc, [num2str(2000+i) '_FGM_KRTP_1M.TAB']);
             disp(['Loading ' sc ' MAG data from ' datFile '.'])
             fileID = fopen(datFile,'r');
@@ -120,7 +123,6 @@ function CompareSatModels(LIVE_PLOTS, scName, SEQUENTIAL, coeffPath, figDir, fig
     BrSC(exclude) = [];
     BthSC(exclude) = [];
     BphiSC(exclude) = [];
-    rP_Rp(exclude) = [];
 
     npts = length(ets);
     t_h = ets / 3600;
@@ -140,16 +142,10 @@ function CompareSatModels(LIVE_PLOTS, scName, SEQUENTIAL, coeffPath, figDir, fig
     end
 
     %% Plot trajectory
-    % Exclude points we won't be plotting
     disp(['Getting ' sc ' trajectories in KSO frame for ' num2str(npts) ' pts.'])
     [~, ~, ~, xyzKSO_km, ~] = GetPosSpice(sc, parentName, t_h, 'KSO');
     xyz_Rp = xyzKSO_km / Rp_km;
     x = xyz_Rp(1,:); y = xyz_Rp(2,:); z = xyz_Rp(3,:);
-    axlim_Rp = 10;
-    outer = find(rP_Rp > axlim_Rp);
-    x(outer) = nan;
-    y(outer) = nan;
-    z(outer) = nan;
     
     %% Plot trajectories
     windowName = 'Spacecraft Saturn trajectories';
@@ -166,6 +162,7 @@ function CompareSatModels(LIVE_PLOTS, scName, SEQUENTIAL, coeffPath, figDir, fig
     
     % Plot planet, pole, and rings for illustrative purposes
     pbaspect([1 1 1]);
+    axlim_Rp = 10;
     xlim([-axlim_Rp, axlim_Rp]); ylim([-axlim_Rp, axlim_Rp]); zlim([-axlim_Rp, axlim_Rp]);
     grid on;
     title([parentName ' orbit trajectories']);
