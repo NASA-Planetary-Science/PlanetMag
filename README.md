@@ -34,7 +34,7 @@ To fully install PlanetMag and access all features:
          1. ``s000131a.bsp``
          1. ``s030916a.bsp``
    1. For Cassini:
-      1. All in the ``spice/Cassini`` directory, from https://naif.jpl.nasa.gov/pub/naif/pds/data/co-s_j_e_v-spice-6-v1.0/cosp_1000/extras/mk/>, download all meta kernels listed in LoadSpice() (one for each year Cassini was operational at Saturn).
+      1. All in the ``spice/Cassini`` directory, from <https://naif.jpl.nasa.gov/pub/naif/pds/data/co-s_j_e_v-spice-6-v1.0/cosp_1000/extras/mk/>, download all meta kernels listed in LoadSpice() (one for each year Cassini was operational at Saturn).
       1. Delete all files from each meta kernel except for the .bsp files with SCPSE in the name. 
       1. All in the ``spice/Cassini/spk`` directory, from <https://naif.jpl.nasa.gov/pub/naif/pds/data/co-s_j_e_v-spice-6-v1.0/cosp_1000/data/spk/>, download all .bsp files listed in the meta kernels.
    1. For Juno, all from <https://naif.jpl.nasa.gov/pub/naif/JUNO/kernels/spk/>:
