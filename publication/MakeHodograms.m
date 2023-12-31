@@ -16,10 +16,10 @@ function MakeHodograms
         "Callisto"
         ];
     cfmt = {
-        'r'
-        'b'
-        'g'
-        'c'
+        '#bf9005' % ochre
+        '#0652ff' % electric blue
+        '#76cd26' % apple green
+        '#75bbfd' % sky blue
         };
     nMoons = length(moons);
 
@@ -77,11 +77,11 @@ function MakeHodograms
         "Titan"
         ];
     cfmt = {
-        'm'
-        'c'
-        'b'
-        'k'
-        '#f97306' % Orange
+        '#c20078' % magenta
+        '#8e82fe' % periwinkle
+        '#02ab2e' % kelly green
+        '#380835' % eggplant
+        '#dbb40c' % gold
         };
     nMoons = length(moons);
 
@@ -110,7 +110,7 @@ function MakeHodograms
         if ~strcmp(outCoords(1:3), 'IAU'); SPHOUT = 1; end
 
         nexttile
-        PlotHodogramTile(moonName, parentName, magModelDescrip, BvecMoon, SPHOUT, cfmt{i});
+        PlotHodogramTile(moonName, parentName, magModelDescrip, BvecMoon, SPHOUT, cfmt{i}, 0);
     end
 
     fName = [parentName 'FamilyHodogram'];
@@ -133,11 +133,11 @@ function MakeHodograms
         "Oberon"
         ];
     cfmt = {
-        'm'
-        'r'
-        'k'
-        'g'
-        '#06c2ac' % Turqoise
+        '#650021' % maroon
+        '#13eac9' % aqua
+        'k' % black
+        '#06c2ac' % turqoise
+        '#f97306' % orange
         };
     nMoons = length(moons);
 
@@ -180,8 +180,7 @@ function MakeHodograms
     %% Neptune family
     parentName = 'Neptune';
     figNumber = figNumBase + 4;
-    cfmt = '#9a0eea'; % Violet
-
+    cfmt = '#d1b26f'; % tan
 
     moonName = 'Triton';
     [~, ~, ~, magModelDescrip, fEnd] = GetModelOpts(parentName, 0, -1);
@@ -192,20 +191,46 @@ function MakeHodograms
 
     fName = [parentName 'FamilyHodogram'];
     windowName = [parentName ' system hodograms'];
-    [xx, yy, ~, ~, xInfo, yInfo, ~, xlims, ylims] = HodogramSingle( ...
-        moonName, parentName, magModelDescrip, BvecMoon, SPHOUT, 0, 0);
-    PlotGeneric(xx, yy, [], windowName, titleInfo, xInfo, yInfo, fName, figDir, figXtn, ...
-        LIVE_PLOTS, figNumber, 'linear', 'linear', xlims, ylims, cfmt, 1, 1);
+    if LIVE_PLOTS
+        if ~figNumber
+            fig = figure('Visible', 'on', 'Name', windowName);
+        else
+            fig = figure(figNumber);
+            clf();
+            set(gcf, 'Visible', 'on', 'Name', windowName);
+        end
+    else
+        fig = figure('Visible', 'off', 'Name', windowName);
+    end
+    hold on;
+    ApplyPlotDefaults(fig, interpreter, font);
+    tiles = tiledlayout(1, nMoons, 'TileSpacing', 'tight', 'Padding', 'tight');
+    nexttile
+    PlotHodogramTile(moonName, parentName, magModelDescrip, BvecMoon, SPHOUT, cfmt);
+
+    fName = [parentName 'FamilyHodogram'];
+    outFig = fullfile(figDir, [fName '.' figXtn]);
+    % Crop page size for pdf outputs
+    fig.Units = fig.PaperUnits;
+    fig.PaperSize = [0.25*fig.Position(3) 0.35*fig.Position(4)];
+    fig.PaperPosition(1:2) = [0.05 -1.5];
+    saveas(fig, outFig)
+    disp(['Figure saved to ' outFig '.'])
+    if ~LIVE_PLOTS; close(fig); end
 end
 
     function [xInfo, yInfo] = PlotHodogramTile(moonName, parentName, magModelDescrip, BvecMoon, ...
-            SPHOUT, cfmt)
+            SPHOUT, cfmt, LIMS)
+    if ~exist('LIMS', 'var'); LIMS = 1; end
     [xx, yy, ~, ~, xInfo, yInfo, ~, xlims, ylims] = HodogramSingle( ...
             moonName, parentName, magModelDescrip, BvecMoon, SPHOUT, 0, 0);
 
     plot(xx, yy, 'color', cfmt);
     pbaspect([1 1 1])
+    daspect([1 1 1])
     title([moonName ', ' magModelDescrip]);
-    xlim(xlims);
-    ylim(ylims);
+    if LIMS
+        xlim(xlims);
+        ylim(ylims);
+    end
 end
