@@ -14,7 +14,6 @@ Please refer to the :doc:`README<readme>` for the overall package description, i
    primary
    functions
    pythonModules
-   coordinates
    publication
 
 Package index

@@ -61,14 +61,3 @@ Solar--Magnetic--Planet frames
 * :math:`\phi=0` at the sub-solar point, i.e. the :math:`x` axis is along the direction perpendicular to :math:`\hat{z}` along the noon local time longitude line
 * The :math:`xy` plane defines the magnetic equatorial plane
 * Implemented as ``SMJ``, ``SMK``, ``SMU``, ``SMN`` for Jupiter, Saturn, Uranus, and Neptune respectively
-
-.. role:: mat:func
-   :class: func
-
-.. mat:module:: publication
-   :noindex:
-
-:mat:func:`RunPublication`
-+++++++++++++++++++++++++++
-
-.. mat:autofunction:: RunPublication
