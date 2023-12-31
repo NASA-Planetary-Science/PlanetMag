@@ -5,7 +5,9 @@ function CompareJupModels(LIVE_PLOTS, scName, moonName, orbNum, moonProx_RP, Pla
 %
 % Datasets:
 %
-%   * Galileo MAG: https://doi.org/10.17189/1519667, volume GO-J-MAG-3-RDR-HIGHRES-V1.0
+%   * Galileo MAG: https://doi.org/10.17189/1519667, volume GO-J-MAG-3-RDR-HIGHRES-V1.0 (moons)
+%       https://doi.org/10.17189/1519668, volume GO-J-MAG-3-RDR-MAGSPHERIC-SURVEY-V1.0 (full 
+%       orbits)
 %   * Juno MAG: https://doi.org/10.17189/1519711, volume JNO-J-3-FGM-CAL-V1.0
 %
 % Note
