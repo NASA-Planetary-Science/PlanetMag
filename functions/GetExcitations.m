@@ -51,7 +51,8 @@ function [f, fNames] = GetExcitations(moonName, etMid_day)
 
             f = [fSyn, fOrb];
 
-            f = [f, 2*fSyn];
+            f = [f, 2*fSyn, ...
+                ];
 
             fNames = [
                 "synodic"
@@ -62,71 +63,37 @@ function [f, fNames] = GetExcitations(moonName, etMid_day)
         %% Jupiter moons 
         case 'Io'
             fIoTA = 1 / 3600 / 42.315044531808887029; % true anomaly period
-            fOrbBeat = 1 / 3600 / 42.289036514276894252;
             fOrbMid1 = 1 / 3600 / 42.431381950208163;
             fOrbMid2 = 1 / 3600 / 42.305626942856122;
 
-            f = [fSyn, fOrb, fIoTA, fOrbMid1, fOrbMid2];
+            f = [fSyn, fOrbMid1, fOrbMid2];
 
             f = [f, 2*fSyn, ...
                     3*fSyn, ...
                     4*fSyn, ...
-                    5*fSyn, ...
-                    6*fSyn, ...
                     fSyn - fIoTA, ... % 1st harmonic beats
-                    fSyn - fOrb, ...
-                    fSyn + fOrb, ...
                     fSyn + fIoTA, ...
                     2*fSyn - fIoTA, ... % 2nd harmonic beats
-                    2*fSyn + fIoTA, ...
-                    3*fSyn - fIoTA, ... % 3rd harmonic beats
-                    3*fSyn + fIoTA, ...
                     fSynAdj - fIoTA, ... % 1st harmonic beats
-                    fSynAdj - fOrb, ... % 1st harmonic beats
                     fSynAdj + fIoTA, ...
                     2*fSynAdj - fIoTA, ... % 2nd harmonic beats
-                    2*fSynAdj + fIoTA, ...
-                    3*fSynAdj - fIoTA, ... % 3rd harmonic beats
-                    3*fSynAdj + fIoTA, ...
-                    fOrbBeat, ... % ~ 2nd harmonic beat between orbital and TA periods
                     fSynAdj - fOrbMid2, ...  % Beat between strong(est) oscillations
-                    fPar - fJyr, ... % Solar oscillation periods due to 
-                    fPar - 2*fJyr, ... % magnetopause current fields
-                    fOrbAdj - fJyr, ...
-                    fOrbAdj - 2*fJyr];
+                    ];
 
             fNames = [
                 "synodic"
-                "orbital"
-                "true anomaly"
                 "orbital mid 1"
                 "orbital mid 2"
                 "synodic 2nd"
                 "synodic 3rd"
                 "synodic 4th"
-                "synodic 5th"
-                "synodic 6th"
                 "synodic-TA beat"
-                "synodic-orbital beat"
-                "synodic+orbital beat"
                 "synodic+TA beat"
                 "synodic 2nd-TA beat"
-                "synodic 2nd+TA beat"
-                "synodic 3rd-TA beat"
-                "synodic 3rd+TA beat"
                 "adjusted synodic-TA beat"
-                "adjusted synodic-orbital beat"
                 "adjusted synodic+TA beat"
                 "adjusted synodic 2nd-TA beat"
-                "adjusted synodic 2nd+TA beat"
-                "adjusted synodic 3rd-TA beat"
-                "adjusted synodic 3rd+TA beat"
-                "orbital-TA beat 2nd"
                 "adjusted synodic-orbital mid 2 beat"
-                "planet day-year beat"
-                "planet day-half year beat"
-                "adjusted orbital-year beat"
-                "adjusted orbital-half year beat"
                 ];
 
         case 'Europa'
@@ -137,19 +104,11 @@ function [f, fNames] = GetExcitations(moonName, etMid_day)
             % Harmonics
             f = [f, 2*fSyn, ...
                     3*fSyn, ...
-                    4*fSyn, ...
-                    2*fTA, ...
                     fSyn - fTA, ... % 1st harmonic beats
                     fSyn + fTA, ...
-                    2*fSyn - fTA, ... % 2nd harmonic beats
-                    2*fSyn + fTA, ...
-                    2*fTA - fOrb, ...
-                    2*fOrb - fTA, ...
-                    fTA + fOrb, ...
-                    fTA - fJyr, ... % Solar beats with
-                    fOrbAdj - fJyr, ... % orbital periods
-                    fPar - fJyr, ... % Solar oscillation periods due to 
-                    fPar - 2*fJyr, ... % magnetopause current fields
+                    fTA - fJyr, ... % Solar beats
+                    fTA + fJyr, ... % with orbital
+                    fOrbAdj - fJyr, ... % periods
                     ];
 
             fNames = [
@@ -158,255 +117,79 @@ function [f, fNames] = GetExcitations(moonName, etMid_day)
                 "adjusted orbital"
                 "synodic 2nd"
                 "synodic 3rd"
-                "synodic 4th"
-                "TA 2nd"
                 "synodic-TA beat"
                 "synodic+TA beat"
-                "synodic 2nd-TA beat"
-                "synodic 2nd+TA beat"
-                "TA 2nd-orbital beat"
-                "orbital 2nd-TA beat"
-                "TA+orbital beat"
                 "TA-year beat"
+                "TA+year beat"
                 "adjusted orbital-year beat"
-                "planet day-year beat"
-                "planet day-half year beat"
                 ];
 
         case 'Ganymede'
-            fEuropaTA = 3.282358696657e-6;
-            fOrbEuropa = 101.3747235 / 360 / 86400;
-            fMystery = 1 / 3600 / 34.724522173543868;
-            fMystery2 = 1 / 3600 / 150.271894222476305458;
-            f = [fSyn, fOrb];
+            f = [fSyn, fOrbAdj];
 
             f = [f, 2*fSyn, ...
+                    ];
+
+            fNames = [
+                "synodic"
+                "adjusted orbital"
+                "synodic 2nd"
+                ];
+
+        case 'Callisto'
+
+            f = [fSyn, fOrb];
+
+            % Harmonics
+            f = [f, 2*fSyn, ...
                     3*fSyn, ...
-                    4*fSyn, ...
                     5*fSyn, ...
-                    6*fSyn, ...
-                    fSyn - fOrb, ... % 1st harmonic beats
-                    fSyn + fOrb, ...
-                    2*fSyn - fOrb, ... % 2nd harmonic beats
-                    2*fSyn + fOrb, ...
-                    3*fSyn - fOrb, ... % 3rd harmonic beats
-                    3*fSyn + fOrb, ...
-                    fMystery, ...
-                    fSyn - fMystery, ...
-                    fSyn + fMystery, ...
-                    fEuropaTA/2, ... % Half of Europa's true anomaly oscillation
-                    fOrbAdj, ...
-                    fPar - fOrbEuropa, ...
-                    2*fSyn - 5*fOrb, ...
-                    fMystery2, ...
-                    fSyn - fMystery2, ...
-                    1 / 3600 / 4.573237865242181, ...
-                    1 / 3600 / 6.208585640926228, ...
-                    1 / 3600 / 3.188814749737327, ...
-                    1 / 3600 / 3.906250548182006, ...
-                    2*fMystery, ...
-                    fPar - fJyr, ... % Solar oscillation periods due to 
-                    fPar - 2*fJyr, ... % magnetopause current fields
-                    fOrbAdj - fJyr, ...
-                    fOrbAdj - 2*fJyr];
+                    ];
 
             fNames = [
                 "synodic"
                 "orbital"
                 "synodic 2nd"
                 "synodic 3rd"
-                "synodic 4th"
                 "synodic 5th"
-                "synodic 6th"
-                "synodic-orbital beat"
-                "synodic+orbital beat"
-                "synodic 2nd-orbital beat"
-                "synodic 2nd+orbital beat"
-                "synodic 3rd-orbital beat"
-                "synodic 3rd+orbital beat"
-                "mystery"
-                "synodic-mystery beat"
-                "synodic+mystery beat"
-                "Europa TA half period"
-                "adjusted orbital"
-                "Europa synodic"
-                "synodic 2nd-orbital 5th beat"
-                "mystery 2"
-                "synodic-mystery 2 beat"
-                "4.57?"
-                "6.21?"
-                "3.19?"
-                "3.91?"
-                "mystery 2nd"
-                "planet day-year beat"
-                "planet day-half year beat"
-                "adjusted orbital-year beat"
-                "adjusted orbital-half year beat"
-                ];
-
-        case 'Callisto'
-            fSheet1 = 1 / 3600 / 15.120553206749488;
-            fSheet2 = 1 / 3600 / 7.6696338880659605;
-            fSheet3 = 1 / 3600 / 3.8072842207111743;
-            fSheet4 = 1 / 3600 / 3.059002331397538;
-
-            f = [fSyn, fOrbAdj];
-
-            % Harmonics
-            f = [f, 2*fSyn, ...
-                    3*fSyn, ...
-                    4*fSyn, ...
-                    5*fSyn, ...
-                    6*fSyn, ...
-                    2*fOrb, ...
-                    fSyn - fOrb, ... % 1st harmonic beats
-                    fSyn + fOrb, ...
-                    2*fSyn - fOrb, ... % 2nd harmonic beats
-                    2*fSyn + fOrb, ...
-                    fSheet1, ...
-                    fSheet2, ...
-                    fSheet3, ...
-                    fSheet4, ...
-                    fPar - fJyr, ... % Solar oscillation periods due to 
-                    fPar - 2*fJyr, ... % magnetopause current fields
-                    fOrbAdj - fJyr, ...
-                    fOrbAdj - 2*fJyr];
-
-            fNames = [
-                "synodic"
-                "adjusted orbital"
-                "synodic 2nd"
-                "synodic 3rd"
-                "synodic 4th"
-                "synodic 5th"
-                "synodic 6th"
-                "orbital 2nd"
-                "synodic-orbital beat"
-                "synodic+orbital beat"
-                "synodic 2nd-orbital beat"
-                "synodic 2nd+orbital beat"
-                "sheet 1"
-                "sheet 2"
-                "sheet 3"
-                "sheet 4"
-                "planet day-year beat"
-                "planet day-half year beat"
-                "adjusted orbital-year beat"
-                "adjusted orbital-half year beat"
                 ];
 
         %% Saturn moons         
         case 'Mimas'
             fTA = 1 / 3600 / 22.67814677274641;
-            fOrbTAbeat1 = 1 / 3600 / 22.55964638685534;
-            fOrbTAbeat2 = 1 / 3600 / 22.50213602844169;
-            f = [fOrb, fOrbAdj, fTA, fOrbTAbeat1, fOrbTAbeat2];
+            fOrbTAmid = 1 / 3600 / 22.559683415428385;
+            f = [fTA, fOrbTAmid];
 
             % Harmonics
-            f = [f, 2*fOrb, ...  
-                    2*fOrbAdj, ...
-                    2*fTA, ...  
-                    2*fOrbTAbeat1, ...
-                    3*fOrb, ...
-                    3*fOrbAdj, ...
-                    3*fTA, ...
-                    fPar - fSyr, ... % Solar oscillation periods due to 
-                    fPar - 2*fSyr, ... % magnetopause current fields
-                    fOrbAdj - fSyr, ...
-                    fOrbAdj - 2*fSyr];
+            f = [f, 2*fOrb, ...
+                    ];
 
             fNames = [
-                "orbital"
-                "adjusted orbital"
                 "true anomaly"
-                "orbital-TA beat 1"
-                "orbital-TA beat 2"
+                "adjusted orbital-TA mid"
                 "orbital 2nd"
-                "adjusted orbital 2nd"
-                "TA 2nd"
-                "orbital-TA beat 1 2nd"
-                "orbital 3rd"
-                "adjusted orbital 3rd"
-                "TA 3rd"
-                "planet day-year beat"
-                "planet day-half year beat"
-                "adjusted orbital-year beat"
-                "adjusted orbital-half year beat"
                 ];
 
         case 'Enceladus'
-            fTA = 1 / 3600 / 32.927200612354675; % True anomaly period
-            f = [fOrb, fTA];
+            fTA = 1 / 3600 / 32.927655041360495; % True anomaly period
+            f = fTA;
 
-            f = [f, 2*fTA, ...
-                    fPar - fSyr, ... % Solar oscillation periods due to 
-                    fPar - 2*fSyr, ... % magnetopause current fields
-                    fOrbAdj - fSyr, ...
-                    fOrbAdj - 2*fSyr];
+            fNames = "true anomaly";
 
-            fNames = [
-                "orbital"
-                "true anomaly"
-                "TA 2nd"
-                "planet day-year beat"
-                "planet day-half year beat"
-                "adjusted orbital-year beat"
-                "adjusted orbital-half year beat"
-                ];
+        case 'Dione'            
+            f = fOrbAdj - 2*fSyr;
 
-        case 'Dione'
-            fTA = 1 / 3600 / 65.872263600244693293;
-            f = [fOrb, fTA];
-            
-            f = [f, ...
-                    fPar - fSyr, ... % Solar oscillation periods due to 
-                    fPar - 2*fSyr, ... % magnetopause current fields
-                    fOrbAdj - fSyr, ...
-                    fOrbAdj - 2*fSyr];
-
-            fNames = [
-                "orbital"
-                "true anomaly"
-                "planet day-year beat"
-                "planet day-half year beat"
-                "adjusted orbital-year beat"
-                "adjusted orbital-half year beat"
-                ];
+            fNames = "adjusted orbital-half year beat";
 
         case 'Rhea'
             f = fOrb;
-            
-            f = [f, ...
-                    fPar - fSyr, ... % Solar oscillation periods due to 
-                    fPar - 2*fSyr, ... % magnetopause current fields
-                    fOrbAdj - fSyr, ...
-                    fOrbAdj - 2*fSyr];
 
-            fNames = [
-                "orbital"
-                "planet day-year beat"
-                "planet day-half year beat"
-                "adjusted orbital-year beat"
-                "adjusted orbital-half year beat"
-                ];
+            fNames = "orbital";
 
         case 'Titan'
             f = fOrb;
-            
-            f = [f, 2*fOrb, ...
-                    fPar - fSyr, ... % Solar oscillation periods due to 
-                    fPar - 2*fSyr, ... % magnetopause current fields
-                    fOrbAdj - fSyr, ...
-                    fOrbAdj - 2*fSyr];
 
-            fNames = [
-                "orbital"
-                "orbital 2nd"
-                "planet day-year beat"
-                "planet day-half year beat"
-                "adjusted orbital-year beat"
-                "adjusted orbital-half year beat"
-                ];
+            fNames = "orbital";
 
         %% Uranus moons   
         case 'Miranda'
@@ -416,15 +199,10 @@ function [f, fNames] = GetExcitations(moonName, etMid_day)
             f = [f, 2*fSyn, ...
                     3*fSyn, ...
                     4*fSyn, ...
-                    2*fOrb, ...
                     fOrb - fSyn, ... % 1st harmonic beats
                     fSyn + fOrb, ...
-                    2*fSyn - fOrb, ... % 2nd harmonic beats
-                    2*fSyn + fOrb, ...
-                    2*fOrb + fSyn, ...
-                    3*fSyn - fOrb, ... % 3rd harmonic beats
-                    3*fSyn + fOrb, ...
-                    2*fOrb + 2*fSyn]; % Double harmonic beats
+                    2*fSyn + fOrb, ... % 2nd harmonic beats
+                    ];
 
             fNames = [
                 "synodic"
@@ -432,94 +210,55 @@ function [f, fNames] = GetExcitations(moonName, etMid_day)
                 "synodic 2nd"
                 "synodic 3rd"
                 "synodic 4th"
-                "orbital 2nd"
                 "orbital-synodic beat"
                 "synodic+orbital beat"
-                "synodic 2nd-orbital beat"
                 "synodic 2nd+orbital beat"
-                "orbital 2nd+synodic beat"
-                "synodic 3rd-orbital beat"
-                "synodic 3rd+orbital beat"
-                "orbital 2nd+synodic 2nd beat"
                 ];
 
         case 'Ariel'
-            f = [fSyn, fOrb];
+            f = fSyn;
 
             % Harmonics
             f = [f, 2*fSyn, ...
                     3*fSyn, ...
-                    fSyn - fOrb, ... % 1st harmonic beats % 40.09
-                    fSyn + fOrb];
+                    ];
 
             fNames = [
                 "synodic"
-                "orbital"
                 "synodic 2nd"
                 "synodic 3rd"
-                "synodic-orbital beat"
-                "synodic+orbital beat"
                 ];
 
         case 'Umbriel'
-            f = [fSyn, fOrb];
+            f = fSyn;
 
             % Harmonics
             f = [f, 2*fSyn, ...
-                    3*fSyn, ...
-                    4*fSyn, ...
                     fSyn - fOrb, ... % 1st harmonic beats
-                    fSyn + fOrb];
+                    ];
 
             fNames = [
                 "synodic"
-                "orbital"
                 "synodic 2nd"
-                "synodic 3rd"
-                "synodic 4th"
                 "synodic-orbital beat"
-                "synodic+orbital beat"
                 ];
 
         case 'Titania'
-            f = [fSyn, fOrb];
+            f = fSyn;
 
             % Harmonics
             f = [f, 2*fSyn, ...
-                    3*fSyn, ...
-                    4*fSyn, ...
-                    fSyn - fOrb, ... % 1st harmonic beats
-                    fSyn + fOrb];
+                    ];
 
             fNames = [
                 "synodic"
-                "orbital"
                 "synodic 2nd"
-                "synodic 3rd"
-                "synodic 4th"
-                "synodic-orbital beat"
-                "synodic+orbital beat"
                 ];
 
         case 'Oberon'
-            f = [fSyn, fOrb];
+            f = fSyn;
 
-            % Harmonics
-            f = [f, 2*fSyn, ...
-                    3*fSyn, ...
-                    4*fSyn, ...
-                    fSyn - fOrb, ... % 1st harmonic beats
-                    fSyn + fOrb];
-
-            fNames = [
-                "synodic"
-                "orbital"
-                "synodic 2nd"
-                "synodic 3rd"
-                "synodic 4th"
-                "synodic-orbital beat"
-                "synodic+orbital beat"
-                ];
+            fNames = "synodic";
 
         %% Neptune moons
         case 'Triton'
@@ -527,43 +266,20 @@ function [f, fNames] = GetExcitations(moonName, etMid_day)
             f = [fSyn, fOrb];
 
             % Harmonics
-            f = [f, 2*fSyn, ...
-                    3*fSyn, ...
-                    2*fOrb, ...
-                    fSyn - fOrb, ... % 1st harmonic beats
-                    fSyn + fOrb, ...
-                    fSyn - 2*fOrb, ...
-                    fSyn + 2*fOrb, ...
-                    fSyn - 3*fOrb, ...
-                    fSyn + 3*fOrb, ...
-                    2*fSyn - fOrb, ... % 2nd harmonic beats
-                    2*fSyn + fOrb, ...
-                    2*fSyn - 2*fOrb, ...
-                    2*fSyn + 2*fOrb];
+            f = [f, fSyn - fOrb, ... % 1st harmonic beats
+                    ];
 
             fNames = [
                 "synodic"
                 "orbital"
-                "synodic 2nd"
-                "synodic 3rd"
-                "orbital 2nd"
                 "synodic-orbital beat"
-                "synodic+orbital beat"
-                "synodic-orbital 2nd beat"
-                "synodic+orbital 2nd beat"
-                "synodic-orbital 3rd beat"
-                "synodic+orbital 3rd beat"
-                "synodic 2nd-orbital beat"
-                "synodic 2nd+orbital beat"
-                "synodic 2nd-orbital 2nd beat"
-                "synodic 2nd+orbital 2nd beat"
                 ];
                     
     end
     
     if length(f) ~= length(fNames)
-        error(['The number of excitation frequencies does not match the number of names. ' ...
-            'Please update any changed f or fNames lists to match.'])
+        error(['The number of excitation frequencies does not match the number of names for ' ...
+            moonName '. Please update any changed f or fNames lists to match.'])
     end
     [f, indfSort] = sort(f, 'descend');
     fNames = fNames(indfSort);
