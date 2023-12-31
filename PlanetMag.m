@@ -337,8 +337,8 @@ function [T_h, B0vec, B1vec1, B1vec2, B1vec3, outFname, header] = PlanetMag(moon
                 Bvec2Reprod(i,:) = real(B1vec2(i) * exp(-1i * omega_ph(i) * t_h));
                 Bvec3Reprod(i,:) = real(B1vec3(i) * exp(-1i * omega_ph(i) * t_h));
                 indB = find(BeModes == sortBeModes(i));
-                BeStrings(i) = sprintf('|B| amp: %.4e   f_Hz: %.4e   T_h: %.18f', ...
-                    BeModes(indB), 1/3600/T_h(indB), T_h(indB));
+                BeStrings(i) = sprintf('|B| amp: %.4e   f_Hz: %.4e   T_h: %.18f  %s', ...
+                    BeModes(indB), 1/3600/T_h(indB), T_h(indB), BD.fNames(indB));
             end
             disp(BeStrings);
     

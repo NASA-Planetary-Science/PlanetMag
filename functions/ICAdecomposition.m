@@ -75,6 +75,7 @@ function BD = ICAdecomposition(moonName, parentName, ets, Bvec, magModelDescrip,
 %   Contains fields:
 %
 %       - **f** (`double, 1xP`) -- Frequencies of estimated excitation moments in Hz.
+%       - **fNames** (string, 1xP`) -- Descriptive names for each excitation.
 %       - **BexcVec1i** (`double, 1xP`) -- Real part (i for "in-phase") of excitation moments for
 %         vector component 1 (x or r) in nT.
 %       - **BexcVec1q** (`double, 1xP`) -- Imaginary part (q for "quadrature") of excitation
@@ -119,7 +120,7 @@ function BD = ICAdecomposition(moonName, parentName, ets, Bvec, magModelDescrip,
     % ets_ca = 1228738876.0; % For Triton flyby at AOL 50 degrees
     etMid_day = ets_ca / 86400;
 
-    f = GetExcitations(moonName, etMid_day);
+    [f, fNames] = GetExcitations(moonName, etMid_day);
 
     nFreqs = length(f);
     % Initialize frequency sampling matrix
@@ -176,6 +177,7 @@ function BD = ICAdecomposition(moonName, parentName, ets, Bvec, magModelDescrip,
     BD.BexcVec3o = BexcVec3o;
 
     BD.f = f;
+    BD.fNames = fNames;
 
     BexcVec1abs = sqrt(BexcVec1i.^2 + BexcVec1q.^2);
     BexcVec2abs = sqrt(BexcVec2i.^2 + BexcVec2q.^2);
