@@ -1,4 +1,12 @@
 function CompareCoords
+% Compare phi-Omega frames to IAU frames for moons for which these frames are implemented (the
+% Galilean moons). Prints the angles between x and z axes.
+
+% Part of the PlanetMag framework for evaluation and study of planetary magnetic fields.
+% Created by Corey J. Cochrane and Marshall J. Styczinski
+% Maintained by Marshall J. Styczinski
+% Contact: corey.j.cochrane@jpl.nasa.gov
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
     moons = [
         "Io"

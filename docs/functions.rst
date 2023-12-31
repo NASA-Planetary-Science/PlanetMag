@@ -273,6 +273,11 @@ Additional supporting functions
 
 .. mat:autofunction:: GetTargetMoonDist
 
+:mat:func:`HodogramSingle`
+++++++++++++++++++++++++++
+
+.. mat:autofunction:: HodogramSingle
+
 :mat:func:`LoadSpice`
 +++++++++++++++++++++
 

@@ -1,4 +1,12 @@
 function GetNearFarMaxBdiff
+% Calculate the maximum difference in the magnetic field magnitude at the nearest and farthest
+% points relative to the parent planet for moons of concern.
+
+% Part of the PlanetMag framework for evaluation and study of planetary magnetic fields.
+% Created by Corey J. Cochrane and Marshall J. Styczinski
+% Maintained by Marshall J. Styczinski
+% Contact: corey.j.cochrane@jpl.nasa.gov
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     
     disp('Maximum near/far vector difference magnitudes are:')
     moons = [

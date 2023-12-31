@@ -1,4 +1,12 @@
 function MakeHodograms
+% Print hodograms for each moon implemented in PlanetProfile from the default model data used to
+% calculate the excitation moments.
+
+% Part of the PlanetMag framework for evaluation and study of planetary magnetic fields.
+% Created by Corey J. Cochrane and Marshall J. Styczinski
+% Maintained by Marshall J. Styczinski
+% Contact: corey.j.cochrane@jpl.nasa.gov
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
     figDir = 'figures';
     figXtn = 'pdf';

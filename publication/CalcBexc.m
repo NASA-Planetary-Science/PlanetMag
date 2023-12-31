@@ -1,4 +1,13 @@
 function CalcBexc
+% Calculate excitation moments for all moons using selected eras and default models, in addition to
+% particular selections for Europa and Callisto to allow for comparison to Seufert et al. (2011).
+
+% Part of the PlanetMag framework for evaluation and study of planetary magnetic fields.
+% Created by Corey J. Cochrane and Marshall J. Styczinski
+% Maintained by Marshall J. Styczinski
+% Contact: corey.j.cochrane@jpl.nasa.gov
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
     PlanetMag('Europa', 'Galileo', 'SPRH', 1, 0, 0, 0, 0, 1e6, 6); % Seufert comparison
     PlanetMag('Callisto', 'Galileo', 'SPRH', 1, 0, 0, 0, 0, 1e6, 6); % Seufert comparison
     
