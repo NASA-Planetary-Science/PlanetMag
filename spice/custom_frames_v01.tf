@@ -75,7 +75,7 @@ References
        https://doi.org/10.1126/science.233.4759.85
     
     9. O8 model for Neptune:
-       Connerney, J.E.P., Acuna, M.H. and Ness, N.F., 1991. The magnetic
+       Connerney, J.E.P., Acuna, M.H. and Ness, N.F., 1992. The magnetic
        field of Neptune. Journal of Geophysical Research: Space Physics,
        96(S01), pp.19023-19042.
        https://doi.org/10.1029/91JA01165
