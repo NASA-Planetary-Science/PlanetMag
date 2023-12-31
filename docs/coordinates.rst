@@ -42,10 +42,10 @@ Planet--Sun--Magnetic frames
 * :math:`\hat{x}` is toward the Sun
 * :math:`\hat{y}` is along :math:`\hat{\mathbf{M}}\times\hat{x}`, where :math:`\mathbf{M}` is the magnetic dipole moment vector. Requires a choice of magnetic field model in order to infer the dipole moment direction.
 * For use in particular models that require this frame, the selected multipole models are:
-    * ``JSM``: O4 (Acuna and Ness, 1976) <https://doi.org/10.1029/JA081i016p02917>
-    * ``KSM``: Cassini 11 (Dougherty et al., 2018) <https://doi.org/10.1126/science.aat5434>
-    * ``USM``: OTD (Ness et al., 1986) <https://doi.org/10.1126/science.233.4759.85>
-    * ``NSM``: O8 (Connerney et al., 1992) <https://doi.org/10.1016/0273-1177(92)90394-D>
+    * ``JSM``: O4 (Acuna and Ness, 1976) https://doi.org/10.1029/JA081i016p02917
+    * ``KSM``: Cassini 11 (Dougherty et al., 2018) https://doi.org/10.1126/science.aat5434
+    * ``USM``: OTD (Ness et al., 1986) https://doi.org/10.1126/science.233.4759.85
+    * ``NSM``: O8 (Connerney et al., 1992) https://doi.org/10.1016/0273-1177(92)90394-D
 
 Planet--Dipole--Solar--Zenith frames
 ++++++++++++++++++++++++++++++++++++
@@ -61,3 +61,14 @@ Solar--Magnetic--Planet frames
 * :math:`\phi=0` at the sub-solar point, i.e. the :math:`x` axis is along the direction perpendicular to :math:`\hat{z}` along the noon local time longitude line
 * The :math:`xy` plane defines the magnetic equatorial plane
 * Implemented as ``SMJ``, ``SMK``, ``SMU``, ``SMN`` for Jupiter, Saturn, Uranus, and Neptune respectively
+
+.. role:: mat:func
+   :class: func
+
+.. mat:module:: publication
+   :noindex:
+
+:mat:func:`RunPublication`
++++++++++++++++++++++++++++
+
+.. mat:autofunction:: RunPublication
