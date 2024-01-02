@@ -16,6 +16,7 @@ jobs:
       with:
         name: html-docs
         path: docs/_build/html/
+        build-command: 'sphinx-build -b html . _build -v'
     - name: Deploy
       uses: peaceiris/actions-gh-pages@v3
       if: github.ref == 'refs/heads/main'
