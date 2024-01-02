@@ -11,7 +11,7 @@ function [Tpeak_h, B0vec, B1vec] = ExcitationSpectrum(moonName, nOsc, rate, Tint
 % series---if a given oscillation period does not cover a whole number of time steps, the
 % calculated phase of the complex peak amplitude in the FFT will drift.
 %
-% For calculating excitation moments, instead use ICAdecomposition.
+% For calculating excitation moments, instead use LLSdecomposition.
 %
 % Parameters
 % ----------

@@ -27,10 +27,10 @@ Main calculation functions
 
 .. mat:autofunction:: MagFldParentSingle
 
-:mat:func:`ICAdecomposition`
+:mat:func:`LLSdecomposition`
 ++++++++++++++++++++++++++++
 
-.. mat:autofunction:: ICAdecomposition
+.. mat:autofunction:: LLSdecomposition
 
 :mat:func:`LegendreS`
 +++++++++++++++++++++

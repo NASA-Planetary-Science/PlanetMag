@@ -1,13 +1,13 @@
-function BD = ICAdecomposition(moonName, parentName, ets, Bvec, magModelDescrip, SPHOUT, ...
+function BD = LLSdecomposition(moonName, parentName, ets, Bvec, magModelDescrip, SPHOUT, ...
     PLOT_DIAGNOSTIC, COMPARE_SEUFERT, COMPARE_PHIO, LIVE_PLOTS, figDir, figXtn)
 % Decomposes the input magnetic field vector time series into complex excitation moments using
-% :dfn:`Independent Component Analysis (ICA)`.
+% linear least-squares (LLS) decomposition.
 %
-% The methodology applied to invert the imput magnetic field vector time series ``Bvec`` for its
-% complex excitation moments (the "independent components" of ICA) is described in detail in
-% Hyvarinen and Oja (2000) https://doi.org/10.1016/S0893-6080(00)00026-5. In this method, the
-% expected signal components :math:`\mathbf{s} = (s_1, \dots, s_p)` are found from the input
-% measurements :math:`\mathbf{x} = (x_1, \dots, x_n)` by inverting the estimated mixing matrix
+% The methodology applied to invert the input magnetic field vector time series ``Bvec`` for its
+% complex excitation moments is described in detail in Markovsky and Van Huffel (2007)
+% https://doi.org/10.1016/j.sigpro.2007.04.004. In this method, the expected signal components
+% :math:`\mathbf{s} = (s_1, \dots, s_p)` are found from the input measurements
+% :math:`\mathbf{x} = (x_1, \dots, x_n)` by inverting the estimated mixing matrix
 % :math:`\mathbf{A}` and multiplying :math:`\mathbf{A}^{-1}` by the input time series, where
 % :math:`\mathbf{x} = \mathbf{As}`. The signal components :math:`\mathbf{s}` in our case are a list
 % of cos and sin waves, representing the real and imaginary parts of :math:`e^{-i\omega_k t}`

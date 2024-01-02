@@ -40,7 +40,7 @@ function parentName = LoadSpice(moonName, sc, spiceDir)
 %       - ``'Voyager 1'``
 %       - ``'Voyager 2'``
 %
-% spiceDir : char, 1xE, default='spice'
+% spiceDir : char, 1xE, default='SPICE'
 %   Directory where SPICE kernel files are located.
 %
 % Returns
@@ -55,7 +55,7 @@ function parentName = LoadSpice(moonName, sc, spiceDir)
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
     if ~exist('sc', 'var'); sc = ''; end
-    if ~exist('spiceDir', 'var'); spiceDir = 'spice'; end
+    if ~exist('spiceDir', 'var'); spiceDir = 'SPICE'; end
     leapseconds = 'naif0012.tls';
     frames = 'custom_frames_v01.tf';
     
