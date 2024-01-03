@@ -2,5 +2,5 @@ sphinx>=7.1.2
 sphinx-rtd-theme>=1.3.0
 myst-parser>=2.0.0
 sphinxcontrib.apidoc>=0.4.0
-git+https://github.com/sphinx-contrib/matlabdomain.git@f2da418823a8d9b7857a72a557528e98216853ba
+sphinxcontrib-matlabdomain==0.20.2
 numpy>=1.24.0
