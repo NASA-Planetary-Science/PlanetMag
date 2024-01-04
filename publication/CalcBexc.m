@@ -19,9 +19,11 @@ function CalcBexc
 
     PlanetMag('Mimas', 'Cassini', 'IAU', 1, 0, 0, 0, 0, 1e6);
     PlanetMag('Enceladus', 'Cassini', 'IAU', 1, 0, 0, 0, 0, 1e6);
+    PlanetMag('Tethys', 'Cassini', 'IAU', 1, 0, 0, 0, 0, 1e6);
     PlanetMag('Dione', 'Cassini', 'IAU', 1, 0, 0, 0, 0, 1e6);
     PlanetMag('Rhea', 'Cassini', 'IAU', 1, 0, 0, 0, 0, 1e6);
     PlanetMag('Titan', 'Cassini', 'IAU', 1, 0, 0, 0, 0, 1e6);
+    PlanetMag('Iapetus', 'Cassini', 'IAU', 1, 0, 0, 0, 0, 1e6);
 
     PlanetMag('Miranda', 'Voyager', 'IAU', 1, 0, 0, 0, 0, 1e6);
     PlanetMag('Ariel', 'Voyager', 'IAU', 1, 0, 0, 0, 0, 1e6);

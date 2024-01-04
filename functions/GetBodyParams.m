@@ -79,6 +79,9 @@ function [RparentEq_km, RparentPol_km, RmoonEq_km, a_AU, omegaParent_radps, omeg
         case 'Enceladus'
             moonID = 602;
             parentID = 699;
+        case 'Tethys'
+            moonID = 603;
+            parentID = 699;
         case 'Dione'
             moonID = 604;
             parentID = 699;
@@ -87,6 +90,9 @@ function [RparentEq_km, RparentPol_km, RmoonEq_km, a_AU, omegaParent_radps, omeg
             parentID = 699;
         case 'Titan'
             moonID = 606;
+            parentID = 699;
+        case 'Iapetus'
+            moonID = 608;
             parentID = 699;
         case 'Miranda'
             moonID = 705;

@@ -13,6 +13,8 @@ function MakeHodograms
     figNumBase = 30;
     LIVE_PLOTS = 0;
     datDir = 'out';
+    tileSize = 2; % in inches
+    pad = 0.025*tileSize;
 
     %% Jupiter family
     parentName = 'Jupiter';
@@ -27,7 +29,7 @@ function MakeHodograms
         '#bf9005' % ochre
         '#0652ff' % electric blue
         '#76cd26' % apple green
-        '#75bbfd' % sky blue
+        '#ec2d01' % tomato red
         };
     nMoons = length(moons);
 
@@ -68,28 +70,31 @@ function MakeHodograms
     fName = [parentName 'FamilyHodogram'];
     outFig = fullfile(figDir, [fName '.' figXtn]);
     % Crop page size for pdf outputs
-    fig.Units = fig.PaperUnits;
-    fig.PaperSize = [1.025*fig.Position(3) 0.375*fig.Position(4)];
+    figWidth = nMoons*tileSize+2*pad;
+    figHeight = tileSize+2*pad;
+    fig.Units = 'inches';
+    fig.Position(3:4) = [nMoons*tileSize figHeight];
+    fig.PaperSize = [figWidth figHeight];
+    fig.PaperPositionMode = 'auto';
     saveas(fig, outFig)
     disp(['Figure saved to ' outFig '.'])
     if ~LIVE_PLOTS; close(fig); end
 
     %% Saturn family
     parentName = 'Saturn';
+    % Part 1
     figNumber = figNumBase + 2;
     moons = [
         "Mimas"
         "Enceladus"
+        "Tethys"
         "Dione"
-        "Rhea"
-        "Titan"
         ];
     cfmt = {
         '#c20078' % magenta
         '#8e82fe' % periwinkle
+        '#fe420f' % orangered
         '#02ab2e' % kelly green
-        '#380835' % eggplant
-        '#dbb40c' % gold
         };
     nMoons = length(moons);
 
@@ -121,11 +126,68 @@ function MakeHodograms
         PlotHodogramTile(moonName, parentName, magModelDescrip, BvecMoon, SPHOUT, cfmt{i}, 0);
     end
 
-    fName = [parentName 'FamilyHodogram'];
+    fName = [parentName 'FamilyHodogram1'];
     outFig = fullfile(figDir, [fName '.' figXtn]);
     % Crop page size for pdf outputs
-    fig.Units = fig.PaperUnits;
-    fig.PaperSize = [1.025*fig.Position(3) 0.3*fig.Position(4)];
+    figWidth = nMoons*tileSize+2*pad;
+    fig.Units = 'inches';
+    fig.Position(3:4) = [nMoons*tileSize figHeight];
+    fig.PaperSize = [figWidth figHeight];
+    fig.PaperPositionMode = 'auto';
+    saveas(fig, outFig)
+    disp(['Figure saved to ' outFig '.'])
+    if ~LIVE_PLOTS; close(fig); end
+
+    % Saturn part 2
+    figNumber = figNumBase + 5;
+    moons = [
+        "Rhea"
+        "Titan"
+        "Iapetus"
+        ];
+    cfmt = {
+        '#9900fa' % vivid purple
+        '#dbb40c' % gold
+        '#fc5a50' % coral
+        };
+    nMoons = length(moons);
+
+    windowName = [parentName ' system hodograms'];
+    if LIVE_PLOTS
+        if ~figNumber
+            fig = figure('Visible', 'on', 'Name', windowName);
+        else
+            fig = figure(figNumber);
+            clf();
+            set(gcf, 'Visible', 'on', 'Name', windowName);
+        end
+    else
+        fig = figure('Visible', 'off', 'Name', windowName);
+    end
+    hold on;
+    ApplyPlotDefaults(fig, interpreter, font);
+    tiles = tiledlayout(1, nMoons, 'TileSpacing', 'tight', 'Padding', 'tight');
+
+    for i=1:nMoons
+        moonName = char(moons(i));
+        [~, ~, ~, ~, fEnd] = GetModelOpts(parentName, 0, -1);
+        magModelDescrip = 'Cassini 11';
+        load(fullfile(datDir, ['evalB' moonName fEnd]), 'BvecMoon', 'outCoords')
+        SPHOUT = 0;
+        if ~strcmp(outCoords(1:3), 'IAU'); SPHOUT = 1; end
+
+        nexttile
+        PlotHodogramTile(moonName, parentName, magModelDescrip, BvecMoon, SPHOUT, cfmt{i}, 0);
+    end
+
+    fName = [parentName 'FamilyHodogram2'];
+    outFig = fullfile(figDir, [fName '.' figXtn]);
+    % Crop page size for pdf outputs
+    figWidth = nMoons*tileSize+2*pad;
+    fig.Units = 'inches';
+    fig.Position(3:4) = [nMoons*tileSize figHeight];
+    fig.PaperSize = [figWidth figHeight];
+    fig.PaperPositionMode = 'auto';
     saveas(fig, outFig)
     disp(['Figure saved to ' outFig '.'])
     if ~LIVE_PLOTS; close(fig); end
@@ -141,10 +203,10 @@ function MakeHodograms
         "Oberon"
         ];
     cfmt = {
-        '#650021' % maroon
-        '#13eac9' % aqua
+        '#8c000f' % crimson
+        '#5cac2d' % grass
         'k' % black
-        '#06c2ac' % turqoise
+        '#be03fd' % bright purple
         '#f97306' % orange
         };
     nMoons = length(moons);
@@ -179,8 +241,11 @@ function MakeHodograms
     fName = [parentName 'FamilyHodogram'];
     outFig = fullfile(figDir, [fName '.' figXtn]);
     % Crop page size for pdf outputs
-    fig.Units = fig.PaperUnits;
-    fig.PaperSize = [1.025*fig.Position(3) 0.3*fig.Position(4)];
+    figWidth = nMoons*tileSize+2*pad;
+    fig.Units = 'inches';
+    fig.Position(3:4) = [nMoons*tileSize figHeight];
+    fig.PaperSize = [figWidth figHeight];
+    fig.PaperPositionMode = 'auto';
     saveas(fig, outFig)
     disp(['Figure saved to ' outFig '.'])
     if ~LIVE_PLOTS; close(fig); end
@@ -188,7 +253,8 @@ function MakeHodograms
     %% Neptune family
     parentName = 'Neptune';
     figNumber = figNumBase + 4;
-    cfmt = '#d1b26f'; % tan
+    cfmt = '#78d1b6'; % seafoam blue
+    nMoons = 1;
 
     moonName = 'Triton';
     [~, ~, ~, magModelDescrip, fEnd] = GetModelOpts(parentName, 0, -1);
@@ -219,16 +285,18 @@ function MakeHodograms
     fName = [parentName 'FamilyHodogram'];
     outFig = fullfile(figDir, [fName '.' figXtn]);
     % Crop page size for pdf outputs
-    fig.Units = fig.PaperUnits;
-    fig.PaperSize = [0.25*fig.Position(3) 0.35*fig.Position(4)];
-    fig.PaperPosition(1:2) = [0.05 -1.5];
+    figWidth = nMoons*tileSize+2*pad;
+    fig.Units = 'inches';
+    fig.Position(3:4) = [nMoons*tileSize figHeight];
+    fig.PaperSize = [figWidth figHeight];
+    fig.PaperPositionMode = 'auto';
     saveas(fig, outFig)
     disp(['Figure saved to ' outFig '.'])
     if ~LIVE_PLOTS; close(fig); end
 end
 
-    function [xInfo, yInfo] = PlotHodogramTile(moonName, parentName, magModelDescrip, BvecMoon, ...
-            SPHOUT, cfmt, LIMS)
+function [xInfo, yInfo] = PlotHodogramTile(moonName, parentName, magModelDescrip, BvecMoon, ...
+    SPHOUT, cfmt, LIMS)
     if ~exist('LIMS', 'var'); LIMS = 1; end
     [xx, yy, ~, ~, xInfo, yInfo, ~, xlims, ylims] = HodogramSingle( ...
             moonName, parentName, magModelDescrip, BvecMoon, SPHOUT, 0, 0);

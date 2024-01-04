@@ -66,7 +66,8 @@ function parentName = LoadSpice(moonName, sc, spiceDir)
         parentName = 'Jupiter';
         generic = 'jup365.bsp';
         %generic = 'jup310.bsp';
-    elseif any(strcmp(moonName, {'Mimas', 'Enceladus', 'Dione', 'Rhea', 'Titan', 'Saturn'}))
+    elseif any(strcmp(moonName, {'Mimas', 'Enceladus', 'Tethys', 'Dione', 'Rhea', 'Titan', ...
+            'Iapetus', 'Saturn'}))
         parentName = 'Saturn';
         generic = 'sat441.bsp';
     elseif any(strcmp(moonName, {'Miranda', 'Ariel', 'Umbriel', 'Titania', 'Oberon', 'Uranus'}))
@@ -79,20 +80,19 @@ function parentName = LoadSpice(moonName, sc, spiceDir)
         error([moonName ' has no parent planet defined in LoadSpice.'])
     end
     
+    % Set general pck file but allow overrides by resetting this var
+    planetData = 'pck00010_mod.tpc';
     switch(sc)
         case 'Swarm'
-            planetData = 'pck00010.tpc';
             pckEarth = 'earth_latest_high_prec.bpc';
             spiceKernelList = { leapseconds planetData generic pckEarth frames };
         case 'Galileo'
-            planetData = 'pck00010.tpc';
             galileoSpicePrime = fullfile(sc, 's980326a.bsp');
             galileoSpiceGEM = fullfile(sc, 's000131a.bsp');
             galileoSpiceGMM = fullfile(sc, 's030916a.bsp');
             spiceKernelList = { leapseconds planetData galileoSpicePrime galileoSpiceGEM ...
                 galileoSpiceGMM generic frames };
         case 'Cassini'
-            planetData = 'pck00010.tpc';
             cassiniSpice = {fullfile(sc, 'cas_2004_v26.tm') ...
                             fullfile(sc, 'cas_2005_v27.tm') ...
                             fullfile(sc, 'cas_2006_v26.tm') ...
@@ -109,12 +109,10 @@ function parentName = LoadSpice(moonName, sc, spiceDir)
                             fullfile(sc, 'cas_2017_v03.tm')};
             spiceKernelList = [{ leapseconds planetData generic frames }  cassiniSpice];
         case 'Juno'
-            planetData = 'pck00010.tpc';
             generic = 'jup380s.bsp';
             junoGanyFlyby = fullfile(sc, 'juno_rec_orbit.bsp');
             spiceKernelList = { leapseconds planetData generic junoGanyFlyby frames };
         case 'Voyager 1'
-            planetData = 'pck00010.tpc';
             switch(parentName)
                 case 'Jupiter'
                     voyaFlyby = fullfile(sc, 'vgr1_jup230.bsp');
@@ -123,7 +121,6 @@ function parentName = LoadSpice(moonName, sc, spiceDir)
             end
             spiceKernelList = { leapseconds planetData generic voyaFlyby frames };
         case 'Voyager 2'
-            planetData = 'pck00010.tpc';
             switch(parentName)
                 case 'Jupiter'
                     voyaFlyby = fullfile(sc, 'vgr2_jup230.bsp');
@@ -137,7 +134,6 @@ function parentName = LoadSpice(moonName, sc, spiceDir)
             spiceKernelList = { leapseconds planetData generic voyaFlyby frames };
             
         otherwise
-            planetData = 'pck00010.tpc';
             spiceKernelList = { leapseconds planetData generic frames };
     end
     
