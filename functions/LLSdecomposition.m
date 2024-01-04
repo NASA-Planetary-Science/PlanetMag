@@ -120,7 +120,8 @@ function BD = LLSdecomposition(moonName, parentName, ets, Bvec, magModelDescrip,
     % ets_ca = 1228738876.0; % For Triton flyby at AOL 50 degrees
     etMid_day = ets_ca / 86400;
 
-    [f, fNames] = GetExcitations(moonName, etMid_day);
+    fList = GetExcitations(moonName, etMid_day);
+    f = fList{:,1}';
 
     nFreqs = length(f);
     % Initialize frequency sampling matrix
@@ -177,7 +178,7 @@ function BD = LLSdecomposition(moonName, parentName, ets, Bvec, magModelDescrip,
     BD.BexcVec3o = BexcVec3o;
 
     BD.f = f;
-    BD.fNames = fNames;
+    BD.fNames = fList{:,2}';
 
     BexcVec1abs = sqrt(BexcVec1i.^2 + BexcVec1q.^2);
     BexcVec2abs = sqrt(BexcVec2i.^2 + BexcVec2q.^2);

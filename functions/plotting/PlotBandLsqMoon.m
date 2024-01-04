@@ -118,18 +118,19 @@ function PlotBandLsqMoon(ets, t_h, r_km, theta, phi, xyz_km, r_RM, BxSC, BySC, B
     
     % Get excitation moments from longer time series with each model
     excMomentsFile = fullfile(dataDir, ['Be1xyz_' moonName '_' era '_' fEnd '.txt']);
-    reloadData = dlmread(excMomentsFile, ',', 1, 0);
+    reloadData = readtable(excMomentsFile, 'VariableNamingRule', 'preserve');
 
-    Texc_h = reloadData(:,1);
-    B0x = mean(reloadData(:,2));
-    B0y = mean(reloadData(:,3));
-    B0z = mean(reloadData(:,4));
-    B1x_Re = reloadData(:,5);
-    B1x_Im = reloadData(:,6);
-    B1y_Re = reloadData(:,7);
-    B1y_Im = reloadData(:,8);
-    B1z_Re = reloadData(:,9);
-    B1z_Im = reloadData(:,10);
+    exc_names = reloadData.('exc name');
+    Texc_h = reloadData.('period(hr)');
+    B0x = mean(reloadData.('B0x(nT)'));
+    B0y = mean(reloadData.('B0y(nT)'));
+    B0z = mean(reloadData.('B0z(nT)'));
+    B1x_Re = reloadData.('Bex_Re(nT)');
+    B1x_Im = reloadData.('Bex_Im(nT)');
+    B1y_Re = reloadData.('Bey_Re(nT)');
+    B1y_Im = reloadData.('Bey_Im(nT)');
+    B1z_Re = reloadData.('Bez_Re(nT)');
+    B1z_Im = reloadData.('Bez_Im(nT)');
     npeaks = length(Texc_h);
     
     omega_ph = 2*pi./Texc_h;
@@ -153,18 +154,19 @@ function PlotBandLsqMoon(ets, t_h, r_km, theta, phi, xyz_km, r_RM, BxSC, BySC, B
     if JUNOTOO
         % Get excitation moments from longer time series with each model
         excMomentsFile = fullfile(dataDir, ['Be1xyz_' moonName '_Juno_' fEnd '.txt']);
-        reloadData = dlmread(excMomentsFile, ',', 1, 0);
-
-        Texc_h = reloadData(:,1);
-        B0x = mean(reloadData(:,2));
-        B0y = mean(reloadData(:,3));
-        B0z = mean(reloadData(:,4));
-        B1x_Re = reloadData(:,5);
-        B1x_Im = reloadData(:,6);
-        B1y_Re = reloadData(:,7);
-        B1y_Im = reloadData(:,8);
-        B1z_Re = reloadData(:,9);
-        B1z_Im = reloadData(:,10);
+        reloadData = readtable(excMomentsFile, 'VariableNamingRule', 'preserve');
+    
+        exc_names = reloadData.('exc name');
+        Texc_h = reloadData.('period(hr)');
+        B0x = mean(reloadData.('B0x(nT)'));
+        B0y = mean(reloadData.('B0y(nT)'));
+        B0z = mean(reloadData.('B0z(nT)'));
+        B1x_Re = reloadData.('Bex_Re(nT)');
+        B1x_Im = reloadData.('Bex_Im(nT)');
+        B1y_Re = reloadData.('Bey_Re(nT)');
+        B1y_Im = reloadData.('Bey_Im(nT)');
+        B1z_Re = reloadData.('Bez_Re(nT)');
+        B1z_Im = reloadData.('Bez_Im(nT)');
         npeaks = length(Texc_h);
 
         omega_ph = 2*pi./Texc_h;
@@ -195,7 +197,7 @@ function PlotBandLsqMoon(ets, t_h, r_km, theta, phi, xyz_km, r_RM, BxSC, BySC, B
     %%
     
     excStr = "Excitation moments";
-    commonTitle = [parentName ' model comparison vs ' char(scName) ' data'];
+    commonTitle = [parentName ' model comparison vs spacecraft data'];
     npts = length(t_h);
     if SEQUENTIAL
         xx = 1:npts;
