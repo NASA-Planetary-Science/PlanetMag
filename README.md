@@ -45,7 +45,6 @@ To fully install PlanetMag and access all features:
    1. For Voyager 1, all in the `spice/Voyager 1` directory and all from <https://naif.jpl.nasa.gov/pub/naif/VOYAGER/kernels/spk/>:
          1. `vgr1_jup230.bsp`
          1. `vgr1_sat337.bsp`
-         1. `s030916a.bsp`
    1. For Voyager 2, all in the `spice/Voyager 2` directory and all from <https://naif.jpl.nasa.gov/pub/naif/VOYAGER/kernels/spk/>:
          1. `vgr2_jup230.bsp`
          1. `vgr2_sat337.bsp`
