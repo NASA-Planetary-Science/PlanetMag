@@ -264,7 +264,7 @@ function [Bvec_nT, Mdip_nT, Odip_km] = MagFldParent(planet, r_km, theta, phi, ..
             % Convert to cylindrical coordinates divided by RP
             rho = sqrt(xm.^2 + ym.^2) / Rp_m;
             psi = acos(xm/Rp_m./rho);
-            psi(ym ~= 0) = psi.*sign(ym);
+            psi(ym ~= 0) = psi(ym ~= 0).*sign(ym(ym ~= 0));
             zed = zm/Rp_m;
 
             % PlanetMag edit -- attenuate current sheet beyond certain distance.
