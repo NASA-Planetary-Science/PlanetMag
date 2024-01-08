@@ -160,7 +160,7 @@ function [RparentEq_km, RparentPol_km, RmoonEq_km, a_AU, omegaParent_radps, omeg
     % pck00010.tpc does not contain precession info for these bodies:
     nutPrecExcluded = [602, 604];
     nutPrecMoon = zeros(18,1);
-    if ~any(moonID == nutPrecExcluded)
+    if ~any(moonID == nutPrecExcluded) && moonID ~= parentID
         % bodvcd returns a variable length; use max size we might need
         nutPrecMoonRet = cspice_bodvcd(moonID, 'NUT_PREC_PM', 18);
         nutPrecMoon(1:length(nutPrecMoonRet)) = nutPrecMoonRet;
