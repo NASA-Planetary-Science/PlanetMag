@@ -1,5 +1,7 @@
 .. role:: mat:func
    :class: func
+.. role:: func
+   :class: func
 
 PlanetMag manuscript data and figure scripts
 ============================================
@@ -27,7 +29,19 @@ PlanetMag manuscript data and figure scripts
 
 .. mat:autofunction:: MakeHodograms
 
+:mat:func:`PrintSurfaceMap`
++++++++++++++++++++++++++++
+
+.. mat:autofunction:: PrintSurfaceMap
+
 :mat:func:`RunPublication`
 +++++++++++++++++++++++++++
 
 .. mat:autofunction:: RunPublication
+
+makeSurfaceMaps
++++++++++++++++
+
+.. automodule:: publication.makeSurfaceMaps
+   :members:
+   :undoc-members:

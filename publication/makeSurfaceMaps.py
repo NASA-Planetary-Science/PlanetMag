@@ -1,5 +1,6 @@
 """
-Run this script after running RunPublication() with Matlab.
+    Creates magnetic field surface maps for data saved to disk by PrintSurfaceMap(). Run this as a
+    script after running RunPublication() with Matlab.
 """
 
 # Part of the PlanetMag framework for evaluation and study of planetary magnetic fields.
@@ -305,7 +306,7 @@ def loadSurfaceMap(planet, model=None, ioDir='publication', fBase='surfMap_', ve
         Index number for model to load, as needed to complete the file name, or 'all'.
     ioDir : str, default='publication'
         Directory name relative to run dir where data files are found.
-    fBase : str, default='surfMap_'
+    fBase : str, default='surfMap\_'
         Filename pattern base to use for loading data files.
     vecComp : str, default='mag'
         Vector component to use for map plotting. Options are 'x', 'y', 'z', 'r', 'theta', 'phi',
@@ -450,7 +451,7 @@ def plotDefaultTogether(fBase='surfMap_'):
 
     Parameters
     ----------
-    fBase : str, default='surfMap_'
+    fBase : str, default='surfMap\_'
         Filename pattern base to use for loading data files.
     """
 
