@@ -3,39 +3,55 @@ function BD = LLSdecomposition(moonName, parentName, ets, Bvec, magModelDescrip,
 % Decomposes the input magnetic field vector time series into complex excitation moments using
 % linear least-squares (LLS) decomposition.
 %
-% The methodology applied to invert the input magnetic field vector time series ``Bvec`` for its
-% complex excitation moments is described in detail in Markovsky and Van Huffel (2007)
-% https://doi.org/10.1016/j.sigpro.2007.04.004. In this method, the expected signal components
-% :math:`\mathbf{s} = (s_1, \dots, s_p)` are found from the input measurements
-% :math:`\mathbf{x} = (x_1, \dots, x_n)` by inverting the estimated mixing matrix
-% :math:`\mathbf{A}` and multiplying :math:`\mathbf{A}^{-1}` by the input time series, where
-% :math:`\mathbf{x} = \mathbf{As}`. The signal components :math:`\mathbf{s}` in our case are a list
-% of cos and sin waves, representing the real and imaginary parts of :math:`e^{-i\omega_k t}`
-% respectively, oscillating with the expected frequencies :math:`\mathbf{f} = (f_1, \dots, f_p)`,
-% evaluated at each ephemeris time in the input time series ``ets``. Weighting the signal
-% components by the excitation moments :math:`\mathbf{B}_j^e` reproduces the input signal
-% :math:`\mathbf{B}_j` when the excitation moments are perfectly resolved. Each signal component
-% comprises a column of the signal matrix :math:`\mathbf{X}`. The eigenvectors of
-% :math:`\mathbf{X}` are the columns of the weight matrix 
-% :math:`\mathbf{W} = (\mathbf{X}^T\mathbf{X})^{-1}`. We find the excitation moments from
+% The methodology applied to invert the input magnetic field vector time series ``Bvec``
+% (:math:`\mathbf{B}_i`) for its complex excitation moments is described in detail in the
+% P\lanetMag paper, Styczinski and Cochrane (2024), DOI TBD.
+% Each time in the input time series :math:`t_i` corresponds to a row in the sampling matrix
+% :math:`X_{ik}`, and each frequency in the list returned by GetExcitations corresponds to a column
+% in :math:`X_{ik}`. The entries in the matrix are sinusoidal, as we are decomposing the input time
+% series :math:`\mathbf{B}_i` into complex Fourier components. The sampling matrix is
 %
 % .. math::
-%   \mathbf{B}_j^e = \mathbf{B}_j\mathbf{XW},
+%   X_{ik} = \begin{bmatrix}
+%     \cos(\omega_1 t_1) & \cos(\omega_2 t_1) & \dots & \cos(\omega_F t_1) & \sin(\omega_1 t_1) &
+%       \sin(\omega_2 t_1) & \dots & \sin(\omega_F t_1) & 1 \\
+%     \cos(\omega_1 t_2) & \cos(\omega_2 t_2) & \dots & \cos(\omega_F t_2) & \sin(\omega_1 t_2) &
+%       \sin(\omega_2 t_2) & \dots & \sin(\omega_F t_2) & 1 \\
+%     \vdots & \vdots & \ddots & \vdots & \vdots & \vdots & \ddots & \vdots & \vdots \\
+%     \cos(\omega_1 t_N) & \cos(\omega_2 t_N) & \dots & \cos(\omega_F t_N) & \sin(\omega_1 t_N) &
+%       \sin(\omega_2 t_N) & \dots & \sin(\omega_F t_N) & 1 \\
+%   \end{bmatrix}
 %
-% with each element :math:`B_{jk}^e` corresponding to a real (cos) or imaginary (sin) wave with
-% frequency :math:`f_k`. The complex excitation moments are constructed by combining the real and
-% imaginary parts for each :math:`f_k`, and the reproduced time series is found by taking the real
-% part of
+% where :math:`N` is the number of points in the time series and :math:`F` is the number of
+% frequencies for which to invert the excitation moments. The eigenvectors of :math:`X_{ik}` are
+% the columns of the weight matrix :math:`W_{kk'}`, such that
+% 
+% .. math::
+%   W_{kk'} = \left( X_{ik}^T X_{ik} \right)^{-1}
+%
+% and the excitation moments are
 %
 % .. math::
-%   \tilde{B}_j(t) = \sum_k \tilde{B}_{jk}^e e^{-i\omega_k t},
+%   B^e_{j,k'} = (\mathbf{B}_i\cdot\mathbf{e}_j) X_{ik}W_{kk'},
 %
-% or for the input time series
+% with each element :math:`B_{j,k'}^e` corresponding to the real (cos) or imaginary (sin) part of
+% the excitation moment for frequency :math:`f_k`. The complex excitation moments are constructed
+% by combining the real and imaginary parts for each :math:`f_k`\:
+% 
+% .. math::
+%   \mathbf{B}^e_k = \sum_j \left( B^e_{j,k,\mathrm{Re}} + \mathrm{i}B^e_{j,k,\mathrm{Im}} 
+%     \right) \mathbf{e}_j
+% 
+% and the reproduced time series is
 %
 % .. math::
-%   \tilde{\mathbf{B}}_j = \mathbf{X}(\mathbf{B}_j^e)^T,
+%   \mathrm{Re}\{\mathbf{B}_\mathrm{exc}(t)\} = \sum_k \left[\mathbf{B}_{k,\mathrm{Re}}^e 
+%     \cos(\omega_k t) + \mathbf{B}_{k,\mathrm{Im}}^e \sin(\omega_k t) \right].
 %
-% where :math:`\tilde{B}` denotes a complex magnetic field quantity.
+% From the input time series,
+%
+% .. math::
+%   \mathrm{Re}\{\mathbf{B}_\mathrm{exc}(t_i)\} = \sum_{j,k} X_{ik}(B_{i,j}^e)^T \mathbf{e}_j.
 %
 % Parameters
 % ----------
