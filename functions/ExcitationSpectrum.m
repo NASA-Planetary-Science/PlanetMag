@@ -97,8 +97,8 @@ function [Tpeak_h, B0vec, B1vec] = ExcitationSpectrum(moonName, nOsc, rate, Tint
     duration = nOsc*Tinterest_h - dt;
     tStart_h = 0;
     tEnd_h = tStart_h + duration;
-    %t_h = tStart_h:dt:tEnd_h;
-    t_h = 0:(1/3):(12*365.25*24);
+    t_h = tStart_h:dt:tEnd_h;
+    %t_h = 0:(1/3):(12*365.25*24);
     
     compare_V2021 = 0;
     if compare_V2021
