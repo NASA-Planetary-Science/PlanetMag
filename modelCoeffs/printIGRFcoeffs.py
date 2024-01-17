@@ -18,7 +18,7 @@ def printIGRFcoeffs(fNameIn='IGRF13.shc', fNameOut='coeffsEarthIGRF13', datDir='
         File name for table of spherical harmonics
     fNameOut : str, default='coeffsEarthIGRF13'
         File name base for output .csv files (one for g, one for h)
-    datDir : str
+    datDir : str, default='modelCoeffs'
         Relative directory path where fNameIn is found and to which fNameOut will be printed
     """
 

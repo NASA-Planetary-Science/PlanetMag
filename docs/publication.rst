@@ -45,3 +45,17 @@ makeSurfaceMaps
 .. automodule:: publication.makeSurfaceMaps
    :members:
    :undoc-members:
+
+hodogram
+++++++++
+
+.. automodule:: functions.plotting.hodogram
+   :members:
+   :undoc-members:
+
+plotFFT
++++++++
+
+.. automodule:: functions.plotting.plotFFT
+   :members:
+   :undoc-members:
