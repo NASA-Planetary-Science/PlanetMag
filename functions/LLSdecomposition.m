@@ -13,13 +13,13 @@ function BD = LLSdecomposition(moonName, parentName, ets, Bvec, magModelDescrip,
 %
 % .. math::
 %   X_{ik} = \begin{bmatrix}
-%     \cos(\omega_1 t_1) & \cos(\omega_2 t_1) & \dots & \cos(\omega_F t_1) & \sin(\omega_1 t_1) &
-%       \sin(\omega_2 t_1) & \dots & \sin(\omega_F t_1) & 1 \\
-%     \cos(\omega_1 t_2) & \cos(\omega_2 t_2) & \dots & \cos(\omega_F t_2) & \sin(\omega_1 t_2) &
-%       \sin(\omega_2 t_2) & \dots & \sin(\omega_F t_2) & 1 \\
-%     \vdots & \vdots & \ddots & \vdots & \vdots & \vdots & \ddots & \vdots & \vdots \\
-%     \cos(\omega_1 t_N) & \cos(\omega_2 t_N) & \dots & \cos(\omega_F t_N) & \sin(\omega_1 t_N) &
-%       \sin(\omega_2 t_N) & \dots & \sin(\omega_F t_N) & 1 \\
+%     \cos(\omega_1 t_1) & \sin(\omega_1 t_1) & \cos(\omega_2 t_1) & \sin(\omega_2 t_1) & \dots & 
+%       \cos(\omega_F t_1) & \sin(\omega_F t_1) & 1 \\
+%     \cos(\omega_1 t_2) & \sin(\omega_1 t_2) & \cos(\omega_2 t_2) & \sin(\omega_2 t_2) & \dots & 
+%       \cos(\omega_F t_2) & \sin(\omega_F t_2) & 1 \\
+%     \vdots & \vdots & \vdots & \vdots & \ddots & \vdots & \vdots & \vdots \\
+%     \cos(\omega_1 t_N) & \sin(\omega_1 t_N) & \cos(\omega_2 t_N) & \sin(\omega_2 t_N) & \dots & 
+%       \cos(\omega_F t_N) & \sin(\omega_F t_N) & 1 \\
 %   \end{bmatrix}
 %
 % where :math:`N` is the number of points in the time series and :math:`F` is the number of
