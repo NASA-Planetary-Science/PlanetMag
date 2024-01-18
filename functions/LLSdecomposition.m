@@ -27,14 +27,14 @@ function BD = LLSdecomposition(moonName, parentName, ets, Bvec, magModelDescrip,
 % the columns of the weight matrix :math:`W_{kk'}`, such that
 % 
 % .. math::
-%   W_{kk'} = \left( X_{ik}^T X_{ik} \right)^{-1}
+%   W = \left( X_{ik}^T X_{ik} \right)^{-1}
 %
 % and the excitation moments are
 %
 % .. math::
-%   B^e_{j,k'} = (\mathbf{B}_i\cdot\mathbf{e}_j) X_{ik}W_{kk'},
+%   B^e_{j,k} = (\mathbf{B}_i\cdot\mathbf{e}_j) X_{ik}W,
 %
-% with each element :math:`B_{j,k'}^e` corresponding to the real (cos) or imaginary (sin) part of
+% with each element :math:`B_{j,k}^e` corresponding to the real (cos) or imaginary (sin) part of
 % the excitation moment for frequency :math:`f_k`. The complex excitation moments are constructed
 % by combining the real and imaginary parts for each :math:`f_k`\:
 % 
