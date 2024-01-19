@@ -4,6 +4,7 @@ function fList = GetExcitations(moonName, etMid_day)
 % Returned excitation frequencies consist of combinations of precise orbital periods, including
 % those adjusted for nutation and precession. For most bodies, one or more empirically determined
 % oscillation periods are also included, such as those corresponding to the true anomaly period.
+% Only one of the parameters marked "adjusted" should be used for each body.
 %
 % Parameters
 % ----------
@@ -58,49 +59,41 @@ function fList = GetExcitations(moonName, etMid_day)
 
         %% Jupiter moons
         case 'Io'
-            fIoTA = 1 / 3600 / 42.315044531808887029; % True anomaly period
-            fOrbMid1 = 1 / 3600 / 42.431381950208163;
-            fOrbMid2 = 1 / 3600 / 42.305626942856122;
+            fTA = 1 / 3600 / 42.30632; % True anomaly period
 
             fList = [
                 {fSyn, "synodic"}
-                {fOrbMid1, "orbital mid 1"}
-                {fOrbMid2, "orbital mid 2"}
+                {fTA, "true anomaly"}
                 {2*fSyn, "synodic 2nd"}
                 {3*fSyn, "synodic 3rd"}
                 {4*fSyn, "synodic 4th"}
-                {fSyn - fIoTA, "synodic-TA beat"}
-                {fSyn + fIoTA, "synodic+TA beat"}
-                {2*fSyn - fIoTA, "synodic 2nd-TA beat"}
-                {fSynAdj - fIoTA, "adjusted synodic-TA beat"}
-                {fSynAdj + fIoTA, "adjusted synodic+TA beat"}
-                {2*fSynAdj - fIoTA, "adjusted synodic 2nd-TA beat"}
-                {fSynAdj - fOrbMid2, "adjusted synodic-orbital mid 2 beat"}
+                {fOrbAdj + fJyr, "orbital+year beat"}
+                {fSynAdj - fTA, "synodic-TA beat"}
+                {fSynAdj + fTA, "synodic+TA beat"}
+                {2*fSynAdj - fTA, "synodic 2nd-TA beat"}
                 ];
 
         case 'Europa'
-            fTA = 1 / 84.62749 / 3600;
+            fTA = 1 / 84.63681 / 3600;
              
             fList = [
                 {fSyn, "synodic"}
                 {fTA, "true anomaly"}
-                {fOrb, "orbital"}
-                {fOrbAdj, "adjusted orbital"}
+                {fOrbAdj, "orbital"}
                 {2*fSyn, "synodic 2nd"}
                 {3*fSyn, "synodic 3rd"}
-                {fPar - fOrbAdj - fTA, "adjusted synodic-TA beat"}
-                {fSyn - fTA, "synodic-TA beat"}
-                {fSyn + fTA, "synodic+TA beat"}
+                {fSynAdj - fTA, "synodic-TA beat"}
+                {fSynAdj + fTA, "synodic+TA beat"}
                 {2*fSyn - fTA, "synodic 2nd-TA beat"}
                 {fTA - fJyr, "TA-year beat"}
                 {fTA + fJyr, "TA+year beat"}
-                {fOrbAdj - fJyr, "adjusted orbital-year beat"}
+                {fOrbAdj - fJyr, "orbital-year beat"}
                 ];
 
         case 'Ganymede'
             fList = [
                 {fSyn,    "synodic"}
-                {fOrbAdj, "adjusted orbital"}
+                {fOrbAdj, "orbital"}
                 {2*fSyn,  "synodic 2nd"}
                 ];
 
@@ -116,7 +109,7 @@ function fList = GetExcitations(moonName, etMid_day)
 
         %% Saturn moons         
         case 'Mimas'
-            fTA = 1 / 3600 / 22.559683415428385;
+            fTA = 1 / 3600 / 22.55972;
             fList = [
                 {fTA, "true anomaly"}
                 {fOrb, "orbital"}
@@ -129,18 +122,18 @@ function fList = GetExcitations(moonName, etMid_day)
                 ];
 
         case 'Enceladus'
-            fTA = 1 / 3600 / 32.927655041360495; % True anomaly period
+            fTA = 1 / 3600 / 32.92759; % True anomaly period
             fList = {fTA, "true anomaly"};
 
         case 'Tethys'
-            fTA = 1 / 3600 / 45.262476427850082; % True anomaly period
+            fTA = 1 / 3600 / 45.25957; % True anomaly period
             fList = [
                 {fTA, "true anomaly"}
                 {fTA - fSyr, "TA-year beat"}
                 ];
 
         case 'Dione'            
-            fList = {fOrbAdj - 2*fSyr, "adjusted orbital-half year beat"};
+            fList = {fOrbAdj - 2*fSyr, "orbital-half year beat"};
 
         case 'Rhea'
             fList = {fOrb, "orbital"};
