@@ -84,11 +84,14 @@ function fList = GetExcitations(moonName, etMid_day)
             fList = [
                 {fSyn, "synodic"}
                 {fTA, "true anomaly"}
+                {fOrb, "orbital"}
                 {fOrbAdj, "adjusted orbital"}
                 {2*fSyn, "synodic 2nd"}
                 {3*fSyn, "synodic 3rd"}
+                {fPar - fOrbAdj - fTA, "adjusted synodic-TA beat"}
                 {fSyn - fTA, "synodic-TA beat"}
                 {fSyn + fTA, "synodic+TA beat"}
+                {2*fSyn - fTA, "synodic 2nd-TA beat"}
                 {fTA - fJyr, "TA-year beat"}
                 {fTA + fJyr, "TA+year beat"}
                 {fOrbAdj - fJyr, "adjusted orbital-year beat"}
@@ -113,12 +116,16 @@ function fList = GetExcitations(moonName, etMid_day)
 
         %% Saturn moons         
         case 'Mimas'
-            fTA = 1 / 3600 / 22.67814677274641;
-            fOrbTAmid = 1 / 3600 / 22.559683415428385;
+            fTA = 1 / 3600 / 22.559683415428385;
             fList = [
                 {fTA, "true anomaly"}
-                {fOrbTAmid, "adjusted orbital-TA mid"}
+                {fOrb, "orbital"}
                 {2*fOrb, "orbital 2nd"}
+                {2*fOrb - fTA, "orbital 2nd-TA beat"}
+                {2*fTA - fOrb, "TA 2nd-orbital beat"}
+                {2*fOrb - fTA - fSyr, "orbital 2nd-TA-year beat"}
+                {2*fOrb - fTA - 2*fSyr, "orbital 2nd-TA-half year beat"}
+                {4*fOrb - 2*fTA - 2*fSyr, "orbital 4th-TA 2nd-half year beat"}
                 ];
 
         case 'Enceladus'
