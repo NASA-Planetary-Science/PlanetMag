@@ -1,5 +1,5 @@
-function CompareSatModels(LIVE_PLOTS, LOAD_PDS_ASCII, yearRange, scName, SEQUENTIAL, coeffPath, ...
-    figDir, figXtn, magDataMat)
+function CompareSatModels(LIVE_PLOTS, LOAD_PDS_ASCII, yearRange, RELATIVE_t, RELATIVE_r, ...
+    scName, SEQUENTIAL, coeffPath, figDir, figXtn, magDataMat)
 % Compare magnetic field measurements from spacecraft near Saturn against each implemented magnetic
 % field model.
 %
@@ -16,6 +16,12 @@ function CompareSatModels(LIVE_PLOTS, LOAD_PDS_ASCII, yearRange, scName, SEQUENT
 %   .mat summery of just the important bits (false).
 % yearRange : int, 1xG, default=4:17
 %   Years over which to compare Cassini data. Default includes all measurements.
+% RELATIVE_t : bool, default=0
+%   Whether to plot points relative to the start of the input time series. Only has an effect when
+%   ``SEQUENTIAL = 0``.
+% RELATIVE_r : bool, default=0
+%   Whether to plot points relative to distance from the parent planet. Overrides SEQUENTIAL and
+%   RELATIVE_t.
 % scName : string, 1xS, default=["Cassini"]
 %   Spacecraft name for which magnetic field data will be compared against implemented models. A
 %   directory must exist with each name in the ``MAG`` directory within the top-level P\lanetMag
@@ -49,6 +55,7 @@ function CompareSatModels(LIVE_PLOTS, LOAD_PDS_ASCII, yearRange, scName, SEQUENT
     if ~exist('figXtn', 'var'); figXtn = 'pdf'; end
     sc = char(scName);
     if ~exist('magDataMat', 'var'); magDataMat = fullfile('MAG', sc, 'ALL_FGM_KRTP_1M'); end
+    if ~exist('RELATIVE_t', 'var'); RELATIVE_t = 0; end
     
     cspice_kclear;
     parentName = 'Saturn';
@@ -137,7 +144,7 @@ function CompareSatModels(LIVE_PLOTS, LOAD_PDS_ASCII, yearRange, scName, SEQUENT
         for MPopt=MPopts
             PlotBandLsq(ets, t_h, r_km, theta, phi, xyz_km, BrSC, BthSC, BphiSC, scName, ...
                 parentName, spkParent, orbStr, opt, MPopt, SEQUENTIAL, coeffPath, figDir, ...
-                figXtn, LIVE_PLOTS);
+                figXtn, LIVE_PLOTS, [], RELATIVE_t, RELATIVE_r);
         end
     end
 

@@ -416,7 +416,7 @@ function [T_h, B0vec, B1vec1, B1vec2, B1vec3, outFname, header] = PlanetMag(moon
                 Bv2lbl]), string([mathTxt '\Delta ' Bv3lbl])];
             xlims = [1 Tmax];
             xInfo = [nmTxt 'Period (hr)'];
-            yInfo = [nmTxt 'FT' mathTxt '\{B_i - B_{i,\rm{exc}}\}' nmTxt ' (nT)'];
+            yInfo = [nmTxt 'Residual excitation (nT)'];
             titleInfo = [bnmTxt 'Residual FFT for ' magModelDescrip ' reproduction'];
             fName = [moonName 'ResidualFFT' magModelDescrip era coordType];
             figNum = figNumBase / 10;

@@ -1,6 +1,6 @@
 function PlotBandLsq(ets, t_h, r_km, theta, phi, xyz_km, BrSC, BthSC, BphiSC, scName, ...
     parentName, S3coords, orbStr, opt, MPopt, SEQUENTIAL, coeffPath, figDir, figXtn, ...
-    LIVE_PLOTS, jt_h)
+    LIVE_PLOTS, jt_h, RELATIVE_t, RELATIVE_r)
 % Plots and calculates comparisons between modeled and measured magnetic fields.
 %
 % Generates time series data of a specified combination of magnetic field models implemented in
@@ -56,6 +56,12 @@ function PlotBandLsq(ets, t_h, r_km, theta, phi, xyz_km, BrSC, BthSC, BphiSC, sc
 %   Whether to load interactive figure windows for plots (true) or print them to disk (false).
 % jt_h : double, 1xM, default=[]
 %   Ephemeris times of Juno measurements in TDB hours relative to J2000 to use in data comparisons.
+% RELATIVE_t : bool, default=0
+%   Whether to plot points relative to the start of the input time series. Only has an effect when
+%   ``SEQUENTIAL = 0``.
+% RELATIVE_r : bool, default=0
+%   Whether to plot points relative to distance from the parent planet. Overrides SEQUENTIAL and
+%   RELATIVE_t.
 
 % Part of the PlanetMag framework for evaluation and study of planetary magnetic fields.
 % Created by Corey J. Cochrane and Marshall J. Styczinski
@@ -69,6 +75,8 @@ function PlotBandLsq(ets, t_h, r_km, theta, phi, xyz_km, BrSC, BthSC, BphiSC, sc
     if ~exist('figXtn', 'var'); figXtn = 'pdf'; end
     if ~exist('LIVE_PLOTS', 'var'); LIVE_PLOTS = 0; end
     if ~exist('jt_h', 'var'); jt_h = []; end
+    if ~exist('RELATIVE_t', 'var'); RELATIVE_t = 0; end
+    if ~exist('RELATIVE_r', 'var'); RELATIVE_r = 0; end
     % The following are defined in SetPlotDefaults. Do NOT reset them anywhere else.
     global nmTxt
     global bnmTxt
@@ -107,24 +115,47 @@ function PlotBandLsq(ets, t_h, r_km, theta, phi, xyz_km, BrSC, BthSC, BphiSC, sc
     Br = Bvec(1,:);
     Bth = Bvec(2,:);
     Bphi = Bvec(3,:);
+    BrD = Br - BrSC;
+    BthD = Bth - BthSC;
+    BphiD = Bphi - BphiSC;
     
     scDataName = [char(scName) ' MAG'];
     commonTitle = [parentName ' model comparison vs ' char(scName) ' data'];
-    if SEQUENTIAL
-        xx = 1:npts;
-        xInfo = 'Measurement index';
-    elseif strcmp(parentName, 'Earth')
-        xx = t_h - 175308.0192178;
-        xInfo = 'Time relative to NY 2020 (h)';
-    elseif strcmp(parentName, 'Uranus')
-        xx = t_h + 122154.0036;
-        xInfo = 'Time relative to CA (h)';
-    elseif strcmp(parentName, 'Neptune')
-        xx = t_h + 90752.0566;
-        xInfo = 'Time relative to CA (h)';
+    Rp_km = GetBodyParams(parentName);
+    if RELATIVE_r
+        [xx, i_xx] = sort(r_km/Rp_km);
+        xInfo = [nmTxt 'Distance relative to ' parentName ' center ' mathTxt '(R_P)'];
+        fEnd = '_r';
+        Br = Br(i_xx);
+        BrSC = BrSC(i_xx);
+        Bth = Bth(i_xx);
+        BthSC = BthSC(i_xx);
+        Bphi = Bphi(i_xx);
+        BphiSC = BphiSC(i_xx);
+        BrD = BrD(i_xx);
+        BthD = BthD(i_xx);
+        BphiD = BphiD(i_xx);
     else
-        xx = t_h;
-        xInfo = 'Time past J2000 (h)';
+        fEnd = '';
+        if SEQUENTIAL
+            xx = 1:npts;
+            xInfo = 'Measurement index';
+        elseif strcmp(parentName, 'Earth')
+            xx = t_h - 175308.0192178;
+            xInfo = 'Time relative to NY 2020 (h)';
+        elseif strcmp(parentName, 'Uranus')
+            xx = t_h + 122154.0036;
+            xInfo = 'Time relative to CA (h)';
+        elseif strcmp(parentName, 'Neptune')
+            xx = t_h + 90752.0566;
+            xInfo = 'Time relative to CA (h)';
+        elseif RELATIVE_t
+            xx = (t_h - t_h(1)) / 24;
+            xInfo = 'Time past start (days)';
+        else
+            xx = t_h;
+            xInfo = 'Time past J2000 (h)';
+        end
     end
 
     figNumBase = 3000 + 100*opt + 10*MPopt;
@@ -133,34 +164,30 @@ function PlotBandLsq(ets, t_h, r_km, theta, phi, xyz_km, BrSC, BthSC, BphiSC, sc
     yInfo = [mathTxt 'B_r' nmTxt ' component (nT)'];
     legendStrings = [string(magModelDescrip), string(scDataName)];
     titleInfo = commonTitle;
-    fName = [char(scName) parentName 'BrComparison' magModelDescrip];
+    fName = [char(scName) parentName 'BrComparison' magModelDescrip fEnd];
     PlotGeneric(xx, yy, legendStrings, windowName, titleInfo, xInfo, yInfo, fName, ...
         figDir, figXtn, LIVE_PLOTS, figNumBase + 1);
 
     windowName = [char(scName) 'Bth, ' orbStr ', ' magModelDescrip];
     yy = [Bth; BthSC];
     yInfo = [mathTxt 'B_\theta' nmTxt ' component (nT)'];
-    fName = [char(scName) parentName 'BthComparison' magModelDescrip];
+    fName = [char(scName) parentName 'BthComparison' magModelDescrip fEnd];
     PlotGeneric(xx, yy, legendStrings, windowName, titleInfo, xInfo, yInfo, fName, ...
         figDir, figXtn, LIVE_PLOTS, figNumBase + 2);
 
     windowName = [char(scName) 'Bphi, ' orbStr ', ' magModelDescrip];
     yy = [Bphi; BphiSC];
     yInfo = [mathTxt 'B_\phi' nmTxt ' component (nT)'];
-    fName = [char(scName) parentName 'BphiComparison' magModelDescrip];
+    fName = [char(scName) parentName 'BphiComparison' magModelDescrip fEnd];
     PlotGeneric(xx, yy, legendStrings, windowName, titleInfo, xInfo, yInfo, fName, ...
         figDir, figXtn, LIVE_PLOTS, figNumBase + 3);
-
-    BrD = Br - BrSC;
-    BthD = Bth - BthSC;
-    BphiD = Bphi - BphiSC;
 
     windowName = ['Vector comp diffs, ' orbStr ', ' magModelDescrip ' - ' char(scName) ' MAG'];
     yy = [BrD; BthD; BphiD];
     yInfo = 'Component difference (nT)';
     legendStrings = [string([ mathTxt '\Delta B_r']), string([mathTxt '\Delta B_\theta']), ...
         string([mathTxt '\Delta B_\phi'])];
-    fName = [char(scName) parentName 'DeltaBComparison' magModelDescrip];
+    fName = [char(scName) parentName 'DeltaBComparison' magModelDescrip fEnd];
     PlotGeneric(xx, yy, legendStrings, windowName, titleInfo, xInfo, yInfo, fName, ...
         figDir, figXtn, LIVE_PLOTS, figNumBase + 4);
 

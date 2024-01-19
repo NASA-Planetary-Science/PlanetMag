@@ -11,7 +11,8 @@ function RunPublication
     GetNearFarMaxBdiff();
     CompareCoords();
     CalcBexc();
-    CompareSatModels(0, 1, 16);
+    CompareSatModels(0, 1, 16, 1);
+    CompareSatModels(0, 1, 16, 0, 1);
     MakeHodograms();
     for planets=["Jupiter", "Saturn", "Uranus", "Neptune"]
         planet = char(planets);
