@@ -1,0 +1,539 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>PlanetMag manuscript data and figure scripts &mdash; PlanetMag v1.0.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=19f00094" />
+
+  
+    <link rel="shortcut icon" href="_static/PlanetMag_logo.ico"/>
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="_static/jquery.js?v=5d32c60e"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js?v=0ec76b63"></script>
+        <script src="_static/doctools.js?v=888ff710"></script>
+        <script src="_static/sphinx_highlight.js?v=4825356b"></script>
+        <script type="text/x-mathjax-config">MathJax.Hub.Config({"extensions": ["tex2jax.js"], "TeX": {"extensions": ["mhchem.js", "unicode.js"], "Macros": {"upalpha": "\\unicode{945}", "upbeta": "\\unicode{946}", "upgamma": "\\unicode{947}", "updelta": "\\unicode{948}", "upepsilon": "\\unicode{949}", "upzeta": "\\unicode{950}", "upeta": "\\unicode{951}", "uptheta": "\\unicode{952}", "upiota": "\\unicode{953}", "upkappa": "\\unicode{954}", "uplambda": "\\unicode{955}", "upmu": "\\unicode{956}", "upnu": "\\unicode{957}", "upxi": "\\unicode{958}", "upomicron": "\\unicode{959}", "uppi": "\\unicode{960}", "uprho": "\\unicode{961}", "upsigma": "\\unicode{963}", "uptau": "\\unicode{964}", "upupsilon": "\\unicode{965}", "upphi": "\\unicode{x03d5}", "upvarphi": "\\unicode{966}", "upchi": "\\unicode{967}", "uppsi": "\\unicode{968}", "upomega": "\\unicode{969}", "upAlpha": "\\unicode{913}", "upBeta": "\\unicode{914}", "upGamma": "\\unicode{915}", "upDelta": "\\unicode{916}", "upEpsilon": "\\unicode{917}", "upZeta": "\\unicode{918}", "upEta": "\\unicode{919}", "upTheta": "\\unicode{920}", "upIota": "\\unicode{921}", "upKappa": "\\unicode{922}", "upLambda": "\\unicode{923}", "upMu": "\\unicode{924}", "upNu": "\\unicode{925}", "upXi": "\\unicode{926}", "upOmicron": "\\unicode{927}", "upPi": "\\unicode{928}", "upRho": "\\unicode{929}", "upSigma": "\\unicode{931}", "upTau": "\\unicode{932}", "upUpsilon": "\\unicode{933}", "upPhi": "\\unicode{934}", "upChi": "\\unicode{935}", "upPsi": "\\unicode{936}", "upOmega": "\\unicode{937}"}}, "HTML-CSS": {"fonts": ["STIX-Web"]}})</script>
+        <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@2/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="prev" title="Implemented frames and coordinates" href="coordinates.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search"  style="background: #2980B9" >
+
+          
+          
+          <a href="index.html">
+            
+              <img src="_static/PlanetMag_logoDocs.png" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="readme.html">README</a></li>
+<li class="toctree-l1"><a class="reference internal" href="primary.html">PlanetMag Matlab run scripts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="functions.html">Matlab supporting functions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="pythonModules.html">PlanetMag Python documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="coordinates.html">Implemented frames and coordinates</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">PlanetMag manuscript data and figure scripts</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#calcbexc"><code class="xref mat mat-func docutils literal notranslate"><span class="pre">CalcBexc()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#comparecoords"><code class="xref mat mat-func docutils literal notranslate"><span class="pre">CompareCoords()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#getnearfarmaxbdiff"><code class="xref mat mat-func docutils literal notranslate"><span class="pre">GetNearFarMaxBdiff()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#makehodograms"><code class="xref mat mat-func docutils literal notranslate"><span class="pre">MakeHodograms()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#printsurfacemap"><code class="xref mat mat-func docutils literal notranslate"><span class="pre">PrintSurfaceMap()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#runpublication"><code class="xref mat mat-func docutils literal notranslate"><span class="pre">RunPublication()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-publication.makeSurfaceMaps">makeSurfaceMaps</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#publication.makeSurfaceMaps.Cformat"><code class="docutils literal notranslate"><span class="pre">Cformat()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#publication.makeSurfaceMaps.EastFormatted"><code class="docutils literal notranslate"><span class="pre">EastFormatted()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#publication.makeSurfaceMaps.FixLons"><code class="docutils literal notranslate"><span class="pre">FixLons()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#publication.makeSurfaceMaps.GetSign"><code class="docutils literal notranslate"><span class="pre">GetSign()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#publication.makeSurfaceMaps.LatFormatted"><code class="docutils literal notranslate"><span class="pre">LatFormatted()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#publication.makeSurfaceMaps.LatHemisphere"><code class="docutils literal notranslate"><span class="pre">LatHemisphere()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#publication.makeSurfaceMaps.LonHemisphere"><code class="docutils literal notranslate"><span class="pre">LonHemisphere()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#publication.makeSurfaceMaps.SetMap"><code class="docutils literal notranslate"><span class="pre">SetMap()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#publication.makeSurfaceMaps.healpixMap"><code class="docutils literal notranslate"><span class="pre">healpixMap()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#publication.makeSurfaceMaps.loadSurfaceMap"><code class="docutils literal notranslate"><span class="pre">loadSurfaceMap()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#publication.makeSurfaceMaps.plotAllIndividual"><code class="docutils literal notranslate"><span class="pre">plotAllIndividual()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#publication.makeSurfaceMaps.plotDefaultTogether"><code class="docutils literal notranslate"><span class="pre">plotDefaultTogether()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#module-functions.plotting.hodogram">hodogram</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#functions.plotting.hodogram.loaddat"><code class="docutils literal notranslate"><span class="pre">loaddat()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#functions.plotting.hodogram.plotHodogramSingle"><code class="docutils literal notranslate"><span class="pre">plotHodogramSingle()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#module-functions.plotting.plotFFT">plotFFT</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#functions.plotting.plotFFT.loaddat"><code class="docutils literal notranslate"><span class="pre">loaddat()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#functions.plotting.plotFFT.plotFFTSingle"><code class="docutils literal notranslate"><span class="pre">plotFFTSingle()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu"  style="background: #2980B9" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">PlanetMag</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">PlanetMag manuscript data and figure scripts</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/publication.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="planetmag-manuscript-data-and-figure-scripts">
+<h1>PlanetMag manuscript data and figure scripts<a class="headerlink" href="#planetmag-manuscript-data-and-figure-scripts" title="Permalink to this heading"></a></h1>
+<section id="calcbexc">
+<h2><a class="reference internal" href="#publication.CalcBexc" title="publication.CalcBexc"><code class="xref mat mat-func docutils literal notranslate"><span class="pre">CalcBexc()</span></code></a><a class="headerlink" href="#calcbexc" title="Permalink to this heading"></a></h2>
+<dl class="mat function">
+<dt class="sig sig-object mat" id="publication.CalcBexc">
+<span class="sig-prename descclassname"><span class="pre">publication.</span></span><span class="sig-name descname"><span class="pre">CalcBexc</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#publication.CalcBexc" title="Permalink to this definition"></a></dt>
+<dd><p>Calculate excitation moments for all moons using selected eras and default models, in addition to
+particular selections for Europa and Callisto to allow for comparison to Seufert et al. (2011).</p>
+</dd></dl>
+
+</section>
+<section id="comparecoords">
+<h2><a class="reference internal" href="#publication.CompareCoords" title="publication.CompareCoords"><code class="xref mat mat-func docutils literal notranslate"><span class="pre">CompareCoords()</span></code></a><a class="headerlink" href="#comparecoords" title="Permalink to this heading"></a></h2>
+<dl class="mat function">
+<dt class="sig sig-object mat" id="publication.CompareCoords">
+<span class="sig-prename descclassname"><span class="pre">publication.</span></span><span class="sig-name descname"><span class="pre">CompareCoords</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#publication.CompareCoords" title="Permalink to this definition"></a></dt>
+<dd><p>Compare phi-Omega frames to IAU frames for moons for which these frames are implemented (the
+Galilean moons). Prints the angles between x and z axes.</p>
+</dd></dl>
+
+</section>
+<section id="getnearfarmaxbdiff">
+<h2><a class="reference internal" href="#publication.GetNearFarMaxBdiff" title="publication.GetNearFarMaxBdiff"><code class="xref mat mat-func docutils literal notranslate"><span class="pre">GetNearFarMaxBdiff()</span></code></a><a class="headerlink" href="#getnearfarmaxbdiff" title="Permalink to this heading"></a></h2>
+<dl class="mat function">
+<dt class="sig sig-object mat" id="publication.GetNearFarMaxBdiff">
+<span class="sig-prename descclassname"><span class="pre">publication.</span></span><span class="sig-name descname"><span class="pre">GetNearFarMaxBdiff</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#publication.GetNearFarMaxBdiff" title="Permalink to this definition"></a></dt>
+<dd><p>Calculate the maximum difference in the magnetic field magnitude at the nearest and farthest
+points relative to the parent planet for moons of concern.</p>
+</dd></dl>
+
+</section>
+<section id="makehodograms">
+<h2><a class="reference internal" href="#publication.MakeHodograms" title="publication.MakeHodograms"><code class="xref mat mat-func docutils literal notranslate"><span class="pre">MakeHodograms()</span></code></a><a class="headerlink" href="#makehodograms" title="Permalink to this heading"></a></h2>
+<dl class="mat function">
+<dt class="sig sig-object mat" id="publication.MakeHodograms">
+<span class="sig-prename descclassname"><span class="pre">publication.</span></span><span class="sig-name descname"><span class="pre">MakeHodograms</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#publication.MakeHodograms" title="Permalink to this definition"></a></dt>
+<dd><p>Print hodograms for each moon implemented in PlanetProfile from the default model data used to
+calculate the excitation moments.</p>
+</dd></dl>
+
+</section>
+<section id="printsurfacemap">
+<h2><a class="reference internal" href="#publication.PrintSurfaceMap" title="publication.PrintSurfaceMap"><code class="xref mat mat-func docutils literal notranslate"><span class="pre">PrintSurfaceMap()</span></code></a><a class="headerlink" href="#printsurfacemap" title="Permalink to this heading"></a></h2>
+<dl class="mat function">
+<dt class="sig sig-object mat" id="publication.PrintSurfaceMap">
+<span class="sig-prename descclassname"><span class="pre">publication.</span></span><span class="sig-name descname"><span class="pre">PrintSurfaceMap</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">planet</span></em>, <em class="sig-param"><span class="pre">model</span></em>, <em class="sig-param"><span class="pre">hpDir</span></em>, <em class="sig-param"><span class="pre">hpFname</span></em>, <em class="sig-param"><span class="pre">outDir</span></em>, <em class="sig-param"><span class="pre">outFbase</span></em><span class="sig-paren">)</span><a class="headerlink" href="#publication.PrintSurfaceMap" title="Permalink to this definition"></a></dt>
+<dd><p>Evaluates magnetic field vectors on a HEALpix map at the body surface and prints to disk.</p>
+<p>Prints a .mat file for the given planet and model that contains magnetic field vectors at the
+“surface” of the planet, typically the 1-bar radius defined in IAU reports.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>planet</strong> (<span><code class="xref mat mat-obj docutils literal notranslate"><span class="pre">char,</span> <span class="pre">1xC</span></code></span>) – Planet name for which to calculate the surface map.</p></li>
+<li><p><strong>model</strong> (<span><code class="xref mat mat-obj docutils literal notranslate"><span class="pre">int</span></code></span>) – Model index to pass to <code class="xref py py-func docutils literal notranslate"><span class="pre">GetModelOpts()</span></code>. If -1 is passed, print maps for all models. If 0 is
+passed, the default model will be evaluated.</p></li>
+<li><p><strong>hpDir</strong> (<span><code class="xref mat mat-obj docutils literal notranslate"><span class="pre">char,</span> <span class="pre">1xD,</span> <span class="pre">default='publication'</span></code></span>) – Directory containing a file with pixel locations on a HEALpix grid where function outputs are
+to be compared.</p></li>
+<li><p><strong>hpFname</strong> (<span><code class="xref mat mat-obj docutils literal notranslate"><span class="pre">char,</span> <span class="pre">1xE,</span> <span class="pre">default='healpix_locs.txt'</span></code></span>) – File name where HEALpix locations are stored.</p></li>
+<li><p><strong>outDir</strong> (<span><code class="xref mat mat-obj docutils literal notranslate"><span class="pre">char,</span> <span class="pre">1xF,</span> <span class="pre">default='out'</span></code></span>) – Directory where a file with function outputs will be written.</p></li>
+<li><p><strong>outFbase</strong> (<span><code class="xref mat mat-obj docutils literal notranslate"><span class="pre">char,</span> <span class="pre">1xG,</span> <span class="pre">default='surfaceMap_'</span></code></span>) – File name pattern for function outputs.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="runpublication">
+<h2><a class="reference internal" href="#publication.RunPublication" title="publication.RunPublication"><code class="xref mat mat-func docutils literal notranslate"><span class="pre">RunPublication()</span></code></a><a class="headerlink" href="#runpublication" title="Permalink to this heading"></a></h2>
+<dl class="mat function">
+<dt class="sig sig-object mat" id="publication.RunPublication">
+<span class="sig-prename descclassname"><span class="pre">publication.</span></span><span class="sig-name descname"><span class="pre">RunPublication</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#publication.RunPublication" title="Permalink to this definition"></a></dt>
+<dd><p>Run all scripts needed to produce data and figure products for the publication describing
+PlanetMag, DOI TBD.</p>
+</dd></dl>
+
+</section>
+<section id="module-publication.makeSurfaceMaps">
+<span id="makesurfacemaps"></span><h2>makeSurfaceMaps<a class="headerlink" href="#module-publication.makeSurfaceMaps" title="Permalink to this heading"></a></h2>
+<p>Creates magnetic field surface maps for data saved to disk by PrintSurfaceMap(). Run this as a
+script after running RunPublication() with Matlab.</p>
+<dl class="py function">
+<dt class="sig sig-object py" id="publication.makeSurfaceMaps.Cformat">
+<span class="sig-prename descclassname"><span class="pre">publication.makeSurfaceMaps.</span></span><span class="sig-name descname"><span class="pre">Cformat</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">field</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#publication.makeSurfaceMaps.Cformat" title="Permalink to this definition"></a></dt>
+<dd><p>Formatting function for magnetic field contour labels.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>field</strong> (<em>float</em><em>, </em><em>array-like</em>) – Magnetic field component or magnitude value for contour to label.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>fmtString</strong> – A string to represent the contour label.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="publication.makeSurfaceMaps.EastFormatted">
+<span class="sig-prename descclassname"><span class="pre">publication.makeSurfaceMaps.</span></span><span class="sig-name descname"><span class="pre">EastFormatted</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">longitude</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">EAST</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#publication.makeSurfaceMaps.EastFormatted" title="Permalink to this definition"></a></dt>
+<dd><p>Formatting function to pass to axis labelers for longitudes.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>longitude</strong> (<em>float</em><em>, </em><em>array-like</em>) – Longitude for which to generate tick labels.</p></li>
+<li><p><strong>EAST</strong> (<em>bool</em><em>, </em><em>default=True</em>) – Whether to treat longitude values as all east (used in maps running from 0–360).</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>fmtString</strong> – A string to represent the passed longitude for a given axis tick.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="publication.makeSurfaceMaps.FixLons">
+<span class="sig-prename descclassname"><span class="pre">publication.makeSurfaceMaps.</span></span><span class="sig-name descname"><span class="pre">FixLons</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">lons</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#publication.makeSurfaceMaps.FixLons" title="Permalink to this definition"></a></dt>
+<dd><p>Configure longitudes to be from 0 to 360.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>lons</strong> (<em>float</em><em>, </em><em>array-like</em>) – Longitude(s) to adjust to be between 0 and 360.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>lons</strong> – Adjusted longitudes.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>float, array-like</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="publication.makeSurfaceMaps.GetSign">
+<span class="sig-prename descclassname"><span class="pre">publication.makeSurfaceMaps.</span></span><span class="sig-name descname"><span class="pre">GetSign</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">val</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#publication.makeSurfaceMaps.GetSign" title="Permalink to this definition"></a></dt>
+<dd><p>Get + or - for text labels of numbers that may be negative.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>val</strong> (<em>float</em>) – Value for which to get + or - sign.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>sign</strong> – A string to prepend to text labels that may be negative.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="publication.makeSurfaceMaps.LatFormatted">
+<span class="sig-prename descclassname"><span class="pre">publication.makeSurfaceMaps.</span></span><span class="sig-name descname"><span class="pre">LatFormatted</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">latitude</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#publication.makeSurfaceMaps.LatFormatted" title="Permalink to this definition"></a></dt>
+<dd><p>Formatting function to pass to axis labelers for latitudes.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>latitude</strong> (<em>float</em><em>, </em><em>array-like</em>) – Latitude for which to generate tick labels.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>fmtString</strong> – A string to represent the passed latitude for a given axis tick.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="publication.makeSurfaceMaps.LatHemisphere">
+<span class="sig-prename descclassname"><span class="pre">publication.makeSurfaceMaps.</span></span><span class="sig-name descname"><span class="pre">LatHemisphere</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">latitude</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#publication.makeSurfaceMaps.LatHemisphere" title="Permalink to this definition"></a></dt>
+<dd><p>Retrieve the N/S hemisphere letter for degree unit labels.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>latitude</strong> (<em>float</em><em>, </em><em>array-like</em>) – Latitude for which to retrieve hemisphere letter.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>hemisphere</strong> – A string to accompany degree units in map labels to label the hemisphere. Either nothing
+(for 0), N, or S.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="publication.makeSurfaceMaps.LonHemisphere">
+<span class="sig-prename descclassname"><span class="pre">publication.makeSurfaceMaps.</span></span><span class="sig-name descname"><span class="pre">LonHemisphere</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">longitude</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">EAST</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#publication.makeSurfaceMaps.LonHemisphere" title="Permalink to this definition"></a></dt>
+<dd><p>Retrieve the E/W hemisphere letter for degree unit labels.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>longitude</strong> (<em>float</em><em>, </em><em>array-like</em>) – Longitude for which to retrieve hemisphere letter.</p></li>
+<li><p><strong>EAST</strong> (<em>bool</em><em>, </em><em>default=True</em>) – Whether to treat longitude values as all east (used in maps running from 0–360).</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>hemisphere</strong> – A string to accompany degree units in map labels to label the hemisphere. Either nothing
+(for 0), E, or W.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="publication.makeSurfaceMaps.SetMap">
+<span class="sig-prename descclassname"><span class="pre">publication.makeSurfaceMaps.</span></span><span class="sig-name descname"><span class="pre">SetMap</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ax</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#publication.makeSurfaceMaps.SetMap" title="Permalink to this definition"></a></dt>
+<dd><p>Format axis labels as a cylindrical projection map.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>ax</strong> (<em>matplotlib.axes._axes.Axes</em>) – Axis object to format as a map.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="publication.makeSurfaceMaps.healpixMap">
+<span class="sig-prename descclassname"><span class="pre">publication.makeSurfaceMaps.</span></span><span class="sig-name descname"><span class="pre">healpixMap</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ax</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Bplot_G</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vecComp</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">title</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">levels</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cmap</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#publication.makeSurfaceMaps.healpixMap" title="Permalink to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>ax</strong> (<em>matplotlib.axes._axes.Axes</em>) – Axis object for the given map.</p></li>
+<li><p><strong>Bplot_G</strong> (<em>float</em><em>, </em><em>array-like</em>) – Magnetic field map of the selected vector component at evaluated HEALpix pixels.</p></li>
+<li><p><strong>vecComp</strong> (<em>str</em>) – Vector component to use for map plotting. Options are ‘x’, ‘y’, ‘z’, ‘r’, ‘theta’, ‘phi’,
+and ‘mag’.</p></li>
+<li><p><strong>title</strong> (<em>str</em>) – Title string for placing at the top the plot.</p></li>
+<li><p><strong>levels</strong> (<em>float</em><em>, </em><em>array-like</em><em>, </em><em>default=None</em>) – Contour levels to pass to ax.contour method.</p></li>
+<li><p><strong>cmap</strong> (<em>str</em><em>, </em><em>default=None</em>) – Colormap identifier string to pass to ax.pcolormesh method.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="publication.makeSurfaceMaps.loadSurfaceMap">
+<span class="sig-prename descclassname"><span class="pre">publication.makeSurfaceMaps.</span></span><span class="sig-name descname"><span class="pre">loadSurfaceMap</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">planet</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ioDir</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'publication'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fBase</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'surfMap_'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vecComp</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'mag'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#publication.makeSurfaceMaps.loadSurfaceMap" title="Permalink to this definition"></a></dt>
+<dd><p>Load data from disk for a magnetic field surface map.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>planet</strong> (<em>str</em>) – Planet for which to load saved data.</p></li>
+<li><p><strong>model</strong> (<em>int</em><em> or </em><em>str</em><em>, </em><em>default=None</em>) – Index number for model to load, as needed to complete the file name, or ‘all’.</p></li>
+<li><p><strong>ioDir</strong> (<em>str</em><em>, </em><em>default='publication'</em>) – Directory name relative to run dir where data files are found.</p></li>
+<li><p><strong>fBase</strong> (<em>str</em><em>, </em><em>default='surfMap_'</em>) – Filename pattern base to use for loading data files.</p></li>
+<li><p><strong>vecComp</strong> (<em>str</em><em>, </em><em>default='mag'</em>) – Vector component to use for map plotting. Options are ‘x’, ‘y’, ‘z’, ‘r’, ‘theta’, ‘phi’,
+and ‘mag’.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><strong>Bout_G</strong> (<em>list of float, array-like</em>) – Magnetic field map of the selected vector component at evaluated HEALpix pixels.</p></li>
+<li><p><strong>titles</strong> (<em>list of str</em>) – Title strings for placing at the top of each plot axis object.</p></li>
+<li><p><strong>inpFile</strong> (<em>list of str</em>) – File paths sans extension used for each surface map.</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="publication.makeSurfaceMaps.plotAllIndividual">
+<span class="sig-prename descclassname"><span class="pre">publication.makeSurfaceMaps.</span></span><span class="sig-name descname"><span class="pre">plotAllIndividual</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#publication.makeSurfaceMaps.plotAllIndividual" title="Permalink to this definition"></a></dt>
+<dd><p>Plot magnetic field surface maps from data saved to disk, separately.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="publication.makeSurfaceMaps.plotDefaultTogether">
+<span class="sig-prename descclassname"><span class="pre">publication.makeSurfaceMaps.</span></span><span class="sig-name descname"><span class="pre">plotDefaultTogether</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fBase</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'surfMap_'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#publication.makeSurfaceMaps.plotDefaultTogether" title="Permalink to this definition"></a></dt>
+<dd><p>Plot magnetic field surface maps for each planet, all together in one figure.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>fBase</strong> (<em>str</em><em>, </em><em>default='surfMap_'</em>) – Filename pattern base to use for loading data files.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="module-functions.plotting.hodogram">
+<span id="hodogram"></span><h2>hodogram<a class="headerlink" href="#module-functions.plotting.hodogram" title="Permalink to this heading"></a></h2>
+<p>Functions for loading data and printing individual hodograms for each moon.</p>
+<dl class="py function">
+<dt class="sig sig-object py" id="functions.plotting.hodogram.loaddat">
+<span class="sig-prename descclassname"><span class="pre">functions.plotting.hodogram.</span></span><span class="sig-name descname"><span class="pre">loaddat</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">planet</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">moonName</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">datDir</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'out'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">figDir</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'figures'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#functions.plotting.hodogram.loaddat" title="Permalink to this definition"></a></dt>
+<dd><p>Load time series data from disk and format into horizontal and vertical for hodogram plotting.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>planet</strong> (<em>str</em>) – Name of parent planet for hodogram data to load.</p></li>
+<li><p><strong>moonName</strong> (<em>str</em>) – Name of moon for hodogram data to load.</p></li>
+<li><p><strong>model</strong> (<em>int</em><em>, </em><em>default=None</em>) – Model index number as defined in GetModelOpts. Passing None selects the default.</p></li>
+<li><p><strong>datDir</strong> (<em>str</em><em>, </em><em>default='out'</em>) – Data directory from which to load FFT data.</p></li>
+<li><p><strong>figDir</strong> (<em>str</em><em>, </em><em>default='figures'</em>) – Output directory for figure files.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><strong>xx</strong> (<em>float, shape 1xN</em>) – Selected <span class="math notranslate nohighlight">\(\vec{B}\)</span> component for plotting on the <span class="math notranslate nohighlight">\(x\)</span> axis in hodogram plot.
+The selected component depends on the moon, so that the most interesting components are
+plotted.</p></li>
+<li><p><strong>yy</strong> (<em>float, shape 1xN</em>) – Selected <span class="math notranslate nohighlight">\(\vec{B}\)</span> component for plotting on the <span class="math notranslate nohighlight">\(x\)</span> axis in hodogram plot.
+The selected component depends on the moon, so that the most interesting components are
+plotted.</p></li>
+<li><p><strong>xlabel</strong> (<em>str</em>) – Text to display for label on x axis.</p></li>
+<li><p><strong>ylabel</strong> (<em>str</em>) – Text to display for label on y axis.</p></li>
+<li><p><strong>title</strong> (<em>str</em>) – Text to display at top for plot title.</p></li>
+<li><p><strong>figFile</strong> (<em>str</em>) – Output file name for figure to print, including extension.</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="functions.plotting.hodogram.plotHodogramSingle">
+<span class="sig-prename descclassname"><span class="pre">functions.plotting.hodogram.</span></span><span class="sig-name descname"><span class="pre">plotHodogramSingle</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">xx</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">yy</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">xlabel</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ylabel</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">title</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">figFile</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">deftFigsize</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#functions.plotting.hodogram.plotHodogramSingle" title="Permalink to this definition"></a></dt>
+<dd><p>Plots a single hodogram figure for given input data and labels.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>xx</strong> (<em>float</em><em>, </em><em>shape 1xN</em>) – <span class="math notranslate nohighlight">\(x\)</span> axis data for hodogram plot.</p></li>
+<li><p><strong>yy</strong> (<em>float</em><em>, </em><em>shape 1xN</em>) – <span class="math notranslate nohighlight">\(y\)</span> axis data for hodogram plot.</p></li>
+<li><p><strong>xlabel</strong> (<em>str</em>) – Text to display for label on x axis.</p></li>
+<li><p><strong>ylabel</strong> (<em>str</em>) – Text to display for label on y axis.</p></li>
+<li><p><strong>title</strong> (<em>str</em>) – Text to display at top for plot title.</p></li>
+<li><p><strong>figFile</strong> (<em>str</em>) – Output file name for figure to print, including extension.</p></li>
+<li><p><strong>deftFigsize</strong> (<em>tuple</em><em> of </em><em>float</em><em>, </em><em>shape 1x2</em><em>, </em><em>default=None</em>) – Default figure size in screen inches (the default of matplotlib).</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="module-functions.plotting.plotFFT">
+<span id="plotfft"></span><h2>plotFFT<a class="headerlink" href="#module-functions.plotting.plotFFT" title="Permalink to this heading"></a></h2>
+<p>Functions for plotting Fast Fourier Transform (FFT) data.</p>
+<dl class="py function">
+<dt class="sig sig-object py" id="functions.plotting.plotFFT.loaddat">
+<span class="sig-prename descclassname"><span class="pre">functions.plotting.plotFFT.</span></span><span class="sig-name descname"><span class="pre">loaddat</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">moonName</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">datDir</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'out'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">figDir</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'figures'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#functions.plotting.plotFFT.loaddat" title="Permalink to this definition"></a></dt>
+<dd><p>Reloads FFT data from disk into numpy arrays.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>moonName</strong> (<em>str</em>) – Name of moon to use for reloading data.</p></li>
+<li><p><strong>datDir</strong> (<em>str</em><em>, </em><em>default='out'</em>) – Data directory from which to load FFT data.</p></li>
+<li><p><strong>figDir</strong> (<em>str</em><em>, </em><em>default='figures'</em>) – Output directory for figure files.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><strong>T_h</strong> (<em>float, shape 1xN</em>) – Periods for excitation spectrum data in hours, i.e.the x axis values.</p></li>
+<li><p><strong>BxFFT_nT</strong> (<em>float, shape 1xN</em>) – Magnitude of the <span class="math notranslate nohighlight">\(\hat{x}\)</span> component of the excitation spectrum power for each period.</p></li>
+<li><p><strong>ByFFT_nT</strong> (<em>float, shape 1xN</em>) – Magnitude of the <span class="math notranslate nohighlight">\(\hat{y}\)</span> component of the excitation spectrum power for each period.</p></li>
+<li><p><strong>BzFFT_nT</strong> (<em>float, shape 1xN</em>) – Magnitude of the <span class="math notranslate nohighlight">\(\hat{z}\)</span> component of the excitation spectrum power for each period.</p></li>
+<li><p><strong>xlabel</strong> (<em>str</em>) – Text to display for label on x axis.</p></li>
+<li><p><strong>ylabel</strong> (<em>str</em>) – Text to display for label on y axis.</p></li>
+<li><p><strong>title</strong> (<em>str</em>) – Text to display at top for plot title.</p></li>
+<li><p><strong>figFile</strong> (<em>str</em>) – Output file name for figure to print, including extension.</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="functions.plotting.plotFFT.plotFFTSingle">
+<span class="sig-prename descclassname"><span class="pre">functions.plotting.plotFFT.</span></span><span class="sig-name descname"><span class="pre">plotFFTSingle</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">T_h</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">BxFFT_nT</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ByFFT_nT</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">BzFFT_nT</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">xlabel</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ylabel</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">title</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">figFile</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">deftFigsize</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">LW</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#functions.plotting.plotFFT.plotFFTSingle" title="Permalink to this definition"></a></dt>
+<dd><p>Plot Fast Fourier Transform (FFT) data for a single excitation spectrum.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>T_h</strong> (<em>float</em><em>, </em><em>shape 1xN</em>) – Periods for excitation spectrum data in hours, i.e.the x axis values.</p></li>
+<li><p><strong>BxFFT_nT</strong> (<em>float</em><em>, </em><em>shape 1xN</em>) – Magnitude of the <span class="math notranslate nohighlight">\(\hat{x}\)</span> component of the excitation spectrum power for each period.</p></li>
+<li><p><strong>ByFFT_nT</strong> (<em>float</em><em>, </em><em>shape 1xN</em>) – Magnitude of the <span class="math notranslate nohighlight">\(\hat{y}\)</span> component of the excitation spectrum power for each period.</p></li>
+<li><p><strong>BzFFT_nT</strong> (<em>float</em><em>, </em><em>shape 1xN</em>) – Magnitude of the <span class="math notranslate nohighlight">\(\hat{z}\)</span> component of the excitation spectrum power for each period.</p></li>
+<li><p><strong>xlabel</strong> (<em>str</em>) – Text to display for label on x axis.</p></li>
+<li><p><strong>ylabel</strong> (<em>str</em>) – Text to display for label on y axis.</p></li>
+<li><p><strong>title</strong> (<em>str</em>) – Text to display at top for plot title.</p></li>
+<li><p><strong>figFile</strong> (<em>str</em>) – Output file name for figure to print, including extension.</p></li>
+<li><p><strong>deftFigsize</strong> (<em>tuple</em><em> of </em><em>float</em><em>, </em><em>shape 1x2</em><em>, </em><em>default=None</em>) – Default figure size in screen inches (the default of matplotlib).</p></li>
+<li><p><strong>LW</strong> (<em>float</em><em>, </em><em>default=None</em>) – Linewidth in pt.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="coordinates.html" class="btn btn-neutral float-left" title="Implemented frames and coordinates" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, California Institute of Technology.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

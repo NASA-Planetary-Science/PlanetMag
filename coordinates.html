@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Implemented frames and coordinates &mdash; PlanetMag v1.0.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=19f00094" />
+
+  
+    <link rel="shortcut icon" href="_static/PlanetMag_logo.ico"/>
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="_static/jquery.js?v=5d32c60e"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js?v=0ec76b63"></script>
+        <script src="_static/doctools.js?v=888ff710"></script>
+        <script src="_static/sphinx_highlight.js?v=4825356b"></script>
+        <script type="text/x-mathjax-config">MathJax.Hub.Config({"extensions": ["tex2jax.js"], "TeX": {"extensions": ["mhchem.js", "unicode.js"], "Macros": {"upalpha": "\\unicode{945}", "upbeta": "\\unicode{946}", "upgamma": "\\unicode{947}", "updelta": "\\unicode{948}", "upepsilon": "\\unicode{949}", "upzeta": "\\unicode{950}", "upeta": "\\unicode{951}", "uptheta": "\\unicode{952}", "upiota": "\\unicode{953}", "upkappa": "\\unicode{954}", "uplambda": "\\unicode{955}", "upmu": "\\unicode{956}", "upnu": "\\unicode{957}", "upxi": "\\unicode{958}", "upomicron": "\\unicode{959}", "uppi": "\\unicode{960}", "uprho": "\\unicode{961}", "upsigma": "\\unicode{963}", "uptau": "\\unicode{964}", "upupsilon": "\\unicode{965}", "upphi": "\\unicode{x03d5}", "upvarphi": "\\unicode{966}", "upchi": "\\unicode{967}", "uppsi": "\\unicode{968}", "upomega": "\\unicode{969}", "upAlpha": "\\unicode{913}", "upBeta": "\\unicode{914}", "upGamma": "\\unicode{915}", "upDelta": "\\unicode{916}", "upEpsilon": "\\unicode{917}", "upZeta": "\\unicode{918}", "upEta": "\\unicode{919}", "upTheta": "\\unicode{920}", "upIota": "\\unicode{921}", "upKappa": "\\unicode{922}", "upLambda": "\\unicode{923}", "upMu": "\\unicode{924}", "upNu": "\\unicode{925}", "upXi": "\\unicode{926}", "upOmicron": "\\unicode{927}", "upPi": "\\unicode{928}", "upRho": "\\unicode{929}", "upSigma": "\\unicode{931}", "upTau": "\\unicode{932}", "upUpsilon": "\\unicode{933}", "upPhi": "\\unicode{934}", "upChi": "\\unicode{935}", "upPsi": "\\unicode{936}", "upOmega": "\\unicode{937}"}}, "HTML-CSS": {"fonts": ["STIX-Web"]}})</script>
+        <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@2/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="PlanetMag manuscript data and figure scripts" href="publication.html" />
+    <link rel="prev" title="workspace" href="stubs/modules.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search"  style="background: #2980B9" >
+
+          
+          
+          <a href="index.html">
+            
+              <img src="_static/PlanetMag_logoDocs.png" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="readme.html">README</a></li>
+<li class="toctree-l1"><a class="reference internal" href="primary.html">PlanetMag Matlab run scripts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="functions.html">Matlab supporting functions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="pythonModules.html">PlanetMag Python documentation</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Implemented frames and coordinates</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#iau-frames">IAU frames</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#system-iii-frames">System III frames</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#sprh-frames">SPRH frames</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#planet-sun-orbit-frames">Planet–Sun–Orbit frames</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#planet-sun-magnetic-frames">Planet–Sun–Magnetic frames</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#planet-dipole-solar-zenith-frames">Planet–Dipole–Solar–Zenith frames</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#solar-magnetic-planet-frames">Solar–Magnetic–Planet frames</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="publication.html">PlanetMag manuscript data and figure scripts</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu"  style="background: #2980B9" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">PlanetMag</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Implemented frames and coordinates</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/coordinates.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="implemented-frames-and-coordinates">
+<h1>Implemented frames and coordinates<a class="headerlink" href="#implemented-frames-and-coordinates" title="Permalink to this heading"></a></h1>
+<p>Numerous frames are implemented in SPICE through built-in options and those we have defined in <code class="docutils literal notranslate"><span class="pre">custom_frames_v01.tf</span></code>. We describe each implemented frame and its associate coordinate system here. More detail on the frames and where they have appeared in past studies can be found in the supplemental text of the PlanetMag publication (DOI TBD).</p>
+<p>All frames use the body center of mass for the origin. Any axis direction not listed can be inferred by that needed to complete a right-handed coordinate system. All frames in PlanetMag and all those available in SPICE are right-handed. All frames implemented in PlanetMag use Cartesian basis vectors.</p>
+<section id="iau-frames">
+<h2>IAU frames<a class="headerlink" href="#iau-frames" title="Permalink to this heading"></a></h2>
+<p>Defined in reports of the IAU Working Group on Cartographic Coordinates and Rotational Elements.</p>
+<ul class="simple">
+<li><p><span class="math notranslate nohighlight">\(\hat{z}\)</span> is along the angular momentum vector</p></li>
+<li><p><span class="math notranslate nohighlight">\(\hat{x}\)</span> is approximately toward the planet, with the <span class="math notranslate nohighlight">\(xz\)</span> plane containing a specific surface feature identified by the IAU</p></li>
+<li><p>Available in SPICE as <code class="docutils literal notranslate"><span class="pre">IAU_BODY</span></code> for any body for which ephemeris data has been loaded into the kernel pool</p></li>
+</ul>
+</section>
+<section id="system-iii-frames">
+<h2>System III frames<a class="headerlink" href="#system-iii-frames" title="Permalink to this heading"></a></h2>
+<p>These frames rotate with the planet according to the period inferred from regular oscillations in the magnetic field, or physical behavior tied to the field such as synchrotron emission.</p>
+<ul class="simple">
+<li><p><span class="math notranslate nohighlight">\(\hat{z}\)</span> is along the planet’s angular momentum vector</p></li>
+<li><p><span class="math notranslate nohighlight">\(\hat{x}\)</span> is in an arbitrarily defined direction at an arbitrary moment, because the giant planets generally lack stable surface features</p></li>
+<li><p>Identical to <code class="docutils literal notranslate"><span class="pre">IAU_JUPITER</span></code> and <code class="docutils literal notranslate"><span class="pre">IAU_SATURN</span></code> for those planets</p></li>
+<li><p>Implemented as <code class="docutils literal notranslate"><span class="pre">ULS</span></code> and <code class="docutils literal notranslate"><span class="pre">NLS</span></code> for the Uranus Longitude System and Neptune Longitude System, respectively</p></li>
+</ul>
+</section>
+<section id="sprh-frames">
+<h2>SPRH frames<a class="headerlink" href="#sprh-frames" title="Permalink to this heading"></a></h2>
+<p>This is a designation sometimes used in NASA Planetary Data System (PDS) archives for data aligned to spherical coordinate basis vectors. The frame is identical to System III coordinates for those bodies for which data are expressed in this format. However, because spherical coordinate axes are not aligned to Cartesian axes, the data must be converted for comparison to SPICE frames.</p>
+</section>
+<section id="planet-sun-orbit-frames">
+<h2>Planet–Sun–Orbit frames<a class="headerlink" href="#planet-sun-orbit-frames" title="Permalink to this heading"></a></h2>
+<ul class="simple">
+<li><p><span class="math notranslate nohighlight">\(\hat{x}\)</span> is toward the Sun</p></li>
+<li><p><span class="math notranslate nohighlight">\(\hat{y}\)</span> is along the component normal to <span class="math notranslate nohighlight">\(\hat{x}\)</span> of the velocity vector of the Sun as seen from the body</p></li>
+<li><p>Implemented as <code class="docutils literal notranslate"><span class="pre">JSO</span></code>, <code class="docutils literal notranslate"><span class="pre">KSO</span></code>, <code class="docutils literal notranslate"><span class="pre">USO</span></code>, <code class="docutils literal notranslate"><span class="pre">NSO</span></code> for Jupiter, Saturn, Uranus, and Neptune respectively</p></li>
+</ul>
+</section>
+<section id="planet-sun-magnetic-frames">
+<h2>Planet–Sun–Magnetic frames<a class="headerlink" href="#planet-sun-magnetic-frames" title="Permalink to this heading"></a></h2>
+<ul>
+<li><p><span class="math notranslate nohighlight">\(\hat{x}\)</span> is toward the Sun</p></li>
+<li><p><span class="math notranslate nohighlight">\(\hat{y}\)</span> is along <span class="math notranslate nohighlight">\(\hat{\mathbf{M}}\times\hat{x}\)</span>, where <span class="math notranslate nohighlight">\(\mathbf{M}\)</span> is the magnetic dipole moment vector. Requires a choice of magnetic field model in order to infer the dipole moment direction.</p></li>
+<li><p>For use in particular models that require this frame. The selected multipole models are:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">JSM</span></code>: O4 (Acuna and Ness, 1976) <a class="reference external" href="https://doi.org/10.1029/JA081i016p02917">https://doi.org/10.1029/JA081i016p02917</a></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">KSM</span></code>: Cassini 11 (Dougherty et al., 2018) <a class="reference external" href="https://doi.org/10.1126/science.aat5434">https://doi.org/10.1126/science.aat5434</a></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">USM</span></code>: OTD (Ness et al., 1986) <a class="reference external" href="https://doi.org/10.1126/science.233.4759.85">https://doi.org/10.1126/science.233.4759.85</a></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">NSM</span></code>: O8 (Connerney et al., 1992) <a class="reference external" href="https://doi.org/10.1016/0273-1177(92)90394-D">https://doi.org/10.1016/0273-1177(92)90394-D</a></p></li>
+</ul>
+</div></blockquote>
+</li>
+</ul>
+</section>
+<section id="planet-dipole-solar-zenith-frames">
+<h2>Planet–Dipole–Solar–Zenith frames<a class="headerlink" href="#planet-dipole-solar-zenith-frames" title="Permalink to this heading"></a></h2>
+<ul class="simple">
+<li><p><span class="math notranslate nohighlight">\(\hat{z}\)</span> is toward the Sun</p></li>
+<li><p><span class="math notranslate nohighlight">\(\hat{y}\)</span> is along <span class="math notranslate nohighlight">\(\hat{\mathbf{M}}\times\hat{z}\)</span>, where <span class="math notranslate nohighlight">\(\mathbf{M}\)</span> is the same dipole moment vector as used in Planet–Sun–Magnetic frames</p></li>
+<li><p>Implemented as <code class="docutils literal notranslate"><span class="pre">JDSZ</span></code>, <code class="docutils literal notranslate"><span class="pre">KDSZ</span></code>, <code class="docutils literal notranslate"><span class="pre">UDSZ</span></code>, <code class="docutils literal notranslate"><span class="pre">NDSZ</span></code> for Jupiter, Saturn, Uranus, and Neptune respectively</p></li>
+</ul>
+</section>
+<section id="solar-magnetic-planet-frames">
+<h2>Solar–Magnetic–Planet frames<a class="headerlink" href="#solar-magnetic-planet-frames" title="Permalink to this heading"></a></h2>
+<ul class="simple">
+<li><p><span class="math notranslate nohighlight">\(\hat{z}\)</span> is along <span class="math notranslate nohighlight">\(\hat{\mathbf{M}}\)</span> as defined in Planet–Sun–Magnetic frames</p></li>
+<li><p><span class="math notranslate nohighlight">\(\phi=0\)</span> at the sub-solar point, i.e. the <span class="math notranslate nohighlight">\(x\)</span> axis is along the direction perpendicular to <span class="math notranslate nohighlight">\(\hat{z}\)</span> along the noon local time longitude line</p></li>
+<li><p>The <span class="math notranslate nohighlight">\(xy\)</span> plane defines the magnetic equatorial plane</p></li>
+<li><p>Implemented as <code class="docutils literal notranslate"><span class="pre">SMJ</span></code>, <code class="docutils literal notranslate"><span class="pre">SMK</span></code>, <code class="docutils literal notranslate"><span class="pre">SMU</span></code>, <code class="docutils literal notranslate"><span class="pre">SMN</span></code> for Jupiter, Saturn, Uranus, and Neptune respectively</p></li>
+</ul>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="stubs/modules.html" class="btn btn-neutral float-left" title="workspace" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="publication.html" class="btn btn-neutral float-right" title="PlanetMag manuscript data and figure scripts" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, California Institute of Technology.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
